@@ -1,0 +1,33 @@
+.rightNav {
+  width: 200px;
+  background: #fff;
+  border-left: 1px solid #f0f0f0;
+  padding: 16px;
+  height: fit-content;
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+}
+
+.header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.anchorList {
+  box-shadow: none !important;
+  margin-left: 0 !important;
+
+  :global(.ant-anchor-link) {
+    padding: 4px 0 4px 12px;
+  }
+
+  :global(.ant-anchor-link-title) {
+    font-size: 13px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

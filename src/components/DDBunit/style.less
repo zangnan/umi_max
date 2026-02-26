@@ -1,0 +1,90 @@
+.editable-cell-value-wrap {
+  padding: 0 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-height: 30px;
+  line-height: 30px;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+.editable-row .ant-input-number {
+  width: auto;
+}
+
+.antv-s2-tooltip-container {
+  z-index: 1200;
+}
+.antv-s2-switcher-dimension-items {
+  max-height: 400px;
+}
+.dbfield_card_db,
+.dbfield_card_fields_original,
+.dbfield_card_fields_select{
+  .ant-list-item {
+    cursor: pointer;
+  }
+  .ant-list-item.item_active {
+    // border-block-end: 1px solid #f56a00;
+    cursor: unset;
+    .ant-list-item-meta .ant-list-item-meta-title {
+      color: rgb(184 35 35 / 88%);
+    }
+    .ant-list-item-meta .ant-list-item-meta-description {
+      // color: rgb(245 106 0);
+    }
+  }
+  .select_db {
+    // font-size: 12px;
+  }
+  .isUsedField {
+    position: absolute;
+    top: -3px;
+    left: -13px;
+    font-size: 10px;
+    color: #4e7f08;
+    display: none;
+  }
+  .ant-list-item.item_active {
+    .isUsedField {
+      display: inline-block;
+    }
+  }
+}
+.config_menu_nav {
+  .cmenu_wrap {
+    text-align: center;
+    font-size: 50px;
+    cursor: pointer;
+    .cmenu_title {
+      font-size: 14px;
+    }
+    .cmenu_icon1 { color: rgb(229, 62, 62); }
+    .cmenu_icon2 { color: rgb(44, 142, 187); }
+    .cmenu_icon3 { color: rgb(246, 146, 32); }
+    .cmenu_icon4 { color: #00744c; }
+    .cmenu_icon5 { color: #af55c1; }
+  }
+}
+.right_drawer {
+  .right_drawer_sel {
+    cursor: pointer;
+    .ant-avatar {
+      background-color: #00000040;
+    }
+  }
+  .right_drawer_sel_active {
+    cursor: initial;
+    .ant-avatar {
+      background-color: #0a6ed1;
+    }
+  }
+}
+.treeCd {
+  // .ant-tree-list-holder{ overflow-y: auto !important; }
+  .cdgl-icon { padding-left: 4px; display: none; }
+  .ant-tree-node-content-wrapper:hover .cdgl-icon { display: inline-block; }
+}

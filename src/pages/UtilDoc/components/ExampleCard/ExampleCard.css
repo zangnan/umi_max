@@ -1,0 +1,49 @@
+.exampleCard {
+  margin: 12px 0;
+  border-radius: 8px;
+}
+
+.exampleCard :global(.ant-card-head) {
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 8px 12px;
+}
+
+.exampleCard :global(.ant-card-body) {
+  padding: 12px;
+}
+
+.description {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.exampleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exampleRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.exampleRow .label {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.codeWrapper {
+  position: relative;
+}
+
+.codeWrapper .copyBtn {
+  position: absolute;
+  top: 14px;
+  right: 8px;
+  z-index: 1;
+  padding: 4px 8px;
+  font-size: 12px;
+}

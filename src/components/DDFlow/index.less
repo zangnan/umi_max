@@ -1,0 +1,56 @@
+.react-shape-app {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  font-family: sans-serif;
+  .app-content { flex: 1; height: 280px; margin-right: 8px; margin-left: 8px; border-radius: 5px; box-shadow: 0 12px 5px -10px rgb(0 0 0 / 10%), 0 0 4px 0 rgb(0 0 0 / 10%); }
+  .custom-react-node { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background-color: #fff; border: 1px solid #8f8f8f; border-radius: 6px; }
+  .custom-react-node span { display: inline-block; width: 100%; height: 100%; }
+}
+
+.d_flow_splitter {
+  background-color: #ffffff;
+}
+.d_flow {
+  display: flex; padding: 0 12px 12px 12px; background-color: #fff;
+  #container { display: flex; border: 1px solid #dfe3e8; width: 100%; height: calc(100vh - 170px); background-color: #fff; }
+  #app_stencil { width: 280px; height: 100%; position: relative; border-right: 1px solid #dfe3e8; }
+  // #app_stencil { width: 0; border-right: 0px solid #dfe3e8; }
+  #app-content { flex: 1; height: 100%; }
+  .x6-widget-stencil  { background-color: #fff; }
+  .x6-widget-stencil-title { background-color: #fff; }
+  .x6-widget-stencil-group-title { background-color: #fff !important; }
+  .x6-widget-transform { margin: -1px 0 0 -1px; padding: 0px; border: 1px solid #239edd; }
+  .x6-widget-transform > div { border: 1px solid #239edd; }
+  .x6-widget-transform > div:hover { background-color: #3dafe4; }
+  .x6-widget-transform-active-handle { background-color: #3dafe4; }
+  .x6-widget-transform-resize { border-radius: 0; }
+  .x6-widget-selection-inner { border: 1px solid #239edd; }
+  .x6-widget-selection-box { opacity: 0; }
+}
+.d_flow_util { padding: 12px 12px 0 12px; background-color: #fff; }
+
+.d_cus_node {
+  position: relative; width: 120px; height: 32px; line-height: 30px; font-size: 13px; padding: 0 10px; border: 1px solid #c2c8d5; border-left: 3px solid #30bf14; background-color: #fff; display: inline-block; border-radius: 4px; box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.06);
+  .d_cus_node_icon { position: absolute; top: 5px; display: inline-block; width: 20px; height: 20px; background-color: #30bf14; color: #fff; line-height: 20px; text-align: center; margin: 0px 0 0 0; border-radius: 50%; font-weight: bold; }
+  .d_cus_node_text { display: inline-block;  width: 68px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0 0 0 24px; }
+  &.d_start_right { width: 32px; border: 0px solid #30bf14; background-color: #30bf14; border-radius: 50%; font-size: 20px; padding: 0; text-align: center; }
+  &.d_start_right .d_cus_node_icon { margin-left: -8px; }
+  &.d_stop { border-left-color: #868686; }
+  &.d_stop .d_cus_node_icon{ background-color: #868686; }
+  &.d_stop .d_cus_node_icon span {width: 8px; height: 8px; display: inline-block; background-color: #ffffff; position: relative; top: -1px;}
+  &.d_stop_right { width: 32px; border: 0px solid #868686; background-color: #868686; border-radius: 50%; font-size: 18px; padding: 0; text-align: center; }
+  &.d_stop_right .d_cus_node_icon {   margin-left: -10px;; background-color: #868686;}
+  &.d_stop_right .d_cus_node_icon span { width: 10px; height: 10px; }
+  &.d_event { border-left-color: #0a6ed1;}
+  &.d_event .d_cus_node_icon { background-color: #0a6ed1; font-size: 14px;}
+  &.d_gateway { border-left: 3px solid #ff9325; }
+  &.d_gateway .d_cus_node_icon{ background-color: #ff9325; border-radius: 0; transform: rotate(45deg); width: 17px; height: 17px; line-height: 16px; }
+  &.d_gateway .d_cus_node_text { margin-left: 26px;}
+  &.d_gateway_right { border: none; background: transparent; box-shadow: none; padding: 0;width: 32px; text-align: center;}
+  &.d_gateway_right .d_cus_node_icon {width: 21px; height: 21px; position: relative; top: -1px; left: -1px;}
+  &.d_gateway_right .d_cus_node_icon .anticon {position: relative; top: 3px; left: 0; font-size: 15px;}
+  &.d_gateway_in .d_cus_node_icon span { width: 11px; height: 11px; border: 2px solid #fff; display: inline-block; border-radius: 50%; position: relative; top: 1px; left: 0px; }
+  &.d_gateway_in.d_gateway_right  .d_cus_node_icon span { width: 13px; height: 13px;top: 4px; }
+}
+.d_flow.d_flow_readonly { padding-top: 12px; }

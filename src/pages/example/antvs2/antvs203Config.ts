@@ -1,0 +1,27 @@
+export default {
+  api_grid_query: '/hx/ty/crud/queryPagerS21',
+  // grid_show_serial_number: false,
+  // grid_pagination: false,
+  sheet_type: 'table', // table or ''
+  grid_columns: [
+    { title: '报关单号', dataIndex: 'ckbgdh', width: 180, fixed: 'left' },
+    { title: '项号', dataIndex: 'xh4', width: 60, fixed: 'left' },
+    { title: '银行账号', dataIndex: 'yhzh', width: 160 },
+    { title: '监管方式', dataIndex: 'jgfsDm', width: 155, sorter: true, codeTable: 'code_dm_ckts_hgjgfs', },
+    { title: '出口日期', dataIndex: 'ckrq1', width: 120, sorter: true, render: { type: 'date', format: 'YYYY-MM-DD' } },
+    { title: '商品代码', dataIndex: 'ckspDm', width: 95 },
+    { title: '商品名称', dataIndex: 'ckspmc', width: 180, ellipsis: true, },
+    { title: '海关商品名称', dataIndex: 'hgspmc', width: 180 },
+    { title: '出口合同号', dataIndex: 'ckhth', width: 115 },
+    { title: '成交方式', dataIndex: 'hgcjfsmc', width: 85 },
+    { title: '成交单位', dataIndex: 'hgjldwmc', width: 90, ellipsis: true },
+    { title: '成交数量', dataIndex: 'cjsl1', width: 140, align: 'right', render: { type: 'number', format: '0,0.0000' } },
+    { title: '成交币制', dataIndex: 'cjhghbzmDm', width: 85 },
+    { title: '成交金额', dataIndex: 'cjzj', width: 140, align: 'right', render: { type: 'number', format: '0,0.00' } },
+    { title: '美元离岸价', dataIndex: 'mylaj', width: 140, align: 'right', render: { type: 'number', format: '0,0.00' } },
+    { title: '法定单位', dataIndex: 'dyjldwDm', width: 90, codeTable: 'code_dm_ckts_hgjldw', ellipsis: true },
+    { title: '法定单位数量', dataIndex: 'cksl', width: 140, align: 'right', render: { type: 'number', format: '0,0.0000' } },
+    { title: '第二单位', dataIndex: 'dejldwDm', width: 90, codeTable: 'code_dm_ckts_hgjldw', ellipsis: true },
+    { title: '第二单位数量', dataIndex: 'decksl', width: 140, align: 'right', render: { type: 'number', format: '0,0.0000' }, fixed: 'right' },
+  ],
+};

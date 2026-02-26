@@ -1,0 +1,92 @@
+.editable-cell-value-wrap {
+  padding: 0 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-height: 30px;
+  line-height: 30px;
+}
+.editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+.editable-row .ant-input-number {
+  width: auto;
+}
+.antv-s2-tooltip-container {
+  z-index: 1200;
+}
+.antv-s2-switcher-dimension-items {
+  max-height: 400px;
+}
+.dbfield_card_db .ant-list-item,
+.dbfield_card_fields_original .ant-list-item,
+.dbfield_card_fields_select .ant-list-item {
+  cursor: pointer;
+}
+.dbfield_card_db .ant-list-item.item_active,
+.dbfield_card_fields_original .ant-list-item.item_active,
+.dbfield_card_fields_select .ant-list-item.item_active {
+  cursor: unset;
+}
+.dbfield_card_db .ant-list-item.item_active .ant-list-item-meta .ant-list-item-meta-title,
+.dbfield_card_fields_original .ant-list-item.item_active .ant-list-item-meta .ant-list-item-meta-title,
+.dbfield_card_fields_select .ant-list-item.item_active .ant-list-item-meta .ant-list-item-meta-title {
+  color: rgb(184 35 0.39772727%);
+}
+.dbfield_card_db .isUsedField,
+.dbfield_card_fields_original .isUsedField,
+.dbfield_card_fields_select .isUsedField {
+  position: absolute;
+  top: -3px;
+  left: -13px;
+  font-size: 10px;
+  color: #4e7f08;
+  display: none;
+}
+.dbfield_card_db .ant-list-item.item_active .isUsedField,
+.dbfield_card_fields_original .ant-list-item.item_active .isUsedField,
+.dbfield_card_fields_select .ant-list-item.item_active .isUsedField {
+  display: inline-block;
+}
+.config_menu_nav .cmenu_wrap {
+  text-align: center;
+  font-size: 50px;
+  cursor: pointer;
+}
+.config_menu_nav .cmenu_wrap .cmenu_title {
+  font-size: 14px;
+}
+.config_menu_nav .cmenu_wrap .cmenu_icon1 {
+  color: #e53e3e;
+}
+.config_menu_nav .cmenu_wrap .cmenu_icon2 {
+  color: #2c8ebb;
+}
+.config_menu_nav .cmenu_wrap .cmenu_icon3 {
+  color: #f69220;
+}
+.config_menu_nav .cmenu_wrap .cmenu_icon4 {
+  color: #00744c;
+}
+.config_menu_nav .cmenu_wrap .cmenu_icon5 {
+  color: #af55c1;
+}
+.right_drawer .right_drawer_sel {
+  cursor: pointer;
+}
+.right_drawer .right_drawer_sel .ant-avatar {
+  background-color: #00000040;
+}
+.right_drawer .right_drawer_sel_active {
+  cursor: initial;
+}
+.right_drawer .right_drawer_sel_active .ant-avatar {
+  background-color: #0a6ed1;
+}
+.treeCd .cdgl-icon {
+  padding-left: 4px;
+  display: none;
+}
+.treeCd .ant-tree-node-content-wrapper:hover .cdgl-icon {
+  display: inline-block;
+}

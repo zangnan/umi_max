@@ -1,0 +1,152 @@
+.playground {
+  border-radius: 8px;
+  background: #fafafa;
+
+  :global(.ant-card-body) {
+    padding: 12px;
+  }
+}
+
+.codeHeader,
+.resultHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+
+  > span:first-child {
+    white-space: nowrap;
+  }
+
+  :global(.ant-space) {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.resultHeader {
+  :global(.ant-btn) {
+    margin-left: auto;
+  }
+}
+
+.codeInput {
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 13px;
+  resize: none;
+
+  :global(.ant-input) {
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+  }
+}
+
+.resultOutput {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 12px;
+  min-height: 108px;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.resultPre {
+  margin: 0;
+  font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.placeholder {
+  color: #999;
+  font-size: 13px;
+}
+
+.fullExampleHeader {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+
+  ul {
+    margin: 12px 0;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 4px;
+      color: #666;
+    }
+  }
+
+  :global(.ant-alert) {
+    margin-top: 12px;
+  }
+}
+
+// 图标展示样式
+.iconPlayground {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+.iconList {
+  border-right: 1px solid #f0f0f0;
+  background: #fafafa;
+  padding: 12px;
+
+  :global(.ant-list-item) {
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #e6f7ff;
+    }
+
+    &.active {
+      background: #1890ff;
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+}
+
+.iconPreview {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+
+  .iconDisplay {
+    font-size: 64px;
+    margin-bottom: 16px;
+    color: inherit;
+  }
+
+  .iconName {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .iconCode {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 13px;
+    color: #666;
+  }
+}

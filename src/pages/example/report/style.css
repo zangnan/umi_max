@@ -1,0 +1,9 @@
+.dd-statistics-res .ant-table-cell-fix-left.rpa-res-col-first,
+.dd-statistics-res .ant-table-cell-fix-right.rpa-res-col-last {
+  color: #f56a00;
+  font-weight: bold;
+}
+
+.dd-statistics-res .highlight_row td {
+  color: #f56a00;
+}

@@ -1,0 +1,87 @@
+// 弹窗
+.ant-modal-wrap.standard-modal,
+.ant-modal-wrap.standard-modal-1 {
+  .ant-modal { top: 0; bottom: 0; height: 100vh; }
+  .ant-modal .ant-modal-container { height: 100vh; border-radius: 0; }
+  .ant-modal .ant-modal-container .ant-modal-body { height: calc(100vh - 40px - 32px - 42px); overflow-y: auto; margin: 0 -24px; padding: 0 24px; }
+}
+// 弹窗 基于方法
+.ant-modal-wrap.standard-modal-fn {
+  .ant-modal { top: 0; bottom: 0; height: 100vh; }
+  .ant-modal .ant-modal-container { height: 100vh; border-radius: 0; }
+  .ant-modal-confirm-body-wrapper {
+    .ant-modal-confirm-body {
+      .ant-modal-confirm-content {
+        height: calc(100vh - 70px);
+        overflow-y: auto;
+        .jse-contents { // json预览时使用
+          height: calc(100vh - 128px);
+          overflow-y: auto;
+          flex: auto;
+        }
+      }
+    }
+  }
+}
+
+// 新
+.ant-fullscreen {
+  .ant-layout-header { display: none; }
+  .ant-table .ant-table-sticky-holder { top: 50px !important; }
+  .ant-layout-has-sider>div:first-child {display: none;}
+  .ant-layout-has-sider .ant-pro-sider { display: none; }
+  // 弹窗下全屏
+  .ant-drawer-content-wrapper { width: 100% !important; }
+}
+
+// table
+.ant-table {
+  tr.drop-over-downward td { border-bottom: 2px dashed #86929e; }
+  tr.drop-over-upward td { border-top: 2px dashed #86929e; }
+  // div.ant-table-summary { box-shadow: none; }
+  .ant-table-expanded-row {
+    .ant-descriptions-item-container {
+      .ant-descriptions-item-label{ font-size: 12px; min-width: 130px; text-align: right; display: inline-block; }
+      .ant-descriptions-item-content { font-size: 12px; }
+    }
+  }
+}
+
+.dd_modal_bg .dd_toolbar_wrap .dd-toolbar { padding: 10px; }
+
+.col-copy { margin: 0 4px 0 0; cursor: pointer; }
+
+// modal masker
+.dd_modal_show_masker {
+  .ant-modal-content {pointer-events:none;user-select:none;}
+  .ant-spin-blur {opacity:1;}
+  .ant-spin-blur.ant-spin-blur::after {opacity:0;}
+  &.dd_modal_show_masker::after {content:'';position:absolute;top:0;bottom:12px;left:0;right:0;background-color:#fff;opacity:0.60;z-index:99999;}
+}
+.ant-layout-sider-collapsed.ant-pro-sider-collapsed .head_right_content {
+  &>.ant-space {margin-right: 0 !important;};
+  &>.ant-space>.ant-space-item:first-child {display: none;}
+  &>.ant-space>.ant-space-item:last-child .ant-space-item:last-child{display: none;}
+}
+
+// Slider 滚动条
+.ant-layout-sider {
+  ::-webkit-srollbar-track-piece{ border-radius:0; } // 滚动的滑块 background:none;
+  ::-webkit-scrollbar { width: 10px; height: 10px; } // 外层轨道
+  ::-webkit-scrollbar-thumb { height:50px; border-radius: 0; } // 滚动的滑块:hover   box-shadow: inset 0 0 5px rgba(0,0,0,0%); background: #74778c;
+  ::-webkit-scrollbar-thumb:vertical {height:50px;background-color:#74778c;}
+  ::-webkit-scrollbar-thumb:hover { background: #878aa1 !important; }
+  ::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:#74778c;}
+  ::-webkit-scrollbar-track { border-radius: 0; box-shadow: none !important; background: #283848; } // 内层滚动槽  box-shadow: inset 0 0 5px rgba(0,0,0,0%);
+}
+// 滚动条
+// ::-webkit-scrollbar { width: 8px; height: 8px; } // 外层轨道
+// ::-webkit-scrollbar-track { box-shadow: inset 0 0 5px rgba(0,0,0,0%); border-radius: 0; background: rgba(0,0,0,10%); } // 内层滚动槽
+// ::-webkit-srollbar-track-piece{ background:none; border-radius:0; } // 滚动的滑块
+// ::-webkit-scrollbar-thumb { border-radius: 0; box-shadow: inset 0 0 5px rgba(0,0,0,0%); background: rgba(0,0,0,10%); } // 滚动的滑块:hover
+// ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,20%); }
+// // ant-table-sticky-scroll
+// .ant-table-sticky-scroll { background: rgba(0, 0, 0, 10%) !important; border-top: 0 solid #f0f0f0 !important; opacity: 1 !important; height: 8px !important; }
+// .ant-table-sticky-scroll-bar { background-color: rgba(0,0,0,10%); border-radius: 0 !important; }
+// .ant-table-sticky-scroll-bar:hover { background-color: rgba(0,0,0,20%) !important; }
+

@@ -1,0 +1,55 @@
+@skin02_color1: #2b2e3a;
+@skin02_color2: #10121a;
+@skin02_color3: #1e202d;
+@skin02_color4: #0f7185;
+@skin02_color5: #00c1de;
+@skin02_color6: #4ce700;
+
+.skin02 {
+  .ant-table-tbody > tr.ant-table-row:hover > td { border-color: @skin02_color4; }
+
+  .jsondiffpatch-added .jsondiffpatch-property-name,
+  .jsondiffpatch-added .jsondiffpatch-value pre,
+  .jsondiffpatch-modified .jsondiffpatch-right-value pre,
+  .jsondiffpatch-textdiff-added { background: #bfb; color: #000; }
+
+  // 仿Excel三方组件
+  .Spreadsheet__table { background-color: @skin02_color3; color: rgba(255, 255, 255, 0.85); border-color: #454967; }
+  .Spreadsheet__header { background: #272935; color: rgba(255, 255, 255, 0.85); }
+  .Spreadsheet__cell, .Spreadsheet__header { border-color: #454967; }
+
+  .dd_dnd_container { background-color: #22252f; border: none; }
+  .dd_dnd_container>div { background-color: #3a3f4c; }
+
+  ::-webkit-srollbar-track-piece{border-radius:0;}
+  ::-webkit-scrollbar{width:10px;height:8px;}
+  ::-webkit-scrollbar-thumb:vertical{height:50px;background-color:#74778c;border-radius:0;}
+  ::-webkit-scrollbar-thumb:hover{background-color:#74778c !important;}
+  ::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:#74778c;border-radius:0;}
+  ::-webkit-scrollbar-track { border-radius: 0 !important; box-shadow: none !important; background: #484b58 !important; }
+
+  // .ant-menu-light.ant-menu-submenu > .ant-menu { background-color: @skin02_color2; }
+  // ant-table-sticky-scroll
+  // .ant-table-sticky-scroll { background: #4f5362 !important; border-top: 0 solid #f0f0f0 !important; opacity: 1 !important; height: 8px !important; }
+  // .ant-table-sticky-scroll-bar { background-color: @skin02_color2; border-radius: 0 !important; }
+  // .ant-table-sticky-scroll-bar:hover { background-color: @skin02_color2 !important; }
+  // .ant-modal-content {
+  //   ::-webkit-scrollbar-thumb:vertical{background-color:@skin02_color2;outline:0 solid @skin02_color2; ouline-offset:-2px;border:2px solid @skin02_color2;}
+  //   ::-webkit-scrollbar-thumb:hover{background-color:#05060a !important;}
+  //   ::-webkit-scrollbar-thumb:horizontal{background-color:@skin02_color1;outline:0 solid @skin02_color2; ouline-offset:-2px;border:2px solid @skin02_color1;}
+  //   ::-webkit-scrollbar-track { background: #484b58 !important; }
+  // }
+  // .dd-form .ant-input-group.ant-input-group-compact .site-input-split { background-color: @skin02_color3; }
+  // .dd_dnd_container>div>div button { background-color: #5d5d5d; }
+  // .ant-pro-card { background-color: @skin02_color1; }
+  // .ant-input-affix-wrapper-readonly,
+  // .ant-input-affix-wrapper-readonly.ant-input-outlined,
+  // .ant-input-affix-wrapper-readonly.ant-input-outlined:hover {
+  //   border-color: #3a3d51;
+  // }
+  // .ant-input-number-readonly,
+  // .ant-input-number-readonly.ant-input-number-outlined,
+  // .ant-input-number-readonly.ant-input-number-outlined:hover {
+  //   border-color: #3a3d51;
+  // }
+}

@@ -1,0 +1,573 @@
+// 首页样式文件 - 科技感主题
+
+// ==================== 变量定义 ====================
+// 白色主题背景色
+@bg-primary: #ffffff;
+@bg-secondary: #f8fafc;
+@bg-card: rgba(255, 255, 255, 0.9);
+@bg-glass: rgba(255, 255, 255, 0.85);
+@bg-glass-hover: rgba(255, 255, 255, 1);
+
+// 霓虹色彩 (调整为白色背景适配的深色主调)
+@neon-cyan: #0ea5e9;
+@neon-cyan40: rgba(14, 165, 233, 0.4);
+@neon-cyan-light: rgba(14, 165, 233, 0.1);
+@neon-purple: #8b5cf6;
+@neon-purple-light: rgba(139, 92, 246, 0.1);
+@neon-blue: #3b82f6;
+@neon-blue-light: rgba(59, 130, 246, 0.1);
+@neon-green: #10b981;
+@neon-green-light: rgba(16, 185, 129, 0.1);
+@neon-red: #ef4444;
+@neon-red-light: rgba(239, 68, 68, 0.1);
+@neon-amber: #f59e0b;
+@neon-amber-light: rgba(245, 158, 11, 0.1);
+@neon-pink: #ec4899;
+@neon-pink-light: rgba(236, 72, 153, 0.1);
+
+// 渐变色
+@gradient-primary: linear-gradient(135deg, @neon-cyan 0%, @neon-purple 50%, @neon-blue 100%);
+@gradient-card: linear-gradient(135deg, @neon-cyan-light 0%, @neon-purple-light 50%, @neon-blue-light 100%);
+@gradient-hero: linear-gradient(135deg, @neon-cyan-light 0%, rgba(139, 92, 246, 0.08) 50%, @neon-blue-light 100%);
+
+// 边框颜色 (白色主题 - 更柔和的边框)
+@border-light: #e2e8f0;
+@border-glass: rgba(226, 232, 240, 0.8);
+@border-glow-cyan: rgba(14, 165, 233, 0.3);
+@border-glow-purple: rgba(139, 92, 246, 0.3);
+
+// 文字颜色 (白色主题)
+@text-primary: #1e293b;
+@text-secondary: #64748b;
+@text-muted: #94a3b8;
+
+// 动画
+@transition-fast: 0.15s ease;
+@transition-normal: 0.3s ease;
+@transition-slow: 0.5s ease;
+
+// ==================== 基础页面布局 ====================
+.home-page {
+  position: relative;
+  min-height: calc(100vh - 24px);
+  padding: 16px;
+  background: @bg-secondary;
+  overflow: hidden;
+
+  // 网格背景效果 (更柔和的线条)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+}
+
+// ==================== 动态背景粒子效果 ====================
+.bg-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+
+  .gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+
+    &.orb-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, @neon-cyan-light 0%, transparent 70%);
+      top: -100px;
+      right: -100px;
+    }
+
+    &.orb-2 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, @neon-purple-light 0%, transparent 70%);
+      bottom: 20%;
+      left: -50px;
+    }
+
+    &.orb-3 {
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, @neon-blue-light 0%, transparent 70%);
+      top: 40%;
+      right: 20%;
+    }
+  }
+}
+
+// ==================== 顶部欢迎区 ====================
+.welcome-section {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 32px;
+  background: @gradient-hero;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  border: 1px solid @border-light;
+  box-shadow:
+    0 4px 20px rgba(14, 165, 233, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    height: 3px;
+    background: @gradient-primary;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+.welcome-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar {
+  background: @neon-cyan-light;
+  border: 2px solid @neon-cyan;
+  position: relative;
+  z-index: 1;
+
+  .anticon {
+    color: @neon-cyan;
+  }
+}
+
+.avatar-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: @gradient-primary border-box;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.welcome-text {
+  h3 {
+    color: @text-primary !important;
+    margin-bottom: 4px !important;
+    font-weight: 600;
+  }
+
+  .ant-typography {
+    color: @text-secondary;
+  }
+}
+
+.env-tag {
+  display: flex;
+  gap: 12px;
+
+  .env-tag-item {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .env-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+  }
+}
+
+// ==================== 玻璃拟态卡片 ====================
+.glass-card {
+  position: relative;
+  z-index: 1;
+  background: @bg-card;
+  backdrop-filter: blur(20px);
+  border: 1px solid @border-light;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, @neon-cyan, transparent);
+    opacity: 0.3;
+  }
+
+  .ant-card-head {
+    border-bottom: 1px solid @border-light;
+    background: @bg-primary;
+
+    .ant-card-head-title {
+      font-weight: 600;
+      color: @text-primary;
+    }
+  }
+
+  .ant-card-body {
+    padding: 20px;
+  }
+}
+
+.glass-card-inner {
+  background: linear-gradient(135deg, @bg-primary 0%, @bg-secondary 100%);
+  border: 1px solid @border-light;
+  border-radius: 12px;
+  transition: all @transition-normal;
+
+  &:hover {
+    background: @bg-primary;
+    border-color: @neon-cyan;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.1);
+  }
+}
+
+// ==================== 图标样式 ====================
+.section-icon {
+  margin-right: 8px;
+  color: @neon-cyan;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.card-icon {
+  margin-right: 6px;
+  color: @neon-purple;
+}
+
+// ==================== 快捷入口卡片 ====================
+.quick-entry-card {
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    .icon-wrapper {
+      transform: scale(1.05);
+    }
+  }
+
+  .quick-entry-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+  }
+
+  .ant-card-body {
+    padding: 20px 16px;
+  }
+
+  .icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all @transition-normal;
+  }
+}
+
+// ==================== 统计卡片 ====================
+.statistic-card {
+  border-radius: 12px;
+  transition: all @transition-normal;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(14, 165, 233, 0.12);
+    border-color: @neon-cyan;
+  }
+
+  .ant-statistic-title {
+    font-size: 13px;
+    color: @text-muted;
+  }
+
+  .ant-statistic-content {
+    font-size: 28px;
+    font-weight: 600;
+    color: @text-primary;
+  }
+
+  .ant-statistic-content-prefix {
+    margin-right: 8px;
+  }
+
+  .ant-statistic-content-suffix {
+    font-size: 14px;
+    margin-left: 4px;
+    color: @text-secondary;
+  }
+}
+
+// ==================== 日志统计卡片 ====================
+.log-stat-card {
+  border-radius: 10px;
+
+  .ant-statistic-title {
+    font-size: 12px;
+    color: @text-muted;
+  }
+
+  .ant-statistic-content {
+    font-size: 22px;
+    font-weight: 600;
+    color: @text-primary;
+  }
+
+  .ant-statistic-content-prefix {
+    margin-right: 6px;
+  }
+
+  .ant-statistic-content-suffix {
+    font-size: 12px;
+    margin-left: 4px;
+    color: @text-secondary;
+  }
+
+  .trend-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+}
+
+// ==================== 数据卡片 ====================
+.data-card {
+  border-radius: 12px;
+
+  .ant-card-head {
+    border-bottom: 1px solid @border-light;
+    background: @bg-secondary;
+
+    .ant-card-head-title {
+      font-size: 14px;
+      color: @text-secondary;
+    }
+  }
+
+  .ant-card-body {
+    padding: 12px;
+  }
+}
+
+// ==================== 科技感表格 ====================
+.tech-table {
+  .ant-table {
+    background: transparent;
+    color: @text-secondary;
+
+    &-thead > tr > th {
+      background: @bg-secondary;
+      color: @text-secondary;
+      font-size: 12px;
+      font-weight: 600;
+      border-bottom: 1px solid @border-light;
+    }
+
+    &-tbody > tr > td {
+      border-bottom: 1px solid @border-light;
+      color: @text-secondary;
+      font-size: 13px;
+    }
+
+    &-tbody > tr:hover > td {
+      background: @bg-secondary;
+    }
+  }
+
+  .tech-table-cell {
+    color: @text-secondary;
+  }
+
+  .tech-tag {
+    border-radius: 6px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .tech-badge {
+    .ant-badge-count {
+      font-weight: 600;
+    }
+  }
+}
+
+// ==================== 按钮样式 ====================
+.tech-btn {
+  font-size: 13px;
+  transition: all @transition-fast;
+
+  &:hover {
+    text-shadow: 0 0 10px currentColor;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.25);
+  }
+}
+
+.section-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+// ==================== 响应式适配 ====================
+@media screen and (max-width: 768px) {
+  .home-page {
+    padding: 8px;
+  }
+
+  .welcome-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .welcome-content {
+    flex-direction: column;
+  }
+
+  .env-tag {
+    margin-top: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .quick-entry-card {
+    .ant-card-body {
+      padding: 16px 12px;
+    }
+
+    .icon-wrapper {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  .statistic-card {
+    .ant-statistic-content {
+      font-size: 22px;
+    }
+  }
+}
+
+// ==================== 标签状态样式增强 ====================
+.ant-badge-status-success {
+  background-color: @neon-green;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.ant-badge-status-processing {
+  background-color: @neon-cyan;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.ant-badge-status-warning {
+  background-color: @neon-amber;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.ant-badge-status-error {
+  background-color: @neon-red;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+// ==================== 通知列表样式 ====================
+.ant-list-item {
+  padding: 12px 0;
+  border-bottom: 1px solid @border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .ant-list-item-meta-title {
+    margin-bottom: 0;
+    font-size: 14px;
+
+    a {
+      color: @text-secondary;
+      transition: color @transition-fast;
+
+      &:hover {
+        color: @neon-cyan;
+      }
+    }
+  }
+
+  .ant-list-item-meta-description {
+    font-size: 12px;
+    color: @text-muted;
+  }
+}
+
+// ==================== 图表卡片标题 ====================
+.ant-card-head-title {
+  font-size: 14px;
+}
+
+// ==================== 卡片悬停效果 ====================
+.statistic-card,
+.quick-entry-card {
+  cursor: pointer;
+}

@@ -1,0 +1,87 @@
+export default {
+  // 通用校验规则
+  'validator_required': '该项内容为必填项不能为空！',
+  'validator_english': '该项内容只能输入英文！',
+  'validator_chinese': '该项内容只能输入汉字！',
+  'validator_number': '该项内容只能输入数字！',
+  'validator_empty': '该项内容不能输入空格！',
+  'validator_english_number': '该项内容只能输入数字或字母！',
+  'validator_english_number_symbol': '该项内容只能输入数字、字母、特殊字符！',
+  'validator_intAndfloat': '该项内容只能输入整数或小数！',
+  'validator_n': '该项内容只能输入数值！',
+  // 'validator_n_max':	'该项数值必须大于{{d.min}}！',
+  // 'validator_n_min':	'该项数值必须小于{{d.max}}！',
+  'validator_n_min_eq': '该项数值必须大于或等于${min}！',
+  'validator_n_max_eq': '该项数值必须小于或等于${max}！',
+  'validator_float': '该项数值只能输入小数！',
+  'validator_int': '该项数值只能输入整数！',
+  'validator_v_eq': '该项内容长度必须为{{len}}！',
+  'validator_v_max': '该项内容长度不能大于{{len}}字符！',
+  'validator_v_min': '该项内容长度不能小于{{len}}字符！',
+  'validator_d_yyyy': '请输入正确的年份格式yyyy！',
+  'validator_d_MM': '请输入正确的月份格式MM！',
+  'validator_d_yyyyMM': '请输入正确的年月格式yyyyMM！',
+  'validator_d_yyyyMMdd': '请输入正确的年月日格式yyyyMMdd！',
+  // 'validator_d_yyyy_or_yyyyMM':	'请输入正确的年份或者年月格式yyyy或yyyyMM！',
+  // 'validator_d_yyyyMMdd_range_01':	'请输入正确的年月日格式yyyyMMdd或yyyyMMdd-yyyyMMdd！',
+  // 'validator_d_yyyyMMdd_range_02':	'开始日期不能大于结束日期！',
+  // 'validator_d_yyyyMMdd_range_03':	'日期间隔不能超过90天！',
+  'validator_url': '请输入正确的地址格式！',
+  'validator_phone': '请输入正确的电话格式！',
+  'validator_email': '请输入正确的邮箱地址！',
+  'validator_idCard': '请输入正确的身份证号码！',
+  'validator_ESC': '该项不能输入&特殊转义字符！',
+  'validator_num_pz': '该项不能输入负数！',
+  'validator_num_nz': '该项不能输入正数！',
+  'validator_num_pn': '该项不能为0！',
+  'validator_num_n': '该项只能为负数！',
+  'validator_num_p': '该项只能为正数！',
+  'validator_num_z': '该项只能为0！',
+  // 业务字段校验 示例
+  'validator_jhfpl_01': '当前没有可以重新计算分配率的数据，请先进行数据采集。',
+  'validator_ssq_02': '请输入所属期！',
+  'validator_szch_01': '手(账)册号首字母应只允许录入C、E、T、H、J！',
+  'validator_sjfpl_01': '实际分配率超出合理范围（0-100），请确认后填报！',
+  'validator_hesj_01': '核销起始日期是必填字段！',
+  'validator_hesj_02': '核销截止日期应大于等于核销起始日期！',
+  'validator_hesj_03': '核销截止日期是必填字段！',
+  'validator_bgdanddlzm_01': "'报关单号'与'代理证明号'不能同时存在！",
+  'validator_bgdanddlzm_02': "'报关单号'与'代理证明号'不能同时为空！",
+  'validator_bgd21_01': '该项内容长度必须为21！',
+  'validator_myxse_01': '美元销售额是必填字段且不能为0',
+  'validator_rmbxse_02': '人民币销售额是必填字段且不能为0',
+  'validator_myda_01': '美元到岸价是必填字段且不能为0',
+  'validator_rmbda_01': '人民币到岸价是必填字段且不能为0',
+  // 所属期字段
+  'validator_ssq_01': '该所属期已申报！',
+  'validator_ssq_pc_01': '该所属期批次已申报！',
+  // 出口合同号字段
+  'validator_ckhth_01': '业务类型为XTHH时必录！',
+  // 报关单号字段
+  'validator_ckbgdh_01': '报关单号和代理证明号不能同时为空！',
+  // 出口数量字段
+  'validator_cksl_01': '业务类型红字冲减时为负数！',
+  // 备注字段
+  'validator_bz_01': '业务类型代码包含“JGW”时，备注不能为空！',
+  'validator_bz_02': '业务类型代码包含“HXWH”时，备注不能为空！',
+  'validator_bz_03': '业务类型代码包含“HCWX”时，备注不能为空！',
+  // 业务类型字段
+  'validator_cktmsywlxdmjh_01': '业务类型最多选择三项，请确认后填报！',
+  // 退税率字段
+  'validator_tsl_01': '退税率应在以下范围内：0,0.5,1,2,3,4,5,6,8,9,10,11,13,14,15,16,17！',
+  // 征税税率字段
+  'validator_zssl_01': '征税税率应在以下范围内：1,2,3,4,6,9,10,11,13,16,17,0.5！',
+  //本地存放路径
+  'validator_bdcflj_01': '请输入本地文件存放路径',
+  'validator_Ftp_01': '请输入FTP服务器地址',
+  'validator_Ftp_02': '请输入FTP存放文件路径',
+  'validator_Ftp_03': '请输入FTP登录用户',
+  'validator_Ftp_04': '请输入FTP登录密码',
+  'validator_Ycc_01': '请输入云存储密码',
+
+  'validator_ckbgdh123_01': 'xxxxxx',
+  'validator_ckbgdh123_02': 'xxxxxx',
+  'validator_ckbgdh123_03': 'xxxxxx',
+
+
+};

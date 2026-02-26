@@ -1,0 +1,68 @@
+delete from nbgl_yggl_zwdjxx;
+delete from nbgl_yggl_zwxx;
+
+commit;
+
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band2', 'Band2', 'Band2', '0', '0', '0', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band3', 'Band3', 'Band3', 'n1sIxix0zx5U9mT12e7drZcajyFIfNIn84M7fA+St1UEBlmkpKjf8ycc8oXPLJzGu7j+CrJlKBwZir1j1/U/ODUedcLNzMHoaX9BASD+F7wEzIF9WzqRHf01TP/dPamPA7hCH7hUloaUqXJ0tNNsyW+cFk5B4/3zzM0yX0SAojE=', 'QDf3rMFhD1XgDGtwIEklikKGbKFaJkbkHTjQM621urFSJqSkmY+sxALP/rawnYkfunPfVA9Xlj7uIpcmo9U3USerXVhQzH0W3UA3H8NLManIt/4hVxWdB1akSF6OFtnlRkjuVHm1Dl926B89c98nYP0J6ANJJwuuYuiLsUtlqFg=', 'qPyUSuISAH+x6PGXREc90/AfXvZRqvK4h8qFQrRJqdueI29iuDl+cmd9fJ4+X3aLKAdjsUMRLbaAZhjvyWzP6zJ6yfnVgSHzrk7bAoM9nKqo4h4eyxsVPKSq2hJZ+8vCFLf6pXpcq6rlj+BQp1Mi2qI+DKl11wF6ozvbQ5f8Zpc=', null, null, null, '2025-07-29 11:01:09', '41fa8ceb52b76b7ca33b04fe991d89ac', 'ZJB_CW&RL_RLZY&XZB');
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band4', 'Band4', 'Band4', 'HREGePvG9P/LBYsoLGULlVbbehqPsXXMUShpRXYnq1oL2fMwFYLO/BInWqh247NZwCGgRfATjqR7h5qfnLer+MN3WTEHyCz6F9ponJISvCsSqfCzVzA8zHcKVONg0VcYOBJRZKN4khvlIrv2u9c96YgirLwrgSu4ojKg2+jqHoY=', 'bNVS89wFgbGmPy1G9j2SJmC+YCOk45eXiXaNk4Qqu5CpYkvThFlwRRnp9uuLcl30JfqdRIETDxP5d0pCrb+U1STA7275nhcPtCIxL/uBnMBKd9ClsWTExZLr53TV58B1KdcGKP4eDv7zFtpdyDmbWf0Hpo1mT5Rp0Kp2viN7Yas=', 'zwhnrIqKJO5GHPgny3DzDTO66JEOFux/gBx0YxGwOH51l6GcAgJLgnBibOOg726b6uBoJvn+qdSsxc9eg3KYheFMpxpHXPcvaDKahH9zrhdBrDcHX4ze4j02moeTZk35D4v8Ogf/SMo4ZGxWEUIpFz6CWsY+wnP0W8QW3Uvgn10=', null, null, null, '2025-07-29 11:01:42', '41fa8ceb52b76b7ca33b04fe991d89ac', 'ZJB_CW&RL_RLZY&XZB');
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band5', 'Band5', 'Band5', 'IIb9PQNWhP7qrsLD+c933qCXCMKzdWpoRrCnhRy2U9OGgnafB4MLjebm02MMqZuVMvRrRtsociBrvkKTDTPO+j+KpYh7IY9zaNMBu5hmocvK+3J/ZJ3zjn4dB1gGEG1TjYbtGzEuj5pDGdJp68NAfQ9XaFsVRuwM5XufA8EhJT0=', 'xQ9EK4bDQTg7JRGvWx91kuqmN0lXlPXe49ZWcMObynCsqShQVB3HFXUe8byYI3wAhQZi13k+X9LAfs0t8Y1B2LzfZ94K87IC5aPd1jUIKvBk6TibUtcC/tWb31ea69xGYpo0Ah9lhlz4gviMS6P5g6pP7DgRvHgNgqidKdQXso4=', 'EZiuGPG9kGW5mmsICij0W7yFtMSPg7+fYGpzpEkEkVVxuKhpUwHWrlogGRHFikNwGRg82QPuGKAMhNovwTSVkwkYc4Dp+EOiNpE4Arr3ymg2E9qpiR/tqHMYJtUOR4KX33g/IS0kcyG/nJWyIuzOyRmqekjqmbK3MgfD1CmYDZ8=', null, null, null, '2025-07-29 13:32:52', '41fa8ceb52b76b7ca33b04fe991d89ac', 'ZJB_CW&RL_RLZY&XZB');
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band6', 'Band6', 'Band6', 'aXbvkZ+Av014haeRWSSRaGNWtrWPFElV5ER0k/TJgtgYP+credbmLOyij1kCE245mT+kBlc0SYypu5dA6U9PGAWPVIkZSbZyk+EItLVY4ex8TqGUmgzAZrBDe911DnBvgB2YoYK4IBQSY3n3jigXyuvmH+GFkP1BfFR0RFPViGY=', 'AVJmW9monYDToLsHXrxuPVhGcJLIa4q4apox2OnEwpcQ9sVRr6H7wgvBNZlWDzcpu0ktVZPzhUS6fyR6I1EFT0nRO/jph9UqejCyCu7xKCtBJrd3V6XZH/woTHY2KkJlDJ2H2iOEZrMDXrvZXpA37l+Icj4TxQfax/diZHpuTPA=', 'ZAgWz/Izb12H71L+v+hYeT+y+KnpLFrKbWCqSQZY1DcGR5tlObKUczZT7HB/NC00Egqe6V82Zc1L1HllP8liRrQ6mggVqU9iXGwlE+Jfn/ZHgeaakt349j8ZQQZ7HP3tWfNBkfbtjE2P6jIL0LcMViWm7Ueo03OP7OWZD3bdcMs=', null, null, null, '2025-07-29 13:33:34', '41fa8ceb52b76b7ca33b04fe991d89ac', 'ZJB_CW&RL_RLZY&XZB');
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band7', 'Band7', 'Band7', '11600', '22300', '16950', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band8', 'Band8', 'Band8', '18500', '35550', '27025', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwdjxx` VALUES ('Band9', 'Band9', 'Band9', '0', '0', '0', null, null, null, null, null, null);
+
+
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('001', '001', '总经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('002', '002', '证券代表', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('003', '003', '运营经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('004', '004', '运维与技术支持（浙江）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('005', '005', '运维与技术支持（沈阳）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('006', '006', '运维与技术支持（深圳）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('007', '007', '运维工程师（云南）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('008', '008', '运维工程师（武汉）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('009', '009', '运维工程师（深圳）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('010', '010', '运维工程师（大连）  ', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('011', '011', '运维工程师（北京）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('012', '012', '需求分析师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('013', '013', '行政专员', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('014', '014', '销售组长', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('015', '015', '项目经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('016', '016', '项目负责人', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('017', '017', '系统工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('018', '018', '网站维护', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('019', '019', '数据库开发工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('020', '020', '首席顾问', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('021', '021', '视频剪辑师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('022', '022', '市场总监', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('023', '023', '市场营销经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('024', '024', '软件产品销售', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('025', '025', '人力资源经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('026', '026', '前端工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('027', '027', '内勤（残疾人）', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('028', '028', '课程内容制作', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('029', '029', '讲师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('030', '030', '技术支持', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('031', '031', '会计', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('032', '032', '大数据工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('033', '033', '产品运营专员', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('034', '034', '产品经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('035', '035', '测试工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('036', '036', '财务总监', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('037', '037', '财务助理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('038', '038', '财务经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('039', '039', '财税讲师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('040', '040', '部门经理', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('041', '041', 'Web前端工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('042', '042', 'UI工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('043', '043', 'Oracle工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('044', '044', 'Java开发工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('045', '045', 'IT服务工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('046', '046', 'G端服务组负责人', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('047', '047', 'B端服务组联合负责人', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('048', '048', 'Android开发工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('049', '049', '.Net开发工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('050', '050', ' Ios开发工程师', null, null, null, null, null, null);
+INSERT INTO `nbgl_yggl_zwxx` VALUES ('e0541b00162d459bab6d8cee7781d239', '051', '保洁员', '2025-07-29 15:30:00', '41fa8ceb52b76b7ca33b04fe991d89ac', 'ZJB_CW&RL_RLZY&XZB', null, null, null);
+
+commit;

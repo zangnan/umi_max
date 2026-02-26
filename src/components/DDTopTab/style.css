@@ -1,0 +1,14 @@
+.dd_layout_tabs {
+  margin: -16px -16px 0;
+}
+.dd_layout_tabs > .ant-tabs-nav {
+  background-color: #fff;
+  padding: 0 24px;
+}
+.dd_layout_tabs > .ant-tabs-nav .ant-tabs-tab {
+  padding: 7px 0;
+}
+.dd_layout_tabs > .ant-tabs-content-holder {
+  margin: 0 24px;
+  background-color: #fff;
+}

@@ -1,0 +1,65 @@
+.tree_advanced_filter {
+  padding: 12px;
+}
+.tree_advanced_filter .ant-tree-treenode .anticon.anticon-delete {
+  display: none;
+  color: #ff4d4f;
+}
+.tree_advanced_filter .ant-tree-treenode:hover .anticon.anticon-delete {
+  display: inline-flex;
+}
+.tree_advanced_filter .ant-switch {
+  background: #339c00;
+}
+.tree_advanced_filter .ant-switch.ant-switch-checked {
+  background: #e38000;
+}
+.tree_advanced_filter .ant-switch.ant-switch-checked:hover:not(.ant-switch-disabled) {
+  background: #bf6c00;
+}
+.tree_advanced_filter .ant-switch:hover:not(.ant-switch-disabled) {
+  background: #287b00;
+}
+.tree_advanced_filter .ant-switch.ant-switch-loading,
+.tree_advanced_filter .ant-switch.ant-switch-disabled {
+  background: #bababa;
+}
+.sql_wrap {
+  font-size: 16px;
+}
+.sql_wrap .sql_table {
+  color: #00c1de;
+}
+.sql_wrap .sql_condition {
+  color: #aa4800;
+  display: inline-block;
+  margin: 0px 0px 0px 5px;
+  font-weight: bold;
+}
+.sql_wrap .sql_value {
+  color: #ff4d4f;
+  display: inline-block;
+  margin: 0px 0px 0px 5px;
+  font-weight: bold;
+}
+.sql_wrap .sql_lop {
+  display: inline-block;
+  margin: 0 0 0 5px;
+  font-weight: bold;
+}
+.sql_wrap .sql_prop {
+  color: #00c1de;
+  display: inline-block;
+  margin: 0 0 0 5px;
+}
+.sql_wrap .sql_group {
+  border-bottom: 3px solid #b6b6b6;
+  padding: 3px 0;
+  display: inline-block;
+  margin: 0px 0;
+}
+.sql_wrap .sql_bracket {
+  color: #b6b6b6;
+  margin: 0 0 0 5px;
+  font-size: 24px;
+}
