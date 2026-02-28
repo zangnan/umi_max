@@ -147,7 +147,7 @@ const DrawerList: React.FC<BdjgProps> = ({
         <Button type='primary' onClick={saveTree}>保存</Button>
       </Space>}
     >
-      <Spin tip="Loading..." spinning={masker} delay={100}>
+      <Spin description="Loading..." spinning={masker} delay={100}>
         <Tree
           checkStrictly
           checkable

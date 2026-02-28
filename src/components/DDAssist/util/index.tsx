@@ -4388,7 +4388,7 @@ myUtil.media = {
       let previewVideo;
       previewVideo = {
         preview:{
-          destroyOnClose: true,
+          // destroyOnClose: true,
           imageRender: () => (
             <video
               muted
@@ -4398,7 +4398,7 @@ myUtil.media = {
               src={`${mediaPathVideo}`}
             />
           ),
-          toolbarRender: () => null,
+          actionsRender: () => null,
         }
       }
       if (item?.mediaPathPic) {

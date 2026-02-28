@@ -269,7 +269,7 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
         }
       }
 
-      tagReactNode.push(<Tag { ...commonTagProp }>{adfName}</Tag>);
+      tagReactNode.push(<Tag key={adfId} { ...commonTagProp }>{adfName}</Tag>);
     });
     return tagReactNode;
   }
@@ -465,23 +465,23 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
       return { color: tmp.lop === 'and' ? '#e38000' : '#339c00' };
     }
     const treeRecursive = (targetTreeData: any = []) => {
-      let nodeSqlBracketleft: any = <span className='sql_bracket'>(</span>;
-      let nodeSqlBracketRight: any = <span className='sql_bracket'>)</span>;
+      let getNodeSqlBracketleft = () => <span key={`bracket-left-${tmpSql.length}`} className='sql_bracket'>(</span>;
+      let getNodeSqlBracketRight = () => <span key={`bracket-right-${tmpSql.length}`} className='sql_bracket'>(</span>;
       let nodeSqlLop: any = (item: any) => {
-        return <span style={getLopStyle(item)} className='sql_lop'>{item.lop}</span>
+        return <span key={`lop-${tmpSql.length}`} style={getLopStyle(item)} className='sql_lop'>{item.lop}</span>
       };
       targetTreeData.forEach((item: any, index: any) => {
         if (item.children && item.children.length > 0) {
           if (index === 0) {
-            tmpSql.push(nodeSqlBracketleft);
+            tmpSql.push(getNodeSqlBracketleft());
           } else {
-            tmpSql.push(<span className=''>
+            tmpSql.push(<span key={`span-${tmpSql.length}`} className=''>
               {nodeSqlLop(item)}
-              {nodeSqlBracketleft}
+              {getNodeSqlBracketleft()}
             </span>);
           }
           treeRecursive(item.children);
-          tmpSql.push(nodeSqlBracketRight);
+          tmpSql.push(getNodeSqlBracketRight());
         } else {
           let dictName: any = ENV_TYPE === 'node' ? item.dict_name : item.dict_field_rel_table;
           let opObj: any = {};
@@ -507,19 +507,19 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
             fieldVal = fieldVal.replaceAll(",", "','")
             fieldVal = `('${fieldVal}')`;
           }
-          let tmpGroup: any = <>
-            {nodeSqlBracketleft}
+          let tmpGroup: any = <React.Fragment key={`group-frag-${tmpSql.length}`}>
+            {getNodeSqlBracketleft()}
             <span className='sql_prop'><b className='sql_table'>{`${dictName}.`}</b><b>{item.dict_field_name}</b></span>
             <span className='sql_condition'>{opObj?.conditionCodeDesc}</span>
             <span className='sql_value'>{fieldVal}</span>
-            {nodeSqlBracketRight}
-          </>
+            {getNodeSqlBracketRight()}
+          </React.Fragment>
           if (index === 0) {
-            tmpSql.push(<div className='sql_group'>
+            tmpSql.push(<div key={`group-${tmpSql.length}`} className='sql_group'>
               {tmpGroup}
             </div>);
           } else {
-            tmpSql.push(<div className='sql_group'>
+            tmpSql.push(<div key={`group-${tmpSql.length}`} className='sql_group'>
               {nodeSqlLop(item)}
               {tmpGroup}
             </div>);
@@ -713,9 +713,11 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
     };
     if (codeTable) {
       let tmpOption: any = myUtil.code.getSelectOption(codeTable);
-      inputNode = <Select { ...inputCommonPro } options={tmpOption} mode='multiple' maxTagCount='responsive' value={nodeData.value}/>
+      const multipleValue = Array.isArray(nodeData.value) ? nodeData.value : nodeData.value ? [nodeData.value] : [];
+      inputNode = <Select { ...inputCommonPro } options={tmpOption} mode='multiple' maxTagCount='responsive' value={multipleValue}/>
     } else if (inputType === itemType.Input) {
-      inputNode = <Input { ...inputCommonPro } value={nodeData.value}/>
+      const { allowClear, ...inputProps } = inputCommonPro;
+      inputNode = <Input { ...inputProps } value={nodeData.value}/>
     } else if (inputType === itemType.DatePicker) {
       let valTmp: any;
       if (nodeData?.op === 'range') {
@@ -730,7 +732,8 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
         inputNode = <DatePicker { ...inputCommonPro } value={valTmp}/>
       }
     } else if (inputType === itemType.InputNumber) {
-      inputNode = <InputNumber { ...inputCommonPro } value={nodeData.value} controls={false}/>
+      const { allowClear, ...inputNumberProps } = inputCommonPro;
+      inputNode = <InputNumber { ...inputNumberProps } value={nodeData.value} controls={false}/>
     }
     // debugger;
     let treeNodeTmp = <Space>
@@ -738,18 +741,18 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
         <Switch defaultChecked checkedChildren="与" unCheckedChildren="或" value={nodeData.lop === 'and' ? true : false}
           disabled={nodeData?.switchIsDisabled}
           onChange={(param: any) => {onChangeCondition({value: param, nodeData, targetKey: 'lop'})}}/>
-        {nodeData.isGroup && <>
+        {nodeData.isGroup && <React.Fragment key="group-buttons">
           <Button icon={<PlusOutlined />} onClick={(event: any) => addTreeNode({data: nodeData, event})} size='small' type="primary">添加条件</Button>
           <Button icon={<PlusCircleOutlined />}onClick={(event: any) => addTreeNode({data: nodeData, event, isGroup: true})} size='small' type="primary">添加分组</Button>
-        </>}
+        </React.Fragment>}
       </Flex>
-      {!nodeData.isGroup && <>
+      {!nodeData.isGroup && <React.Fragment key="non-group-items">
         <Select options={getSelectField()} value={nodeData.selectVal} style={{width: '200px'}} placeholder="请选择字段"
           onChange={(value: any) => {onChangeCondition({value, nodeData, targetKey: 'dict_field_name'})}}/>
         <Select options={getSelectCondition(nodeData)} value={nodeData.op} style={{width: '120px'}} placeholder="请选择条件"
           onChange={(value: any) => {onChangeCondition({value, nodeData, targetKey: 'op'})}}/>
         { nodeData.inputIsShow && inputNode }
-      </>}
+      </React.Fragment>}
       <DeleteOutlined onClick={(event: any) => delTreeNode(nodeData, event)} />
     </Space>;
     return treeNodeTmp;
@@ -796,7 +799,7 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
         </Flex>
       </Col>
     </Row>
-    {showSql && <>
+    {showSql && <React.Fragment key="sql-row">
       {/* {<Row gutter={24} style={{backgroundColor: '#ffffff'}}> */}
       {<Row gutter={24}>
       <Col flex="auto">
@@ -808,7 +811,7 @@ const DDAdvancedFilter: React.FC<DDAdvancedFilterProps> = ({
         <div style={{margin: '0 0 20px 0'}}>{getSql()}</div>
       </Col>
     </Row>}
-    </>}
+    </React.Fragment>}
     <FloatButton onClick={() => setShowSql(!showSql)} icon={<CodeOutlined />} tooltip={`${showSql ? '隐藏' : '显示'}SQL伪代码`} />
   </>
 };

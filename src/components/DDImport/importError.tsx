@@ -67,9 +67,9 @@ const error_grid_columns = [
         </>)}
         onCancel={() => setModalVisible(false)}
         className={`${masker ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
-        <Spin tip="Loading..." spinning={masker} delay={100}>
+        <Spin description="Loading..." spinning={masker} delay={100}>
           <Table
             dataSource={data.drycxx}
             columns={error_grid_columns}

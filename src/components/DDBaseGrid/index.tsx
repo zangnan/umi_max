@@ -861,7 +861,7 @@ const DDBaseGrid: React.FC<DDBaseGridProps> = ({
             // videopath = videopath.split('---')[3];
             previewVideo = {
               preview:{
-                destroyOnClose: true,
+                // destroyOnClose: true,
                 imageRender: () => (
                   <video
                     muted
@@ -871,7 +871,7 @@ const DDBaseGrid: React.FC<DDBaseGridProps> = ({
                     src={`${mediaPathVideo}`}
                   />
                 ),
-                toolbarRender: () => null,
+                actionsRender: () => null,
               }
             }
           }

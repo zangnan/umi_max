@@ -127,7 +127,7 @@ const DrawerList: React.FC<BdjgProps> = ({
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       destroyOnHidden={true}
       wrapClassName='standard-modal'
-      maskClosable={false}
+      mask={{ closable: false }}
       okText="转正申请"
       cancelText="关闭"
       onOk={() => formSubmit()}

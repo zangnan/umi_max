@@ -84,7 +84,7 @@ const DDChartConfigForm: React.FC<any> = ({
       okText="统计查询"
       cancelText="关闭"
       onCancel={() => setModalVisible(false)}
-      maskClosable={false}
+      mask={{ closable: false }}
       destroyOnHidden={true}
       footer={<Space>
         <Button type="default" onClick={() => DDChartUtil.showChartModal({chartConfigForm, config, refGrid, showJson: true})} >图表配置Json</Button>

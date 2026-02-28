@@ -449,7 +449,7 @@ Func.getToolbarDropDown = ({ unitKey, statisticsPlan, setStatisticsPlan, setStat
   <Button onClick={() => {
     Func.popupStatisticsAdd({config, setStatisticsItems, setStatisticsPlanOnEdit, setStatisticsOptModalVisible});
   }}>维度表统计</Button>
-  {statisticsPlan?.length > 0 && <Tooltip title="维度表统计方案">
+  {statisticsPlan?.length > 0 &&
     <Dropdown placement="bottomRight" menu={Func.statisticsDropdownItems({
       unitKey,
       statisticsPlan,
@@ -459,9 +459,9 @@ Func.getToolbarDropDown = ({ unitKey, statisticsPlan, setStatisticsPlan, setStat
       setStatisticsItems,
       config,
     })}>
-      <Button icon={<DownOutlined />} />
+      <Tooltip title="维度表统计方案"><Button icon={<DownOutlined />} /></Tooltip>
     </Dropdown>
-  </Tooltip>}
+  }
 </>
 }
 

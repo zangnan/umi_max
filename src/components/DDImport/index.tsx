@@ -142,9 +142,9 @@ const DDImport: React.FC<DDImportProps> = ({
           <Button onClick={handleImport} type="primary">确定</Button>
         </>)}
         className={`${masker ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
-        <Spin tip="Loading..." spinning={masker} key={'sjdrspin'} delay={100}>
+        <Spin description="Loading..." spinning={masker} key={'sjdrspin'} delay={100}>
           <Form
             name="basic"
             labelCol={{ span: 8 }}

@@ -3,6 +3,7 @@ const unitConfig: any = {};
 unitConfig.module_key = 'EXAMPLE_DATA_PAGE_4';
 unitConfig.page_id = 'example_list_4';
 unitConfig.api_grid_query = `/dict/automatic/queryPagerStatistics`;
+unitConfig.grid_row_key = 'uuid';
 
 // 配置项：列表列
 unitConfig.grid_columns = [

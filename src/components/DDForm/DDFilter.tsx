@@ -65,7 +65,7 @@ const DDFilter: React.FC<FilterProps> = ({
     <div className="dd-form">
       <div style={{position: 'relative', paddingRight: '200px'}}>
         <div className="field-group" style={{ height: searchHeight, overflow: 'hidden' }}>
-          <DndProvider backend={HTML5Backend}>
+          {/* <DndProvider backend={HTML5Backend}> */}
             <Form
               form={form}
               name="advanced_search"
@@ -77,7 +77,7 @@ const DDFilter: React.FC<FilterProps> = ({
             >
               <DDItems items={items} layout={layout} formType='filter' searchAct={onFinish}/>
             </Form>
-          </DndProvider>
+          {/* </DndProvider> */}
         </div>
         <div style={{position: 'absolute', top: '0', right: '0'}}>
           <Space>

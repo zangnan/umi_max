@@ -169,7 +169,7 @@ const Report02: React.FC<unknown> = () => {
   }
 
   return (
-    <Spin tip="Loading..." spinning={masker} delay={100}>
+    <Spin description="Loading..." spinning={masker} delay={100}>
       <ProCard split="horizontal" className='dd-statistics-res'>
         <ProCard>
           <Form form={form1} layout='inline' initialValues={initData}>

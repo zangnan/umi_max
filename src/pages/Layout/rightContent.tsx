@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { LogoutOutlined, SettingOutlined, UserOutlined, AntDesignOutlined, BellOutlined, FileExcelOutlined, QuestionOutlined } from '@ant-design/icons';
 import { message, Spin, Avatar, Dropdown, Space, Tag, Badge, Popover, Button, List } from 'antd';
 import DDSkinSetting from '@/components/DDThemeSetting';
@@ -108,13 +108,14 @@ const RightContent: React.FC<any> = () => {
     };
   });
 
-  if (!initialState) {
-    setUserLoadin(true);
-  }
-
-  if (!currentUser || !currentUser?.body?.loginName) {
-    setUserLoadin(true);
-  }
+  // 使用 useEffect 处理条件状态更新，避免在渲染阶段直接调用 setState
+  useEffect(() => {
+    if (!initialState || !currentUser || !currentUser?.body?.loginName) {
+      setUserLoadin(true);
+    } else {
+      setUserLoadin(false);
+    }
+  }, [initialState, currentUser]);
 
   // Dropdown
   const items: MenuProps['items'] = [

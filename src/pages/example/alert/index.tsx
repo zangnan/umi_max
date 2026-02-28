@@ -162,10 +162,10 @@ const Alert: React.FC<any> = ({ }) => {
           <Button type="primary" onClick={() => handleSave()}>保存</Button>
         </>}
         onCancel={() => handleModalVisible1(false)}
-        maskClosable={false}
+        mask={{ closable: false }}
         // className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
       >
-        {/* <Spin tip="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
+        {/* <Spin description="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
           <DDBaseForm
             form={form}
             items={formItems1}
@@ -181,13 +181,13 @@ const Alert: React.FC<any> = ({ }) => {
         open={modalVisible2}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         onCancel={() => handleModalVisible2(false)}
-        maskClosable={false}
+        mask={{ closable: false }}
         okText="保存"
         cancelText="关闭"
         onOk={() => handleModalVisible2(false)}
         // className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
       >
-        {/* <Spin tip="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
+        {/* <Spin description="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
           <DDBaseForm
             form={form}
             items={formItems2}
@@ -203,7 +203,7 @@ const Alert: React.FC<any> = ({ }) => {
         open={modalVisible3}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         onCancel={() => handleModalVisible3(false)}
-        maskClosable={false}
+        mask={{ closable: false }}
         okText="保存"
         cancelText="关闭"
         onOk={() => handleSave()}
@@ -211,7 +211,7 @@ const Alert: React.FC<any> = ({ }) => {
         // okButtonProps={{ className: 'dd_btn_focus' }}
         // className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
       >
-        {/* <Spin tip="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
+        {/* <Spin description="Loading..." spinning={masker2} delay={100} key='DDBunit2DDBaseForm'> */}
           <DDBaseForm
             form={form}
             items={formItems3}

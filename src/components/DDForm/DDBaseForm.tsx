@@ -106,7 +106,7 @@ const DDBaseForm: React.FC<BaseFormProps> = ({
   }, [form, otherParam]);
   return (
     <div className="dd-form">
-      <DndProvider backend={HTML5Backend}>
+      {/* <DndProvider backend={HTML5Backend}> */}
         <Form preserve={false}
           form={form}
           className='simple-form'
@@ -125,7 +125,7 @@ const DDBaseForm: React.FC<BaseFormProps> = ({
           {/* <DDItems useform={form} items={myItems} layout={myLayout} otherParam={otherParam} formType='form' formStyle={formStyle} labelInputLayout={myLabelInputLayout}/> */}
           <DDItems useform={form} items={myItems} layout={myLayout} otherParam={otherParam} formType='form' formStyle={formStyle} labelInputLayout={labelInputLayout}/>
         </Form>
-      </DndProvider>
+      {/* </DndProvider> */}
     </div>
   );
 };

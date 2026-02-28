@@ -10,8 +10,8 @@ import type { SizeType } from 'antd/es/config-provider/SizeContext';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import { useDrop } from 'react-dnd';
-import Dnd from "./Dnd";
-import DragLayer from "./DragLayer";
+// import Dnd from "./Dnd";
+// import DragLayer from "./DragLayer";
 import { cloneDeep } from 'lodash';
 import type { RcFile, UploadFile } from 'antd/es/upload';
 import MdEditor from 'react-markdown-editor-lite';
@@ -1283,7 +1283,11 @@ const DDItems: React.FC<ItemsProps> = ({
       if (myItems[i]?.layout) {
         layoutNew.group =myItems[i].layout;
       }
-      const layoutItem = (type === itemType.GroupTitle || type === itemType.Blank) ? layoutNew.groupTitle : layoutNew.group;
+      const layoutItem = (() => {
+        const item = (type === itemType.GroupTitle || type === itemType.Blank) ? layoutNew.groupTitle : layoutNew.group;
+        const { formItem, ...rest } = item || {};
+        return rest;
+      })();
 
       // 拼接所有组别的录入项目
       if (type === itemType.Hidden) {
@@ -1300,14 +1304,14 @@ const DDItems: React.FC<ItemsProps> = ({
           </div>);
         } else {
           if (formType === 'form' && formStyle?.form_items) { // formStyle中有配置项则为拖拽组件
-            const top = formStyle?.form_items[i].top;
-            const left = formStyle?.form_items[i].left;
-            children.push(
-              <>
-                <Dnd key={i} index={i} top={top} left={left} width={formStyle?.drag_style.width}>{itemLabel}</Dnd>
-                <DragLayer index={i} top={top} left={left} width={formStyle?.drag_style.width}>{itemLabel}</DragLayer>
-              </>
-            );
+            // const top = formStyle?.form_items[i].top;
+            // const left = formStyle?.form_items[i].left;
+            // children.push(
+            //   <React.Fragment key={i}>
+            //     <Dnd key={`dnd_${i}`} index={i} top={top} left={left} width={formStyle?.drag_style.width}>{itemLabel}</Dnd>
+            //     <DragLayer key={`drag_${i}`} index={i} top={top} left={left} width={formStyle?.drag_style.width}>{itemLabel}</DragLayer>
+            //   </React.Fragment>
+            // );
           } else {
             children.push(<Col {...layoutItem} key={i}>
               {itemLabel}
@@ -1337,23 +1341,23 @@ const DDItems: React.FC<ItemsProps> = ({
   }
 
   // 初始化drop
-  const [, drop] = useDrop(
-    () => ({
-      accept: 'box',
-      drop(item: any, monitor) {
-        const delta = monitor.getDifferenceFromInitialOffset() as {
-          x: number
-          y: number
-        }
-        let left = Math.round(item.left + delta.x);
-        let top = Math.round(item.top + delta.y);
-        [left, top] = doSnapToGrid(left, top);
-        moveBox(item.index, left, top)
-        return undefined
-      },
-    }),
-    [moveBox],
-  )
+  // const [, drop] = useDrop(
+  //   () => ({
+  //     accept: 'box',
+  //     drop(item: any, monitor) {
+  //       const delta = monitor.getDifferenceFromInitialOffset() as {
+  //         x: number
+  //         y: number
+  //       }
+  //       let left = Math.round(item.left + delta.x);
+  //       let top = Math.round(item.top + delta.y);
+  //       [left, top] = doSnapToGrid(left, top);
+  //       moveBox(item.index, left, top)
+  //       return undefined
+  //     },
+  //   }),
+  //   [moveBox],
+  // )
   const styles: any = {
     ...formStyle?.drop_style,
     position: "relative",
@@ -1369,7 +1373,9 @@ const DDItems: React.FC<ItemsProps> = ({
     } else {
       node.push(<Row key={'row'} className="antd-Row" gutter={24}>{getFields()}</Row>);
     }
-    return <div ref={drop} style={styles}>
+    return <div
+    // ref={drop}
+    style={styles}>
       {node}
     </div>
   }

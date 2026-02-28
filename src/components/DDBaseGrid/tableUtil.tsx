@@ -391,36 +391,48 @@ tableUtil = {
         return <><Tooltip placement="topLeft" title={text}> {text}</Tooltip></>
       }
     }
-    // title
-    if (targetColumn.title?.toString().indexOf('{br}') > -1) {
-      targetColumn.titleOriginal = targetColumn.title.replace(new RegExp('{br}', 'g'), '');; // 存贮原始数据: title 导出用
+    // title - 使用 titleRender 包装，不直接修改 title 属性
+    if (typeof targetColumn.title === 'string' && targetColumn.title.indexOf('{br}') > -1) {
+      const originalTitle = targetColumn.title.replace(new RegExp('{br}', 'g'), '');
+      if (!targetColumn.titleOriginal) {
+        targetColumn.titleOriginal = originalTitle;
+      }
       const titleBrArr: any = targetColumn.title.split('{br}');
       const titleBr: any = [];
       titleBrArr?.forEach((title: any, index: number) => {
-        titleBr.push(title);
+        titleBr.push(<span key={`title-text-${index}`}>{title}</span>);
         if (index !== titleBrArr.length - 1) {
-          titleBr.push(<br key={index.toString()} />);
+          titleBr.push(<br key={`title-br-${index}`} />);
         }
       })
-      targetColumn.title = <span>{titleBr}</span>;
+      targetColumn._titleRender = <span>{titleBr}</span>;
     }
-    // title tooltip
-    if (targetColumn.titleTooltip) {
-      targetColumn.titleOriginal = targetColumn.title; // 存贮原始数据: title 导出用
-      const tooltip: any = [];
-      const titleTooltipArr: any = targetColumn.titleTooltip.split('{br}');
-      titleTooltipArr?.forEach((tip: any, index: number) => {
-        tooltip.push(tip);
-        if (index !== titleTooltipArr.length) {
-          tooltip.push(<br key={index.toString()} />);
-        }
-      });
-      targetColumn.title = <>
-        <Tooltip title={tooltip}>
-          <span>{targetColumn.title} <QuestionCircleOutlined /></span>
-        </Tooltip>
-      </>;
+    // title tooltip - 使用 title 函数形式避免 key 问题
+    if (targetColumn.titleTooltip && typeof targetColumn.title === 'string') {
+      const originalTitle = targetColumn.title;
+      // 处理 tooltipText 中的 {br} 换行
+      const tooltipText = targetColumn.titleTooltip.split('{br}').map((text: string, index: number, arr: string[]) => (
+        <span key={`tooltip-${index}`}>
+          {text}
+          {index < arr.length - 1 && <br />}
+        </span>
+      ));
+      // 使用函数形式的 title，这样可以正确处理 React 元素
+      targetColumn.title = () => (
+        <span>
+          {originalTitle}
+          <Tooltip title={tooltipText}>
+            <QuestionCircleOutlined style={{ marginLeft: 4 }} />
+          </Tooltip>
+        </span>
+      );
+      targetColumn.titleOriginal = originalTitle;
       delete targetColumn.titleTooltip;
+    }
+
+    // 应用 _titleRender
+    if (targetColumn._titleRender) {
+      targetColumn.title = targetColumn._titleRender;
     }
   },
   // 渲染图形
@@ -528,10 +540,10 @@ tableUtil = {
           tmpList = myUtil.code.getHeaderFilterOption(codeTable, showCode);
         }
         if (!(list?.length > 0)) {
-          arr.push(<Radio key={tmpList.length.toString()} value={''}>{'全部'}</Radio>);
+          arr.push(<Radio key="all" value={''}>{'全部'}</Radio>);
         }
         tmpList.forEach((item: any, index: number) => {
-          arr.push(<Radio key={index.toString()} value={item.value}>{item.text}</Radio>);
+          arr.push(<Radio key={`radio-${index}`} value={item.value}>{item.text}</Radio>);
         });
         targetColumn.filterDropdown = (params: any) => (
           // params = { setSelectedKeys, selectedKeys, confirm, clearFilters }
@@ -547,10 +559,11 @@ tableUtil = {
           </div>
         );
       } else if (type === itemType.Input) {
+        const placeholderText = targetColumn.titleOriginal || (typeof targetColumn.title === 'string' ? targetColumn.title : '');
         targetColumn.filterDropdown = (params: any) => (
           <div style={{ padding: 8 }}>
             <Input.Search
-              placeholder={`${targetColumn.title}`}
+              placeholder={placeholderText}
               // value={params?.selectedKeys[0]}
               // size="small"
               allowClear

@@ -225,7 +225,7 @@ return <>
 			{isCancelledForm && <Button type="primary" onClick={() => handleSave('1')}>中止</Button>}
 		</>}
 		onCancel={() => setModalVisible(false)}
-		maskClosable={false}
+		mask={{ closable: false }}
 	>
 		<Space orientation="vertical" size={12} style={{ display: 'flex' }}>
 			<Descriptions size='small' title={processRun.xtglProcessName} column={2} bordered={false} items={processDefForm} />

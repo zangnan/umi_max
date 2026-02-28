@@ -159,10 +159,15 @@ const DDBunit2RelTable: React.FC<DDBunit2RelTableProps> = ({
         <Button type='primary' onClick={saveRole}>保存</Button>
       </Space>}
     >
-      <Spin tip="Loading..." spinning={masker} delay={100}>
+      <Spin description="Loading..." spinning={masker} delay={100}>
         <Transfer
           dataSource={dataSource}
-          listStyle={{ width: '50%', height: 400 }}
+          styles={{
+            section : {
+              width: '50%',
+              height: 400,
+            },
+          }}
           titles={['待选', '已选']}
           targetKeys={targetKeys}
           selectedKeys={selectedKeys}

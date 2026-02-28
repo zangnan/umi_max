@@ -64,7 +64,7 @@ const CreateWord: React.FC<unknown> = () => {
         ]
       }]
     });
-    myUtil.word.saveDocx({doc, name: 'MyDocument.docx'});
+    myUtil.word.saveDocx(doc, 'MyDocument.docx');
   };
 
   // 生成文档对象children：模块及字典部分
@@ -103,32 +103,32 @@ const CreateWord: React.FC<unknown> = () => {
     }
     // 工具栏按钮
     if (moduleCommonToolbar.length + moduleCommonToolbarCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam: {text: '工具栏按钮', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '工具栏按钮', bold: true, size: 22, bullet: true}));
     }
     if (moduleCommonToolbar.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonToolbar.join('、')}`}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonToolbar.join('、')}`}));
     }
     if (moduleCommonToolbarCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonToolbarCus.join('、')}`, color: "8c121f"}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonToolbarCus.join('、')}`, color: "8c121f"}));
     }
     // 列表操作列
     if (moduleCommonGridCol.length + moduleCommonGridColCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam: {text: '列表操作列', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '列表操作列', bold: true, size: 22, bullet: true}));
     }
     if (moduleCommonGridCol.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonGridCol.join('、')}`}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonGridCol.join('、')}`}));
     }
     if (moduleCommonGridColCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonGridColCus.join('、')}`, color: "8c121f"}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonGridColCus.join('、')}`, color: "8c121f"}));
     }
     const formatIsUsed = (val: any) => val === '1' ? '√' : '';
     // 数据字典 列表
     let appTableDictGrid = appTableDict.filter((item: any) => { return item.gridUsed });
     if (appTableDictGrid?.length > 0) {
       appTableDictGrid = orderBy(appTableDictGrid, ['gridIndex'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 列表', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 列表', bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dictFieldName' },
           { title: '字段英文名', dataIndex: 'dictFieldDesc' },
           { title: '主键标识', dataIndex: 'gridKey', format: formatIsUsed },
@@ -140,37 +140,37 @@ const CreateWord: React.FC<unknown> = () => {
           { title: '隐藏', dataIndex: 'gridHidden', format: formatIsUsed },
           { title: '合并列头', dataIndex: 'gridChildren' },
         ],
-        gridData: appTableDictGrid,
+        dataSource: appTableDictGrid,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
     // 数据字典 筛选项
     let appTableDictFilter = appTableDict.filter((item: any) => { return item.filterItemType });
     if (appTableDictFilter?.length > 0) {
       appTableDictFilter = orderBy(appTableDictFilter, ['filterItemIndex'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 筛选项', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 筛选项', bold: true, size: 22, bullet: true}));
       // debugger;
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dictFieldName' },
           { title: '字段英文名', dataIndex: 'dictFieldDesc' },
           { title: '类型', dataIndex: 'filterItemType' },
           // { title: '位置', dataIndex: 'filterItemPosition' },
           // { title: '占位符', dataIndex: 'filterItemPlaceholder' },
         ],
-        gridData: appTableDictFilter,
+        dataSource: appTableDictFilter,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
     // 数据字典 表单项
     let appTableDictForm = appTableDict.filter((item: any) => { return item.formItemUsed === '1' });
     if (appTableDictForm?.length > 0) {
       appTableDictForm = orderBy(appTableDictForm, ['formItemIndex'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 表单项', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 表单项', bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dictFieldName' },
           { title: '字段英文名', dataIndex: 'dictFieldDesc' },
           { title: '类型', dataIndex: 'formItemType' },
@@ -178,9 +178,9 @@ const CreateWord: React.FC<unknown> = () => {
           { title: '格式化', dataIndex: 'formItemFormat' },
           { title: '验证', dataIndex: 'formItemRule' },
         ],
-        gridData: appTableDictForm,
+        dataSource: appTableDictForm,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
   }
@@ -193,27 +193,27 @@ const CreateWord: React.FC<unknown> = () => {
     let dbTableList: any = dbTableListResponse?.body?.rows || [];
     let dbTableFieldList: any = dbTableFieldListResponse?.body?.rows || [];
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter} 数据库`, level: 1}));
+    children.push(myUtil.word.createTitle({text: `${startChapter} 数据库`, level: 1}));
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.1 数据库表一览`, level: 2}));
+    children.push(myUtil.word.createTitle({text: `${startChapter}.1 数据库表一览`, level: 2}));
     // 数据库表汇总
     children.push(myUtil.word.createTable({
-      cols: [
+      columns: [
         { title: '物理表名称', dataIndex: 'tableName' },
         { title: '物理表含义', dataIndex: 'tableDesc' },
       ],
-      gridData: dbTableList,
+      dataSource: dbTableList,
       showLineNumber: true,
-      docxConfig,
+      config: docxConfig,
     }));
     // word层级标题：数据库表明细
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2 数据库表明细`, level: 2}));
+    children.push(myUtil.word.createTitle({text: `${startChapter}.2 数据库表明细`, level: 2}));
     // 数据库表明细
     dbTableList.forEach((item1: any) => {
       let appTableDict = dbTableFieldList.filter((item2: any) => { return item2.dictName === item1.dictName });
-      children.push(myUtil.word.createParagraph({textParam: {text: `${item1.dictName} ${item1.dictDesc}`, bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph( {text: `${item1.dictName} ${item1.dictDesc}`, bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '物理表字段英文名', dataIndex: 'dictFieldName' },
           { title: '物理表字段中文名', dataIndex: 'dictFieldDesc' },
           { title: '数据元类型', dataIndex: 'dictFieldType' },
@@ -221,9 +221,9 @@ const CreateWord: React.FC<unknown> = () => {
           // { title: '默认值', dataIndex: 'dictFieldDefaultValue' },
           { title: '非空', dataIndex: 'dictFieldNotNull' },
         ],
-        gridData: appTableDict,
+        dataSource: appTableDict,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     })
   }
@@ -231,7 +231,7 @@ const CreateWord: React.FC<unknown> = () => {
   // 生成文档对象children：功能菜单
   const wordChildrenMenu = async ({ children = [], menuTree = [], startChapter = 1, docxConfig, }: any) => {
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter} 功能菜单`, level: 1, pageBreakBefore: true}));
+    children.push(myUtil.word.createTitle({text: `${startChapter} 功能菜单`, level: 1, pageBreakBefore: true}));
     // 菜单树
     let menuData: any = [];
     let drawMenu: any;
@@ -255,12 +255,12 @@ const CreateWord: React.FC<unknown> = () => {
     };
     drawMenu(cloneDeep(menuTree));
     children.push(myUtil.word.createTable({
-      cols: [
+      columns: [
         { title: '菜单名称', dataIndex: 'menuName' },
         { title: '菜单路径', dataIndex: 'menuPath' },
       ],
-      gridData: menuData,
-      docxConfig,
+      dataSource: menuData,
+      config: docxConfig,
     }));
   }
 
@@ -294,7 +294,7 @@ const CreateWord: React.FC<unknown> = () => {
     // word 模块及字典部分
     if (content.indexOf('dictModule') > -1) {
       startChapter = startChapter + 1;
-      children.push(myUtil.word.createLevelTitle({text: `${startChapter} 模块`, level: 1}));
+      children.push(myUtil.word.createTitle({text: `${startChapter} 模块`, level: 1}));
       let drawMenu: any;
       drawMenu = (menuArr: any = [], prefix: any = '') => {
         menuArr.forEach((menuTmp: any, index: any) => {
@@ -305,7 +305,7 @@ const CreateWord: React.FC<unknown> = () => {
           }
           let tmpTitle: any = `${tmpPrefix}${(startIndex)} ${menuTmp.menuName}`;
           let tmpLevel: any = Number(menuTmp.menuLevel) + 1;
-          let levelTitle = myUtil.word.createLevelTitle({text: tmpTitle, level: tmpLevel});
+          let levelTitle = myUtil.word.createTitle({text: tmpTitle, level: tmpLevel});
           children.push(levelTitle);
           if (menuTmp?.menuPath?.indexOf('/cfgp/') > -1) {
             const tmp = menuTmp?.menuPath?.split('cfgp/');
@@ -328,7 +328,7 @@ const CreateWord: React.FC<unknown> = () => {
     let docxTitle = `DDIT_数据字典设计概要_${myUtil.date.formatDate(new Date(), 'YYYYMMDD.hhmmss')}`;
     // 创建文档对象
     let docCc: any = {
-      styles: myUtil.word.config(docxConfig).styles,
+      styles: myUtil.word.createDocxConfig(docxConfig).styles,
       sections: [{ children, }],
     }
     if (createHeader) {
@@ -339,7 +339,7 @@ const CreateWord: React.FC<unknown> = () => {
     }
     const doc = new Document(docCc);
     // 下载保存word
-    myUtil.word.saveDocx({doc, name: `${docxTitle}.docx`});
+    myUtil.word.saveDocx(doc, `${docxTitle}.docx`);
     setLoading(false);
   };
 

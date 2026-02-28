@@ -1504,12 +1504,12 @@ const DDVTable: React.FC<DDVTableProps> = ({
         onCancel={handleCloseForm}
         onOk={handleFormSubmit}
         confirmLoading={formMasker2}
-        maskClosable={false}
+        mask={{ closable: false }}
         destroyOnHidden
         wrapClassName="standard-modal-1"
         className={`${formMasker ? 'dd_modal_show_masker' : ''}`}
       >
-        <Spin spinning={formMasker} tip="Loading...">
+        <Spin spinning={formMasker} description="Loading...">
           <DDBaseForm
             form={form}
             items={formItems}
@@ -1544,10 +1544,10 @@ const DDVTable: React.FC<DDVTableProps> = ({
         onCancel={handleCloseDetail}
         wrapClassName="standard-modal-1"
         className={`${detailLoading ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
         destroyOnHidden
       >
-        <Spin spinning={detailLoading} tip="Loading...">
+        <Spin spinning={detailLoading} description="Loading...">
           <DDDescriptions
             config={{
               form_items: formItems,

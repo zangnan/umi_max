@@ -102,12 +102,12 @@ const DrawerList: React.FC<BdjgProps> = ({
       onCancel={() => setModalVisible(false)}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       destroyOnHidden={true}
-      maskClosable={false}
+      mask={{ closable: false }}
       okText="生成"
       cancelText="关闭"
       onOk={() => formSubmit()}
     >
-      <Spin tip="Loading..." spinning={masker} delay={100}>
+      <Spin description="Loading..." spinning={masker} delay={100}>
         <DDBaseForm config={formConfig} form={form} initialValues={{}} func={Func}/>
       </Spin>
     </Modal>

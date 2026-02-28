@@ -1354,11 +1354,10 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
             <>
               <Button onClick={popupAdvancedFilter}>筛选</Button>
               {adfPlan?.length > 0 && (
-                <Tooltip title="筛选方案">
-                  <Dropdown placement="bottomRight" menu={advencedFilterDropdownItems()}>
-                    <Button icon={<DownOutlined />} />
-                  </Dropdown>
-                </Tooltip>
+
+                <Dropdown placement="bottomRight" menu={advencedFilterDropdownItems()}>
+                  <Tooltip title="筛选方案"><Button icon={<DownOutlined />} /></Tooltip>
+                </Dropdown>
               )}
             </>
           )}
@@ -1366,11 +1365,11 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
           <>
             <Button icon={<SettingOutlined />} onClick={gridSetting} />
             {gridViewPlan?.length > 0 && (
-              <Tooltip title="视图方案">
-                <Dropdown placement="bottomRight" menu={gridViewDropdownItems()}>
-                  <Button icon={<DownOutlined />} />
-                </Dropdown>
-              </Tooltip>
+
+              <Dropdown placement="bottomRight" menu={gridViewDropdownItems()}>
+                <Tooltip title="视图方案"><Button icon={<DownOutlined />} /></Tooltip>
+              </Dropdown>
+
             )}
           </>
         )}
@@ -1654,7 +1653,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
   });
 
   return (
-    <Spin tip="Loading..." spinning={masker} delay={100}>
+    <Spin description="Loading..." spinning={masker} delay={100}>
       {filterItems && filterItems.length > 0 && (
         <Card variant="borderless" className="dd-filter-wrap">
           <DDFilter
@@ -1727,12 +1726,12 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
           onCancel={() => handleModalVisible(false)}
           onOk={handleSave}
           className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
-          maskClosable={false}
+          mask={{ closable: false }}
           destroyOnHidden={true}
           forceRender
         >
           <Spin
-            tip="Loading..."
+            description="Loading..."
             spinning={masker2}
             delay={100}
             key="DDBunit2DDBaseForm"
@@ -1763,10 +1762,10 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
           footer={null}
           onCancel={() => handleModalVisible2(false)}
           className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
-          maskClosable={false}
+          mask={{ closable: false }}
           destroyOnHidden={true}
         >
-          <Spin tip="Loading..." spinning={masker2} delay={100} key="DDBunit2DDBaseForm" >
+          <Spin description="Loading..." spinning={masker2} delay={100} key="DDBunit2DDBaseForm" >
             <DDDescriptions config={descriptionsConfig}/>
           </Spin>
         </Modal>
@@ -1791,7 +1790,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
         wrapClassName="standard-modal-1"
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         onCancel={() => setAdfPlanModalVisible(false)}
-        maskClosable={false}
+        mask={{ closable: false }}
         footer={null}
         destroyOnHidden={true}
       >
@@ -1810,7 +1809,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
         cancelText="关闭"
         onCancel={() => setStatisticsOptModalVisible(false)}
         onOk={handleStatistics}
-        maskClosable={false}
+        mask={{ closable: false }}
         destroyOnHidden={true}
       >
         <MultipleContainers handle actionRef={refMultipleContainers} items={statisticsItems} />
@@ -1827,7 +1826,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
           <Button type="default" onClick={() => refreshStaticticData()} >刷新</Button>
           <Button onClick={() => setStatisticsResModalVisible(false)} type="default">关闭</Button>
         </>}
-        maskClosable={false}
+        mask={{ closable: false }}
         destroyOnHidden={true}
       >
         <DDStatisticsView config={statisticsConfig} onRef={refStatistic} func={func} searchModel={queryParam}/>

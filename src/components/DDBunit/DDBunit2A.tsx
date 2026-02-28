@@ -2407,10 +2407,10 @@ const Unit2: React.FC<DDBunit2Props> = ({ config, func = {} }) => {
 
   // 数据元 ****************************************************************************** end
 
-  return <Spin tip="Loading..." spinning={masker} delay={100} >
+  return <Spin description="Loading..." spinning={masker} delay={100} >
     <DDBunit2 config={{...myConfig, gridIsInitSearch: false}} func={func} /> {/* gridIsInitSearch 设置预览页面不查询 */}
     <Drawer title="视图设置" placement="bottom" onClose={() => {setModalVisible0(false)}} open={modalVisible0} height={630}>
-      <Spin tip="Loading..." spinning={loadingViewSetting} delay={100} >
+      <Spin description="Loading..." spinning={loadingViewSetting} delay={100} >
       <Tabs
         activeKey={activeKey}
         size="small"
@@ -2544,10 +2544,10 @@ const Unit2: React.FC<DDBunit2Props> = ({ config, func = {} }) => {
         <Button type="primary" onClick={() => saveScheme()}>保存</Button>
       </>}
       onCancel={() => setModalVisible4(false)}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
       <Spin
-        tip="Loading..."
+        description="Loading..."
         spinning={loadingScheme}
         delay={100}
         key="DDBunit2DDBaseForm"
@@ -2616,7 +2616,7 @@ const Unit2: React.FC<DDBunit2Props> = ({ config, func = {} }) => {
         <Button disabled={!(dbFields.length>0)} onClick={() => addGridFormColumns({isReplace: true, type: C_GRID_SUM_FIELD})} danger>替换统计</Button>
       </>}
       onCancel={() => setModalVisible5(false)}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
       <ProCard style={{ marginBlockStart: 8 }} gutter={8} ghost className='dbfield_card'>
         <ProCard colSpan="250px" bordered title={<div>物理表 ({getFilterDbTables()?.length || 0})</div>} className='dbfield_card_db'>

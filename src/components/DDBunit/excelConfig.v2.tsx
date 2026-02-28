@@ -367,7 +367,7 @@ const DrawerList: React.FC<any> = ({
         <Button onClick={() => handleDownload()}>模板下载</Button>
       </>}
       onCancel={() => setModalVisible(false)}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
       <Form initialValues={{}} form={form} layout="vertical">
         <Form.Item

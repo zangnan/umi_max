@@ -84,13 +84,15 @@ const DrawerList: React.FC<BdjgProps> = ({
         <Button type='primary' onClick={saveRole}>保存</Button>
       </Space>}
     >
-      <Spin tip="Loading..." spinning={masker} delay={100}>
+      <Spin description="Loading..." spinning={masker} delay={100}>
         <Transfer
           rowKey={(record: any) => record.role_id}
           dataSource={dataSource}
-          listStyle={{
-            width: '50%',
-            height: 400,
+          styles={{
+            section : {
+              width: '50%',
+              height: 400,
+            },
           }}
           titles={['待选角色', '已选角色']}
           targetKeys={targetKeys}

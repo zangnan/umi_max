@@ -640,7 +640,7 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
                     </div>
                     <div className={styles.resultOutput}>
                       {loading ? (
-                        <Spin tip="执行中..." />
+                        <description tip="执行中..." />
                       ) : error ? (
                         <Alert type="error" message={error} />
                       ) : result ? (
@@ -809,7 +809,7 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
             </div>
             <div className={styles.resultOutput}>
               {loading ? (
-                <Spin tip="执行中..." />
+                <Spin description="执行中..." />
               ) : error ? (
                 <Alert type="error" message={error} />
               ) : result ? (

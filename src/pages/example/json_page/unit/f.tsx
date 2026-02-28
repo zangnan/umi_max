@@ -123,13 +123,13 @@ Func.columnsRender = {
       const info = [];
       info.push(
         sybz === 'Y' ? (
-          <div>使用状态：{badgeSuccess} 已使用</div>
+          <div key='divbadgeSuccess'>使用状态：{badgeSuccess} 已使用</div>
         ) : (
-          <div>使用状态：{badgeError} 未使用</div>
+          <div key='divbadgeError'>使用状态：{badgeError} 未使用</div>
         ),
       );
       info.push(
-        czbz1 === 'Y' ? <div>关单信息：{badgeSuccess} 有</div> : <div>关单信息：{badgeError} 无</div>,
+        czbz1 === 'Y' ? <div key='divczbz'>关单信息：{badgeSuccess} 有</div> : <div key=''>关单信息：{badgeError} 无</div>,
       );
       return info;
     };

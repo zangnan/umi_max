@@ -190,10 +190,10 @@ const DrawerList: React.FC<ImportProps> = ({
         <Button type="primary" onClick={() => handleSave()}>提交</Button>
       </>}
       onCancel={() => setModalVisible(false)}
-      maskClosable={false}
+      mask={{ closable: false }}
       className={`${masker ? 'dd_modal_show_masker' : ''}`}
     >
-      <Spin tip="Loading..." spinning={masker} key={'sjdrspin'} delay={100}>
+      <Spin description="Loading..." spinning={masker} key={'sjdrspin'} delay={100}>
         <Form initialValues={{}} form={form} layout="vertical">
           <Form.Item
             label={label}

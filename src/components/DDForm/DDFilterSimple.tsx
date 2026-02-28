@@ -30,7 +30,7 @@ const DDFilterSimple: React.FC<FilterSimpleProps> = ({
 
   return (
     <div className="dd-form">
-      <DndProvider backend={HTML5Backend}>
+      {/* <DndProvider backend={HTML5Backend}> */}
         <Form
           form={form}
           name={name}
@@ -44,7 +44,7 @@ const DDFilterSimple: React.FC<FilterSimpleProps> = ({
             <Button onClick={reset} >重置</Button>
           </Space>
         </Form>
-      </DndProvider>
+      {/* </DndProvider> */}
     </div>
   );
 };

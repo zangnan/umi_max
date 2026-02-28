@@ -602,7 +602,7 @@ const Unit2: React.FC<unknown> = () => {
           </div>
         </div>
       </>;
-      aaa.push(tmp);
+      aaa.push(<React.Fragment key={ddd.href || ddd.id}>{tmp}</React.Fragment>);
     });
     return <>{aaa}</>;
   }
@@ -616,7 +616,7 @@ const Unit2: React.FC<unknown> = () => {
         href: `#${ddd.href ? ddd.href : ddd.id}`,
         title: `${ddd.id}`,
       }
-      aaa.push(tmp);
+      aaa.push({ ...tmp, key: `link-${ddd.href || ddd.id}` });
     });
     return aaa;
   }
@@ -634,10 +634,10 @@ const Unit2: React.FC<unknown> = () => {
   let docDomAll = () => {
     let bbb: any = [];
     docUtil.forEach((eee: any, index: any) => {
-      bbb.push(<>
+      bbb.push(<React.Fragment key={eee.categoryJs}>
         <div className="fun_type" id="myUtil.text" style={{backgroundColor: token.colorFillQuaternary}}>{eee.categoryTitle}</div>
         {docDom(index)}
-      </>);
+      </React.Fragment>);
     });
     return <div className='dd_util_test'>{bbb}</div>;
   };

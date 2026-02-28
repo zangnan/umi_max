@@ -48,7 +48,7 @@ const DragHandle: React.FC = () => {
       cancelText="关闭"
       onCancel={() => handleModalVisible(false)}
       onOk={test123}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
 
     <MultipleContainers handle actionRef={refGrid}

@@ -90,7 +90,7 @@ const Unit2: React.FC<unknown> = () => {
   const colorInfo: any = token?.colorInfo;
 
   return <>
-    <Spin tip="Loading..." spinning={loading} delay={100}>
+    <Spin description="Loading..." spinning={loading} delay={100}>
       <Card>
         <DDBaseForm config={formConfig} form={form} initialValues={{}} func={Func}/>
       </Card>

@@ -60,7 +60,9 @@ const fetchUserInfo = async () => {
     myUtil.sessionStore.setItem('currentUser', msg.body);
     return msg;
   } catch (error) {
-    history.push(CONSTANTS.ROUTE.LOGIN);
+    const { origin } = window.location;
+    window.location.href = `${origin}${CONSTANTS.ROUTE.LOGIN}`;
+    // history.push(CONSTANTS.ROUTE.LOGIN);
   }
   return undefined;
 };

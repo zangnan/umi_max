@@ -242,7 +242,7 @@ const DDBunitTreeGrid: React.FC<DDBunitPropsTree> = ({
   </>
 
   return <>
-    <Spin tip="Loading..." spinning={masker} delay={100}>
+    <Spin description="Loading..." spinning={masker} delay={100}>
       <div style={{position: 'relative', padding: '0 0 0 320px'}}>
         <div style={{position: 'absolute', width: '300px', left: '0'}}>{leftTree}</div>
         <div style={{}}>{rightUnit}</div>
@@ -257,7 +257,7 @@ const DDBunitTreeGrid: React.FC<DDBunitPropsTree> = ({
         onCancel={() => handleModalVisible(false)}
         onOk={saveTreeNode}
         // className={`${masker2 ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
         {/* <Spin
           tip="Loading..."

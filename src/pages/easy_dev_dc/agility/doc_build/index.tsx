@@ -122,36 +122,36 @@ const CreateWord: React.FC<unknown> = () => {
     }
     // 帮助文档中内容
     if (docHelp) {
-      children.push(myUtil.word.createParagraph({textParam: {text: docHelp}, indent: indent * 2 }));
+      children.push(myUtil.word.createParagraph({text: docHelp, indent: indent * 2 }));
     }
     // 工具栏按钮
     if (moduleCommonToolbar.length + moduleCommonToolbarCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam: {text: '工具栏按钮', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '工具栏按钮', bold: true, size: 22, bullet: true}));
     }
     if (moduleCommonToolbar.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonToolbar.join('、')}`}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonToolbar.join('、')}`}));
     }
     if (moduleCommonToolbarCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonToolbarCus.join('、')}`, color: "8c121f"}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonToolbarCus.join('、')}`, color: "8c121f"}));
     }
     // 列表操作列
     if (moduleCommonGridCol.length + moduleCommonGridColCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam: {text: '列表操作列', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '列表操作列', bold: true, size: 22, bullet: true}));
     }
     if (moduleCommonGridCol.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonGridCol.join('、')}`}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonGridCol.join('、')}`}));
     }
     if (moduleCommonGridColCus.length > 0) {
-      children.push(myUtil.word.createParagraph({textParam:{text: `${moduleCommonGridColCus.join('、')}`, color: "8c121f"}}));
+      children.push(myUtil.word.createParagraph({text: `${moduleCommonGridColCus.join('、')}`, color: "8c121f"}));
     }
     const formatIsUsed = (val: any) => val === '1' ? '√' : '';
     // 数据字典 列表
     let appTableDictGrid = appTableDict.filter((item: any) => { return item.grid_used });
     if (appTableDictGrid?.length > 0) {
       appTableDictGrid = orderBy(appTableDictGrid, ['grid_index'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 列表', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 列表', bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dict_field_name' },
           { title: '字段英文名', dataIndex: 'dict_field_desc' },
           { title: '主键标识', dataIndex: 'grid_key', format: formatIsUsed },
@@ -163,36 +163,36 @@ const CreateWord: React.FC<unknown> = () => {
           { title: '隐藏', dataIndex: 'grid_hidden', format: formatIsUsed },
           { title: '合并列头', dataIndex: 'grid_children' },
         ],
-        gridData: appTableDictGrid,
+        dataSource: appTableDictGrid,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
     // 数据字典 筛选项
     let appTableDictFilter = appTableDict.filter((item: any) => { return item.filter_item_type });
     if (appTableDictFilter?.length > 0) {
       appTableDictFilter = orderBy(appTableDictFilter, ['filter_item_index'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 筛选项', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 筛选项', bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dict_field_name' },
           { title: '字段英文名', dataIndex: 'dict_field_desc' },
           { title: '类型', dataIndex: 'filter_item_type' },
           // { title: '位置', dataIndex: 'filterItemPosition' },
           // { title: '占位符', dataIndex: 'filterItemPlaceholder' },
         ],
-        gridData: appTableDictFilter,
+        dataSource: appTableDictFilter,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
     // 数据字典 表单项
     let appTableDictForm = appTableDict.filter((item: any) => { return item.form_item_used === '1' });
     if (appTableDictForm?.length > 0) {
       appTableDictForm = orderBy(appTableDictForm, ['form_item_index'], ['asc']);
-      children.push(myUtil.word.createParagraph({textParam: {text: '数据字典 - 表单项', bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createParagraph({text: '数据字典 - 表单项', bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '字段中文名', dataIndex: 'dict_field_name' },
           { title: '字段英文名', dataIndex: 'dict_field_desc' },
           { title: '类型', dataIndex: 'form_item_type' },
@@ -200,9 +200,9 @@ const CreateWord: React.FC<unknown> = () => {
           { title: '格式化', dataIndex: 'form_item_format' },
           { title: '验证', dataIndex: 'form_item_rule' },
         ],
-        gridData: appTableDictForm,
+        dataSource: appTableDictForm,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     }
   }
@@ -215,37 +215,37 @@ const CreateWord: React.FC<unknown> = () => {
     let dbTableList: any = dbTableListResponse?.body?.rows || [];
     let dbTableFieldList: any = dbTableFieldListResponse?.body?.rows || [];
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter} 数据库`, level: 1}));
+    children.push(myUtil.word.createTitle(`${startChapter} 数据库`, 1));
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.1 数据库表一览`, level: 2}));
+    children.push(myUtil.word.createTitle(`${startChapter}.1 数据库表一览`, 2));
     // 数据库表汇总
     children.push(myUtil.word.createTable({
-      cols: [
+      columns: [
         { title: '物理表名称', dataIndex: 'dict_name' },
         { title: '物理表含义', dataIndex: 'dict_desc' },
       ],
-      gridData: dbTableList,
+      dataSource: dbTableList,
       showLineNumber: true,
-      docxConfig,
+      config: docxConfig,
     }));
     // word层级标题：数据库表明细
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2 数据库表明细`, level: 2}));
+    children.push(myUtil.word.createTitle(`${startChapter}.2 数据库表明细`, 2));
     // 数据库表明细
     dbTableList.forEach((item1: any, index: any) => {
       let appTableDict = dbTableFieldList.filter((item2: any) => { return item2.dict_name === item1.dict_name });
-      children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1} ${item1.dict_name} ${item1.dict_desc}`, level: 3}));
-      // children.push(myUtil.word.createParagraph({textParam: {text: `${item1.dict_name} ${item1.dict_desc}`, bold: true, size: 22}, bullet: true}));
+      children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1} ${item1.dict_name} ${item1.dict_desc}`, 3));
+      // children.push(myUtil.word.createParagraph({text: `${item1.dict_name} ${item1.dict_desc}`, bold: true, size: 22, bullet: true}));
       children.push(myUtil.word.createTable({
-        cols: [
+        columns: [
           { title: '物理表字段英文名', dataIndex: 'dict_field_name' },
           { title: '物理表字段中文名', dataIndex: 'dict_field_desc' },
           { title: '数据元类型', dataIndex: 'dict_field_type' },
           { title: '键', dataIndex: 'dict_field_key' },
           { title: '非空', dataIndex: 'dict_field_not_null' },
         ],
-        gridData: appTableDict,
+        dataSource: appTableDict,
         showLineNumber: true,
-        docxConfig,
+        config: docxConfig,
       }));
     })
   }
@@ -253,7 +253,7 @@ const CreateWord: React.FC<unknown> = () => {
   // 生成文档对象children：功能菜单
   const wordChildrenMenu = async ({ children = [], menuTree = [], startChapter = 1, docxConfig, }: any) => {
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter} 功能菜单`, level: 1, pageBreakBefore: true}));
+    children.push(myUtil.word.createTitle(`${startChapter} 功能菜单`, 1, true));
     // 菜单树
     let menuData: any = [];
     let drawMenu: any;
@@ -277,12 +277,12 @@ const CreateWord: React.FC<unknown> = () => {
     };
     drawMenu(cloneDeep(menuTree));
     children.push(myUtil.word.createTable({
-      cols: [
+      columns: [
         { title: '菜单名称', dataIndex: 'menu_name' },
         { title: '菜单路径', dataIndex: 'menu_path' },
       ],
-      gridData: menuData,
-      docxConfig,
+      dataSource: menuData,
+      config: docxConfig,
     }));
   }
 
@@ -327,28 +327,28 @@ const CreateWord: React.FC<unknown> = () => {
       }
     });
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter} 接口`, level: 1}));
+    children.push(myUtil.word.createTitle(`${startChapter} 接口`, 1));
     // word层级标题：数据库表一览
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.1 接口一览`, level: 2}));
+    children.push(myUtil.word.createTitle(`${startChapter}.1 接口一览`, 2));
     // 接口一览
     children.push(myUtil.word.createTable({
-      cols: [
+      columns: [
         { title: '模块', dataIndex: 'module_name' },
         { title: '接口名称', dataIndex: 'api_name' },
         { title: '接口地址', dataIndex: 'api_url' },
       ],
-      gridData: apiList,
+      dataSource: apiList,
       showLineNumber: true,
-      docxConfig,
+      config: docxConfig,
     }));
 
-    // apiList.forEach((tmp: any) => {
-    //   children.push(myUtil.word.createParagraph({textParam: {text: `${tmp.api_name}`, size: 20}, bullet: true, spacing}));
-    //   children.push(myUtil.word.createParagraph({textParam: {text: `${tmp.api_url}`, size: 18}, spacing}));
-    // })
+    apiList.forEach((tmp: any) => {
+      children.push(myUtil.word.createParagraph({text: `${tmp.api_name}`, size: 20, bullet: true, spacing}));
+      children.push(myUtil.word.createParagraph({text: `${tmp.api_url}`, size: 18, spacing}));
+    })
 
     // word层级标题：接口明细
-    children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2 接口明细`, level: 2}));
+    children.push(myUtil.word.createTitle(`${startChapter}.2 接口明细`, 2));
     // 接口明细
     (dataModule?.body?.rows || []).forEach((moduleInfo: any, index: any) => {
       let grid_key_arr: any = [];
@@ -357,13 +357,13 @@ const CreateWord: React.FC<unknown> = () => {
       let appTableDictForGrid: any = appTableDict.filter((item: any) => { return item.grid_used === '1' });
       let appTableDictForForm: any = appTableDict.filter((item: any) => { return item.form_item_used  === '1' });
       // 菜单：模块级别标题
-      children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1} ${moduleInfo.module_name}`, level: 3}));
+      children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1} ${moduleInfo.module_name}`, 3));
 
       // api - 1.列表分页查询
       // api - 1.1菜单
-      children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1}.1 列表分页查询`, level: 4}));
+      children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1}.1 列表分页查询`, 4));
       // api - 1.2输入报文说明
-      children.push(myUtil.word.createParagraph({textParam: {text: '输入报文说明', bold: true, size: 22}, bullet: true, spacing}));
+      children.push(myUtil.word.createParagraph({text: '输入报文说明', bold: true, size: 22, bullet: true, spacing}));
       let tmp11: any = [];
       tmp11.push(
         { aa: 'orderModel', bb: 'array', cc: '排序条件', dd: '', ee: '' },
@@ -373,22 +373,22 @@ const CreateWord: React.FC<unknown> = () => {
         { aa: 'searchModel2', bb: 'array', cc: '自定义筛选查询条件', dd: '', ee: '' },
       )
       children.push(myUtil.word.createTable({
-        cols: cols1,
-        gridData: tmp11,
+        columns: cols1,
+        dataSource: tmp11,
         showLineNumber: false,
-        docxConfig,
+        config: docxConfig,
       }));
       // api - 1.3输入报文示例
-      children.push(myUtil.word.createParagraph({textParam: {text: '输入报文示例', bold: true, size: 22}, bullet: true, spacing}));
-      children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"orderModel": [],'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"page": 1,'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"pageSize": 10,'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"searchModel": [],'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"searchModel2": []'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+      children.push(myUtil.word.createParagraph({text: '输入报文示例', bold: true, size: 22, bullet: true, spacing}));
+      children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+      children.push(myUtil.word.createParagraph({text: '"orderModel": [],', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"page": 1,', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"pageSize": 10,', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"searchModel": [],', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"searchModel2": []', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
       // api - 1.4响应报文说明
-      children.push(myUtil.word.createParagraph({textParam: {text: '响应报文说明', bold: true, size: 22}, bullet: true, spacing}));
+      children.push(myUtil.word.createParagraph({text: '响应报文说明', bold: true, size: 22, bullet: true, spacing}));
       let tmp12: any = [];
       tmp12.push({ aa: 'code', bb: 'string', cc: '状态码', dd: '' });
       tmp12.push({ aa: 'body', bb: 'object', cc: '业务数据', dd: '' });
@@ -409,97 +409,97 @@ const CreateWord: React.FC<unknown> = () => {
       tmp12.push({ aa: '    min', bb: 'object', cc: '最小值', dd: '' });
       tmp12.push({ aa: '    sum', bb: 'object', cc: '合计', dd: '' });
       children.push(myUtil.word.createTable({
-        cols: cols2,
-        gridData: tmp12,
+        columns: cols2,
+        dataSource: tmp12,
         showLineNumber: false,
-        docxConfig,
+        config: docxConfig,
       }));
       // api - 1.5返回报文示例
-      children.push(myUtil.word.createParagraph({textParam: {text: '返回报文示例', bold: true, size: 22}, bullet: true, spacing}));
-      children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"code": "200"'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"body": {'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"rowCount": 49,'}, indent: indent * 3, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"rows": ['}, indent: indent * 3, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '返回报文示例', bold: true, size: 22, bullet: true, spacing}));
+      children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+      children.push(myUtil.word.createParagraph({text: '"code": "200"', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"body": {', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '"rowCount": 49,', indent: indent * 3, shading }));
+      children.push(myUtil.word.createParagraph({text: '"rows": [', indent: indent * 3, shading }));
+      children.push(myUtil.word.createParagraph({text: '{', indent: indent * 4, shading }));
       appTableDictForGrid.forEach((tmp: any, index: any) => {
-        children.push(myUtil.word.createParagraph({textParam: {text: `"${tmp.dict_field_name}": ""${index === appTableDictForGrid.length - 1 ? '' : ','}`}, indent: indent * 5, shading }));
+        children.push(myUtil.word.createParagraph({text: `"${tmp.dict_field_name}": ""${index === appTableDictForGrid.length - 1 ? '' : ','}`, indent: indent * 5, shading }));
       })
-      children.push(myUtil.word.createParagraph({textParam: {text: '},'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '...'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '],'}, indent: indent * 3, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"statistics": {'}, indent: indent * 3, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"avg": {},'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"max": {},'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"min": {},'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '"sum": {}'}, indent: indent * 4, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 3, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 2, shading }));
-      children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+      children.push(myUtil.word.createParagraph({text: '},', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '...', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '],', indent: indent * 3, shading }));
+      children.push(myUtil.word.createParagraph({text: '"statistics": {', indent: indent * 3, shading }));
+      children.push(myUtil.word.createParagraph({text: '"avg": {},', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '"max": {},', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '"min": {},', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '"sum": {}', indent: indent * 4, shading }));
+      children.push(myUtil.word.createParagraph({text: '}', indent: indent * 3, shading }));
+      children.push(myUtil.word.createParagraph({text: '}', indent: indent * 2, shading }));
+      children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
 
       // api - 2.数据删除
       if (moduleInfo.toolbar_default_delete || moduleInfo.grid_col_del) {
         // api - 2.1菜单
-        children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1}.2 数据删除`, level: 4}));
+        children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1}.2 数据删除`, 4));
         // api - 2.2输入报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '输入报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp11 = [];
         tmp11.push({ aa: 'uuids', bb: 'array', cc: '主键数组', dd: '是', ee: '' })
         children.push(myUtil.word.createTable({
-          cols: cols1,
-          gridData: tmp11,
+          columns: cols1,
+          dataSource: tmp11,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 2.3输入报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"uuids": []'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '输入报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"uuids": []', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
         // api - 2.4响应报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '响应报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '响应报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp12 = [];
         tmp12.push({ aa: 'code', bb: 'string', cc: '状态码', dd: '' });
         tmp12.push({ aa: 'msg', bb: 'string', cc: '业务提示信息', dd: '' });
         children.push(myUtil.word.createTable({
-          cols: cols2,
-          gridData: tmp12,
+          columns: cols2,
+          dataSource: tmp12,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 2.5返回报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '返回报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"code": "200",'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"msg": "删除 1 条数据成功"'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '返回报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"code": "200",', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '"msg": "删除 1 条数据成功"', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
       }
 
       // api - 3.表单查询
       if (moduleInfo.toolbar_default_add || moduleInfo.toolbar_default_edit || moduleInfo.grid_col_detail) {
         // api - 3.1菜单
-        children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1}.3 表单查询`, level: 4}));
+        children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1}.3 表单查询`, 4));
         // api - 3.2输入报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '输入报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp11 = [];
         for (let i = 0; i < grid_key_arr.length; i++) {
           tmp11.push({ aa: grid_key_arr[i].dict_field_name, bb: 'string', cc: grid_key_arr[i].dict_field_desc, dd: '是', ee: '' });
         }
         children.push(myUtil.word.createTable({
-          cols: cols1,
-          gridData: tmp11,
+          columns: cols1,
+          dataSource: tmp11,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 3.3输入报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '输入报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
         for (let i = 0; i < grid_key_arr.length; i++) {
-          children.push(myUtil.word.createParagraph({textParam: {text: `"${grid_key_arr[i].dict_field_name}": ""`}, indent: indent * 2, shading }));
+          children.push(myUtil.word.createParagraph({text: `"${grid_key_arr[i].dict_field_name}": ""`, indent: indent * 2, shading }));
         }
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
         // api - 3.4响应报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '响应报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '响应报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp12 = [];
         tmp12.push({ aa: 'code', bb: 'string', cc: '状态码', dd: '' });
         tmp12.push({ aa: 'body', bb: 'object', cc: '业务数据', dd: '' });
@@ -509,30 +509,30 @@ const CreateWord: React.FC<unknown> = () => {
         })
         tmp12.push({ aa: 'msg', bb: 'string', cc: '业务提示信息', dd: '' });
         children.push(myUtil.word.createTable({
-          cols: cols2,
-          gridData: tmp12,
+          columns: cols2,
+          dataSource: tmp12,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 3.5返回报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '返回报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"code": "200",'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"body": {'}, indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '返回报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"code": "200",', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '"body": {', indent: indent * 2, shading }));
         appTableDictForForm.forEach((tmp: any, index: any) => {
-          children.push(myUtil.word.createParagraph({textParam: {text: `"${tmp.dict_field_name}": ""${index === appTableDictForForm.length - 1 ? '' : ','}`}, indent: indent * 3, shading }));
+          children.push(myUtil.word.createParagraph({text: `"${tmp.dict_field_name}": ""${index === appTableDictForForm.length - 1 ? '' : ','}`, indent: indent * 3, shading }));
         })
-        children.push(myUtil.word.createParagraph({textParam: {text: '},'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"msg": "表单查询成功"'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '},', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '"msg": "表单查询成功"', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
       }
 
       // api - 4.表单编辑
       if (moduleInfo.toolbar_default_add || moduleInfo.toolbar_default_edit || moduleInfo.grid_col_edit) {
         // api - 4.1菜单
-        children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1}.4 表单编辑`, level: 4}));
+        children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1}.4 表单编辑`, 4));
         // api - 4.2输入报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文说明', bold: true, size: 22}, bullet: true}));
+        children.push(myUtil.word.createParagraph({text: '输入报文说明', bold: true, size: 22, bullet: true}));
         tmp11 = [];
         tmp11.push({ aa: 'formType', bb: 'string', cc: '采集类别', dd: '是', ee: '表单新建add，表单更新edit' });
         appTableDictForForm.forEach((tmp: any) => {
@@ -540,76 +540,76 @@ const CreateWord: React.FC<unknown> = () => {
           tmp11.push({ aa: tmp.dict_field_name, bb: DDBunit2ADBUtil.formatApiType({ dictFieldType: targetField.dict_field_type }), cc: tmp.dict_field_desc, dd: '', ee: '' });
         });
         children.push(myUtil.word.createTable({
-          cols: cols1,
-          gridData: tmp11,
+          columns: cols1,
+          dataSource: tmp11,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 4.3输入报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: `"formType": "edit",` }, indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '输入报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: `"formType": "edit",`, indent: indent * 2, shading }));
         appTableDictForForm.forEach((tmp: any, index: any) => {
-          children.push(myUtil.word.createParagraph({textParam: {text: `"${tmp.dict_field_name}": ""${index === appTableDictForForm.length - 1 ? '' : ','}`}, indent: indent * 2, shading }));
+          children.push(myUtil.word.createParagraph({text: `"${tmp.dict_field_name}": ""${index === appTableDictForForm.length - 1 ? '' : ','}`, indent: indent * 2, shading }));
         });
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
         // api - 4.4响应报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '响应报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '响应报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp12 = [];
         tmp12.push({ aa: 'code', bb: 'string', cc: '状态码', dd: '' });
         tmp12.push({ aa: 'msg', bb: 'string', cc: '业务提示信息', dd: '' });
         children.push(myUtil.word.createTable({
-          cols: cols2,
-          gridData: tmp12,
+          columns: cols2,
+          dataSource: tmp12,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 4.5返回报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '返回报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"code": "200",'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"msg": "编辑成功"'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '返回报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"code": "200",', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '"msg": "编辑成功"', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
       }
 
       // api - 5.数据导入
       if (moduleInfo.toolbar_default_upload) {
         // api - 5.1菜单
-        children.push(myUtil.word.createLevelTitle({text: `${startChapter}.2.${index + 1}.5 数据导入`, level: 4}));
+        children.push(myUtil.word.createTitle(`${startChapter}.2.${index + 1}.5 数据导入`, 4));
         // api - 5.2输入报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '输入报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp11 = [];
         tmp11.push({ aa: 'header', bb: 'array', cc: 'Excel表头配置', dd: '', ee: 'form-data格式' });
         tmp11.push({ aa: 'file', bb: 'array', cc: 'Excel文件', dd: '', ee: 'form-data格式' });
         // tmp11.push({ aa: 'drgz', bb: 'array', cc: '主键数组', dd: '', ee: '' });
         children.push(myUtil.word.createTable({
-          cols: cols1,
-          gridData: tmp11,
+          columns: cols1,
+          dataSource: tmp11,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 5.3输入报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '输入报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"header": []'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"file": （二进制）'}, indent: indent * 1, shading }));
-        // children.push(myUtil.word.createParagraph({textParam: {text: '"drgz": 10'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '输入报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '"header": []', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"file": （二进制）', indent: indent * 1, shading }));
+        // children.push(myUtil.word.createParagraph({text: '"drgz": 10', indent: indent * 1, shading }));
         // api - 5.4响应报文说明
-        children.push(myUtil.word.createParagraph({textParam: {text: '响应报文说明', bold: true, size: 22}, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '响应报文说明', bold: true, size: 22, bullet: true, spacing}));
         tmp12 = [];
         tmp12.push({ aa: 'code', bb: 'string', cc: '状态码', dd: '' });
         tmp12.push({ aa: 'msg', bb: 'string', cc: '业务提示信息', dd: '' });
         children.push(myUtil.word.createTable({
-          cols: cols2,
-          gridData: tmp12,
+          columns: cols2,
+          dataSource: tmp12,
           showLineNumber: false,
-          docxConfig,
+          config: docxConfig,
         }));
         // api - 5.5返回报文示例
-        children.push(myUtil.word.createParagraph({textParam: {text: '返回报文示例', bold: true, size: 22}, bullet: true, spacing}));
-        children.push(myUtil.word.createParagraph({textParam: {text: '{'}, indent: indent * 1, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"code": "200",'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '"msg": "成功导入11条数据"'}, indent: indent * 2, shading }));
-        children.push(myUtil.word.createParagraph({textParam: {text: '}'}, indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '返回报文示例', bold: true, size: 22, bullet: true, spacing}));
+        children.push(myUtil.word.createParagraph({text: '{', indent: indent * 1, shading }));
+        children.push(myUtil.word.createParagraph({text: '"code": "200",', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '"msg": "成功导入11条数据"', indent: indent * 2, shading }));
+        children.push(myUtil.word.createParagraph({text: '}', indent: indent * 1, shading }));
       }
     })
   }
@@ -636,7 +636,7 @@ const CreateWord: React.FC<unknown> = () => {
     let children: any = [];
     // word 目录
     if (createToc) {
-      myUtil.word.createToc({ children });
+      myUtil.word.createTableOfContents(children)
     }
     // word 功能菜单
     if (content.indexOf('menu') > -1) {
@@ -651,7 +651,7 @@ const CreateWord: React.FC<unknown> = () => {
     // word 模块及字典部分
     if (content.indexOf('dictModule') > -1) {
       startChapter = startChapter + 1;
-      children.push(myUtil.word.createLevelTitle({text: `${startChapter} 模块`, level: 1}));
+      children.push(myUtil.word.createTitle(`${startChapter} 模块`, 1));
       let drawMenu: any;
       drawMenu = (menuArr: any = [], prefix: any = '') => {
         menuArr.forEach((menuTmp: any, index: any) => {
@@ -662,7 +662,7 @@ const CreateWord: React.FC<unknown> = () => {
           }
           let tmpTitle: any = `${tmpPrefix}${(startIndex)} ${menuTmp.menu_name}`;
           let tmpLevel: any = Number(menuTmp.level) + 1;
-          let levelTitle = myUtil.word.createLevelTitle({text: tmpTitle, level: tmpLevel});
+          let levelTitle = myUtil.word.createTitle(tmpTitle, tmpLevel);
           children.push(levelTitle);
           if (menuTmp?.menu_path?.indexOf('/cfgp/') > -1) {
             const tmp = menuTmp?.menu_path?.split('cfgp/');
@@ -691,18 +691,18 @@ const CreateWord: React.FC<unknown> = () => {
     let docxTitle = `DDIT_数据字典设计概要_${myUtil.date.formatDate(new Date(), 'YYYYMMDD.hhmmss')}`;
     // 创建文档对象
     let docCc: any = {
-      styles: myUtil.word.config(docxConfig).styles,
+      styles: myUtil.word.createDocxConfig(docxConfig).styles,
       sections: [{ children, }],
     }
     if (createHeader) {
-      docCc.sections[0].headers = myUtil.word.createHeader({ docxConfig, docxTitle });
+      docCc.sections[0].headers = myUtil.word.createHeader(docxTitle);
     }
     if (createFooter) {
-      docCc.sections[0].footers = myUtil.word.createFooter({ docxConfig });
+      docCc.sections[0].footers = myUtil.word.createFooter();
     }
     const doc = new Document(docCc);
     // 下载保存word
-    myUtil.word.saveDocx({doc, name: `${docxTitle}.docx`});
+    myUtil.word.saveDocx(doc, `${docxTitle}.docx`);
     setLoading(false);
   };
 

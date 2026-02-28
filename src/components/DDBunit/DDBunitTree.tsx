@@ -217,7 +217,7 @@ const DDBunitTree: React.FC<DDBunitPropsTree> = ({
   }
 
   return <>
-    <Spin tip="Loading..." spinning={masker} delay={100}>
+    <Spin description="Loading..." spinning={masker} delay={100}>
       <Row gutter={[16, 0]}>
         <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
           <Card title={`${config.unit_title || ''}树`} >
@@ -242,8 +242,8 @@ const DDBunitTree: React.FC<DDBunitPropsTree> = ({
           </Card>
         </Col>
         <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
-          <Card title={`${config.unit_title  || ''}编辑`} {...getFormBtn()}>
-            <div style={{ height: myUtil.heightCalc.getCalc(['header', 'cardMargin', toolbar_default_edit ? '56px' : '14px']), overflowY: 'auto', overflowX: 'hidden' }}>
+          <Card styles={{ actions: { padding: '10px 0' }}} title={`${config.unit_title  || ''}编辑`} {...getFormBtn()} >
+            <div style={{ height: myUtil.heightCalc.getCalc(['header', 'cardMargin', toolbar_default_edit ? '76px' : '14px']), overflowY: 'auto', overflowX: 'hidden' }}>
               <DDBaseForm config={formConfig} form={form} initialValues={{}} func={func}/>
             </div>
           </Card>

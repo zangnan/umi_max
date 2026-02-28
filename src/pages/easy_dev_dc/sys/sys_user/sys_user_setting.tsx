@@ -63,6 +63,10 @@ const UserSetting: React.FC<unknown> = () => {
 
   // init
   const fetchUserInfo = async () => {
+    // 添加空值检查
+    if (!currentUser?.body) {
+      return;
+    }
     let form1InitValue: any = {
       loginName: currentUser.body.loginName,
       userName: currentUser.body.userName,
@@ -73,7 +77,7 @@ const UserSetting: React.FC<unknown> = () => {
 
   useEffect(() => {
     fetchUserInfo();
-  });
+  }, [currentUser]);
 
   // 保存用户信息
   const handleSave0 = () => {
