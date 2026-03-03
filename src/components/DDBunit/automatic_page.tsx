@@ -67,12 +67,13 @@ const Unit2: React.FC<unknown> = () => {
   }
 
   useEffect(() => {
-    setMyConfig({});
+    // 移除 setMyConfig({}) 避免清空配置导致发起错误请求
+    // 只有当新配置加载完成后再设置，避免竞态条件
     init();
   }, [window.location.href]);
 
   return <>
-    <DDBunit2 config={myConfig} func={{}} />
+    <DDBunit2 key={myConfig?.module_key} config={myConfig} func={{}} />
     <FloatButton.Group style={{ right: 24 }} >
       <FloatButton tooltip='查看配置文件' onClick={(showModal)} icon={<CodeOutlined />}/>
     </FloatButton.Group>
