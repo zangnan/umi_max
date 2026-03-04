@@ -1875,6 +1875,25 @@ const DDVTable: React.FC<DDVTableProps> = ({
     const order = settingConfig.columnOrder || [];
     const visibility = settingConfig.columnVisibility || {};
 
+    // 收集所有列配置的统计类型，按固定顺序（SUM → MIN → MAX → AVG）
+    const fixedOrder = ['SUM', 'MIN', 'MAX', 'AVG'] as const;
+    const neededAggregationTypes: string[] = [];
+    if (settingConfig.showSummary) {
+      const neededTypes = new Set<string>();
+      config.grid_columns?.forEach((col: DDVTableColumn) => {
+        if (col.sum) neededTypes.add('SUM');
+        if (col.min) neededTypes.add('MIN');
+        if (col.max) neededTypes.add('MAX');
+        if (col.avg) neededTypes.add('AVG');
+      });
+      // 按固定顺序输出
+      fixedOrder.forEach((type) => {
+        if (neededTypes.has(type)) {
+          neededAggregationTypes.push(type);
+        }
+      });
+    }
+
     // 根据配置排序并过滤列
     const sortedColumns = [...config.grid_columns].sort((a, b) => {
       const idxA = config.grid_columns.indexOf(a);
@@ -1908,8 +1927,15 @@ const DDVTable: React.FC<DDVTableProps> = ({
         vtableCol.style = { textAlign: col.align };
       }
 
-      // 构建聚合配置（统计行）
-      const aggregation: any[] = [];
+      // 构建聚合配置（统计行）- 使用固定顺序 SUM -> MIN -> MAX -> AVG
+      // 统计类型到显示文本的映射
+      const aggregationLabels: Record<string, string> = {
+        SUM: '合计',
+        MIN: '最小',
+        MAX: '最大',
+        AVG: '平均',
+      };
+
       // 获取格式化函数，用于统计行
       const getFormatter = () => {
         if (!col.render) return null;
@@ -1928,18 +1954,25 @@ const DDVTable: React.FC<DDVTableProps> = ({
       };
       const formatter = getFormatter();
 
-      if (col.sum) {
-        aggregation.push({ aggregationType: 'SUM', formatFun: formatter });
-      }
-      if (col.min) {
-        aggregation.push({ aggregationType: 'MIN', formatFun: formatter });
-      }
-      if (col.max) {
-        aggregation.push({ aggregationType: 'MAX', formatFun: formatter });
-      }
-      if (col.avg) {
-        aggregation.push({ aggregationType: 'AVG', formatFun: formatter });
-      }
+      // 根据实际配置的统计类型构建 aggregation
+      const aggregation: any[] = [];
+
+      // 使用之前收集的 neededAggregationTypes，只包含实际需要的统计类型
+      neededAggregationTypes.forEach((type) => {
+        const typeKey = type.toLowerCase() as 'sum' | 'min' | 'max' | 'avg';
+        const configKey = typeKey;
+
+        if (col[configKey]) {
+          // 该列配置了此统计类型，使用格式化函数
+          aggregation.push({ aggregationType: type, formatFun: formatter });
+        } else {
+          // 该列未配置此统计类型，formatFun 返回空
+          aggregation.push({
+            aggregationType: type,
+            formatFun: () => '',
+          });
+        }
+      });
 
       // 如果有聚合配置且显示统计行，添加到列配置中
       if (settingConfig.showSummary && aggregation.length > 0) {
@@ -2226,35 +2259,57 @@ const DDVTable: React.FC<DDVTableProps> = ({
       }
     }
 
-    // 在统计行的第一列根据统计类型显示对应的文本
+    // 为第一列添加统计类型标签显示
     if (settingConfig.showSummary && bottomFrozenRowCount > 0 && finalColumns.length > 0) {
-      // 统计类型到显示文本的映射（按显示顺序）
+      // 统计类型到显示文本的映射
       const aggregationLabels: Record<string, string> = {
         SUM: '合计',
         MIN: '最小',
         MAX: '最大',
         AVG: '平均',
       };
-      // 按配置顺序收集统计类型
-      const aggregationTypes: string[] = [];
-      config?.grid_columns?.forEach((col: DDVTableColumn) => {
-        if (col.sum && !aggregationTypes.includes('SUM')) aggregationTypes.push('SUM');
-        if (col.min && !aggregationTypes.includes('MIN')) aggregationTypes.push('MIN');
-        if (col.max && !aggregationTypes.includes('MAX')) aggregationTypes.push('MAX');
-        if (col.avg && !aggregationTypes.includes('AVG')) aggregationTypes.push('AVG');
-      });
 
-      // 构建 aggregation 数组，每行显示对应的统计类型
-      const aggregations = aggregationTypes.map((type) => ({
-        aggregationType: VTable.TYPES.AggregationType[type as keyof typeof VTable.TYPES.AggregationType],
-        formatFun: (_value: any, _col: number, _row: number) => {
-          return aggregationLabels[type] || '';
-        },
-      }));
+      // 确定统计标签应该放在哪一列
+      let labelColIndex = -1;
+      let needCopyAggregation = false;
 
-      // 为第一列设置统计显示
-      if (finalColumns[0]) {
-        finalColumns[0].aggregation = aggregations;
+      if (settingConfig.showIndex) {
+        // 如果开启了序号显示，优先放在序号列
+        // 序号列索引：有 selectionColumn 时在 index=1，否则在 index=0
+        labelColIndex = selectionColumn ? 1 : 0;
+        needCopyAggregation = true;
+      }
+
+      // 如果没有序号列，则放在第一列数据列
+      if (labelColIndex === -1) {
+        if (selectionColumn) {
+          labelColIndex = settingConfig.showIndex ? 2 : 1;
+        } else if (settingConfig.showIndex) {
+          labelColIndex = 1;
+        } else {
+          labelColIndex = 0;
+        }
+      }
+
+      const labelCol = finalColumns[labelColIndex];
+
+      // 如果需要从其他列复制 aggregation 配置
+      if (needCopyAggregation && !labelCol?.aggregation) {
+        // 找到第一列数据列的 aggregation
+        let firstDataColIndex = labelColIndex + 1;
+        const firstDataCol = finalColumns[firstDataColIndex];
+        if (firstDataCol?.aggregation) {
+          // 复制 aggregation 配置到序号列
+          labelCol.aggregation = firstDataCol.aggregation;
+        }
+      }
+
+      if (labelCol?.aggregation) {
+        // 修改对应列的 aggregation，让 formatFun 返回统计类型标签
+        labelCol.aggregation = labelCol.aggregation.map((agg: any) => ({
+          ...agg,
+          formatFun: () => aggregationLabels[agg.aggregationType] || '',
+        }));
       }
     }
 
