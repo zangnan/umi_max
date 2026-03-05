@@ -4265,6 +4265,7 @@ myUtil.api = {
     let apiPrefix = API_URL_BASE;
     if (window.location.href.indexOf('/other/create_word') > -1 ||
       window.location.href.indexOf('/example/vtable/ddvtable') > -1 ||
+      window.location.href.indexOf('/example/cfgp/') > -1 ||
       window.location.href.indexOf('/ai/theme') > -1) {
     } else if(window.location.href.indexOf('/example/') > -1) {
       apiPrefix = API_URL_EXAMPLE;

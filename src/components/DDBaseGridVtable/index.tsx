@@ -125,6 +125,27 @@ const formatDate = (value: number | string | Date, format?: string): string => {
   return `${year}-${month}-${day}`;
 };
 
+/**
+ * 从表格列配置中提取码表 key
+ * @param columns - 表格列配置数组
+ * @returns 码表 key 数组
+ */
+const extractCodeTableKeysFromColumns = (columns: DDVTableColumn[]): string[] => {
+  const keys: string[] = [];
+  if (!columns) return keys;
+
+  columns.forEach((col) => {
+    // 处理 render 配置中的码表
+    if (col.render?.type === 'code_table' && col.render?.key) {
+      if (!keys.includes(col.render.key)) {
+        keys.push(col.render.key);
+      }
+    }
+  });
+
+  return keys;
+};
+
 // ==================== 默认配置 ====================
 
 /**
@@ -314,6 +335,9 @@ const DDVTable: React.FC<DDVTableProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // ==================== 码表加载状态 ====================
+  const [codeTableLoading, setCodeTableLoading] = useState(false);
+
   // ==================== API 模式相关状态 ====================
   const [loading, setLoading] = useState(false);
   const [apiTableData, setApiTableData] = useState<DDVTableData | null>(null);
@@ -329,6 +353,38 @@ const DDVTable: React.FC<DDVTableProps> = ({
   useEffect(() => {
     onFormSaveRef.current = onFormSave;
   }, [onFormSave]);
+
+  // 码表预加载 - 在组件加载前预先加载 grid_columns 中配置的码表
+  useEffect(() => {
+    const initCodeTables = async () => {
+      const columns = config?.grid_columns || [];
+      const codeTableKeys = extractCodeTableKeysFromColumns(columns);
+
+      if (codeTableKeys.length === 0) return;
+
+      setCodeTableLoading(true);
+
+      // 构建码表参数
+      const param = codeTableKeys.map((key) => ({ key }));
+
+      // 获取码表 Promise 数组
+      const promiseArr = myUtil.code.getCodeTablePromise(param);
+
+      if (promiseArr.length > 0) {
+        try {
+          await Promise.all(promiseArr);
+        } catch (error) {
+          console.error('码表加载失败:', error);
+        } finally {
+          setCodeTableLoading(false);
+        }
+      } else {
+        setCodeTableLoading(false);
+      }
+    };
+
+    initCodeTables();
+  }, [config?.grid_columns]);
 
   // 从 config.api_config 中获取 API 地址（优先使用），如果没有则使用 api_grid_query 属性
   const apiGridQuery = config?.api_config?.apiGridQuery || api_grid_query;
@@ -2684,21 +2740,23 @@ const DDVTable: React.FC<DDVTableProps> = ({
       )}
       <div style={{ flex: 1, overflow: 'hidden' }}>
         <Card variant="borderless" className="dd-grid-wrap">
-          <ListTable
-            option={option}
-            records={finalData?.rows || []}
-            height={(showToolbar || hasFilter) ? (typeof tableHeight === 'number' ? tableHeight - 56 : tableHeight) : tableHeight}
-            onReady={handleReady}
-            onClickCell={handleCellClick}
-            onSort={(args) => {
-              // API 模式：联动后端排序
-              if (isApiMode && args.field && args.order && args.order !== 'normal') {
-                handleApiSortChange(args.field, args.order === 'asc' ? 'asc' : 'desc');
-              }
-              // 调用外部回调
-              onSort?.(args);
-            }}
-          />
+          <Spin spinning={codeTableLoading}>
+            <ListTable
+              option={option}
+              records={finalData?.rows || []}
+              height={(showToolbar || hasFilter) ? (typeof tableHeight === 'number' ? tableHeight - 56 : tableHeight) : tableHeight}
+              onReady={handleReady}
+              onClickCell={handleCellClick}
+              onSort={(args) => {
+                // API 模式：联动后端排序
+                if (isApiMode && args.field && args.order && args.order !== 'normal') {
+                  handleApiSortChange(args.field, args.order === 'asc' ? 'asc' : 'desc');
+                }
+                // 调用外部回调
+                onSort?.(args);
+              }}
+            />
+          </Spin>
         </Card>
       </div>
       {/* 加载状态遮罩（仅 API 模式显示） */}

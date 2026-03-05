@@ -170,6 +170,9 @@ function getCode(req: Request, res: Response) {
       { code: "1", name: "测试1" },
       { code: "2", name: "测试2" },
       { code: "3", name: "测试3" },
+      { code: "04", name: "测试04" },
+      { code: "05", name: "测试05" },
+      { code: "06", name: "测试06" },
       { code: "1-1", name: "测试1-1", pid: "1" },
       { code: "1-2", name: "测试1-3", pid: "1" },
     ];
