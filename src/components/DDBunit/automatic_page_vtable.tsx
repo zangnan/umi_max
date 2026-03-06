@@ -15,6 +15,9 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
   const transformConfig = (config: any): any => {
     if (!config) return config;
 
+    // 提取 filter_items 中的 name 字段集合，用于自动配置列的 filter
+    const filterFieldSet = new Set((config.filter_items || []).map((item: any) => item.name));
+
     // 1. 转换 grid_columns：dataIndex -> field, sorter -> sort, sum2->sum 等
     const grid_columns = (config.grid_columns || []).map((col: any) => {
       // 转换统计字段：sum2->sum, min2->min, max2->max, avg2->avg
@@ -28,9 +31,16 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
         ? { type: 'code_table', key: col.codeTable }
         : col.render;
 
+      // 获取列字段名，用于匹配 filter_items
+      const field = col.dataIndex || col.field;
+      // 判断该列是否在 filter_items 中存在相同名称的字段
+      const isInFilterItems = filterFieldSet.has(field);
+      // 如果在 filter_items 中存在且未显式配置 filter，则自动添加 filter: true
+      const autoFilter = isInFilterItems && col.filter === undefined ? true : col.filter;
+
       return {
         title: col.title,
-        field: col.dataIndex || col.field,
+        field,
         width: col.width,
         sort: !!col.sorter,
         hidden: col.hidden,
@@ -41,6 +51,7 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
         max,
         avg,
         render,
+        filter: autoFilter,
         // 其他字段透传
         ...col,
       };
