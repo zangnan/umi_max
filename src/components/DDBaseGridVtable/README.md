@@ -2,6 +2,40 @@
 
 基于 VTable (`@visactor/react-vtable`) 的轻量级明细表组件，封装了常用配置，提供更简洁的 API。
 
+## 组件定位
+
+DDVTable 是项目中表格组件之一，与其他表格组件的定位区别：
+
+| 组件 | 基于技术 | 适用场景 |
+|------|----------|----------|
+| **DDVTable** | @visactor/vtable | 大数据量、高性能要求的明细表场景 |
+| **DDBaseGrid** | @ant-design/pro-table | 功能丰富、业务复杂的通用列表场景 |
+| **DDBaseGridS2** | @antvis/s2 | 数据分析、透视汇总场景 |
+| **DDBaseGridVtable** | @visactor/vtable | 与 DDVTable 相同，DDBaseGridVtable 是完整导出版本 |
+
+> 💡 **推荐**：如果你的表格数据量较大（万级以上）、对渲染性能有要求，推荐使用 DDVTable。
+
+## 目录
+
+- [特性](#特性)
+- [安装依赖](#安装依赖)
+- [快速开始](#快速开始)
+- [Props](#props)
+- [类型定义](#类型定义)
+- [核心配置](#核心配置)
+  - [渲染格式化](#渲染格式化)
+  - [统计行](#统计行)
+  - [过滤功能](#过滤功能)
+  - [表格筛选组件](#表格筛选组件)
+  - [自动换行](#自动换行)
+- [交互功能](#交互功能)
+  - [工具栏](#工具栏)
+  - [操作列](#操作列)
+  - [设置弹窗](#设置弹窗)
+- [数据源模式](#数据源模式)
+- [高级用法](#高级用法)
+- [注意事项](#注意事项)
+
 ## 特性
 
 - **简单配置**：仅需 `config.grid_columns` 和 `data.rows` 即可快速使用
@@ -9,6 +43,7 @@
 - **动态配置**：支持设置弹窗动态配置紧凑度、序号列、冻结列数、统计行、表格高度、自动换行等
 - **首列动态选择**：选择类型（checkbox/radio）支持运行时动态切换
 - **码表渲染**：支持 `code_table` 渲染类型，将数值映射为码表显示值
+- **码表预加载**：自动预加载列配置、筛选表单、表单中使用的码表数据
 - **自动换行**：支持配置单元格自动换行，可在设置弹窗中动态切换
 - **统一 API 配置**：通过 `config.api_config` 统一管理所有接口地址
 - **内置表单支持**：支持通过 `config.form_config` 和 `config.form_items` 配置内置表单
@@ -24,43 +59,20 @@ npm install @visactor/react-vtable @visactor/vtable
 
 ## 快速开始
 
+DDVTable 支持两种数据获取方式：**直接传入数据** 或 **API 查询**。
+
+### 方式一：直接传入数据
+
 ```tsx
 import { DDVTable } from '@/components/DDBaseGridVtable';
 
+// 最简配置：只需要列定义 + 数据
 const config = {
-  // 列表列配置
   grid_columns: [
     { title: '姓名', field: 'name', width: 120 },
-    { title: '年龄', field: 'age', width: 80, sort: true },
+    { title: '年龄', field: 'age', width: 80, sort: true },  // sort: true 开启排序
     { title: '城市', field: 'city', width: 150 },
   ],
-  // 列表配置
-  grid_config: {
-    grid_row_series_number: true,    // 显示行序号
-    grid_height: 500,                // 表格高度
-    grid_allow_frozen_col_count: 2,  // 允许冻结的列数
-    grid_frozen_col_count: 1,        // 初始冻结列数
-    grid_show_frozen_icon: true,     // 显示冻结图标
-    grid_auto_wrap_text: true,       // 自动换行
-  },
-  // 工具栏配置
-  toolbar_default: {
-    add: true,
-    edit: true,
-    delete: true,
-    setting: true,
-    download: true,
-    reload: true,
-  },
-  // 统一 API 配置
-  api_config: {
-    api_grid_query: '/api/grid/query',     // 列表查询
-    api_form_query: '/api/form/query',      // 表单查询
-    api_form_edit: '/api/form/save',        // 表单保存
-    api_form_delete: '/api/form/delete',    // 表单删除
-  },
-  // 业务单元 key
-  module_key: 'example_module',
 };
 
 const data = {
@@ -71,6 +83,75 @@ const data = {
 };
 
 <DDVTable config={config} data={data} />;
+```
+
+### 方式二：API 查询数据
+
+```tsx
+import { DDVTable } from '@/components/DDBaseGridVtable';
+
+// API 模式：配置列 + API 地址
+const config = {
+  grid_columns: [
+    { title: '姓名', field: 'name', width: 120 },
+    { title: '年龄', field: 'age', width: 80 },
+    { title: '城市', field: 'city', width: 150 },
+  ],
+  // API 配置（统一管理接口地址）
+  api_config: {
+    api_grid_query: '/api/user/list',
+  },
+};
+
+<DDVTable
+  config={config}
+  apiParams={{ page: 1, pageSize: 20 }}
+/>;
+```
+
+### 常用配置示例
+
+以下是一个包含常用功能的完整配置示例：
+
+```tsx
+const config = {
+  // 列配置
+  grid_columns: [
+    { title: '姓名', field: 'name', width: 120 },
+    { title: '金额', field: 'amount', width: 100, sum: true, render: { type: 'number', format: '0,0.00' } },
+    { title: '状态', field: 'status', render: { type: 'code_table', key: 'code_status' } },
+    { title: '日期', field: 'createTime', sort: true, render: { type: 'date', format: 'YYYY-MM-DD' } },
+  ],
+  // 表格配置
+  grid_config: {
+    grid_row_series_number: true,    // 显示行序号
+    grid_height: 500,                // 表格高度
+    grid_selection_type: 'checkbox',  // 复选框选择
+    grid_allow_frozen_col_count: 2,  // 允许冻结列
+  },
+  // 工具栏
+  toolbar_default: {
+    add: true,        // 新增
+    edit: true,      // 编辑
+    delete: true,    // 删除
+    setting: true,   // 设置
+    download: true,  // 导出
+    reload: true,    // 刷新
+  },
+  // 操作列
+  grid_handle_columns_default: {
+    edit: true,
+    delete: true,
+    detail: true,
+  },
+  // API 配置
+  api_config: {
+    api_grid_query: '/api/grid/query',
+    api_form_query: '/api/form/query',
+    api_form_edit: '/api/form/save',
+    api_form_delete: '/api/form/delete',
+  },
+};
 ```
 
 ## Props
@@ -147,6 +228,8 @@ interface DDVTableGridConfig {
   grid_selection_type?: 'checkbox' | 'radio' | false; // 选择类型
   grid_row_key?: string; // 主键字段（用于删除等操作）
   grid_auto_wrap_text?: boolean; // 是否自动换行
+  /** 表格标题：显示在"共 xx 条"前面 */
+  grid_title?: string;
   /** 性能模式：启用后跳过所有复杂配置，只保留基础 field/title/width，用于性能测试 */
   grid_performance_mode?: boolean;
 }
@@ -417,6 +500,13 @@ const customFormatters = {
 | custom    | `'statusMap'`           | 自定义函数名              |
 | copy      | -                       | 单元格复制功能            |
 | code_table | -                       | 码表映射，需配合 `key` 使用 |
+
+**码表预加载**：组件会自动收集并预加载以下位置的码表配置，页面首次渲染时无需等待：
+- `grid_columns` 中配置了 `render: { type: 'code_table', key: 'xxx' }` 的列
+- `filter_items` 中配置了 `codeTable` 的筛选字段
+- `form_items` 中配置了 `codeTable` 的表单字段
+
+这意味着当你使用码表渲染、码表筛选、码表表单字段时，数据会在组件加载前预先获取，提升用户体验。
 
 **复制功能**：设置 `render: { type: 'copy' }` 可在单元格上显示复制图标，点击即可复制单元格内容：
 
@@ -1115,57 +1205,9 @@ setData({ rows: newRows });
 
 ## 数据源模式
 
-DDVTable 支持两种数据获取方式：
+> 💡 更多使用示例请参考 [快速开始](#快速开始) 章节。
 
-### 方式1：直接传入数据
-
-通过 `data` 属性直接传入列表数据：
-
-```tsx
-<DDVTable
-  config={{
-    grid_columns: [
-      { title: '姓名', field: 'name', width: 120 },
-      { title: '年龄', field: 'age', width: 80 },
-    ],
-  }}
-  data={{ rows: [{ name: '张三', age: 25 }, { name: '李四', age: 30 }] }}
-/>
-```
-
-### 方式2：API 查询数据
-
-通过 `config.api_config` 和 `apiParams` 从后端 API 获取数据：
-
-```tsx
-// 使用 config.api_config 统一配置 API 地址
-const config = {
-  grid_columns: [
-    { title: '姓名', field: 'name', width: 120 },
-    { title: '年龄', field: 'age', width: 80, sort: true },
-  ],
-  api_config: {
-    api_grid_query: '/hx/ty/crud/queryPager',
-    api_form_query: '/hx/ty/crud/queryOne',
-    api_form_edit: '/hx/ty/crud/edit',
-  },
-};
-
-<DDVTable
-  config={config}
-  apiParams={{ page: 1, pageSize: 20 }}
-  onDataLoad={(data) => console.log('数据加载完成', data)}
-  onLoadingChange={(loading) => console.log('加载状态', loading)}
-/>
-```
-
-**API 模式特性**：
-- 内部通过 API 查询数据，无需外部传入 `data`
-- 支持分页查询
-- 支持查询参数配置（searchModel、orderModel）
-- 自动加载数据（可关闭）
-- 支持后端排序联动
-- 自动适配多种 API 响应格式
+### API 模式进阶
 
 **带查询条件**：
 
@@ -1173,7 +1215,7 @@ const config = {
 const config = {
   grid_columns: [...],
   api_config: {
-    api_grid_query: '/hx/ty/crud/queryPager',
+    api_grid_query: '/api/list',
   },
 };
 

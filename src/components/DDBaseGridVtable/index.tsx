@@ -62,6 +62,8 @@ import DDDescriptions from '../DDForm/DDDescriptions';
 import DDFilter from '../DDForm/DDFilter';
 import formUtil from '../DDForm/formUtil';
 import myUtil from '../DDAssist/util';
+import { itemType } from '../DDForm/data.d';
+import CONSTANTS from '../DDAssist/constants';
 
 // 重新导出 types.ts 中的类型，供外部使用
 export * from './types';
@@ -170,6 +172,114 @@ const extractCodeTableKeysFromItems = (items: DDVTableFormItem[]): string[] => {
   });
 
   return keys;
+};
+
+/**
+ * 组装普通筛选 searchModel（不含标题行筛选）
+ * 基于 DDBunit/unit_util.tsx 的 assembleSearchModel 简化而来
+ * @param formValues - 表单获取的所有值对象
+ * @param items - 筛选项配置数组
+ * @returns searchModel 数组
+ */
+const assembleVtableSearchModel = (formValues: any, items: any[]): any[] => {
+  const searchModel: any[] = [];
+  if (!items || items.length === 0) {
+    return searchModel;
+  }
+
+  items.forEach((item: any) => {
+    const tmpKey: any = item.name;
+    // 检查该字段是否有值（包括主值和范围查询的值）
+    if (tmpKey && (formValues[tmpKey] || formValues[tmpKey + '_searchModelQ'] || formValues[tmpKey + '_searchModelZ'])) {
+      let dataDdType: any = item.type;
+      let op: any = item.op ? item.op : CONSTANTS.FILTER_CONDITION.include.condetionCode; // 包含
+      let value: any = formValues[tmpKey];
+
+      if (dataDdType === itemType.Input) {
+        // Input 支持范围查询
+        if (item.range) {
+          // 范围查询：创建两个条件
+          if (formValues[tmpKey + '_searchModelQ'] !== undefined && formValues[tmpKey + '_searchModelQ'] !== null && formValues[tmpKey + '_searchModelQ'] !== '') {
+            let tmpItem1 = {
+              type: dataDdType,
+              property: tmpKey,
+              value: formValues[tmpKey + '_searchModelQ'] || '',
+              op: CONSTANTS.FILTER_CONDITION.greaterThanOrEqual.condetionCode, // 大于等于
+            };
+            myUtil.mysql.addDbFields(tmpItem1, item);
+            searchModel.push(tmpItem1);
+          }
+          op = CONSTANTS.FILTER_CONDITION.lessThanOrEqual.condetionCode; // 小于等于
+          value = formValues[tmpKey + '_searchModelZ'] || '';
+        }
+      } else if (dataDdType === itemType.InputNumber) {
+        // InputNumber 支持范围查询，非范围查询使用 equal
+        if (item.range) {
+          if (formValues[tmpKey + '_searchModelQ'] !== undefined && formValues[tmpKey + '_searchModelQ'] !== null && formValues[tmpKey + '_searchModelQ'] !== '') {
+            let tmpItem1 = {
+              type: dataDdType,
+              property: tmpKey,
+              value: formValues[tmpKey + '_searchModelQ'],
+              op: CONSTANTS.FILTER_CONDITION.greaterThanOrEqual.condetionCode,
+            };
+            myUtil.mysql.addDbFields(tmpItem1, item);
+            searchModel.push(tmpItem1);
+          }
+          op = CONSTANTS.FILTER_CONDITION.lessThanOrEqual.condetionCode;
+          value = formValues[tmpKey + '_searchModelZ'];
+        } else {
+          op = CONSTANTS.FILTER_CONDITION.equal.condetionCode; // 等于
+        }
+      } else if (dataDdType === itemType.Select) {
+        op = CONSTANTS.FILTER_CONDITION.equal.condetionCode;
+      } else if (dataDdType === itemType.Checkbox) {
+        op = CONSTANTS.FILTER_CONDITION.in.condetionCode;
+      } else if (dataDdType === itemType.DatePicker) {
+        // DatePicker 支持范围查询
+        value = value?.valueOf();
+        op = item.op ? item.op : CONSTANTS.FILTER_CONDITION.greaterThanOrEqual.condetionCode;
+        if (formValues[tmpKey] instanceof Array) {
+          // 范围查询
+          let tmpItem1 = {
+            type: dataDdType,
+            property: tmpKey,
+            value: (new Date(formValues[tmpKey][0].format('YYYY/MM/DD'))).getTime(),
+            op: CONSTANTS.FILTER_CONDITION.greaterThanOrEqual.condetionCode,
+          };
+          myUtil.mysql.addDbFields(tmpItem1, item);
+          searchModel.push(tmpItem1);
+          op = CONSTANTS.FILTER_CONDITION.lessThanOrEqual.condetionCode;
+          value = myUtil.date.accurateDate(formValues[tmpKey][1].format('YYYY/MM/DD'), '2');
+        } else {
+          value = (new Date(dayjs(value).format("YYYY/MM/DD"))).getTime();
+        }
+      } else if (dataDdType === itemType.TreeSelect) {
+        // TreeSelect 处理 labelInValue
+        if (item.labelInValue && value) {
+          value = value.label;
+        }
+      } else if (dataDdType === itemType.InputTags) {
+        op = CONSTANTS.FILTER_CONDITION.in.condetionCode;
+      }
+
+      // 过滤空值：去除空 checkbox
+      if (!(op === CONSTANTS.FILTER_CONDITION.in.condetionCode && (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)))) {
+        const tmpItem: any = {
+          type: dataDdType,
+          property: tmpKey,
+          value: value,
+          value2: value, // InputTags/Select&&multiple 后端适配字段
+          op,
+        };
+        myUtil.mysql.addDbFields(tmpItem, item);
+        if (tmpItem.value !== undefined && tmpItem.value !== null && tmpItem.value !== '') {
+          searchModel.push(tmpItem);
+        }
+      }
+    }
+  });
+
+  return searchModel;
 };
 
 // ==================== 默认配置 ====================
@@ -662,50 +772,14 @@ const DDVTable: React.FC<DDVTableProps> = ({
   });
   const hasFilter = filterItems && filterItems.length > 0;
 
-  // 处理筛选表单提交 - 由于 DDFilter 内部的 assembleSearchModel 没有传 items，导致返回空数组
-  // 所以这里直接从 filterForm 获取值，手动构建 searchModel
+  // 处理筛选表单提交 - 调用 assembleVtableSearchModel 构建 searchModel
   const handleFilterSubmit = useCallback(async () => {
     try {
       const values = await filterForm.validateFields();
       console.log('[DDVTable] filter form values:', values);
 
-      // 手动构建 searchModel 格式: [{ property: "sbpc", value: "999", op: "alike" }, ...]
-      const searchModel: any[] = [];
-      filterItems.forEach((item: any) => {
-        const key = item.name;
-        const value = values[key];
-        // 跳过空值
-        if (value === undefined || value === null || value === '') {
-          return;
-        }
-        // 获取操作符，默认 like（包含）
-        const op = item.op || 'alike';
-        // 处理范围查询
-        if (item.range && value && typeof value === 'object' && value.length === 2) {
-          // 范围查询：创建两个条件
-          if (value[0] !== undefined && value[0] !== null && value[0] !== '') {
-            searchModel.push({
-              property: key,
-              value: value[0],
-              op: 'ge', // 大于等于
-            });
-          }
-          if (value[1] !== undefined && value[1] !== null && value[1] !== '') {
-            searchModel.push({
-              property: key,
-              value: value[1],
-              op: 'le', // 小于等于
-            });
-          }
-        } else {
-          // 普通查询
-          searchModel.push({
-            property: key,
-            value: value,
-            op: op,
-          });
-        }
-      });
+      // 使用 assembleVtableSearchModel 构建 searchModel
+      const searchModel = assembleVtableSearchModel(values, filterItems);
 
       console.log('[DDVTable] handleFilterSubmit searchModel:', searchModel);
 

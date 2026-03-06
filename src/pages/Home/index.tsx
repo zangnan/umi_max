@@ -60,20 +60,20 @@ const apiCallData = [
 
 // 异常日志数据
 const exceptionLogs = [
-  { id: 1, time: '2024-01-29 15:32:18', level: 'ERROR', message: '数据查询超时: /api/v1/queryListNs', count: 3 },
-  { id: 2, time: '2024-01-29 14:25:03', level: 'WARN', message: 'Token即将过期，请刷新', count: 15 },
-  { id: 3, time: '2024-01-29 12:18:45', level: 'ERROR', message: '数据库连接失败: Connection refused', count: 1 },
-  { id: 4, time: '2024-01-29 10:05:22', level: 'WARN', message: '接口响应时间过长: 2387ms', count: 7 },
-  { id: 5, time: '2024-01-28 22:30:10', level: 'ERROR', message: '文件上传失败: exceed max size', count: 2 },
+  { key: 1, id: 1, time: '2024-01-29 15:32:18', level: 'ERROR', message: '数据查询超时: /api/v1/queryListNs', count: 3 },
+  { key: 2, id: 2, time: '2024-01-29 14:25:03', level: 'WARN', message: 'Token即将过期，请刷新', count: 15 },
+  { key: 3, id: 3, time: '2024-01-29 12:18:45', level: 'ERROR', message: '数据库连接失败: Connection refused', count: 1 },
+  { key: 4, id: 4, time: '2024-01-29 10:05:22', level: 'WARN', message: '接口响应时间过长: 2387ms', count: 7 },
+  { key: 5, id: 5, time: '2024-01-28 22:30:10', level: 'ERROR', message: '文件上传失败: exceed max size', count: 2 },
 ];
 
 // 热门接口数据
 const hotApiData = [
-  { rank: 1, method: 'GET', path: '/api/v1/dict/list', calls: 4520, avgTime: '45ms' },
-  { rank: 2, method: 'POST', path: '/api/v1/data/import', calls: 2890, avgTime: '320ms' },
-  { rank: 3, method: 'GET', path: '/api/v1/user/info', calls: 2150, avgTime: '38ms' },
-  { rank: 4, method: 'POST', path: '/api/v1/form/submit', calls: 1680, avgTime: '156ms' },
-  { rank: 5, method: 'GET', path: '/api/v1/module/list', calls: 1240, avgTime: '62ms' },
+  { key: 1, rank: 1, method: 'GET', path: '/api/v1/dict/list', calls: 4520, avgTime: '45ms' },
+  { key: 2, rank: 2, method: 'POST', path: '/api/v1/data/import', calls: 2890, avgTime: '320ms' },
+  { key: 3, rank: 3, method: 'GET', path: '/api/v1/user/info', calls: 2150, avgTime: '38ms' },
+  { key: 4, rank: 4, method: 'POST', path: '/api/v1/form/submit', calls: 1680, avgTime: '156ms' },
+  { key: 5, rank: 5, method: 'GET', path: '/api/v1/module/list', calls: 1240, avgTime: '62ms' },
 ];
 
 // ==================== 快捷入口配置 ====================
@@ -356,7 +356,7 @@ const HomePage: React.FC = () => {
             <Col xs={12} sm={8} md={6} lg={3} key={index}>
               <Card
                 className="statistic-card glass-card-inner"
-                bordered={false}
+                variant="borderless"
               >
                 <StatisticCard
                   statistic={{
@@ -388,11 +388,11 @@ const HomePage: React.FC = () => {
                         {stat.trendValue}
                       </span>
                     ),
-                  }}
-                  contentStyle={{
-                    color: '#1e293b',
-                    fontSize: 28,
-                    fontWeight: 600,
+                    style: {
+                      color: '#1e293b',
+                      fontSize: 28,
+                      fontWeight: 600,
+                    },
                   }}
                 />
               </Card>
@@ -421,7 +421,7 @@ const HomePage: React.FC = () => {
             <Col span={6} key={index}>
               <Card
                 size="small"
-                bordered={false}
+                variant="borderless"
                 className="log-stat-card glass-card-inner"
               >
                 <StatisticCard
@@ -446,11 +446,11 @@ const HomePage: React.FC = () => {
                         <span className="trend-indicator" /> {stat.trendValue}
                       </span>
                     ),
-                  }}
-                  contentStyle={{
-                    color: '#1e293b',
-                    fontSize: 22,
-                    fontWeight: 600,
+                    style: {
+                      color: '#1e293b',
+                      fontSize: 22,
+                      fontWeight: 600,
+                    },
                   }}
                 />
               </Card>
@@ -514,7 +514,7 @@ const HomePage: React.FC = () => {
           </Button>
         }
       >
-        <Card bordered={false} className="chart-card glass-card-inner">
+        <Card variant="borderless" className="chart-card glass-card-inner">
           <Line
             data={apiCallData.flatMap(item => [
               { time: item.time, count: item.requests, type: '请求数' },
