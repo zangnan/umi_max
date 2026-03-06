@@ -48,10 +48,10 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
 
     // 2. 转换 api_config
     const api_config = {
-      apiGridQuery: config.api_grid_query,
-      apiFormQuery: config.api_form_query,
-      apiFormEdit: config.api_form_edit,
-      apiFormDelete: config.api_form_delete,
+      api_grid_query: config.api_grid_query,
+      api_form_query: config.api_form_query,
+      api_form_edit: config.api_form_edit,
+      api_form_delete: config.api_form_delete,
     };
 
     // 3. 转换 grid_config
@@ -66,8 +66,21 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
       form_title: config.form_title,
       form_width: config.form_width,
       form_layout_type: config.form_layout_type,
-      gridRowKey: config.grid_row_key,
     };
+
+    // 删除不需要的配置节点
+    delete config.form_title;
+    delete config.form_layout_type;
+    delete config.form_width;
+    delete config.form_submit_type;
+    delete config.api_excel_export;
+    delete config.api_excel_import;
+    delete config.api_excel_template;
+    delete config.grid_title;
+    delete config.grid_filter_quick;
+    delete config.grid_list_card_field;
+    delete config.gridParams;
+    delete config.grid_ext;
 
     return {
       ...config,

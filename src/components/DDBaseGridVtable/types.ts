@@ -166,10 +166,10 @@ export interface DDVTableGridConfig {
   grid_row_key?: string;
   /** 是否全局开启自动换行（配合 defaultRowHeight 使用），默认 false */
   grid_auto_wrap_text?: boolean;
-  /** 性能模式：启用后跳过所有复杂配置，只保留基础 field/title/width，用于性能测试 */
-  performanceMode?: boolean;
   /** 表格标题：显示在"共 xx 条"前面 */
   grid_title?: string;
+  /** 性能模式：启用后跳过所有复杂配置，只保留基础 field/title/width，用于性能测试 */
+  grid_performance_mode?: boolean;
 }
 
 /**
@@ -187,13 +187,13 @@ export interface DDVTableConfig {
   /** API 配置 - 统一管理所有接口地址 */
   api_config?: {
     /** 列表查询 API 地址 */
-    apiGridQuery?: string;
+    api_grid_query?: string;
     /** 表单查询 API 地址（编辑时查询） */
-    apiFormQuery?: string;
+    api_form_query?: string;
     /** 表单保存 API 地址（新增/编辑时保存） */
-    apiFormEdit?: string;
+    api_form_edit?: string;
     /** 表单删除 API 地址 */
-    apiFormDelete?: string;
+    api_form_delete?: string;
   };
   /** 表单配置 */
   form_config?: DDVTableFormConfig;
@@ -222,7 +222,7 @@ export interface DDVTableFilterRule {
   /** 过滤字段 */
   field: string;
   /** 过滤类型 */
-  filterType: 'text' | 'number' | 'date';
+  filter_type: 'text' | 'number' | 'date';
   /** 过滤条件值 */
   value: string | number | { min?: number; max?: number };
 }
@@ -284,53 +284,23 @@ export interface DDVTableFormItem {
 }
 
 /**
- * 统一 API 配置类型
- */
-export interface DDVTableApiConfig {
-  /** 列表查询 API 地址 */
-  apiGridQuery?: string;
-  /** 表单查询 API 地址（编辑时查询） */
-  apiFormQuery?: string;
-  /** 表单保存 API 地址 */
-  apiFormEdit?: string;
-  /** 表单删除 API 地址 */
-  apiFormDelete?: string;
-}
-
-/**
  * 表单配置类型
  */
 export interface DDVTableFormConfig {
   /** 表单标题 */
   form_title?: string;
   /** 表单宽度 */
-  width?: number | string;
-  /** 表单宽度（兼容旧配置） */
   form_width?: number | string;
-  /** 表单项配置 */
-  items?: DDVTableFormItem[];
   /** 布局类型：horizontal | vertical | 数字（多列） */
   form_layout_type?: 'horizontal' | 'vertical' | number;
   /** 标签与输入框排列方式 */
   form_label_input_layout?: 'horizontal' | 'vertical';
-  /** 统一 API 配置（推荐方式） */
-  apiConfig?: DDVTableApiConfig;
-  /** API：表单查询（推荐使用 apiConfig.apiFormQuery，此处保留用于向后兼容） */
-  apiFormQuery?: string;
-  /** API：表单保存（推荐使用 apiConfig.apiFormEdit，此处保留用于向后兼容） */
-  apiFormEdit?: string;
-  /** API：表单校验 */
-  apiFormCheck?: string;
-  /** 主键字段 */
-  gridRowKey?: string;
-  /** 业务单元key */
-  module_key?: string;
   /** 提交类型：默认null，FormData可选 */
-  formSubmitType?: 'FormData' | null;
+  form_submit_type?: 'FormData' | null;
   /** 是否执行后端校验 */
-  saveCheck?: boolean;
+  form_save_check?: boolean;
   /** 是否从列表获取编辑数据 */
-  getEditValueByGrid?: boolean;
+  form_get_value_by_grid?: boolean;
 }
 
 // ==================== API 查询相关类型 ====================
@@ -431,8 +401,6 @@ export interface DDVTableProps {
   config?: DDVTableConfig;
   /** 列表数据 - 直接传入数据时使用 */
   data?: DDVTableData;
-  /** 列表查询 API 地址 - API 模式时使用，与 data 二选一 */
-  api_grid_query?: string;
   /** API 查询参数 - API 模式时使用 */
   apiParams?: DDVTableApiQueryParams;
   /** 是否自动加载数据（API 模式有效，默认 true） */
@@ -471,8 +439,6 @@ export interface DDVTableProps {
   onError?: (error: any) => void;
   /** 刷新按钮点击回调（点击刷新按钮时触发） */
   onRefresh?: (selectedRows?: any[]) => void;
-  /** 表单配置（用于新建/编辑弹窗） */
-  formConfig?: DDVTableFormConfig;
   /** 表单保存回调，返回 Promise 或 void */
   onFormSave?: (values: any, formType: 'add' | 'edit', record?: any) => Promise<void> | void;
   /** 表单加载数据完成后回调（用于编辑时回填数据） */

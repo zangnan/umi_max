@@ -73,7 +73,7 @@ import { MultipleContainers } from '../../pages/example/dnd/dnd5/MultipleContain
 import tableUtil from '../DDBaseGrid/tableUtil';
 import formUtil from '../DDForm/formUtil';
 import UnitUtil from './unit_util';
-import myUtil from '../DDAssist/util';
+import myUtil, { intl } from '../DDAssist/util';
 import pdfUtil from '../DDAssist/util/pdfUtil';
 import CONSTANTS from '../DDAssist/constants';
 import DDIT_TOOL_CONSTANTS from './excelConfig.v2.constants';
@@ -609,11 +609,11 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
   // Button: 打开编辑弹窗 工具栏入口
   const popupUpdateFromToolbar = () => {
     if (selectionRowKeys?.length === 0) {
-      message.info(myUtil.intl.formatMessage({ id: 'message_handle_unselected' }));
+      message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
       return;
     }
     if (selectionRowKeys?.length !== 1) {
-      message.info(myUtil.intl.formatMessage({ id: 'message_one_selected' }));
+      message.info(intl.formatMessage({ id: 'message_one_selected' }));
       return;
     }
     popupUpdate(selectionRows[0]);

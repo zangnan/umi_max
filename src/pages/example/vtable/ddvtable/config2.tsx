@@ -127,7 +127,7 @@ export const testConfigForApi: DDVTableConfig = {
     // 主键字段
     grid_row_key: 'uuid',
     // 性能模式 - 启用后只保留 field/title/width
-    // performanceMode: true,
+    // grid_performance_mode: true,
   },
   // 操作列按钮配置
   grid_handle_columns_default: {
@@ -161,14 +161,14 @@ export const testConfigForApi: DDVTableConfig = {
   // API 配置（统一管理所有接口）
   api_config: {
     /** 列表查询 API 地址 */
-    // apiGridQuery: '/dict/automatic/exp/bs/queryPager/eg_m_mts_tsjh', // 通过模块名查询
-    apiGridQuery: '/ns/base/list/eg_mts_tsjh', // 通过表名简单查询
+    // api_grid_query: '/dict/automatic/exp/bs/queryPager/eg_m_mts_tsjh', // 通过模块名查询
+    api_grid_query: '/ns/base/list/eg_mts_tsjh', // 通过表名简单查询
     /** 表单查询 API 地址（编辑时查询） */
-    apiFormQuery: '/dict/automatic/exp/bs/queryForm/eg_m_mts_tsjh',
+    api_form_query: '/dict/automatic/exp/bs/queryForm/eg_m_mts_tsjh',
     /** 表单保存 API 地址 */
-    apiFormEdit: '/dict/automatic/exp/bs/saveOrUpdate/eg_m_mts_tsjh',
+    api_form_edit: '/dict/automatic/exp/bs/saveOrUpdate/eg_m_mts_tsjh',
     /** 表单删除 API 地址 */
-    apiFormDelete: '/dict/automatic/exp/bs/delete/eg_m_mts_tsjh',
+    api_form_delete: '/dict/automatic/exp/bs/delete/eg_m_mts_tsjh',
   },
   // 表单配置
   form_config: {
@@ -236,10 +236,6 @@ export const testConfigForApi: DDVTableConfig = {
         { type: 'base_required' },
         { type: 'base_string', range: [ 0, 1 ] }
       ],
-      list: [
-        { value: 'C', name: '消费税', label: '消费税' },
-        { value: 'V', name: '增值税', label: '增值税' },
-      ]
     },
     {
       label: '出口退(免)税凭证类型代码',
@@ -251,15 +247,6 @@ export const testConfigForApi: DDVTableConfig = {
         { type: 'base_required' },
         { type: 'base_string', range: [ 0, 2 ] }
       ],
-      list: [
-        { value: '02', name: '增值税专用发票', label: '增值税专用发票' },
-        { value: '04', name: '海关进口增值税专用缴款书', label: '海关进口增值税专用缴款书' },
-        { value: '05', name: '海关进口消费税专用缴款书', label: '海关进口消费税专用缴款书' },
-        { value: '06', name: '出口货物消费税专用缴款书', label: '出口货物消费税专用缴款书' },
-        { value: '07', name: '出口货物消费税专用缴款书分割单', label: '出口货物消费税专用缴款书分割单' },
-        { value: '08', name: '税收专用缴款书', label: '税收专用缴款书' },
-        { value: '10', name: '消费税专用缴款书', label: '消费税专用缴款书' }
-      ]
     },
     {
       label: '进货凭证号',

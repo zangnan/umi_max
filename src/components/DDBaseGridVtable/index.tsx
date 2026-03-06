@@ -27,7 +27,6 @@ import type {
   DDVTableData,
   DDVTableFilterRule,
   DDVTableFormItem,
-  DDVTableApiConfig,
   DDVTableFormConfig,
   DDVTableApiSearchItem,
   DDVTableApiOrderItem,
@@ -139,6 +138,33 @@ const extractCodeTableKeysFromColumns = (columns: DDVTableColumn[]): string[] =>
     if (col.render?.type === 'code_table' && col.render?.key) {
       if (!keys.includes(col.render.key)) {
         keys.push(col.render.key);
+      }
+    }
+  });
+
+  return keys;
+};
+
+/**
+ * 从筛选项/表单项配置中提取码表 key
+ * @param items - 筛选项/表单项配置数组
+ * @returns 码表 key 数组
+ */
+const extractCodeTableKeysFromItems = (items: DDVTableFormItem[]): string[] => {
+  const keys: string[] = [];
+  if (!items) return keys;
+
+  items.forEach((item) => {
+    // 处理 codeTable 配置
+    if (item.codeTable) {
+      if (!keys.includes(item.codeTable)) {
+        keys.push(item.codeTable);
+      }
+    }
+    // 处理 treeTable 配置（树形码表）
+    if (item.treeTable) {
+      if (!keys.includes(item.treeTable)) {
+        keys.push(item.treeTable);
       }
     }
   });
@@ -290,13 +316,15 @@ VTable.register.icon('filtered', {
  *
  * // 方式2：API 查询数据
  * <DDVTable
- *   api_grid_query="/hx/ty/crud/queryPager"
  *   apiParams={{ page: 1, pageSize: 20 }}
  *   config={{
  *     grid_columns: [
  *       { title: '姓名', field: 'name' },
  *       { title: '年龄', field: 'age' },
  *     ],
+ *     api_config: {
+ *       api_grid_query: '/hx/ty/crud/queryPager',
+ *     },
  *   }}
  *   onDataLoad={(data) => console.log(data)}
  * />
@@ -305,7 +333,6 @@ VTable.register.icon('filtered', {
 const DDVTable: React.FC<DDVTableProps> = ({
   config,
   data,
-  api_grid_query,
   apiParams,
   autoLoad = true,
   customFormatters,
@@ -325,12 +352,11 @@ const DDVTable: React.FC<DDVTableProps> = ({
   onDataLoad,
   onError,
   onRefresh,
-  formConfig: formConfigProp,
   onFormSave,
   onFormDataLoaded,
 }) => {
-  // 如果 formConfig 属性未传入，则从 config.form_config 中获取
-  const formConfig = formConfigProp || config?.form_config;
+  // 从 config.form_config 获取表单配置
+  const formConfig = config?.form_config;
   const tableRef = useRef<any>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -354,18 +380,32 @@ const DDVTable: React.FC<DDVTableProps> = ({
     onFormSaveRef.current = onFormSave;
   }, [onFormSave]);
 
-  // 码表预加载 - 在组件加载前预先加载 grid_columns 中配置的码表
+  // 码表预加载 - 在组件加载前预先加载 grid_columns、filter_items、form_items 中配置的码表
   useEffect(() => {
     const initCodeTables = async () => {
+      // 从 grid_columns 中提取码表 key
       const columns = config?.grid_columns || [];
-      const codeTableKeys = extractCodeTableKeysFromColumns(columns);
+      const codeTableKeysFromColumns = extractCodeTableKeysFromColumns(columns);
 
-      if (codeTableKeys.length === 0) return;
+      // 从 filter_items 中提取码表 key
+      const filterItems = config?.filter_items || [];
+      const codeTableKeysFromFilter = extractCodeTableKeysFromItems(filterItems);
+
+      // 从 form_items 中提取码表 key
+      const formItems = config?.form_items || [];
+      const codeTableKeysFromForm = extractCodeTableKeysFromItems(formItems);
+
+      // 合并所有码表 key
+      const allCodeTableKeys = [...codeTableKeysFromColumns, ...codeTableKeysFromFilter, ...codeTableKeysFromForm];
+      // 去重
+      const uniqueKeys = Array.from(new Set(allCodeTableKeys));
+
+      if (uniqueKeys.length === 0) return;
 
       setCodeTableLoading(true);
 
       // 构建码表参数
-      const param = codeTableKeys.map((key) => ({ key }));
+      const param = uniqueKeys.map((key) => ({ key }));
 
       // 获取码表 Promise 数组
       const promiseArr = myUtil.code.getCodeTablePromise(param);
@@ -384,10 +424,10 @@ const DDVTable: React.FC<DDVTableProps> = ({
     };
 
     initCodeTables();
-  }, [config?.grid_columns]);
+  }, [config?.grid_columns, config?.filter_items, config?.form_items]);
 
-  // 从 config.api_config 中获取 API 地址（优先使用），如果没有则使用 api_grid_query 属性
-  const apiGridQuery = config?.api_config?.apiGridQuery || api_grid_query;
+  // 从 config.api_config 中获取 API 地址
+  const apiGridQuery = config?.api_config?.api_grid_query;
 
   // 判断是否使用 API 模式
   const isApiMode = !!apiGridQuery;
@@ -453,22 +493,13 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
   // ==================== API 配置辅助函数 ====================
 
-  /** 获取表单 API 地址（优先使用 config.api_config，其次兼容 formConfig 配置） */
-  const getFormApiUrl = useCallback((apiType: 'apiFormQuery' | 'apiFormEdit'): string | undefined => {
-    // 优先使用 config.api_config 中的配置
+  /** 获取表单 API 地址 */
+  const getFormApiUrl = useCallback((apiType: 'api_form_query' | 'api_form_edit'): string | undefined => {
     if (config?.api_config?.[apiType]) {
       return config.api_config[apiType];
     }
-    // 兼容旧配置：formConfig 中直接配置的 apiFormQuery/apiFormEdit
-    if (formConfig?.[apiType]) {
-      return formConfig[apiType];
-    }
-    // 兼容旧配置：formConfig.apiConfig 对象
-    if (formConfig?.apiConfig?.[apiType]) {
-      return formConfig.apiConfig[apiType];
-    }
     return undefined;
-  }, [config, formConfig]);
+  }, [config]);
 
   /** 构建完整的 API 地址（自动添加 API 根路径） */
   const buildFullApiUrl = useCallback((apiUrl: string | undefined): string | undefined => {
@@ -483,7 +514,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
   /** 获取删除 API 地址 */
   const getDeleteApiUrl = useCallback((): string | undefined => {
-    return config?.api_config?.apiFormDelete;
+    return config?.api_config?.api_form_delete;
   }, [config]);
 
   // ==================== API 数据加载逻辑（仅 API 模式使用） ====================
@@ -548,10 +579,10 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
   /** 加载数据（API 模式） */
   const loadData = useCallback(async (params?: DDVTableApiQueryParams) => {
-    // 优先使用 config.api_config.apiGridQuery，其次使用 api_grid_query 属性
-    const queryUrl = config?.api_config?.apiGridQuery || api_grid_query;
+    // 从 config.api_config 获取 API 地址
+    const queryUrl = config?.api_config?.api_grid_query;
     if (!queryUrl) {
-      console.warn('[DDVTable] api_grid_query is required in API mode');
+      console.warn('[DDVTable] config.api_config.api_grid_query is required in API mode');
       return;
     }
 
@@ -610,12 +641,25 @@ const DDVTable: React.FC<DDVTableProps> = ({
       setLoading(false);
       onLoadingChange?.(false);
     }
-  }, [config, api_grid_query, getFinalParams, onLoadingChange, onDataLoad, onError, buildFullApiUrl]);
+  }, [config, getFinalParams, onLoadingChange, onDataLoad, onError, buildFullApiUrl]);
 
   // ==================== 筛选表单相关 ====================
   const [filterForm] = Form.useForm();
   // 使用 formUtil.init 对 filter_items 进行格式转换
   const filterItems = formUtil.init({ items: config?.filter_items || [] });
+  // 码表渲染：为 filter_items 中的 codeTable/treeTable 配置生成选项列表
+  filterItems?.forEach((item: any) => {
+    const { codeTable, treeTable, isSelectLeaf = false } = item;
+    if (codeTable) {
+      item.list = myUtil.code.getSelectOption(codeTable);
+    }
+    if (treeTable) {
+      item.list = myUtil.treeCode.getTreeCodeData(treeTable);
+      if (isSelectLeaf) {
+        myUtil.array.traverseTreeLeaf(item.list);
+      }
+    }
+  });
   const hasFilter = filterItems && filterItems.length > 0;
 
   // 处理筛选表单提交 - 由于 DDFilter 内部的 assembleSearchModel 没有传 items，导致返回空数组
@@ -717,7 +761,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
       loadData();
     }
     // apiParams 变化时的后续加载由外部 refreshKey 控制
-  }, [isApiMode, autoLoad, api_grid_query, loadData]);
+  }, [isApiMode, autoLoad, loadData]);
 
   /** 处理排序变化（API 模式联动后端排序） */
   const handleApiSortChange = useCallback((sortField: string, sortOrder: 'asc' | 'desc') => {
@@ -778,16 +822,15 @@ const DDVTable: React.FC<DDVTableProps> = ({
     return formatted;
   }, [config?.form_items]);
   // 初始化表单项（使用 useMemo 避免重复计算）
-  // 支持两种配置方式：config.form_items 或 formConfig.items
   const formItems = useMemo(() => {
-    const items = config?.form_items || formConfig?.items || [];
+    const items = config?.form_items || [];
     if (!items || items.length === 0) return [];
     return formUtil.init({
       items,
       func: {},
       form,
     });
-  }, [config?.form_items, formConfig?.items, form]);
+  }, [config?.form_items, form]);
 
   // 拖拽传感器
   const sensors = useSensors(
@@ -820,18 +863,18 @@ const DDVTable: React.FC<DDVTableProps> = ({
       setFormVisible(true);
       setFormMasker(true);
 
-      // 获取表单查询 API 地址（支持新旧配置方式）
-      const apiFormQueryUrl = getFormApiUrl('apiFormQuery');
+      // 获取表单查询 API 地址
+      const apiFormQueryUrl = getFormApiUrl('api_form_query');
 
-      // 检查是否配置了 apiFormQuery
+      // 检查是否配置了 api_form_query
       if (apiFormQueryUrl && record) {
         // 构建完整 API 路径
         const fullApiUrl = buildFullApiUrl(apiFormQueryUrl);
 
         // 构建查询参数
-        const gridRowKey = config?.grid_config?.grid_row_key || formConfig?.gridRowKey || 'id';
+        const gridRowKey = config?.grid_config?.grid_row_key || 'id';
         const queryParam: Record<string, any> = {
-          key: config?.module_key || formConfig?.module_key || '',
+          key: config?.module_key || '',
           [gridRowKey]: record[gridRowKey] || record.id,
         };
 
@@ -865,7 +908,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
             setFormMasker(false);
           });
       } else {
-        // 如果没有配置 apiFormQuery，使用 getEditValueByGrid 或默认逻辑
+        // 如果没有配置 api_form_query，使用 getEditValueByGrid 或默认逻辑
         setFormMasker(false);
         if (onFormDataLoaded && record) {
           onFormDataLoaded(form, record);
@@ -896,14 +939,14 @@ const DDVTable: React.FC<DDVTableProps> = ({
       setDetailVisible(true);
 
       // 获取表单查询 API 地址
-      const apiFormQueryUrl = getFormApiUrl('apiFormQuery');
+      const apiFormQueryUrl = getFormApiUrl('api_form_query');
       // 获取 getEditValueByGrid 配置
-      const getEditValueByGrid = formConfig?.getEditValueByGrid || config?.form_config?.getEditValueByGrid;
+      const getEditValueByGrid = formConfig?.form_get_value_by_grid || config?.form_config?.form_get_value_by_grid;
 
       // 构建查询参数
-      const gridRowKey = config?.grid_config?.grid_row_key || formConfig?.gridRowKey || 'id';
+      const gridRowKey = config?.grid_config?.grid_row_key || 'id';
       const param: Record<string, any> = {
-        key: config?.module_key || formConfig?.module_key || '',
+        key: config?.module_key || '',
         [gridRowKey]: record[gridRowKey] || record.id,
       };
 
@@ -956,18 +999,18 @@ const DDVTable: React.FC<DDVTableProps> = ({
       const values = await form.validateFields();
       setFormMasker2(true);
 
-      // 获取表单保存 API 地址（支持新旧配置方式）
-      const apiFormEditUrl = getFormApiUrl('apiFormEdit');
+      // 获取表单保存 API 地址
+      const apiFormEditUrl = getFormApiUrl('api_form_edit');
 
-      // 检查是否配置了 apiFormEdit
+      // 检查是否配置了 api_form_edit
       if (apiFormEditUrl) {
         // 构建完整 API 路径
         const fullApiUrl = buildFullApiUrl(apiFormEditUrl);
 
         // 构建请求参数
-        const gridRowKey = config?.grid_config?.grid_row_key || formConfig?.gridRowKey || 'id';
+        const gridRowKey = config?.grid_config?.grid_row_key || 'id';
         const param: Record<string, any> = {
-          key: config?.module_key || formConfig?.module_key || '',
+          key: config?.module_key || '',
           formType: formType,
           ...values,
         };
@@ -996,7 +1039,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
           message.error(error.message || '保存失败');
         }
       } else {
-        // 如果没有配置 apiFormEdit，使用回调方式
+        // 如果没有配置 api_form_edit，使用回调方式
         await handleApiFormSave(values, formType, editingRecord);
       }
     } catch (error: any) {
@@ -1122,7 +1165,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
     if (!config?.grid_columns) return [];
 
     // 性能模式：只返回最基础的列配置，用于性能测试
-    if (config.grid_config?.performanceMode) {
+    if (config.grid_config?.grid_performance_mode) {
       return config.grid_columns
         .filter((col: any) => col.hidden !== true)
         .map((col: any) => ({
@@ -1545,8 +1588,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
     // 如果没有配置表单，则不显示
     if (!config?.form_items || config.form_items.length === 0) return null;
 
-    // 获取表单配置，支持 snake_case 和 camelCase 两种字段名
-    const formWidth = formConfig.form_width || formConfig.width || 720;
+    // 获取表单配置
+    const formWidth = formConfig.form_width || 720;
     const formLayoutType = formConfig.form_layout_type || 'vertical';
     const formLabelLayout = formConfig.form_label_input_layout || 'horizontal';
 
@@ -1576,7 +1619,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
             }}
             initialValues={{}}
             otherParam={{
-              module_key: formConfig.module_key,
+              module_key: config?.module_key,
             }}
           />
         </Spin>
@@ -1792,7 +1835,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
               // 应用过滤
               const newRule: DDVTableFilterRule = {
                 field: filterColumn.field,
-                filterType,
+                filter_type: filterType,
                 value: filterValue,
               };
               const newRules = [...filterRules.filter((r) => r.field !== filterColumn.field), newRule];
@@ -1918,7 +1961,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
     if (!config?.grid_columns) return [];
 
     // 性能模式：只返回最基础的列配置，跳过所有复杂处理
-    if (config.grid_config?.performanceMode) {
+    if (config.grid_config?.grid_performance_mode) {
       return config.grid_columns
         .filter((col: any) => col.hidden !== true)
         .map((col: any): Record<string, any> => ({
@@ -2154,7 +2197,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
   // 构建完整的 VTable 配置
   const option = useMemo(() => {
     // 性能模式：直接返回最简配置，跳过所有复杂处理
-    if (config?.grid_config?.performanceMode) {
+    if (config?.grid_config?.grid_performance_mode) {
       return {
         ...defaultConfig,
         columns,
@@ -2393,12 +2436,12 @@ const DDVTable: React.FC<DDVTableProps> = ({
           const value = record[rule.field];
           if (value === null || value === undefined) return true;
 
-          if (rule.filterType === 'text') {
+          if (rule.filter_type === 'text') {
             // 文本类型 - 模糊搜索
             const filterValue = rule.value as string;
             if (!filterValue) return true;
             return String(value).toLowerCase().includes(filterValue.toLowerCase());
-          } else if (rule.filterType === 'number') {
+          } else if (rule.filter_type === 'number') {
             // 数值类型 - 范围过滤
             const range = rule.value as { min?: number; max?: number };
             const numValue = Number(value);
@@ -2406,7 +2449,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
             if (range.min !== undefined && numValue < range.min) return false;
             if (range.max !== undefined && numValue > range.max) return false;
             return true;
-          } else if (rule.filterType === 'date') {
+          } else if (rule.filter_type === 'date') {
             // 日期类型 - 范围过滤
             const range = rule.value as { min?: string; max?: string };
             const dateValue = new Date(value).getTime();
@@ -2560,7 +2603,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
   /** 处理行删除操作（单行删除） */
   const handleRowDelete = useCallback(
     async (rowData: any) => {
-      const gridRowKey = config?.grid_config?.grid_row_key || formConfig?.gridRowKey || 'id';
+      const gridRowKey = config?.grid_config?.grid_row_key || 'id';
       const uuidValue = rowData[gridRowKey];
 
       console.log('[删除] gridRowKey:', gridRowKey, ', uuidValue:', uuidValue);
@@ -2596,7 +2639,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
         return;
       }
 
-      const gridRowKey = config?.grid_config?.grid_row_key || formConfig?.gridRowKey || 'id';
+      const gridRowKey = config?.grid_config?.grid_row_key || 'id';
       // 提取所有选中行的主键值
       const uuidValues = selectedData.map((row) => row[gridRowKey]).filter(Boolean);
 
@@ -2662,8 +2705,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
         switch (actionType) {
           case 'edit':
-            // 如果配置了 formConfig，自动弹出编辑表单
-            if (formConfig?.apiFormEdit || config?.form_items) {
+            // 如果配置了表单字段，自动弹出编辑表单
+            if (config?.form_items) {
               handlePopupEdit(rowData);
             }
             // 调用外部回调

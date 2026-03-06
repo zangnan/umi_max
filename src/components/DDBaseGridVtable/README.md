@@ -5,7 +5,6 @@
 ## 特性
 
 - **简单配置**：仅需 `config.grid_columns` 和 `data.rows` 即可快速使用
-- **局部刷新**：数据更新时仅刷新数据，表头配置不重新渲染
 - **统计行增强**：支持格式化显示、禁用选择、动态冻结、类型标签
 - **动态配置**：支持设置弹窗动态配置紧凑度、序号列、冻结列数、统计行、表格高度、自动换行等
 - **首列动态选择**：选择类型（checkbox/radio）支持运行时动态切换
@@ -53,12 +52,12 @@ const config = {
     download: true,
     reload: true,
   },
-  // 统一 API 配置（推荐）
+  // 统一 API 配置
   api_config: {
-    apiGridQuery: '/api/grid/query',     // 列表查询
-    apiFormQuery: '/api/form/query',      // 表单查询
-    apiFormEdit: '/api/form/save',        // 表单保存
-    apiFormDelete: '/api/form/delete',    // 表单删除
+    api_grid_query: '/api/grid/query',     // 列表查询
+    api_form_query: '/api/form/query',      // 表单查询
+    api_form_edit: '/api/form/save',        // 表单保存
+    api_form_delete: '/api/form/delete',    // 表单删除
   },
   // 业务单元 key
   module_key: 'example_module',
@@ -80,7 +79,6 @@ const data = {
 | --- | --- | --- | --- |
 | config | `DDVTableConfig` | 是 | 表格配置对象 |
 | data | `DDVTableData` | 否 | 表格数据对象（直接传入数据模式使用） |
-| api_grid_query | `string` | 否 | 列表查询 API 地址（API 模式使用，与 data 二选一） |
 | apiParams | `DDVTableApiQueryParams` | 否 | API 查询参数（API 模式使用） |
 | autoLoad | `boolean` | 否 | 是否自动加载数据（API 模式有效，默认 true） |
 | customFormatters | `Record<string, (value: any) => string>` | 否 | 自定义格式化函数映射 |
@@ -100,7 +98,6 @@ const data = {
 | onRowEdit | `(rowData: any, tableInstance: any) => void` | 否 | 操作列编辑按钮回调 |
 | onRowDelete | `(rowData: any, tableInstance: any) => void` | 否 | 操作列删除按钮回调 |
 | onRowDetail | `(rowData: any, tableInstance: any) => void` | 否 | 操作列详情按钮回调 |
-| formConfig | `DDVTableFormConfig` | 否 | 表单配置（用于内置表单弹窗） |
 | onFormSave | `(values: any, formType: 'add' \| 'edit', record?: any) => Promise<void> \| void` | 否 | 表单保存回调 |
 | onFormDataLoaded | `(form: any, record: any) => void` | 否 | 表单数据加载完成回调（用于编辑时回填） |
 
@@ -151,7 +148,7 @@ interface DDVTableGridConfig {
   grid_row_key?: string; // 主键字段（用于删除等操作）
   grid_auto_wrap_text?: boolean; // 是否自动换行
   /** 性能模式：启用后跳过所有复杂配置，只保留基础 field/title/width，用于性能测试 */
-  performanceMode?: boolean;
+  grid_performance_mode?: boolean;
 }
 ```
 
@@ -167,10 +164,10 @@ interface DDVTableConfig {
   grid_handle_columns_default?: DDVTableHandleColumnsConfig; // 操作列
   /** API 配置 - 统一管理所有接口地址 */
   api_config?: {
-    apiGridQuery?: string; // 列表查询 API 地址
-    apiFormQuery?: string; // 表单查询 API 地址（编辑时查询）
-    apiFormEdit?: string; // 表单保存 API 地址（新增/编辑时保存）
-    apiFormDelete?: string; // 表单删除 API 地址
+    api_grid_query?: string; // 列表查询 API 地址
+    api_form_query?: string; // 表单查询 API 地址（编辑时查询）
+    api_form_edit?: string; // 表单保存 API 地址（新增/编辑时保存）
+    api_form_delete?: string; // 表单删除 API 地址
   };
   /** 表单配置 */
   form_config?: DDVTableFormConfig;
@@ -253,32 +250,17 @@ interface DDVTableSettingConfig {
 
 ### DDVTableFormConfig
 
-表单配置类型，通过 `config.form_config` 或 `formConfig` 属性配置。
+表单配置类型，通过 `config.form_config` 配置。
 
 ```typescript
 interface DDVTableFormConfig {
   form_title?: string; // 表单标题
-  width?: number | string; // 表单宽度
-  form_width?: number | string; // 表单宽度（兼容旧配置）
-  items?: DDVTableFormItem[]; // 表单项配置
+  form_width?: number | string; // 表单宽度
   form_layout_type?: 'horizontal' | 'vertical' | number; // 布局类型
   form_label_input_layout?: 'horizontal' | 'vertical'; // 标签与输入框排列方式
-  /** 统一 API 配置（推荐方式） */
-  apiConfig?: {
-    apiGridQuery?: string; // 列表查询 API
-    apiFormQuery?: string; // 表单查询 API
-    apiFormEdit?: string; // 表单保存 API
-  };
-  /** API：表单查询（推荐使用 apiConfig.apiFormQuery） */
-  apiFormQuery?: string;
-  /** API：表单保存（推荐使用 apiConfig.apiFormEdit） */
-  apiFormEdit?: string;
-  apiFormCheck?: string; // API：表单校验
-  gridRowKey?: string; // 主键字段
-  module_key?: string; // 模块 key
-  formSubmitType?: 'FormData' | null; // 提交类型
-  saveCheck?: boolean; // 是否执行后端校验
-  getEditValueByGrid?: boolean; // 是否从列表获取编辑数据
+  form_submit_type?: 'FormData' | null; // 提交类型
+  form_save_check?: boolean; // 是否执行后端校验
+  form_get_value_by_grid?: boolean; // 是否从列表获取编辑数据
 }
 ```
 
@@ -323,7 +305,7 @@ interface DDVTableFormItem {
 ```typescript
 interface DDVTableFilterRule {
   field: string; // 过滤字段
-  filterType: 'text' | 'number' | 'date'; // 过滤类型
+  filter_type: 'text' | 'number' | 'date'; // 过滤类型
   value: string | number | { min?: number; max?: number }; // 过滤值
 }
 ```
@@ -519,7 +501,7 @@ const config = {
   onFilter={(filterRules) => {
     console.log('过滤规则:', filterRules);
     // filterRules 结构:
-    // [{ field: 'name', filterType: 'text', value: '张' }]
+    // [{ field: 'name', filter_type: 'text', value: '张' }]
   }}
 />
 ```
@@ -541,11 +523,14 @@ const config = {
     { name: 'age', label: '年龄', type: 'InputNumber', range: true },
     { name: 'city', label: '城市', type: 'Select', list: [{ label: '北京', value: 'bj' }, { label: '上海', value: 'sh' }] },
   ],
+  // 统一 API 配置
+  api_config: {
+    api_grid_query: '/api/list',
+  },
 };
 
 <DDVTable
   config={config}
-  api_grid_query="/api/list"
   apiParams={{ page: 1, pageSize: 20 }}
 />
 ```
@@ -713,8 +698,8 @@ const config = {
 
 当配置了 `form_items` 时，点击详情按钮会弹出详情弹窗，展示该行的详细信息：
 
-- 自动调用 API 获取详情数据（使用 `apiFormQuery` 接口）
-- 支持 `getEditValueByGrid` 配置，直接从列表行数据获取详情
+- 自动调用 API 获取详情数据（使用 `api_form_query` 接口）
+- 支持 `form_get_value_by_grid` 配置，直接从列表行数据获取详情
 - 使用 `DDDescriptions` 组件以只读形式展示数据
 - 弹窗标题格式：`{form_title}详情`
 
@@ -731,7 +716,7 @@ const config = {
     { name: 'city', type: 'Input', label: '城市' },
   ],
   api_config: {
-    apiFormQuery: '/api/form/query',  // 详情查询接口
+    api_form_query: '/api/form/query',  // 详情查询接口
   },
 };
 
@@ -780,11 +765,11 @@ DDVTable 支持配置内置表单，通过 `config.form_config` 和 `config.form
 ```tsx
 const config = {
   grid_columns: [...],
-  // 统一 API 配置（推荐）
+  // 统一 API 配置
   api_config: {
-    apiGridQuery: '/hx/ty/crud/queryPager',     // 列表查询
-    apiFormQuery: '/hx/ty/crud/queryOne',        // 表单查询（编辑时回填）
-    apiFormEdit: '/hx/ty/crud/edit',             // 表单保存
+    api_grid_query: '/hx/ty/crud/queryPager',     // 列表查询
+    api_form_query: '/hx/ty/crud/queryOne',        // 表单查询（编辑时回填）
+    api_form_edit: '/hx/ty/crud/edit',             // 表单保存
   },
   // 表单配置
   form_config: {
@@ -927,14 +912,16 @@ DDVTable 的刷新按钮（工具栏 `reload: true`）支持三种刷新模式�
 
 #### 1. API 模式自动刷新
 
-当使用 `api_grid_query` API 模式时，点击刷新按钮会自动调用 `loadData()` 重新请求数据：
+当使用 `config.api_config.api_grid_query` API 模式时，点击刷新按钮会自动调用 `loadData()` 重新请求数据：
 
 ```tsx
 <DDVTable
-  api_grid_query="/api/list"
   apiParams={{ page: 1, pageSize: 20 }}
   config={{
     toolbar_default: { reload: true },
+    api_config: {
+      api_grid_query: '/api/list',
+    },
   }}
 />
 ```
@@ -945,10 +932,12 @@ DDVTable 的刷新按钮（工具栏 `reload: true`）支持三种刷新模式�
 
 ```tsx
 <DDVTable
-  api_grid_query="/api/list"
   config={{
     toolbar_default: { reload: true },
     grid_config: { grid_selection_type: 'checkbox' },
+    api_config: {
+      api_grid_query: '/api/list',
+    },
   }}
   onRefresh={(selectedRows) => {
     console.log('选中行:', selectedRows);
@@ -1041,7 +1030,7 @@ const config = {
     { title: '城市', field: 'city', width: 150 },
   ],
   grid_config: {
-    performanceMode: true,  // 启用性能模式
+    grid_performance_mode: true,  // 启用性能模式
   },
 };
 
@@ -1146,36 +1135,27 @@ DDVTable 支持两种数据获取方式：
 
 ### 方式2：API 查询数据
 
-通过 `api_grid_query` 和 `apiParams` 从后端 API 获取数据：
+通过 `config.api_config` 和 `apiParams` 从后端 API 获取数据：
 
 ```tsx
-// 方式1：使用 api_grid_query 属性
-<DDVTable
-  api_grid_query="/hx/ty/crud/queryPager"
-  apiParams={{ page: 1, pageSize: 20 }}
-  config={{
-    grid_columns: [
-      { title: '姓名', field: 'name', width: 120 },
-      { title: '年龄', field: 'age', width: 80, sort: true },
-    ],
-  }}
-  onDataLoad={(data) => console.log('数据加载完成', data)}
-  onLoadingChange={(loading) => console.log('加载状态', loading)}
-/>
-
-// 方式2：使用 config.api_config 统一配置（推荐）
+// 使用 config.api_config 统一配置 API 地址
 const config = {
-  grid_columns: [...],
+  grid_columns: [
+    { title: '姓名', field: 'name', width: 120 },
+    { title: '年龄', field: 'age', width: 80, sort: true },
+  ],
   api_config: {
-    apiGridQuery: '/hx/ty/crud/queryPager',
-    apiFormQuery: '/hx/ty/crud/queryOne',
-    apiFormEdit: '/hx/ty/crud/edit',
+    api_grid_query: '/hx/ty/crud/queryPager',
+    api_form_query: '/hx/ty/crud/queryOne',
+    api_form_edit: '/hx/ty/crud/edit',
   },
 };
 
 <DDVTable
   config={config}
   apiParams={{ page: 1, pageSize: 20 }}
+  onDataLoad={(data) => console.log('数据加载完成', data)}
+  onLoadingChange={(loading) => console.log('加载状态', loading)}
 />
 ```
 
@@ -1190,8 +1170,14 @@ const config = {
 **带查询条件**：
 
 ```tsx
+const config = {
+  grid_columns: [...],
+  api_config: {
+    api_grid_query: '/hx/ty/crud/queryPager',
+  },
+};
+
 <DDVTable
-  api_grid_query="/hx/ty/crud/queryPager"
   apiParams={{
     page: 1,
     pageSize: 20,
@@ -1207,8 +1193,14 @@ const config = {
 **带排序条件**：
 
 ```tsx
+const config = {
+  grid_columns: [...],
+  api_config: {
+    api_grid_query: '/hx/ty/crud/queryPager',
+  },
+};
+
 <DDVTable
-  api_grid_query="/hx/ty/crud/queryPager"
   apiParams={{
     page: 1,
     pageSize: 20,
@@ -1223,8 +1215,14 @@ const config = {
 ```tsx
 const [refreshKey, setRefreshKey] = useState(0);
 
+const config = {
+  grid_columns: [...],
+  api_config: {
+    api_grid_query: '/hx/ty/crud/queryPager',
+  },
+};
+
 <DDVTable
-  api_grid_query="/hx/ty/crud/queryPager"
   autoLoad={false}
   config={config}
   key={refreshKey} // 通过 key 变化强制重新加载

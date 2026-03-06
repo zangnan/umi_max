@@ -175,29 +175,31 @@ const DDVTableDemo: React.FC = () => {
 
           <h4>表单采集配置示例：</h4>
           <pre style={{ background: '#f5f5f5', padding: 12, borderRadius: 4 }}>
-{`// 1. 配置表单
+{`// 1. 配置表单（form_config 中的配置）
 const formConfig = {
   form_title: '提案建议',
   form_width: 720,
   form_layout_type: 'horizontal',
   form_label_input_layout: 'horizontal',
-  items: [
-    { label: '所属期', name: 'ssq', type: 'Input', rules: [{ required: true }] },
-    { label: '建议标题', name: 'title', type: 'Input' },
-    { label: '建议类型', name: 'type', type: 'Select', list: [
-      { name: '功能改进', value: '1' },
-      { name: 'Bug修复', value: '2' },
-    ]},
-    { label: '描述', name: 'desc', type: 'TextArea' },
-  ],
 };
 
-// 2. 添加到 DDVTable 组件（推荐使用 config 属性）
+// 2. 配置表单字段（form_items）
+const formItems = [
+  { label: '所属期', name: 'ssq', type: 'Input', rules: [{ required: true }] },
+  { label: '建议标题', name: 'title', type: 'Input' },
+  { label: '建议类型', name: 'type', type: 'Select', list: [
+    { name: '功能改进', value: '1' },
+    { name: 'Bug修复', value: '2' },
+  ]},
+  { label: '描述', name: 'desc', type: 'TextArea' },
+];
+
+// 3. 添加到 DDVTable 组件（推荐使用 config 属性）
 <DDVTable
   config={{
     ...testConfigForApi,
     form_config: formConfig,
-    form_items: [...],  // 表单字段配置
+    form_items: formItems,  // 表单字段配置
   }}
   onFormSave={async (values, formType, record) => {
     // values: 表单数据
@@ -237,9 +239,9 @@ const formConfig = {
           <pre style={{ background: '#f5f5f5', padding: 12, borderRadius: 4 }}>
 {`// 1. 统一 API 配置（已在 testConfigForApi.api_config 中配置）
 // api_config: {
-//   apiGridQuery: '/dict/automatic/exp/bs/queryPager/eg_m_mts_tsjh',
-//   apiFormQuery: '/dict/automatic/exp/bs/queryForm/eg_m_mts_tsjh',
-//   apiFormEdit: '/dict/automatic/exp/bs/saveOrUpdate/eg_m_mts_tsjh',
+//   api_grid_query: '/dict/automatic/exp/bs/queryPager/eg_m_mts_tsjh',
+//   api_form_query: '/dict/automatic/exp/bs/queryForm/eg_m_mts_tsjh',
+//   api_form_edit: '/dict/automatic/exp/bs/saveOrUpdate/eg_m_mts_tsjh',
 // }
 
 // 2. 使用 DDVTable 组件（推荐方式：通过 config 属性统一配置）
