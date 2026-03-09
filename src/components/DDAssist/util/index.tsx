@@ -2924,7 +2924,7 @@ myUtil.theme = {
     } else if (type === 'fontSize') {
       themeItem = myUtil.localStore.getItem('theme')?.fontSize !== undefined ? myUtil.localStore.getItem('theme')?.fontSize : CONSTANTS.DEFAULT_THEME_FONT_SIZE;
     } else if (type === 'gridPaginationPagesize') {
-      themeItem = myUtil.localStore.getItem('theme')?.fontSize !== undefined ? myUtil.localStore.getItem('theme')?.gridPaginationPagesize : CONSTANTS.DEFAULT_THEME_GRID_PAGINATION_PAGESIZE;
+      themeItem = myUtil.localStore.getItem('theme')?.gridPaginationPagesize !== undefined ? myUtil.localStore.getItem('theme')?.gridPaginationPagesize : CONSTANTS.DEFAULT_THEME_GRID_PAGINATION_PAGESIZE;
     }
     return themeItem;
   },

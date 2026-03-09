@@ -157,8 +157,8 @@ const SkinSettingCustomer: React.FC<any> = () => {
     });
     // 主题配置设置
     antdConfig.theme.algorithm = values?.darkAlgorithm ? [darkAlgorithm] : [defaultAlgorithm];
-    antdConfig.theme.token = myUtil.text.cleanNulObject(merge(themeToken.token, tokenCus.token));
-    antdConfig.theme.components = myUtil.text.cleanNulObject(merge(themeToken.components, tokenCus.components));
+    antdConfig.theme.token = myUtil.text.cleanNullObject(merge(themeToken.token, tokenCus.token));
+    antdConfig.theme.components = myUtil.text.cleanNullObject(merge(themeToken.components, tokenCus.components));
     // 合并通用主题与自定义主题
     // let tokenAll = merge(themeToken, tokenCus.layoutToken);
     let tokenAll = merge(themeToken, tokenCus);

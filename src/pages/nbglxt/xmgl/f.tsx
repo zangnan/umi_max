@@ -395,8 +395,8 @@ Func.columnsRender = {
     const { record } = param;
     let left: any = param.unitKey === 'nbgl_xmgl_xmbgxxb' ? { ...record.bgqnr } : { ...JSON.parse(record.nbglBgqnr) };  // 变更后
 		let right: any = param.unitKey === 'nbgl_xmgl_xmbgxxb' ? { ...record.bghnr } : { ...JSON.parse(record.nbglBghnr) }; // 变更前
-    left = myUtil.text.cleanNulObject(left);
-    right = myUtil.text.cleanNulObject(right);
+    left = myUtil.text.cleanNullObject(left);
+    right = myUtil.text.cleanNullObject(right);
     left.lcbbgxx = record?.lcbbgxx?.bgqnr || [];
     right.lcbbgxx = record?.lcbbgxx?.bghnr || [];
     [...fieldsHidden1, ...fieldHidden3].forEach((item: any) => {
