@@ -193,5 +193,6 @@ let CC: any = {
   },
   CHI_CHAR_LENG: 1,
   SHORTCUT_KEYS_OPEN: false, // 是否开启快捷键
+  MOCK_DATA_NUM: 1000, // 增加模拟数据调试
 };
 export default CC;

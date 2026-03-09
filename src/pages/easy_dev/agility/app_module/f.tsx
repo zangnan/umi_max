@@ -568,7 +568,8 @@ Func.addMockData = async (param: any) => {
   // })
 
   let promiseArr: any = [];
-  for (let i = 0; i < 10; i++) {
+  let mockDataNum = CONSTANTS.MOCK_DATA_NUM;
+  for (let i = 0; i < mockDataNum; i++) {
     let promise1: any = baseEdit({ data: getMockData(), url: apiFormEdit });
     promiseArr.push(promise1);
   }
