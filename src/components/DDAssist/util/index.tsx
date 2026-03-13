@@ -4,7 +4,7 @@ import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import getStaticTableCode from '../staticTableCode';
 import hts_message from '../locales/hts_message';
 import CONSTANTS from '../constants';
-import { Tooltip, theme, Button, Space, Modal, message, Image, notification, Tag } from 'antd';
+import { Tooltip, theme, Button, Space, Modal, message, Image, notification, Tag, Card } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import { segmenter } from '@/services/hts/api';
 import { initDbData, createTables, queryListNs, dropDbTablesNs } from '@/services/hts/apiNs';
@@ -2000,20 +2000,34 @@ myUtil.chartsAntD = {
     chartsConfig.forEach((config: any) => {
       const chartType = config.type;
       const ChartComponent = chartComponents[chartType];
+      let proCardConfig: any = { title: config?.title || '图表 - ' + config.type, style: cardStyle};
       if (ChartComponent) {
         result.push(
-          <Card
-            title={config?.title || `图表 - ${chartType}`}
-            style={cardStyle}
-          >
+          <ProCard  {...proCardConfig} >
             <ChartComponent {...config.config} />
-          </Card>,
+          </ProCard>,
         );
       }
     });
 
     return result;
   },
+  /**
+   * @method modalChart
+   * @desc 展现图表弹窗
+   * @param chartsConfig 图表参数
+   */
+  modalChart(chartsConfigArr: any) {
+    Modal.info({
+      title: '图表统计',
+      wrapClassName: 'standard-modal-fn',
+      width: CONSTANTS.C_MODAL_WIDTH_X4,
+      footer: null,
+      icon: null,
+      closable: true,
+      content: myUtil.chartsAntD.chartsContent({chartsConfig: chartsConfigArr }),
+    });
+  }
 };
 // #endregion ******************************************************************************************
 
