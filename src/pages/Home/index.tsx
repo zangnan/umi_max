@@ -3,6 +3,13 @@ import { Row, Col, Card, Tag, Button, Typography, Badge, Avatar, version, Table,
 import { history, useModel } from 'umi';
 import { queryListNs } from '@/services/api';
 import {
+  getOverview,
+  getHourly,
+  getByInterface,
+  getByStatusCode,
+} from '@/services/apiAnalysis';
+import dayjs from 'dayjs';
+import {
   RocketOutlined,
   BarChartOutlined,
   BuildOutlined,
@@ -12,8 +19,6 @@ import {
   ApiOutlined,
   DatabaseOutlined,
   BellOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
   CheckCircleOutlined,
   SyncOutlined,
   WarningOutlined,
@@ -21,6 +26,9 @@ import {
   ClockCircleOutlined,
   SettingOutlined,
   BookOutlined,
+  TableOutlined,
+  ExpandOutlined,
+  CompressOutlined,
 } from '@ant-design/icons';
 import ProCard from '@ant-design/pro-card';
 import { StatisticCard } from '@ant-design/pro-components';
@@ -31,50 +39,57 @@ import './style.less';
 
 const { Title, Text } = Typography;
 
-// ==================== 模拟数据 ====================
-
-// 日志统计数据
-const logStatisticsData = [
-  { title: '接口请求', value: 15680, prefix: <ApiOutlined />, suffix: '次', trend: 'up', trendValue: '12.5%' },
-  { title: '接口成功', value: 15420, prefix: <CheckCircleOutlined />, suffix: '次', trend: 'up', trendValue: '11.8%' },
-  { title: '接口失败', value: 260, prefix: <WarningOutlined />, suffix: '次', trend: 'down', trendValue: '8.3%' },
-  { title: '异常总数', value: 12, prefix: <BugOutlined />, suffix: '条', trend: 'down', trendValue: '25%' },
+// 日志统计数据（从 API 获取）
+const getLogStatisticsData = (overviewData: any) => [
+  { title: '总调用次数', value: overviewData.totalCalls || 0, prefix: <ApiOutlined />, suffix: '次' },
+  { title: '日均调用量', value: overviewData.dailyAvg || 0, prefix: <CheckCircleOutlined />, suffix: '次' },
+  { title: '平均响应时间', value: overviewData.avgResponseTime || 0, prefix: <WarningOutlined />, suffix: 'ms' },
+  { title: '错误率', value: overviewData.errorRate || 0, prefix: <BugOutlined />, suffix: '%' },
 ];
 
-// 接口调用趋势数据 - 24小时数据
-const apiCallData = [
-  { time: '00:00', requests: 120, errors: 2 },
-  { time: '02:00', requests: 80, errors: 1 },
-  { time: '04:00', requests: 65, errors: 1 },
-  { time: '06:00', requests: 95, errors: 2 },
-  { time: '08:00', requests: 890, errors: 5 },
-  { time: '10:00', requests: 1150, errors: 7 },
-  { time: '12:00', requests: 1250, errors: 8 },
-  { time: '14:00', requests: 1080, errors: 6 },
-  { time: '16:00', requests: 980, errors: 4 },
-  { time: '18:00', requests: 750, errors: 3 },
-  { time: '20:00', requests: 650, errors: 3 },
-  { time: '22:00', requests: 420, errors: 2 },
-  { time: '23:59', requests: 320, errors: 1 },
-];
+// 24小时调用量数据（从 API 获取）
+const getHourlyData = (hourlyData: any) => {
+  const distribution = hourlyData.hourlyDistribution || [];
+  return distribution.map((item: any) => ({
+    hour: `${item.hour}:00`,
+    value: item.count,
+  }));
+};
 
-// 异常日志数据
-const exceptionLogs = [
-  { key: 1, id: 1, time: '2024-01-29 15:32:18', level: 'ERROR', message: '数据查询超时: /api/v1/queryListNs', count: 3 },
-  { key: 2, id: 2, time: '2024-01-29 14:25:03', level: 'WARN', message: 'Token即将过期，请刷新', count: 15 },
-  { key: 3, id: 3, time: '2024-01-29 12:18:45', level: 'ERROR', message: '数据库连接失败: Connection refused', count: 1 },
-  { key: 4, id: 4, time: '2024-01-29 10:05:22', level: 'WARN', message: '接口响应时间过长: 2387ms', count: 7 },
-  { key: 5, id: 5, time: '2024-01-28 22:30:10', level: 'ERROR', message: '文件上传失败: exceed max size', count: 2 },
-];
+// 响应码分布数据（从 API 获取）
+const getStatusCodeData = (statusCodeData: any) => {
+  const distribution = statusCodeData.distribution || [];
+  return distribution.map((item: any, index: number) => ({
+    key: index,
+    statusCode: item.statusCode,
+    count: item.count,
+  }));
+};
 
-// 热门接口数据
-const hotApiData = [
-  { key: 1, rank: 1, method: 'GET', path: '/api/v1/dict/list', calls: 4520, avgTime: '45ms' },
-  { key: 2, rank: 2, method: 'POST', path: '/api/v1/data/import', calls: 2890, avgTime: '320ms' },
-  { key: 3, rank: 3, method: 'GET', path: '/api/v1/user/info', calls: 2150, avgTime: '38ms' },
-  { key: 4, rank: 4, method: 'POST', path: '/api/v1/form/submit', calls: 1680, avgTime: '156ms' },
-  { key: 5, rank: 5, method: 'GET', path: '/api/v1/module/list', calls: 1240, avgTime: '62ms' },
-];
+// 错误详情数据
+const getErrorDetails = (statusCodeData: any) => {
+  const errorDetails = statusCodeData.errorDetails || [];
+  return errorDetails.slice(0, 5).map((item: any, index: number) => ({
+    key: index,
+    ...item,
+  }));
+};
+
+// TOP 接口调用排行数据（从 API 获取）
+const getInterfaceData = (interfaceData: any[]) => {
+  return interfaceData.slice(0, 5).map((item, index) => ({
+    key: index,
+    rank: index + 1,
+    interface: item.interface,
+    callCount: item.callCount,
+    avgTime: item.avgTime,
+    maxTime: item.maxTime,
+    minTime: item.minTime,
+    errorCount: item.errorCount,
+    errorRate: item.errorRate,
+    lastCallTime: item.lastCallTime,
+  }));
+};
 
 // ==================== 快捷入口配置 ====================
 
@@ -121,21 +136,36 @@ const HomePage: React.FC = () => {
   const [statisticsData, setStatisticsData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // API 分析数据状态
+  const [overviewData, setOverviewData] = useState<any>({});
+  const [hourlyData, setHourlyData] = useState<any>({});
+  const [interfaceData, setInterfaceData] = useState<any[]>([]);
+  const [statusCodeData, setStatusCodeData] = useState<any>({});
+  const [loadingApiData, setLoadingApiData] = useState(true);
+
+  // 展开/收起状态
+  const [expandedCharts, setExpandedCharts] = useState<Record<string, boolean>>({
+    hourly: false,
+    interface: false,
+    statusCode: false,
+  });
+
   // 获取统计数据
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
         setLoading(true);
         // 并行请求多个表的数据统计
-        const [resAppModule, resDict, resDictField, resUser, resTodo, resProgress, resDone, resApprove] = await Promise.all([
+        const [resAppModule, resDict, resDictField, resUser, resTodo, resProgress, resDone, resApprove
+        ] = await Promise.all([
           queryListNs({}, 'app_module'),
           queryListNs({}, 'dict'),
           queryListNs({}, 'dict_field'),
           queryListNs({}, 'm_sys_user'),
-          queryListNs({ status: 'todo' }, 'task'),
-          queryListNs({ status: 'progress' }, 'task'),
-          queryListNs({ status: 'done' }, 'task'),
-          queryListNs({ status: 'approve' }, 'task'),
+          queryListNs({}, 'm_sys_user'),
+          queryListNs({}, 'm_sys_user'),
+          queryListNs({}, 'm_sys_user'),
+          queryListNs({}, 'm_sys_user'),
         ]);
 
         setStatisticsData([
@@ -159,59 +189,85 @@ const HomePage: React.FC = () => {
     fetchStatistics();
   }, []);
 
-  // 异常日志列配置
-  const exceptionColumns: ColumnsType = [
-    { title: '时间', dataIndex: 'time', key: 'time', width: 180, className: 'tech-table-cell' },
-    {
-      title: '级别',
-      dataIndex: 'level',
-      key: 'level',
-      width: 90,
-      className: 'tech-table-cell',
-      render: (level: string) => {
-        const config: Record<string, { color: string; glow: boolean }> = {
-          ERROR: { color: themeColors.colorError, glow: true },
-          WARN: { color: themeColors.colorWarning, glow: false },
-          INFO: { color: themeColors.colorInfo, glow: false },
+  // 获取 API 分析数据
+  useEffect(() => {
+    const fetchApiAnalysisData = async () => {
+      try {
+        setLoadingApiData(true);
+        const params = {
+          startDate: dayjs().subtract(7, 'days').format('YYYY-MM-DD'),
+          endDate: dayjs().format('YYYY-MM-DD'),
         };
-        const { color, glow } = config[level] || { color: themeColors.colorText, glow: false };
-        return (
-          <Tag
-            style={{
-              backgroundColor: `${color}15`,
-              borderColor: color,
-              color: color,
-              boxShadow: glow ? `0 0 8px ${color}40` : 'none',
-            }}
-            className="tech-tag"
-          >
-            {level}
-          </Tag>
-        );
+
+        const [resOverview, resHourly, resInterface, resStatusCode] = await Promise.all([
+          getOverview(params),
+          getHourly(params),
+          getByInterface({ ...params, limit: 10 }),
+          getByStatusCode(params),
+        ]);
+
+        if (resOverview.code === '200') setOverviewData(resOverview.body || {});
+        if (resHourly.code === '200') setHourlyData(resHourly.body || {});
+        if (resInterface.code === '200') setInterfaceData(resInterface.body || []);
+        if (resStatusCode.code === '200') setStatusCodeData(resStatusCode.body || {});
+      } catch (error) {
+        console.error('获取API分析数据失败:', error);
+      } finally {
+        setLoadingApiData(false);
+      }
+    };
+
+    fetchApiAnalysisData();
+  }, []);
+
+  // 切换展开/收起
+  const toggleExpand = (key: string) => {
+    setExpandedCharts((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // 响应码分布列配置
+  const statusCodeColumns: ColumnsType = [
+    {
+      title: '状态码',
+      dataIndex: 'statusCode',
+      key: 'statusCode',
+      width: 100,
+      className: 'tech-table-cell',
+      render: (statusCode: number) => {
+        const config: Record<number, string> = {
+          200: themeColors.colorSuccess,
+          400: themeColors.colorWarning,
+          401: themeColors.colorError,
+          403: themeColors.colorError,
+          404: themeColors.colorWarning,
+          500: themeColors.colorError,
+          502: themeColors.colorError,
+          503: themeColors.colorError,
+        };
+        const color = config[statusCode] || themeColors.colorText;
+        return <Tag color={color}>{statusCode}</Tag>;
       },
     },
-    { title: '错误信息', dataIndex: 'message', key: 'message', ellipsis: true, className: 'tech-table-cell' },
-    {
-      title: '次数',
-      dataIndex: 'count',
-      key: 'count',
-      width: 80,
-      className: 'tech-table-cell',
-      render: (count: number) => (
-        <Badge
-          count={count}
-          style={{
-            backgroundColor: count > 5 ? themeColors.colorError : themeColors.colorInfo,
-            boxShadow: count > 5 ? `0 0 8px ${themeColors.colorError}66` : `0 0 8px ${themeColors.colorInfo}66`,
-          }}
-          className="tech-badge"
-        />
-      ),
-    },
+    { title: '次数', dataIndex: 'count', key: 'count', width: 100, className: 'tech-table-cell' },
   ];
 
-  // 热门接口列配置
-  const hotApiColumns: ColumnsType = [
+  // 错误详情列配置
+  const errorDetailColumns: ColumnsType = [
+    { title: '接口', dataIndex: 'interface', key: 'interface', ellipsis: true, width: 150 },
+    {
+      title: '状态码',
+      dataIndex: 'statusCode',
+      key: 'statusCode',
+      render: (val: number) => <Tag color={val >= 500 ? 'red' : 'orange'}>{val}</Tag>,
+    },
+    // { title: '用户', dataIndex: 'userId', key: 'userId', width: 100 },
+    { title: 'IP', dataIndex: 'ip', key: 'ip', width: 160 },
+    { title: '调用时间', dataIndex: 'callTime', key: 'callTime', render: (val: string) => val ? dayjs(val).format('MM-DD HH:mm:ss') : '-' },
+    { title: '响应时间(ms)', dataIndex: 'responseTime', key: 'responseTime', width: 100 },
+  ];
+
+  // TOP 接口调用排行列配置
+  const interfaceColumns: ColumnsType = [
     {
       title: '排名',
       dataIndex: 'rank',
@@ -229,31 +285,12 @@ const HomePage: React.FC = () => {
         />
       ),
     },
-    {
-      title: '方法',
-      dataIndex: 'method',
-      key: 'method',
-      width: 80,
-      className: 'tech-table-cell',
-      render: (method: string) => {
-        const methodColor = method === 'GET' ? themeColors.colorSuccess : themeColors.colorWarning;
-        return (
-          <Tag
-            style={{
-              backgroundColor: `${methodColor}20`,
-              borderColor: methodColor,
-              color: methodColor,
-            }}
-            className="method-tag"
-          >
-            {method}
-          </Tag>
-        );
-      },
-    },
-    { title: '接口路径', dataIndex: 'path', key: 'path', ellipsis: true, className: 'tech-table-cell' },
-    { title: '调用次数', dataIndex: 'calls', key: 'calls', width: 100, className: 'tech-table-cell' },
-    { title: '平均耗时', dataIndex: 'avgTime', key: 'avgTime', width: 90, className: 'tech-table-cell' },
+    { title: '接口地址', dataIndex: 'interface', key: 'interface', ellipsis: true, className: 'tech-table-cell' },
+    { title: '调用次数', dataIndex: 'callCount', key: 'callCount', width: 90, className: 'tech-table-cell' },
+    { title: '平均响应(ms)', dataIndex: 'avgTime', key: 'avgTime', width: 100, className: 'tech-table-cell' },
+    { title: '最大响应(ms)', dataIndex: 'maxTime', key: 'maxTime', width: 100, className: 'tech-table-cell' },
+    { title: '错误次数', dataIndex: 'errorCount', key: 'errorCount', width: 80, className: 'tech-table-cell', render: (val: number) => val > 0 ? <Tag color="red">{val}</Tag> : val },
+    { title: '错误率', dataIndex: 'errorRate', key: 'errorRate', width: 80, className: 'tech-table-cell', render: (val: string) => parseFloat(val) > 5 ? <Tag color="orange">{val}%</Tag> : `${val}%` },
   ];
 
   return (
@@ -372,22 +409,6 @@ const HomePage: React.FC = () => {
                       </span>
                     ),
                     suffix: stat.suffix,
-                    description: (
-                      <span
-                        style={{
-                          fontSize: 12,
-                          color: stat.trend === 'up' ? themeColors.colorSuccess : themeColors.colorError,
-                        }}
-                      >
-                        环比
-                        {stat.trend === 'up' ? (
-                          <ArrowUpOutlined style={{ marginLeft: 4 }} />
-                        ) : (
-                          <ArrowDownOutlined style={{ marginLeft: 4 }} />
-                        )}
-                        {stat.trendValue}
-                      </span>
-                    ),
                     style: {
                       color: '#1e293b',
                       fontSize: 28,
@@ -403,13 +424,19 @@ const HomePage: React.FC = () => {
 
       {/* 日志统计 */}
       <ProCard
-        title={<><ApiOutlined className="section-icon" /> 日志统计</>}
+        title={
+          <>
+            <ApiOutlined className="section-icon" /> 日志统计
+            <Text type="secondary" style={{ fontSize: 12, marginLeft: 8 }}>最近7天</Text>
+          </>
+        }
         className="section-card glass-card"
         extra={
           <Button
             type="text"
             className="tech-btn"
             style={{ color: themeColors.colorPrimary }}
+            onClick={() => history.push('/easy_dev_dc/sys/cfgp/m_sys_api_log')}
           >
             查看更多 →
           </Button>
@@ -417,7 +444,7 @@ const HomePage: React.FC = () => {
       >
         {/* 日志统计卡片 */}
         <Row gutter={[12, 12]} style={{ marginBottom: 20 }}>
-          {logStatisticsData.map((stat, index) => (
+          {getLogStatisticsData(overviewData).map((stat, index) => (
             <Col span={6} key={index}>
               <Card
                 size="small"
@@ -436,16 +463,6 @@ const HomePage: React.FC = () => {
                       <span style={{ color: themeColors.colorPrimary }}>{stat.prefix}</span>
                     ),
                     suffix: stat.suffix,
-                    description: (
-                      <span
-                        style={{
-                          fontSize: 11,
-                          color: stat.trend === 'up' ? themeColors.colorSuccess : themeColors.colorError,
-                        }}
-                      >
-                        <span className="trend-indicator" /> {stat.trendValue}
-                      </span>
-                    ),
                     style: {
                       color: '#1e293b',
                       fontSize: 22,
@@ -458,43 +475,54 @@ const HomePage: React.FC = () => {
           ))}
         </Row>
 
-        {/* 异常日志与热门接口 */}
+        {/* 响应码分布与 TOP 接口调用排行 */}
         <Row gutter={[12, 12]}>
-          {/* 异常日志 */}
+          {/* 响应码分布 */}
           <Col xs={24} lg={12}>
             <Card
-              title={<><BugOutlined className="section-icon-sm" /> 异常日志</>}
+              title={<><BugOutlined className="section-icon-sm" /> 响应码分布</>}
               className="tech-card glass-card-inner"
               extra={
-                <Button type="text" className="tech-btn">
-                  更多 →
+                <Button
+                  type="text"
+                  className="tech-btn"
+                  icon={expandedCharts.statusCode ? <CompressOutlined /> : <ExpandOutlined />}
+                  onClick={() => toggleExpand('statusCode')}
+                >
+                  {expandedCharts.statusCode ? '收起' : '查看数据'}
                 </Button>
               }
             >
               <Table
-                dataSource={exceptionLogs}
-                columns={exceptionColumns}
+                dataSource={getStatusCodeData(statusCodeData)}
+                columns={statusCodeColumns}
                 pagination={false}
                 size="small"
                 className="tech-table"
               />
+              {expandedCharts.statusCode && statusCodeData.errorDetails?.length > 0 && (
+                <Table
+                  title={() => '错误详情'}
+                  dataSource={getErrorDetails(statusCodeData)}
+                  columns={errorDetailColumns}
+                  pagination={false}
+                  size="small"
+                  className="tech-table"
+                  style={{ marginTop: 16 }}
+                />
+              )}
             </Card>
           </Col>
 
-          {/* 热门接口 */}
+          {/* TOP 接口调用排行 */}
           <Col xs={24} lg={12}>
             <Card
-              title={<><ApiOutlined className="section-icon-sm" /> 热门接口</>}
+              title={<><ApiOutlined className="section-icon-sm" /> TOP 接口调用排行</>}
               className="tech-card glass-card-inner"
-              extra={
-                <Button type="text" className="tech-btn">
-                  更多 →
-                </Button>
-              }
             >
               <Table
-                dataSource={hotApiData}
-                columns={hotApiColumns}
+                dataSource={getInterfaceData(interfaceData)}
+                columns={interfaceColumns}
                 pagination={false}
                 size="small"
                 className="tech-table"
@@ -504,34 +532,40 @@ const HomePage: React.FC = () => {
         </Row>
       </ProCard>
 
-      {/* 接口调用趋势图 */}
+      {/* 24 小时调用量分布 */}
       <ProCard
-        title={<><ApiOutlined className="section-icon" /> 接口调用趋势</>}
+        title={<><ApiOutlined className="section-icon" /> 24 小时调用量分布</>}
         className="section-card glass-card"
         extra={
-          <Button type="text" className="tech-btn">
-            查看详情 →
-          </Button>
+          <>
+            {hourlyData.peakHour && (
+              <Text type="secondary" style={{ marginRight: 16 }}>
+                高峰时段: {hourlyData.peakHour.hour}:00 ({hourlyData.peakHour.count} 次)
+              </Text>
+            )}
+            <Button
+              type="text"
+              className="tech-btn"
+              icon={expandedCharts.hourly ? <CompressOutlined /> : <ExpandOutlined />}
+              onClick={() => toggleExpand('hourly')}
+            >
+              {expandedCharts.hourly ? '收起' : '查看数据'}
+            </Button>
+          </>
         }
+        loading={loadingApiData}
       >
         <Card variant="borderless" className="chart-card glass-card-inner">
           <Line
-            data={apiCallData.flatMap(item => [
-              { time: item.time, count: item.requests, type: '请求数' },
-              { time: item.time, count: item.errors, type: '错误数' },
-            ])}
-            xField="time"
-            yField="count"
-            seriesField="type"
+            data={getHourlyData(hourlyData)}
+            xField="hour"
+            yField="value"
+            height={350}
             smooth
-            point
-            color={[themeColors.colorPrimary, themeColors.colorError]}
+            color={themeColors.colorPrimary}
             line={{ size: 2 }}
             point={{ size: 3 }}
-            legend={{
-              position: 'top-right',
-              itemName: { style: { fill: '#64748b' } },
-            }}
+            area={{ style: { fill: `l(270) 0:#ffffff 1:${themeColors.colorPrimary}20` } }}
             xAxis={{
               label: { style: { fill: '#64748b' } },
             }}
@@ -540,10 +574,23 @@ const HomePage: React.FC = () => {
             }}
             tooltip={{
               channel: 'y',
-              name: 'count',
+              name: 'value',
               valueFormatter: (d: number) => d.toLocaleString(),
             }}
           />
+          {expandedCharts.hourly && (
+            <Table
+              dataSource={getHourlyData(hourlyData)}
+              columns={[
+                { title: '时段', dataIndex: 'hour', key: 'hour' },
+                { title: '调用次数', dataIndex: 'value', key: 'value' },
+              ]}
+              pagination={false}
+              size="small"
+              style={{ marginTop: 16 }}
+              rowKey="hour"
+            />
+          )}
         </Card>
       </ProCard>
     </div>

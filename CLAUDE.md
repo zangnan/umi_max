@@ -190,3 +190,8 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 ## 微前端
 
 项目支持 qiankun 微前端架构，作为子应用运行。
+
+## 用户偏好
+
+- 提交推送代码前先告知用户，由用户决定是否提交
+- 记录变更信息到 CLAUDE.md 而非自动提交
