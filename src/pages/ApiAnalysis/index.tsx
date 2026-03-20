@@ -319,6 +319,31 @@ const ApiAnalysisPage: React.FC = () => {
     };
   }, [ipData]);
 
+  // 慢接口 TOP 排行配置（水平条形图）
+  const slowInterfaceChartConfig = useMemo(() => {
+    const chartData = (performanceData.slowInterfaces || []).slice(0, 10).map((item, index) => ({
+      index: String(index + 1),
+      name: item.interface,
+      value: item.avgTime,
+    }));
+    const maxValue = Math.max(...(chartData.map((item) => item.value) || [0]));
+    return {
+      data: chartData,
+      xField: 'name',
+      yField: 'value',
+      color: '#ff4d4f',
+      height: 280,
+      label: {
+        text: 'value',
+        textAlign: (d: any) => (d.value > maxValue * 0.5 ? 'right' : 'start'),
+        fill: (d: any) => (d.value > maxValue * 0.5 ? '#fff' : '#000'),
+        dx: (d: any) => (d.value > maxValue * 0.5 ? -5 : 5),
+      },
+      coordinate: { transform: [{ type: 'transpose' }] },
+      style: { maxWidth: 40 },
+    };
+  }, [performanceData.slowInterfaces]);
+
   // 响应时间分布配置（条形图）
   const timeDistConfig = useMemo(() => {
     const chartData = (performanceData.timeDistribution || []).map((item) => ({
@@ -641,13 +666,17 @@ const ApiAnalysisPage: React.FC = () => {
           </Button>} loading={loading}>
             {performanceData.slowInterfaces?.length ? (
               <>
-                <Table
-                  dataSource={performanceData.slowInterfaces}
-                  columns={slowInterfaceColumns}
-                  pagination={false}
-                  size="small"
-                  rowKey="interface"
-                />
+                <Column {...slowInterfaceChartConfig} />
+                {expandedCharts.slowInterface && (
+                  <Table
+                    dataSource={performanceData.slowInterfaces}
+                    columns={slowInterfaceColumns}
+                    pagination={false}
+                    size="small"
+                    style={{ marginTop: 16 }}
+                    rowKey="interface"
+                  />
+                )}
               </>
             ) : <Empty description="暂无数据" />}
           </ProCard>
