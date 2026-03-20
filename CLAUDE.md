@@ -108,6 +108,31 @@ import { DDForm, DDBaseGrid } from '@/components';
 - `src/services/egg_ervices/` - Node 环境 API（authority, common, db, sdp）
 - `src/services/hts/` - HTS 环境 API
 
+**API 服务调用规范**：
+
+所有 API 服务调用必须添加 `myUtil.api.getApiRoot()` 作为前缀：
+
+```typescript
+import { request } from 'umi';
+import myUtil from '@/components/DDAssist/util';
+
+// 正确示例
+export async function getOverview(params?: any) {
+  return request(`${myUtil.api.getApiRoot()}/api/analysis/overview`, {
+    method: 'GET',
+    params,
+  });
+}
+
+// 错误示例（不应使用）
+// return request(`/api/analysis/overview`, ...)
+// return request(`${API_URL_BASE}/analysis/overview`, ...)
+```
+
+获取 API 根地址的方式：
+- `myUtil.api.getApiRoot()` - 获取带环境标识的 API 根地址（推荐）
+- `API_URL_BASE` - 全局变量定义的 API 地址（部分场景可用）
+
 ### 布局系统
 
 - `src/pages/Layout/` - 主布局组件
@@ -141,6 +166,26 @@ import { DDForm, DDBaseGrid } from '@/components';
 - 使用 prettier 进行代码格式化（`npm run format`）
 - 使用 eslint 进行代码检查
 - Git hooks 由 husky + lint-staged 管理
+- 日期操作统一使用 `dayjs`，不再使用 `moment`（antd 5+ 默认支持 dayjs）
+
+```typescript
+// 正确示例
+import dayjs, { Dayjs } from 'dayjs';
+
+// 日期格式化
+dayjs().format('YYYY-MM-DD')
+dayjs('2024-01-01').format('YYYY-MM-DD HH:mm')
+
+// 日期计算
+dayjs().subtract(7, 'days')
+dayjs().add(1, 'year')
+
+// 日期范围
+const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
+  dayjs().subtract(7, 'days'),
+  dayjs(),
+])
+```
 
 ## 微前端
 

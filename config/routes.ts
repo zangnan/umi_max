@@ -15,6 +15,7 @@ let routes: any = [
   // { path: '/', redirect: '/easy_dev/agility/app_build' },
   // { path: '/', redirect: '/sys/user_setting' },
   { path: '/home', component: './Home' },
+  { path: '/apiAnalysis', component: './ApiAnalysis', name: '日志分析', icon: 'LineChartOutlined' },
   { path: '/', redirect: '/Home' },
   { path: '/UtilDoc', layout: false, component: './UtilDoc' },
   { path: '/splc/cfgp/nbgl_process_def/flow_edit', component: './common/flow_edit' },
