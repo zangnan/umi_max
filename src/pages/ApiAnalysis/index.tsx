@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { DatePicker, Row, Col, Card, Table, Button, Tag, Typography, Space, message, Empty } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import type { TimeRangePickerProps } from 'antd';
 import { Line, Pie, Column } from '@ant-design/plots';
 import ProCard from '@ant-design/pro-card';
 import { StatisticCard } from '@ant-design/pro-components';
@@ -20,6 +21,15 @@ import {
 const { RangePicker } = DatePicker;
 const { Text } = Typography;
 const { Statistic } = StatisticCard;
+
+// ==================== 日期快捷选项 ====================
+const datePresets: TimeRangePickerProps['presets'] = [
+  { label: '今天', value: [dayjs().startOf('day'), dayjs()] },
+  { label: '最近7天', value: [dayjs().subtract(7, 'days'), dayjs()] },
+  { label: '最近14天', value: [dayjs().subtract(14, 'days'), dayjs()] },
+  { label: '最近30天', value: [dayjs().subtract(30, 'days'), dayjs()] },
+  { label: '最近90天', value: [dayjs().subtract(90, 'days'), dayjs()] },
+];
 
 // ==================== 类型定义 ====================
 
@@ -415,6 +425,7 @@ const ApiAnalysisPage: React.FC = () => {
                 value={dateRange}
                 onChange={handleDateChange}
                 allowClear={false}
+                presets={datePresets}
                 disabledDate={(current) => current && current > dayjs().endOf('day')}
               />
             </Space>

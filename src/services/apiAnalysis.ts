@@ -7,8 +7,8 @@ const API_URL_BASE = `${myUtil.api.getApiRoot()}/api/analysis`;
 /** 概览仪表盘 - 获取总调用次数、日均调用量、平均响应时间、接口数量、用户数、错误率等核心指标 */
 export async function getOverview(params?: { startDate?: string; endDate?: string }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/overview`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
@@ -19,8 +19,8 @@ export async function getTrend(params?: {
   type?: 'hourly' | 'daily' | 'weekly';
 }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/trend`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
@@ -31,8 +31,8 @@ export async function getByInterface(params?: {
   limit?: number;
 }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/byInterface`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
@@ -43,16 +43,16 @@ export async function getByUser(params?: {
   limit?: number;
 }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/byUser`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
 /** 按响应码统计 - 按 HTTP 响应码统计分布，并提供错误请求的详细列表 */
 export async function getByStatusCode(params?: { startDate?: string; endDate?: string }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/byStatusCode`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
@@ -63,8 +63,8 @@ export async function getByIp(params?: {
   limit?: number;
 }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/byIp`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
@@ -75,15 +75,15 @@ export async function getPerformance(params?: {
   limit?: number;
 }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/performance`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
 
 /** 时段分析 - 分析每小时调用量分布，识别高峰时段 */
 export async function getHourly(params?: { startDate?: string; endDate?: string }) {
   return request<API.ResponseBody>(`${API_URL_BASE}/hourly`, {
-    method: 'GET',
-    params,
+    method: 'POST',
+    data: params,
   });
 }
