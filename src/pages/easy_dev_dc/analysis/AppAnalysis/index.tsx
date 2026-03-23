@@ -246,9 +246,10 @@ const AppAnalysisPage: React.FC = () => {
     };
   }, [errorCodesData]);
 
-  // IP 分布配置
+  // IP 分布配置（过滤 errorCount 为 0 的数据）
   const ipChartConfig = useMemo(() => {
-    const chartData = ipData.slice(0, 10).map((item) => ({
+    const filteredData = ipData.filter((item) => item.errorCount > 0);
+    const chartData = filteredData.slice(0, 10).map((item) => ({
       name: item.ip,
       value: item.errorCount,
     }));
@@ -271,14 +272,16 @@ const AppAnalysisPage: React.FC = () => {
   }, [ipData]);
 
   // URL 分布配置
+  // URL 分布配置（过滤 errorCount 为 0 的数据）
   const urlChartConfig = useMemo(() => {
     // const chartData = urlData.slice(0, 10).map((item) => ({
     //   name: item.url.length > 30 ? item.url.substring(0, 30) + '...' : item.url,
     //   value: item.totalCount,
     // }));
-    const chartData = urlData.map((item) => ({
+    const filteredData = urlData.filter((item) => item.errorCount > 0);
+    const chartData = filteredData.map((item) => ({
       name: item.url,
-      value: item. errorCount ,
+      value: item.errorCount,
     }));
     const maxValue = Math.max(...(chartData.map((item) => item.value) || [0]));
     return {
