@@ -16,6 +16,7 @@ let routes: any = [
   // { path: '/', redirect: '/sys/user_setting' },
   { path: '/home', component: './Home' },
   { path: '/apiAnalysis', component: './easy_dev_dc/analysis/ApiAnalysis', name: '日志分析', icon: 'LineChartOutlined' },
+  { path: '/appAnalysis', component: './easy_dev_dc/analysis/AppAnalysis', name: '应用日志分析', icon: 'FundProjectionScreenOutlined' },
   { path: '/', redirect: '/Home' },
   { path: '/UtilDoc', layout: false, component: './UtilDoc' },
   { path: '/splc/cfgp/nbgl_process_def/flow_edit', component: './common/flow_edit' },
