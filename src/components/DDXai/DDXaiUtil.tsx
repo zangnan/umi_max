@@ -29,7 +29,7 @@ DDXaiUtil.IFLOW_API_DEFAULT_CONFIG = {
 }
 
 // deepSeek 参数
-DDXaiUtil.DEEP_SEEK_KEY = 'sk-03254d88e9154cc084896ee2c9bb7813';
+DDXaiUtil.DEEP_SEEK_KEY = 'sk-03b4c99a09b04d6baf9803020860632a';
 DDXaiUtil.DEEP_SEEK_REQ_AUTH = `Bearer ${DDXaiUtil.DEEP_SEEK_KEY}`;
 DDXaiUtil.DEEP_SEEK_API_COMPLETIONS = 'https://api.deepseek.com/chat/completions';
 DDXaiUtil.DEEP_SEEK_API_DEFAULT_CONFIG = { // deepSeek 默认参数
