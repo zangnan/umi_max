@@ -16,5 +16,5 @@
 /coverage
 .svn
 .claude/settings.local.json
-.claude
 .mcp.json
+__pycache__

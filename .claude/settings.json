@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(python:*)",
+      "Bash(pip:*)",
+      "Bash(cmd:*)",
+      "Bash(powershell:*)",
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(del:*)",
+      "Bash(move:*)",
+      "Bash(dir:*)",
+      "Bash(find:*)",
+      "Bash(findstr:*)",
+      "Bash(awk:*)",
+      "Bash(node:*)",
+      "Bash(ping:*)",
+      "Bash(netstat:*)",
+      "Bash(timeout:*)",
+      "Bash(mv:*)",
+      "Bash(chcp:*)",
+      "Bash(claude:*)",
+      "Bash(claude mcp add:*)",
+      "mcp__chrome-devtools__*",
+      "mcp__playwright__*",
+      "mcp__context7__*",
+      "Skill(*)",
+      "WebSearch",
+      "WebFetch(*)"
+    ]
+  },
+  "enabledPlugins": {
+    "document-skills@anthropic-agent-skills": true,
+    "frontend-design@claude-code-plugins": true
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright",
+    "chrome-devtools",
+    "context7"
+  ]
+}
