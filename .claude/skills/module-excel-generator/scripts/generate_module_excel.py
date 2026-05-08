@@ -225,7 +225,48 @@ def design_module_config(table_info: dict) -> dict:
     """根据表设计模块配置（与 SHEET_CONFIG_MODULE_COMMON 默认值同步）"""
     table_name_en = table_info.get('table_name_en', '')
     table_name_cn = table_info.get('table_name_cn', '')
+    fields = table_info.get('fields', [])
 
+    # 判断是否为树形模块
+    is_tree = is_tree_module(fields)
+
+    if is_tree:
+        # 树形模块配置：严格按模板 eg_m_tree 的配置
+        return {
+            'module_key': f'eg_m_{table_name_en}',
+            'module_name': table_name_cn,
+            'grid_serial': '',
+            'grid_border': '',
+            'grid_selection_type': '',
+            'grid_ext': '',
+            'grid_columns_edit': '',
+            'grid_columns_delete': '',
+            'grid_columns_detail': '',
+            'toolbar_add': '1',
+            'toolbar_delete': '1',
+            'toolbar_edit': '1',
+            'toolbar_upload': '',
+            'toolbar_download': '',
+            'toolbar_setting': '',
+            'toolbar_full': '',
+            'toolbar_reload': '',
+            'toolbar_filter': '',
+            'api_save': '',
+            'api_delete': '',
+            'api_grid_query': '',
+            'api_form_query': '',
+            'api_export': '',
+            'api_import': '',
+            'api_template': '',
+            'form_layout': 'vertical',
+            'form_width': '',
+            'form_submit_type': '',
+            'custom_toolbar_buttons': '',
+            'custom_column_buttons': '',
+            'extra_info': ''
+        }
+
+    # 普通模块配置
     return {
         'module_key': f'eg_m_{table_name_en}',
         'module_name': table_name_cn,
@@ -316,6 +357,15 @@ def is_field_val_len_unknown(field_name_cn: str) -> bool:
     return any(kw in field_name_cn for kw in ['名称', '备注', '用途'])
 
 
+def is_tree_module(fields: list) -> bool:
+    """判断是否为树形模块（检测 tree_id, tree_name, tree_parent_id 结构）"""
+    field_names = [f.get('name', '').lower() for f in fields]
+    has_tree_id = any('tree_id' in name for name in field_names)
+    has_tree_name = any('tree_name' in name for name in field_names)
+    has_tree_parent = any('tree_parent_id' in name or 'parent_id' in name for name in field_names)
+    return has_tree_id and has_tree_name and has_tree_parent
+
+
 def get_default_field_config() -> dict:
     """获取字段Sheet的默认值配置（与 SHEET_CONFIG_FIELD_COMMON 同步）"""
     return {
@@ -404,7 +454,15 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
 
         # 列表项格式化
         list_format = ''
-        if type_category == 'number':
+        # 树形模块特殊字段格式化
+        field_name_lower = field_name.lower()
+        if 'tree_id' in field_name_lower:
+            list_format = 'tree:key'
+        elif 'tree_name' in field_name_lower:
+            list_format = 'tree:title'
+        elif 'tree_parent_id' in field_name_lower or 'parent_id' in field_name_lower:
+            list_format = 'tree:parent_key'
+        elif type_category == 'number':
             list_format = get_number_format(data_type)
         elif type_category == 'date':
             list_format = 'YYYY-MM-DD'
@@ -439,6 +497,8 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         # 表单类型
         form_type = 'Input'
         if is_key:
+            form_type = 'Hidden'
+        elif 'tree_parent_id' in field_name_lower or ('parent_id' in field_name_lower and 'tree' in table_name_en.lower()):
             form_type = 'Hidden'
         elif type_category == 'number':
             form_type = 'InputNumber'
@@ -511,13 +571,26 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
     return configs
 
 
-def design_menu_config(module_info: dict) -> list[dict]:
+def design_menu_config(module_info: dict, table_info: dict = None) -> list[dict]:
     """设计菜单结构"""
+    import random
     module_key = module_info.get('module_key', '')
     module_name = module_info.get('module_name', '')
 
+    # 判断是否为树形模块
+    is_tree = False
+    if table_info:
+        fields = table_info.get('fields', [])
+        is_tree = is_tree_module(fields)
+
+    # 使用随机8位数字作为菜单ID起点
+    base_menu_id = random.randint(10000000, 99999999)
+
+    # 树形模块使用 automatic_page_tree 组件
+    component = './common/automatic_page_tree' if is_tree else './common/automatic_page'
+
     main_menu = {
-        'menu_id': 1010,
+        'menu_id': base_menu_id,
         'parent_id': '',
         'resource_code': '',
         'menu_name': module_name,
@@ -526,11 +599,11 @@ def design_menu_config(module_info: dict) -> list[dict]:
         'menu_icon': 'AppstoreOutlined',
         'hidden': '0',
         'redirect': '',
-        'component': './common/automatic_page',
+        'component': component,
         'enabled': '1',
         'fullscreen': '0',
         'menu_type': '1',
-        'menu_order': '1010',
+        'menu_order': str(base_menu_id),
         'roles': '管理员'
     }
 
@@ -1217,7 +1290,7 @@ def main():
 
             module_info = design_module_config(table_info)
             field_configs = design_field_configs(table_info, module_info)
-            menu_configs = design_menu_config(module_info)
+            menu_configs = design_menu_config(module_info, table_info)
             modules.append({
                 'table_info': table_info,
                 'module_info': module_info,
@@ -1330,7 +1403,7 @@ def main():
 
     module_info = design_module_config(table_info)
     field_configs = design_field_configs(table_info, module_info)
-    menu_configs = design_menu_config(module_info)
+    menu_configs = design_menu_config(module_info, table_info)
 
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     module_name = module_info.get('module_name', 'module')

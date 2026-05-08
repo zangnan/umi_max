@@ -658,7 +658,77 @@ Skill:
 
 ---
 
-## 9. 验证方式
+## 9. AI 增强功能
+
+### 9.1 AI 筛选项增强
+
+通过 AI 智能推断，为 datetime 类型和数值类型的字段自动设置筛选项配置：
+
+| 字段类型 | 筛选项类型 | 筛选项扩展参数 | 筛选项布局 |
+|---------|-----------|---------------|-----------|
+| datetime | `DatePicker` | `range` | `66` |
+| 数值 | `InputNumber` | `range` | `66` |
+
+**说明**：此规则在绑定第一个非Hidden筛选项之后执行，确保 datetime 和数值字段有正确的范围筛选功能。
+
+### 9.2 AI 树形模块增强
+
+当检测到字段包含 `tree_id`、`tree_name`、`tree_parent_id` 结构时，自动应用树形配置：
+
+**判断函数** `is_tree_module(fields)`：
+```python
+def is_tree_module(fields: list) -> bool:
+    """判断是否为树形模块（检测 tree_id, tree_name, tree_parent_id 结构）"""
+    field_names = [f.get('name', '').lower() for f in fields]
+    has_tree_id = any('tree_id' in name for name in field_names)
+    has_tree_name = any('tree_name' in name for name in field_names)
+    has_tree_parent = any('tree_parent_id' in name or 'parent_id' in name for name in field_names)
+    return has_tree_id and has_tree_name and has_tree_parent
+```
+
+**树形模块配置规则**：
+
+| 配置位置 | 字段 | 配置值 |
+|---------|------|--------|
+| 模块 Sheet | form_layout | `vertical` |
+| 模块 Sheet | 工具栏增加 | `1` |
+| 模块 Sheet | 工具栏删除 | `1` |
+| 模块 Sheet | 工具栏编辑 | `1` |
+| 模块 Sheet | 其他工具栏 | 空 |
+| 字段 Sheet | tree_id | list_format=`tree:key`, form_type=`Hidden` |
+| 字段 Sheet | tree_name | list_format=`tree:title`, form_type=`Input` |
+| 字段 Sheet | tree_parent_id | list_format=`tree:parent_key`, form_type=`Hidden` |
+| 菜单 Sheet | 组件 | `./common/automatic_page_tree` |
+
+**模板参考**：严格按 `node_module.xlsx` 中 `eg_m_tree` 模块的配置。
+
+### 9.3 菜单 ID 生成规则
+
+- 起点：随机 8 位数字（如 `90114004`）
+- 后续菜单：依次加一（`90114005`, `90114006`, ...）
+- 菜单序列：与菜单 ID 相同
+
+### 9.4 菜单路径规则
+
+```
+/aigenerator/cfgp/{module_key}
+```
+
+### 9.5 多模块合并功能
+
+使用 `--multi` 参数和多个 `--table-info` 参数，可将多个模块合并生成到单个 Excel 文件：
+
+```bash
+python generate_module_excel.py --multi \
+  --table-info '{"table_name_cn":"模块1","table_name_en":"mod1","fields":[...]}'
+  --table-info '{"table_name_cn":"模块2","table_name_en":"mod2","fields":[...]}'
+```
+
+**输出文件命名**：`多模块合并_{timestamp}.xlsx`
+
+---
+
+## 10. 验证方式
 
 1. **运行 Skill**: 使用 "帮我设计一个企业员工管理模块" 触发
 2. **检查输出**: 生成的 Excel 包含4个 Sheet
