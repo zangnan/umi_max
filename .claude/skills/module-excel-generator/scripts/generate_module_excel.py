@@ -394,6 +394,24 @@ def infer_leaf_label(table_name_cn: str) -> str:
     return table_name_cn[-4:] if len(table_name_cn) >= 4 else table_name_cn
 
 
+def find_display_field(table_info: dict) -> str:
+    """找到主表中用于关联的显示字段
+
+    规则：第一个非主键、非uuid的字段
+    """
+    fields = table_info.get('fields', [])
+    for f in fields:
+        fname = f.get('name', '').lower()
+        if fname not in ['uuid', 'id'] and 'name' in fname:
+            return f.get('name', '')
+    # 取第一个非uuid字段
+    for f in fields:
+        if f.get('name', '').lower() not in ['uuid', 'id']:
+            return f.get('name', '')
+    # 兜底：返回第一个字段
+    return fields[0].get('name', '') if fields else ''
+
+
 def create_leaf_field(child_module_key: str, display_field: str, label: str) -> dict:
     """创建主子表分隔行配置
 
@@ -401,22 +419,27 @@ def create_leaf_field(child_module_key: str, display_field: str, label: str) -> 
         child_module_key: 子模块key，如 'eg_m_staff_education'
         display_field: 主表中用于显示的字段，如 'staff_name'
         label: 分隔行显示文本，如 '教育经历'
+
+    注意：分隔行的列结构（根据 node_module.xlsx）：
+    - Col 1 (data_dict): 空
+    - Col 2 (field_name): 空
+    - Col 3 (field_name_cn): 显示文本（如'教育经历'）
+    - Col 13 (list_format): 'leaf:...'
+    - Col 25 (form_enable): 空（分隔行不需要表单）
     """
-    # 返回完整的字段配置，design_field_configs 会处理
     return {
-        # 分隔行特征：data_dict 为空，表示这是分隔行而非数据字段
-        'data_dict': '',
-        # 字段名称（design_field_configs 用 name 和 name_cn）
-        'name': label,
-        'name_cn': label,
+        # 分隔行特征
+        'data_dict': '',       # 空
+        'name': '',            # 字段名称为空
+        'name_cn': label,      # 中文显示文本放在字段中文名
         # 列表项配置
         'list_enable': '1',
         'list_width': '90',
         'list_fixed': 'R',
         'list_format': f'leaf:{child_module_key}&{display_field}',
-        # 表单配置（分隔行不需要表单）
-        'form_enable': '',
-        'form_type': '',
+        # 表单配置（分隔行不需要表单，这些值会覆盖默认值模板）
+        'form_enable': '',    # 显式设置为空
+        'form_type': '',       # 显式设置为空
     }
 
 
@@ -477,6 +500,11 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
 
     configs = []
 
+    # 校验：每个字段必须有 name_cn
+    for field in fields:
+        if 'name_cn' not in field or not field.get('name_cn'):
+            print(f"  [警告] 字段 '{field.get('name', '?')}' 缺少 name_cn，请检查输入数据")
+
     # 首行：模块名称 模块key（写到 A 列，即 data_dict 字段）
     first_row = {
         'data_dict': f'{module_name} {module_key}',  # A列
@@ -500,14 +528,20 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         # 先复制默认值模板
         config = get_default_field_config()
 
-        # 基础字段 - 如果 data_dict 已为空（leaf 分隔行），则保持为空
-        if field.get('data_dict', '') == '':
-            config['data_dict'] = ''
+        # 基础字段 - 如果 data_dict 属性存在且为空字符串（leaf 分隔行），则保持为空
+        # 否则使用 table_name_en（普通字段）
+        if 'data_dict' in field and field.get('data_dict') == '':
+            config['data_dict'] = ''  # leaf 分隔行
         else:
-            config['data_dict'] = table_name_en
+            config['data_dict'] = table_name_en  # 普通字段
         config['field_name'] = field_name
         config['field_name_cn'] = field_name_cn
         config['field_sort'] = ''
+
+        # 表单配置 - 如果 field 中有 form_enable（如 leaf 分隔行），则覆盖默认值
+        if 'form_enable' in field:
+            config['form_enable'] = field.get('form_enable', '')
+            config['form_type'] = field.get('form_type', '')
 
         # 列表项格式化 - 如果字段已有 list_format（如 leaf 分隔行），则保留
         original_list_format = field.get('list_format', '')
@@ -562,22 +596,27 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         if is_key:
             config['list_hidden'] = '1'
             config['list_primary_key'] = '1'
+        # 外键字段（_uuid 结尾但非主键）也需要隐藏
+        elif field_name_lower.endswith('_uuid') and not is_key:
+            config['list_hidden'] = '1'
 
         # 列表排序 - f.tsx 中 GRID_SORT 保持为空，不设置
         # 注：f.tsx 中没有显式设置 list_sorter 和 list_order
 
-        # 表单类型
-        form_type = 'Input'
-        if is_key:
-            form_type = 'Hidden'
-        elif 'tree_parent_id' in field_name_lower or ('parent_id' in field_name_lower and 'tree' in table_name_en.lower()):
-            form_type = 'Hidden'
-        elif type_category == 'number':
-            form_type = 'InputNumber'
-        elif type_category == 'date':
-            form_type = 'DatePicker'
-        config['form_type'] = form_type
-        config['form_format'] = list_format
+        # 表单类型 - leaf 分隔行不需要表单，保持为空
+        is_leaf_field = original_list_format and original_list_format.startswith('leaf:')
+        if not is_leaf_field:
+            form_type = 'Input'
+            if is_key:
+                form_type = 'Hidden'
+            elif 'tree_parent_id' in field_name_lower or ('parent_id' in field_name_lower and 'tree' in table_name_en.lower()):
+                form_type = 'Hidden'
+            elif type_category == 'number':
+                form_type = 'InputNumber'
+            elif type_category == 'date':
+                form_type = 'DatePicker'
+            config['form_type'] = form_type
+            config['form_format'] = list_format
 
         # 记录第一个非Hidden的表单类型字段索引
         if first_form_type_field_idx is None and form_type != 'Hidden':
@@ -1187,8 +1226,11 @@ def generate_multi_module_excel(modules: list, output_path: str) -> bool:
             apply_table_name_style(ws_table.cell(ws_table.max_row, col))
         ws_table.row_dimensions[ws_table.max_row].height = 15.0
 
-        # 字段行
+        # 字段行 - 跳过分隔行（data_dict 为空）
         for field in table_info.get('fields', []):
+            # 分隔行的 data_dict 为空，跳过（不写入表 Sheet）
+            if 'data_dict' in field and field.get('data_dict') == '':
+                continue
             row = [
                 field.get('name', ''),
                 field.get('name_cn', ''),
@@ -1334,24 +1376,31 @@ def generate_multi_module_excel(modules: list, output_path: str) -> bool:
 # ============== 主函数 ==============
 
 def main():
+    # 默认输出到项目根目录下的 exports/module_configs/
+    # 脚本路径: .claude/skills/module-excel-generator/scripts/generate_module_excel.py
+    # 项目根目录: .claude 的 parent
+    default_output = str(Path(__file__).parent.parent.parent.parent.parent / 'exports/module_configs')
+
     parser = argparse.ArgumentParser(
         description='Module Excel Config Generator'
     )
     parser.add_argument('--requirement', '-r', help='Business requirement description (legacy, use --table-info instead)')
     parser.add_argument('--table-name-cn', help='Table Chinese name (use with --table-info)')
     parser.add_argument('--table-name-en', help='Table English name (use with --table-info)')
-    parser.add_argument('--output', '-o', default='./exports/module_configs/', help='Output directory')
+    parser.add_argument('--output', '-o', default=default_output, help='Output directory')
     parser.add_argument('--interactive', '-i', action='store_true', help='Interactive mode')
     parser.add_argument('--table-info', action='append', help='Table structure as JSON string. Can be specified multiple times for multi-module export.')
-    parser.add_argument('--multi', action='store_true', help='Generate a single Excel file containing all modules specified by multiple --table-info options')
+    parser.add_argument('--multi', action='store_true', help='(Deprecated) Use --groups instead. Master-detail mode: first table is master, rest are details.')
+    parser.add_argument('--groups', '-g', help='Module group definition. Format: "MasterA|Detail1,Detail2;MasterB|Detail3;ModuleC;ModuleD". Use | to separate master from details, ; to separate groups.')
 
     args = parser.parse_args()
 
-    # 多模块模式：合并生成到单个 Excel
-    if args.multi and args.table_info and len(args.table_info) > 1:
+    # 多模块模式：支持多组主子表关系
+    if args.table_info and len(args.table_info) > 1:
         modules = []
-        tables = []  # 保存所有表信息，用于主子表判断
+        tables = []
 
+        # 解析所有 table_info
         for table_info_json in args.table_info:
             try:
                 table_info = json.loads(table_info_json)
@@ -1363,53 +1412,64 @@ def main():
                 sys.exit(1)
             tables.append(table_info)
 
-        # 判断是否为主子表模式（2个及以上表）
-        is_master_detail = len(tables) >= 2
+        # 构建表名到表信息的映射
+        table_map = {t['table_name_cn']: t for t in tables}
 
-        if is_master_detail:
-            # 主子表模式：第一个表为主表，后续为子表
-            master_table = tables[0]
-            detail_tables = tables[1:]
+        # 解析 --groups 参数确定主子表关系
+        master_detail_groups = []  # [(master_table_name, [detail_table_names]), ...]
+        standalone_modules = []    # [table_name, ...]
 
-            # 1. 为主表创建 leaf 分隔行
+        if args.groups:
+            # 格式: "MasterA|Detail1,Detail2;MasterB|Detail3;ModuleC;ModuleD"
+            groups = args.groups.split(';')
+            for group in groups:
+                group = group.strip()
+                if '|' in group:
+                    # 主子表关系
+                    parts = group.split('|')
+                    master_name = parts[0].strip()
+                    detail_names = [d.strip() for d in parts[1].split(',')]
+                    master_detail_groups.append((master_name, detail_names))
+                else:
+                    # 独立模块
+                    standalone_modules.append(group.strip())
+        elif args.multi:
+            # 兼容旧 --multi 参数：第一个为主表，其余为子表
+            if tables:
+                master_detail_groups.append((tables[0]['table_name_cn'], [t['table_name_cn'] for t in tables[1:]]))
+        else:
+            # 没有指定关系，所有模块独立
+            standalone_modules = [t['table_name_cn'] for t in tables]
+
+        # 处理主子表关系
+        for master_name, detail_names in master_detail_groups:
+            if master_name not in table_map:
+                print(f"Error: Master table '{master_name}' not found in --table-info")
+                sys.exit(1)
+            master_table = table_map[master_name]
+
+            # 为主表创建 leaf 分隔行
             master_fields = master_table['fields'].copy()
-            # 找到主表中用于关联的显示字段（第一个非主键、非uuid的字段）
-            display_field = None
-            for f in master_table.get('fields', []):
-                fname = f.get('name', '').lower()
-                if fname not in ['uuid', 'id'] and 'name' in fname:
-                    display_field = f.get('name', '')
-                    break
-            if not display_field and master_table.get('fields'):
-                # 取第一个非uuid字段
-                for f in master_table.get('fields', []):
-                    if f.get('name', '').lower() not in ['uuid', 'id']:
-                        display_field = f.get('name', '')
-                        break
-            if not display_field:
-                display_field = master_table.get('fields', [{}])[0].get('name', '')
+            display_field = find_display_field(master_table)
 
-            # 为每个子表创建分隔行
-            for detail_table in detail_tables:
+            for detail_name in detail_names:
+                if detail_name not in table_map:
+                    print(f"Error: Detail table '{detail_name}' not found in --table-info")
+                    sys.exit(1)
+                detail_table = table_map[detail_name]
                 child_module_key = f"eg_m_{detail_table['table_name_en']}"
                 label = infer_leaf_label(detail_table['table_name_cn'])
                 leaf_field = create_leaf_field(child_module_key, display_field, label)
                 master_fields.append(leaf_field)
 
-            # 更新主表的字段
-            master_table['fields'] = master_fields
+                # 为子表添加外键字段（如果不存在）
+                master_name_en = master_table['table_name_en']
+                master_name_short = master_name_en.split('_')[-1] if '_' in master_name_en else master_name_en.split('_')[0]
+                fk_field_name = f"{master_name_short}_uuid"
 
-            # 2. 为子表添加外键字段（如果不存在）
-            master_name_en = master_table['table_name_en']
-            master_name_short = master_name_en.split('_')[-1] if '_' in master_name_en else master_name_en.split('_')[0]
-            fk_field_name = f"{master_name_short}_uuid"
-
-            for detail_table in detail_tables:
-                # 检查是否已有外键字段
                 has_fk = any(master_name_en in f.get('name', '') or fk_field_name in f.get('name', '')
                             for f in detail_table.get('fields', []))
                 if not has_fk:
-                    # 添加外键字段到子表
                     detail_table['fields'].insert(0, {
                         'name': fk_field_name,
                         'name_cn': f'{master_table["table_name_cn"]}ID',
@@ -1418,17 +1478,52 @@ def main():
                         'required': 'Y'
                     })
 
-        # 处理所有表，生成模块配置
+            master_table['fields'] = master_fields
+
+        # 确定所有需要生成的模块（主子表的主表 + 独立模块 + 所有子表）
+        modules_to_generate = set()
+
+        # 添加主子表的主表
+        for master_name, _ in master_detail_groups:
+            modules_to_generate.add(master_name)
+
+        # 添加独立模块
+        for name in standalone_modules:
+            if name in table_map:
+                modules_to_generate.add(name)
+
+        # 添加所有子表（它们也是独立模块）
+        for _, detail_names in master_detail_groups:
+            for detail_name in detail_names:
+                modules_to_generate.add(detail_name)
+
+        # 处理所有需要生成的模块
         for table_info in tables:
-            module_info = design_module_config(table_info)
-            field_configs = design_field_configs(table_info, module_info)
-            menu_configs = design_menu_config(module_info, table_info)
-            modules.append({
-                'table_info': table_info,
-                'module_info': module_info,
-                'field_configs': field_configs,
-                'menu_configs': menu_configs
-            })
+            if table_info['table_name_cn'] in modules_to_generate:
+                module_info = design_module_config(table_info)
+                field_configs = design_field_configs(table_info, module_info)
+                menu_configs = design_menu_config(module_info, table_info)
+                modules.append({
+                    'table_info': table_info,
+                    'module_info': module_info,
+                    'field_configs': field_configs,
+                    'menu_configs': menu_configs
+                })
+                modules_to_generate.remove(table_info['table_name_cn'])
+
+        # 如果还有未处理的模块（独立模块）
+        for name in modules_to_generate:
+            if name in table_map:
+                table_info = table_map[name]
+                module_info = design_module_config(table_info)
+                field_configs = design_field_configs(table_info, module_info)
+                menu_configs = design_menu_config(module_info, table_info)
+                modules.append({
+                    'table_info': table_info,
+                    'module_info': module_info,
+                    'field_configs': field_configs,
+                    'menu_configs': menu_configs
+                })
 
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         output_filename = f"多模块合并_{timestamp}.xlsx"
