@@ -366,6 +366,60 @@ def is_tree_module(fields: list) -> bool:
     return has_tree_id and has_tree_name and has_tree_parent
 
 
+def infer_leaf_label(table_name_cn: str) -> str:
+    """自动推断分隔行显示文本
+
+    规则：
+    - 如果表名包含 "教育"、"学历"、"学习" → "教育经历"
+    - 如果表名包含 "工作"、"履历"、"经历" → "工作经历"
+    - 如果表名包含 "荣誉"、"奖励"、"称号" → "荣誉"
+    - 如果表名包含 "明细"、"详情"、"详细" → "明细"
+    - 如果表名包含 "附件"、"文件"、"图片" → "附件"
+    - 其他情况：直接使用表中文名的最后4个字
+    """
+    patterns = [
+        (['教育', '学历', '学习'], '教育经历'),
+        (['工作', '履历', '经历'], '工作经历'),
+        (['荣誉', '奖励', '称号'], '荣誉'),
+        (['明细', '详情', '详细'], '明细'),
+        (['附件', '文件', '图片'], '附件'),
+    ]
+
+    for keywords, label in patterns:
+        for kw in keywords:
+            if kw in table_name_cn:
+                return label
+
+    # 默认：取表中文名的最后4个字
+    return table_name_cn[-4:] if len(table_name_cn) >= 4 else table_name_cn
+
+
+def create_leaf_field(child_module_key: str, display_field: str, label: str) -> dict:
+    """创建主子表分隔行配置
+
+    Args:
+        child_module_key: 子模块key，如 'eg_m_staff_education'
+        display_field: 主表中用于显示的字段，如 'staff_name'
+        label: 分隔行显示文本，如 '教育经历'
+    """
+    # 返回完整的字段配置，design_field_configs 会处理
+    return {
+        # 分隔行特征：data_dict 为空，表示这是分隔行而非数据字段
+        'data_dict': '',
+        # 字段名称（design_field_configs 用 name 和 name_cn）
+        'name': label,
+        'name_cn': label,
+        # 列表项配置
+        'list_enable': '1',
+        'list_width': '90',
+        'list_fixed': 'R',
+        'list_format': f'leaf:{child_module_key}&{display_field}',
+        # 表单配置（分隔行不需要表单）
+        'form_enable': '',
+        'form_type': '',
+    }
+
+
 def get_default_field_config() -> dict:
     """获取字段Sheet的默认值配置（与 SHEET_CONFIG_FIELD_COMMON 同步）"""
     return {
@@ -446,41 +500,59 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         # 先复制默认值模板
         config = get_default_field_config()
 
-        # 基础字段
-        config['data_dict'] = table_name_en
+        # 基础字段 - 如果 data_dict 已为空（leaf 分隔行），则保持为空
+        if field.get('data_dict', '') == '':
+            config['data_dict'] = ''
+        else:
+            config['data_dict'] = table_name_en
         config['field_name'] = field_name
         config['field_name_cn'] = field_name_cn
         config['field_sort'] = ''
 
-        # 列表项格式化
-        list_format = ''
-        # 树形模块特殊字段格式化
-        field_name_lower = field_name.lower()
-        if 'tree_id' in field_name_lower:
-            list_format = 'tree:key'
-        elif 'tree_name' in field_name_lower:
-            list_format = 'tree:title'
-        elif 'tree_parent_id' in field_name_lower or 'parent_id' in field_name_lower:
-            list_format = 'tree:parent_key'
-        elif type_category == 'number':
-            list_format = get_number_format(data_type)
-        elif type_category == 'date':
-            list_format = 'YYYY-MM-DD'
-        config['list_format'] = list_format
+        # 列表项格式化 - 如果字段已有 list_format（如 leaf 分隔行），则保留
+        original_list_format = field.get('list_format', '')
+        if original_list_format:
+            list_format = original_list_format
+            config['list_format'] = list_format
+        else:
+            list_format = ''
+            # 树形模块特殊字段格式化
+            field_name_lower = field_name.lower()
+            if 'tree_id' in field_name_lower:
+                list_format = 'tree:key'
+            elif 'tree_name' in field_name_lower:
+                list_format = 'tree:title'
+            elif 'tree_parent_id' in field_name_lower or 'parent_id' in field_name_lower:
+                list_format = 'tree:parent_key'
+            elif type_category == 'number':
+                list_format = get_number_format(data_type)
+            elif type_category == 'date':
+                list_format = 'YYYY-MM-DD'
+            config['list_format'] = list_format
 
         # 列表项对齐方式
         if type_category == 'number':
             config['list_align'] = 'R'
 
-        # 列表项列宽
-        list_width = 100
-        if type_category == 'number':
-            list_width = 140
-        elif type_category == 'date':
-            list_width = 150
-        elif is_val_len_unknown:
-            list_width = 180
-        config['list_width'] = str(list_width)
+        # 列表项列宽 - 如果字段已有 list_width（如 leaf 分隔行），则保留
+        original_list_width = field.get('list_width', '')
+        if original_list_width and original_list_width not in ('100', ''):
+            config['list_width'] = str(original_list_width)
+            list_width = int(original_list_width) if str(original_list_width).isdigit() else 100
+        else:
+            list_width = 100
+            if type_category == 'number':
+                list_width = 140
+            elif type_category == 'date':
+                list_width = 150
+            elif is_val_len_unknown:
+                list_width = 180
+            config['list_width'] = str(list_width)
+
+        # 列表项固定列 - leaf 分隔行保持 R
+        original_list_fixed = field.get('list_fixed', '')
+        if original_list_fixed:
+            config['list_fixed'] = original_list_fixed
 
         # 列表项超出隐藏
         if is_val_len_unknown:
@@ -1278,6 +1350,8 @@ def main():
     # 多模块模式：合并生成到单个 Excel
     if args.multi and args.table_info and len(args.table_info) > 1:
         modules = []
+        tables = []  # 保存所有表信息，用于主子表判断
+
         for table_info_json in args.table_info:
             try:
                 table_info = json.loads(table_info_json)
@@ -1287,7 +1361,65 @@ def main():
             if 'table_name_cn' not in table_info or 'table_name_en' not in table_info or 'fields' not in table_info:
                 print("Error: --table-info must contain table_name_cn, table_name_en, and fields")
                 sys.exit(1)
+            tables.append(table_info)
 
+        # 判断是否为主子表模式（2个及以上表）
+        is_master_detail = len(tables) >= 2
+
+        if is_master_detail:
+            # 主子表模式：第一个表为主表，后续为子表
+            master_table = tables[0]
+            detail_tables = tables[1:]
+
+            # 1. 为主表创建 leaf 分隔行
+            master_fields = master_table['fields'].copy()
+            # 找到主表中用于关联的显示字段（第一个非主键、非uuid的字段）
+            display_field = None
+            for f in master_table.get('fields', []):
+                fname = f.get('name', '').lower()
+                if fname not in ['uuid', 'id'] and 'name' in fname:
+                    display_field = f.get('name', '')
+                    break
+            if not display_field and master_table.get('fields'):
+                # 取第一个非uuid字段
+                for f in master_table.get('fields', []):
+                    if f.get('name', '').lower() not in ['uuid', 'id']:
+                        display_field = f.get('name', '')
+                        break
+            if not display_field:
+                display_field = master_table.get('fields', [{}])[0].get('name', '')
+
+            # 为每个子表创建分隔行
+            for detail_table in detail_tables:
+                child_module_key = f"eg_m_{detail_table['table_name_en']}"
+                label = infer_leaf_label(detail_table['table_name_cn'])
+                leaf_field = create_leaf_field(child_module_key, display_field, label)
+                master_fields.append(leaf_field)
+
+            # 更新主表的字段
+            master_table['fields'] = master_fields
+
+            # 2. 为子表添加外键字段（如果不存在）
+            master_name_en = master_table['table_name_en']
+            master_name_short = master_name_en.split('_')[-1] if '_' in master_name_en else master_name_en.split('_')[0]
+            fk_field_name = f"{master_name_short}_uuid"
+
+            for detail_table in detail_tables:
+                # 检查是否已有外键字段
+                has_fk = any(master_name_en in f.get('name', '') or fk_field_name in f.get('name', '')
+                            for f in detail_table.get('fields', []))
+                if not has_fk:
+                    # 添加外键字段到子表
+                    detail_table['fields'].insert(0, {
+                        'name': fk_field_name,
+                        'name_cn': f'{master_table["table_name_cn"]}ID',
+                        'type': 'varchar(32)',
+                        'key': '',
+                        'required': 'Y'
+                    })
+
+        # 处理所有表，生成模块配置
+        for table_info in tables:
             module_info = design_module_config(table_info)
             field_configs = design_field_configs(table_info, module_info)
             menu_configs = design_menu_config(module_info, table_info)
