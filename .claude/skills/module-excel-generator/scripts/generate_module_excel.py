@@ -443,6 +443,148 @@ def create_leaf_field(child_module_key: str, display_field: str, label: str) -> 
     }
 
 
+def get_rel_field_info(rel_module_name: str, table_map: dict, master_table: dict) -> dict:
+    """获取 rel 关联字段信息（一对多）
+
+    Args:
+        rel_module_name: 关联表模块名（如 '发票类别管理'）
+        table_map: 表名到表信息的映射
+        master_table: 主表信息
+
+    rel 格式: rel:{关联模块名}&{关联模块名称字段}
+    一对多关联：主表中存储关联ID，字段名必须与关联表主键名完全一致
+
+    Returns:
+        包含 field_name 和 list_format 的字典，用于更新主表中已存在的关联字段
+    """
+    # 在 table_map 中查找关联表
+    rel_table = None
+    for tbl in table_map.values():
+        if tbl['table_name_cn'] == rel_module_name:
+            rel_table = tbl
+            break
+
+    if not rel_table:
+        print(f"Warning: Rel table '{rel_module_name}' not found in --table-info, skipping rel field")
+        return None
+
+    rel_module_key = f"eg_m_{rel_table['table_name_en']}"
+
+    # 查找关联表的显示字段（通常是有 name 后缀的字段）
+    display_field = find_display_field(rel_table)
+
+    # 查找关联表的主键字段名（与主表关联字段名一致）
+    rel_pk_field = None
+    for field in rel_table.get('fields', []):
+        if field.get('key') == 'p_key':
+            rel_pk_field = field.get('name')
+            break
+    if not rel_pk_field:
+        # 如果没找到主键，使用第一个字段
+        rel_pk_field = rel_table.get('fields', [{}])[0].get('name', '')
+
+    return {
+        # 主表中存储关联ID的字段名，必须与关联表主键名完全一致
+        # 例如：关联表主键是 category_uuid，则主表关联字段也是 category_uuid
+        'field_name': rel_pk_field,
+        'list_format': f'rel:{rel_module_key}&{display_field}',
+    }
+
+
+def create_rel2_field(rel2_module_name: str, table_map: dict, master_table: dict, explicit_ref_table: str = None) -> dict:
+    """创建 rel2 关联表字段配置（多对多）
+
+    Args:
+        rel2_module_name: 关联表模块名（如 '权限管理'）
+        table_map: 表名到表信息的映射
+        master_table: 主表信息
+        explicit_ref_table: 显式指定的中间表名（如 '人员权限关系表'）
+
+    rel2 格式: rel2:{关联模块名}&{关联模块名称字段}&{关联表模块名}
+    多对多关联：通过中间表关联，rel2 是虚拟显示字段
+    """
+    # 在 table_map 中查找关联表
+    rel2_table = None
+    for tbl in table_map.values():
+        if tbl['table_name_cn'] == rel2_module_name:
+            rel2_table = tbl
+            break
+
+    if not rel2_table:
+        print(f"Warning: Rel2 table '{rel2_module_name}' not found in --table-info, skipping rel2 field")
+        return None
+
+    rel2_module_key = f"eg_m_{rel2_table['table_name_en']}"
+
+    # 查找关联表的显示字段
+    display_field = find_display_field(rel2_table)
+
+    # 查找中间表（需要包含两个外键）
+    ref_table_name = None
+
+    # 如果显式指定了中间表，直接使用
+    if explicit_ref_table and explicit_ref_table in table_map:
+        ref_table_name = explicit_ref_table
+    else:
+        # 否则自动搜索
+        for tbl in table_map.values():
+            # 跳过主表和关联表本身
+            if tbl['table_name_cn'] == master_table['table_name_cn'] or tbl['table_name_cn'] == rel2_module_name:
+                continue
+            fields = tbl.get('fields', [])
+            field_names = [f.get('name', '') for f in fields]
+            # 检查是否包含主表和关联表的外键
+            # 支持多种命名方式：xxx_uuid, xxx_id, 前缀_xxx_uuid
+            master_en = master_table['table_name_en']
+            rel2_en = rel2_table['table_name_en']
+            # 取表名的关键部分作为匹配
+            # person -> person_uuid; permission -> perm_uuid (取前4个字符匹配)
+            master_prefix = master_en[:4] if len(master_en) >= 4 else master_en  # 'pers' for 'person'
+            rel2_prefix = rel2_en[:4] if len(rel2_en) >= 4 else rel2_en  # 'perm' for 'permission'
+
+            has_master_fk = any(
+                fn == 'uuid' or  # 通用 uuid 字段
+                fn.endswith(f'_{master_en}_uuid') or  # person_uuid
+                fn.endswith(f'_{master_en}_id') or
+                fn.startswith(master_prefix) and fn.endswith('_uuid') or  # pers_xxx_uuid
+                fn == master_en
+                for fn in field_names
+            )
+            has_rel2_fk = any(
+                fn == 'uuid' or  # 通用 uuid 字段
+                fn.endswith(f'_{rel2_en}_uuid') or  # permission_uuid
+                fn.endswith(f'_{rel2_en}_id') or
+                fn.startswith(rel2_prefix) and fn.endswith('_uuid') or  # perm_xxx_uuid
+                fn == rel2_en
+                for fn in field_names
+            )
+            if has_master_fk and has_rel2_fk:
+                ref_table_name = tbl['table_name_cn']
+                break
+
+    if not ref_table_name:
+        print(f"Warning: Ref table for rel2 '{rel2_module_name}' not found, skipping rel2 field")
+        return None
+
+    ref_module_key = f"eg_m_{table_map[ref_table_name]['table_name_en']}"
+
+    return {
+        # rel2 字段是虚拟行，data_dict 和 field_name 都为空
+        'data_dict': '',
+        'field_name': '',
+        'name_cn': rel2_module_name,
+        # 列表项配置
+        'list_enable': '1',
+        'list_width': '120',
+        'list_fixed': 'R',
+        'list_format': f'rel2:{rel2_module_key}&{display_field}&{ref_module_key}',
+        # 表单配置为空（rel2 字段不需要表单）
+        'form_enable': '',
+        'form_type': '',
+        'form_format': '',
+    }
+
+
 def get_default_field_config() -> dict:
     """获取字段Sheet的默认值配置（与 SHEET_CONFIG_FIELD_COMMON 同步）"""
     return {
@@ -491,8 +633,12 @@ def get_default_field_config() -> dict:
     }
 
 
-def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
-    """为每个字段设计37列配置（与系统 f.tsx getSheetDataField 规则同步）"""
+def design_field_configs(table_info: dict, module_info: dict, master_table_fields: list = None) -> list[dict]:
+    """为每个字段设计37列配置（与系统 f.tsx getSheetDataField 规则同步）
+
+    Args:
+        master_table_fields: 主表的字段列表，用于判断当前字段是否为外键（子表关联主表的外键字段应在表单中隐藏）
+    """
     fields = table_info.get('fields', [])
     table_name_en = table_info.get('table_name_en', '')
     module_key = module_info.get('module_key', '')
@@ -525,16 +671,42 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         type_category = get_field_type_category(data_type)
         is_val_len_unknown = is_field_val_len_unknown(field_name_cn)
 
+        # 判断是否为子表的外键字段（关联到主表主键的字段）
+        # 例如：子表 staff_education 中的 staff_uuid 字段，关联到主表 staff 的 staff_uuid 主键
+        is_foreign_key = False
+        if master_table_fields is not None and not is_key:
+            master_pk_names = [f.get('name', '') for f in master_table_fields]
+            for pk_name in master_pk_names:
+                # 检查字段名是否以主表主键名结尾或匹配（排除自身是主键的情况）
+                if pk_name and field_name.endswith(f'_{pk_name}') and field_name != pk_name:
+                    is_foreign_key = True
+                    break
+                elif pk_name == field_name and not is_key:
+                    # 字段名与主表主键相同但自身不是主键（外键，如子表的 person_uuid）
+                    is_foreign_key = True
+                    break
+
         # 先复制默认值模板
         config = get_default_field_config()
 
         # 基础字段 - 如果 data_dict 属性存在且为空字符串（leaf 分隔行），则保持为空
+        # rel2 字段也是虚拟行，需要保持为空
         # 否则使用 table_name_en（普通字段）
+        rel_value = field.get('rel', '')
+        rel2_value = field.get('rel2', '')
         if 'data_dict' in field and field.get('data_dict') == '':
             config['data_dict'] = ''  # leaf 分隔行
+        elif rel2_value:
+            config['data_dict'] = ''  # rel2 虚拟行
         else:
             config['data_dict'] = table_name_en  # 普通字段
-        config['field_name'] = field_name
+
+        # rel2 字段是虚拟行，field_name 为空
+        if rel2_value:
+            config['field_name'] = ''
+        else:
+            config['field_name'] = field_name
+
         config['field_name_cn'] = field_name_cn
         config['field_sort'] = ''
 
@@ -592,8 +764,23 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         if is_val_len_unknown:
             config['list_ellipsis'] = '1'
 
-        # 列表项隐藏/主键标识
-        if is_key:
+        # 列表项隐藏/主键标识 - rel/rel2 关联表格式
+        is_rel_field = bool(rel_value or rel2_value)
+        if rel_value:
+            config['list_format'] = rel_value  # rel:eg_m_tag&tag_name 在 M 列
+            config['list_fixed'] = 'R'  # 固定在右侧
+            # rel/rel2 字段不需要表单，显式置空
+            config['form_enable'] = ''
+            config['form_type'] = ''
+            config['form_format'] = ''
+        elif rel2_value:
+            config['list_format'] = rel2_value  # rel2:eg_m_honor&honor_name&eg_m_staff_honor_ref 在 M 列
+            config['list_fixed'] = 'R'  # 固定在右侧
+            # rel/rel2 字段不需要表单，显式置空
+            config['form_enable'] = ''
+            config['form_type'] = ''
+            config['form_format'] = ''
+        elif is_key:
             config['list_hidden'] = '1'
             config['list_primary_key'] = '1'
         # 外键字段（_uuid 结尾但非主键）也需要隐藏
@@ -603,11 +790,14 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
         # 列表排序 - f.tsx 中 GRID_SORT 保持为空，不设置
         # 注：f.tsx 中没有显式设置 list_sorter 和 list_order
 
-        # 表单类型 - leaf 分隔行不需要表单，保持为空
+        # 表单类型 - leaf/rel/rel2 分隔行不需要表单，保持为空
         is_leaf_field = original_list_format and original_list_format.startswith('leaf:')
-        if not is_leaf_field:
+        if not is_leaf_field and not is_rel_field:
             form_type = 'Input'
             if is_key:
+                form_type = 'Hidden'
+            elif is_foreign_key:
+                # 子表的外键字段（如 staff_uuid）应该在表单中隐藏
                 form_type = 'Hidden'
             elif 'tree_parent_id' in field_name_lower or ('parent_id' in field_name_lower and 'tree' in table_name_en.lower()):
                 form_type = 'Hidden'
@@ -637,6 +827,10 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
             if length:
                 form_validation = f'{form_validation},number({length})'.strip(',') if form_validation else f'number({length})'
         config['form_validation'] = form_validation
+
+        # 如果表单类型是 Hidden，则清空验证规则（Hidden字段对用户不可见，无需验证）
+        if config.get('form_type') == 'Hidden':
+            config['form_validation'] = ''
 
         # 筛选项 - f.tsx 中 FILTER_ITEM_INDEX 保持为空，不设置
         # 注：f.tsx 中没有显式设置 filter_order
@@ -680,6 +874,253 @@ def design_field_configs(table_info: dict, module_info: dict) -> list[dict]:
             config['filter_layout'] = '66'
 
     return configs
+
+
+# ============== 列表项格式化校验函数 ==============
+
+def validate_list_format_configs(modules: list, table_map: dict, master_detail_groups: list) -> list[str]:
+    """校验所有模块的列表项格式化配置
+
+    Args:
+        modules: 模块列表，每个包含 table_info, module_info, field_configs
+        table_map: 表名到表信息的映射
+        master_detail_groups: 主子表关系列表 [(master_table_name, [detail_table_names]), ...]
+
+    Returns:
+        错误信息列表，如果为空则校验通过
+    """
+    errors = []
+
+    for mod in modules:
+        table_info = mod['table_info']
+        table_name_en = table_info.get('table_name_en', '')
+        fields = table_info.get('fields', [])
+
+        for config in mod.get('field_configs', []):
+            # 跳过模块首行
+            if 'eg_m' in str(config.get('data_dict', '')) and not config.get('field_name'):
+                continue
+
+            list_format = config.get('list_format', '')
+            if not list_format:
+                continue
+
+            if list_format.startswith('rel:'):
+                errors.extend(validate_rel_format(list_format, table_map, table_name_en, fields))
+            elif list_format.startswith('rel2:'):
+                errors.extend(validate_rel2_format(list_format, table_map, table_name_en, fields, table_info))
+            elif list_format.startswith('leaf:'):
+                errors.extend(validate_leaf_format(list_format, table_map, master_detail_groups))
+            elif list_format.startswith('tree:'):
+                errors.extend(validate_tree_format(list_format, fields))
+
+    return errors
+
+
+def validate_rel_format(rel_value: str, table_map: dict, table_name_en: str, fields: list) -> list[str]:
+    """校验 rel 格式配置
+
+    格式: rel:eg_m_xxx&field_name
+    示例: rel:eg_m_staff_tag&tag_name
+    """
+    errors = []
+    # 解析 rel:eg_m_xxx&field_name
+    try:
+        prefix, rest = rel_value.split(':', 1)
+        parts = rest.split('&')
+        if len(parts) != 2:
+            errors.append(f"rel 格式错误: {rel_value}，应为 rel:{{关联模块名}}&{{显示字段名}}")
+            return errors
+
+        ref_module_key = parts[0]  # 如 eg_m_staff_tag
+        display_field = parts[1]  # 如 tag_name
+
+        # 从模块key提取表英文名：如 eg_m_staff_tag -> staff_tag
+        ref_table_en = ref_module_key.replace('eg_m_', '')
+
+        # 检查关联模块是否存在
+        if ref_table_en not in table_map:
+            errors.append(f"关联模块 {ref_module_key} 不存在，请检查输入")
+
+        # 检查关联表的字段是否存在
+        if ref_table_en in table_map:
+            ref_fields = table_map[ref_table_en].get('fields', [])
+            ref_field_names = [f.get('name', '') for f in ref_fields]
+            if display_field not in ref_field_names:
+                errors.append(f"关联模块 {ref_module_key} 中不存在字段 {display_field}")
+
+        # 检查主表是否包含关联字段（字段名必须与关联表主键名一致）
+        # 例如：关联表主键是 category_uuid，则主表关联字段也是 category_uuid
+        field_names = [f.get('name', '') for f in fields]
+        # 关联表的主键名
+        ref_pk_field = None
+        if ref_table_en in table_map:
+            for f in table_map[ref_table_en].get('fields', []):
+                if f.get('key') == 'p_key':
+                    ref_pk_field = f.get('name')
+                    break
+        if not ref_pk_field:
+            ref_pk_field = table_map[ref_table_en].get('fields', [{}])[0].get('name', '')
+
+        # 检查主表是否有与关联表主键名相同的字段
+        if ref_pk_field and ref_pk_field not in field_names:
+            errors.append(f"主表 {table_name_en} 缺少关联字段（字段名应为 {ref_pk_field}，与关联表主键一致）")
+
+    except Exception as e:
+        errors.append(f"解析 rel 格式失败: {rel_value}，错误: {str(e)}")
+
+    return errors
+
+
+def validate_rel2_format(rel2_value: str, table_map: dict, table_name_en: str, fields: list, master_table: dict = None) -> list[str]:
+    """校验 rel2 格式配置
+
+    格式: rel2:eg_m_xxx&field_name&eg_m_ref
+    示例: rel2:eg_m_permission&perm_name&eg_m_staff_perm_ref
+    """
+    errors = []
+    try:
+        prefix, rest = rel2_value.split(':', 1)
+        parts = rest.split('&')
+        if len(parts) != 3:
+            errors.append(f"rel2 格式错误: {rel2_value}，应为 rel2:{{关联模块名}}&{{显示字段名}}&{{关联表模块名}}")
+            return errors
+
+        ref_module_key = parts[0]  # 如 eg_m_permission
+        display_field = parts[1]  # 如 perm_name
+        ref_table_key = parts[2]  # 如 eg_m_staff_perm_ref
+
+        # 从模块key提取表英文名
+        ref_table_en = ref_module_key.replace('eg_m_', '')
+        ref_table_table_en = ref_table_key.replace('eg_m_', '')
+
+        # 检查关联模块是否存在
+        if ref_table_en not in table_map:
+            errors.append(f"关联模块 {ref_module_key} 不存在")
+        else:
+            # 检查关联表的字段是否存在
+            ref_fields = table_map[ref_table_en].get('fields', [])
+            ref_field_names = [f.get('name', '') for f in ref_fields]
+            if display_field not in ref_field_names:
+                errors.append(f"关联模块 {ref_module_key} 中不存在字段 {display_field}")
+
+            # 获取关联表的主键
+            ref_pk_field = None
+            for f in ref_fields:
+                if f.get('key') == 'p_key':
+                    ref_pk_field = f.get('name')
+                    break
+            if not ref_pk_field:
+                ref_pk_field = ref_fields[0].get('name', '') if ref_fields else ''
+
+        # 检查关联表模块是否存在
+        if ref_table_table_en not in table_map:
+            errors.append(f"关联表模块 {ref_table_key} 不存在")
+        else:
+            # 检查关联表是否包含正确的外键字段
+            ref_table_fields = table_map[ref_table_table_en].get('fields', [])
+            ref_field_names = [f.get('name', '') for f in ref_table_fields]
+
+            # 检查是否有 uuid 主键（主键名必须为 uuid，不带表名前缀）
+            uuid_pk_fields = [f for f in ref_table_fields if f.get('key') == 'p_key' and f.get('name', '').lower() == 'uuid']
+            if not uuid_pk_fields:
+                errors.append(f"关联表 {ref_table_table_en} 的主键必须是 'uuid'（不带表名前缀），当前主键为 {ref_table_fields[0].get('name', '') if ref_table_fields else '未设置'}")
+
+            # 检查是否包含指向主表的外键
+            master_pk_field = None
+            if master_table:
+                for f in master_table.get('fields', []):
+                    if f.get('key') == 'p_key':
+                        master_pk_field = f.get('name')
+                        break
+            if master_pk_field and master_pk_field not in ref_field_names:
+                errors.append(f"关联表 {ref_table_table_en} 必须包含指向主表的外键字段 {master_pk_field}")
+
+            # 检查是否包含指向关联表的外键
+            if ref_pk_field and ref_pk_field not in ref_field_names:
+                errors.append(f"关联表 {ref_table_table_en} 必须包含指向关联表 {ref_module_key} 的外键字段 {ref_pk_field}")
+
+    except Exception as e:
+        errors.append(f"解析 rel2 格式失败: {rel2_value}，错误: {str(e)}")
+
+    return errors
+
+
+def validate_leaf_format(leaf_value: str, table_map: dict, master_detail_groups: list) -> list[str]:
+    """校验 leaf 格式配置
+
+    格式: leaf:eg_m_xxx&field_name
+    示例: leaf:eg_m_staff_education&staff_name
+    """
+    errors = []
+    try:
+        prefix, rest = leaf_value.split(':', 1)
+        parts = rest.split('&')
+        if len(parts) != 2:
+            errors.append(f"leaf 格式错误: {leaf_value}，应为 leaf:{{子模块key}}&{{显示字段名}}")
+            return errors
+
+        child_module_key = parts[0]  # 如 eg_m_staff_education
+        display_field = parts[1]  # 如 staff_name
+
+        # 从模块key提取表英文名：如 eg_m_staff_education -> staff_education
+        child_table_en = child_module_key.replace('eg_m_', '')
+
+        # 从英文表名查找中文表名
+        child_table_cn = None
+        for table_info in table_map.values():
+            if table_info.get('table_name_en') == child_table_en:
+                child_table_cn = table_info.get('table_name_cn')
+                break
+
+        # 检查子模块是否在主子表关系中（比较中文表名）
+        is_in_master_detail = False
+        if child_table_cn:
+            is_in_master_detail = any(
+                child_table_cn in group_info['sub']
+                for group_info in master_detail_groups
+            )
+        if not is_in_master_detail:
+            errors.append(f"子模块 {child_module_key} 不在 --groups 配置的主子表关系中")
+
+        # 检查关联表是否存在
+        if child_table_en not in table_map:
+            errors.append(f"子模块 {child_module_key} 对应的表 {child_table_en} 不存在")
+        else:
+            # 检查子表是否包含指向主表的外键
+            child_fields = table_map[child_table_en].get('fields', [])
+            child_field_names = [f.get('name', '') for f in child_fields]
+            has_master_fk = any('uuid' in name.lower() for name in child_field_names)
+            if not has_master_fk:
+                errors.append(f"子表 {child_table_en} 必须包含指向主表的外键字段（如 xxx_uuid）")
+
+        # 注意：display_field 是主表字段，此处无法直接校验，需要调用者确保
+
+    except Exception as e:
+        errors.append(f"解析 leaf 格式失败: {leaf_value}，错误: {str(e)}")
+
+    return errors
+
+
+def validate_tree_format(tree_value: str, fields: list) -> list[str]:
+    """校验 tree 格式配置
+
+    格式: tree:key / tree:title / tree:parent_key
+    """
+    errors = []
+    field_names = [f.get('name', '').lower() for f in fields]
+
+    if tree_value == 'tree:key':
+        if 'tree_id' not in field_names:
+            errors.append("缺少 tree_id 字段（tree:key 需要）")
+    elif tree_value == 'tree:title':
+        if 'tree_name' not in field_names:
+            errors.append("缺少 tree_name 字段（tree:title 需要）")
+    elif tree_value == 'tree:parent_key':
+        if 'tree_parent_id' not in field_names and 'parent_id' not in field_names:
+            errors.append("缺少 tree_parent_id 字段（tree:parent_key 需要）")
+
+    return errors
 
 
 def design_menu_config(module_info: dict, table_info: dict = None) -> list[dict]:
@@ -1226,8 +1667,12 @@ def generate_multi_module_excel(modules: list, output_path: str) -> bool:
             apply_table_name_style(ws_table.cell(ws_table.max_row, col))
         ws_table.row_dimensions[ws_table.max_row].height = 15.0
 
-        # 字段行 - 跳过分隔行（data_dict 为空）
+        # 字段行 - 跳过分隔行（data_dict 为空）和 rel2 虚拟关联字段
         for field in table_info.get('fields', []):
+            # rel2 虚拟关联字段不写入表 Sheet（关联数据存储在关联表中）
+            if field.get('rel2'):
+                continue
+            # rel 字段是实际字段，写入表 Sheet（关联ID存储在主表中）
             # 分隔行的 data_dict 为空，跳过（不写入表 Sheet）
             if 'data_dict' in field and field.get('data_dict') == '':
                 continue
@@ -1378,7 +1823,7 @@ def generate_multi_module_excel(modules: list, output_path: str) -> bool:
 def main():
     # 默认输出到项目根目录下的 exports/module_configs/
     # 脚本路径: .claude/skills/module-excel-generator/scripts/generate_module_excel.py
-    # 项目根目录: .claude 的 parent
+    # 从脚本向上5级到达项目根目录，再进入 exports/module_configs
     default_output = str(Path(__file__).parent.parent.parent.parent.parent / 'exports/module_configs')
 
     parser = argparse.ArgumentParser(
@@ -1412,47 +1857,88 @@ def main():
                 sys.exit(1)
             tables.append(table_info)
 
-        # 构建表名到表信息的映射
+        # 构建表名到表信息的映射（中文名 -> 表信息）
         table_map = {t['table_name_cn']: t for t in tables}
+        # 构建英文名到表信息的映射（用于 rel/rel2 校验）
+        table_en_map = {t['table_name_en']: t for t in tables}
 
         # 解析 --groups 参数确定主子表关系
-        master_detail_groups = []  # [(master_table_name, [detail_table_names]), ...]
+        # 格式: "主表|sub:子表1,子表2|rel:关联表1|rel2:关联表2,关联表3"
+        # 多组用 ; 分隔: "主表1|sub:子表;主表2|rel:关联表"
+        master_detail_groups = []  # [{master, sub, rel, rel2, rel2_ref}, ...]
         standalone_modules = []    # [table_name, ...]
 
         if args.groups:
-            # 格式: "MasterA|Detail1,Detail2;MasterB|Detail3;ModuleC;ModuleD"
             groups = args.groups.split(';')
             for group in groups:
                 group = group.strip()
-                if '|' in group:
-                    # 主子表关系
-                    parts = group.split('|')
-                    master_name = parts[0].strip()
-                    detail_names = [d.strip() for d in parts[1].split(',')]
-                    master_detail_groups.append((master_name, detail_names))
-                else:
-                    # 独立模块
-                    standalone_modules.append(group.strip())
+                if not group:
+                    continue
+
+                # 按 | 分隔各部分
+                parts = group.split('|')
+                master_name = parts[0].strip()
+
+                sub_tables = []
+                rel_tables = []
+                rel2_tables = []
+                rel2_ref_tables = {}  # {关联表名: 中间表名, ...}
+
+                for part in parts[1:]:
+                    part = part.strip()
+                    if part.startswith('sub:'):
+                        # 子表：创建 leaf: 分隔行 + 外键
+                        sub_tables.extend([t.strip() for t in part[4:].split(',')])
+                    elif part.startswith('rel:'):
+                        # rel 关联表：一对多，通过 rel: 格式化展示
+                        rel_tables.append(part[4:].strip())
+                    elif part.startswith('rel2:'):
+                        # rel2 关联表：多对多，通过 rel2: 格式化展示
+                        # 格式: rel2:关联表名 或 rel2:关联表名,中间表名
+                        rel2_parts = [t.strip() for t in part[5:].split(',')]
+                        rel2_tables.append(rel2_parts[0])  # 第一个是关联表名
+                        if len(rel2_parts) > 1:
+                            # 第二个是中间表名
+                            rel2_ref_tables[rel2_parts[0]] = rel2_parts[1]
+
+                master_detail_groups.append({
+                    'master': master_name,
+                    'sub': sub_tables,
+                    'rel': rel_tables,
+                    'rel2': rel2_tables,
+                    'rel2_ref': rel2_ref_tables
+                })
         elif args.multi:
             # 兼容旧 --multi 参数：第一个为主表，其余为子表
             if tables:
-                master_detail_groups.append((tables[0]['table_name_cn'], [t['table_name_cn'] for t in tables[1:]]))
+                master_detail_groups.append({
+                    'master': tables[0]['table_name_cn'],
+                    'sub': [t['table_name_cn'] for t in tables[1:]],
+                    'rel': [],
+                    'rel2': []
+                })
         else:
             # 没有指定关系，所有模块独立
             standalone_modules = [t['table_name_cn'] for t in tables]
 
-        # 处理主子表关系
-        for master_name, detail_names in master_detail_groups:
+        # 处理主子表关系和关联表
+        for group_info in master_detail_groups:
+            master_name = group_info['master']
+            sub_tables = group_info['sub']
+            rel_tables = group_info['rel']
+            rel2_tables = group_info['rel2']
+
             if master_name not in table_map:
                 print(f"Error: Master table '{master_name}' not found in --table-info")
                 sys.exit(1)
             master_table = table_map[master_name]
 
-            # 为主表创建 leaf 分隔行
+            # 为主表创建 leaf 分隔行（仅 sub 子表）
             master_fields = master_table['fields'].copy()
             display_field = find_display_field(master_table)
 
-            for detail_name in detail_names:
+            # 处理 sub 子表：创建 leaf: 分隔行 + 添加外键
+            for detail_name in sub_tables:
                 if detail_name not in table_map:
                     print(f"Error: Detail table '{detail_name}' not found in --table-info")
                     sys.exit(1)
@@ -1478,14 +1964,43 @@ def main():
                         'required': 'Y'
                     })
 
+            # 处理 rel 关联表：在主表中更新关联字段的 list_format（不是创建新行）
+            for rel_name in rel_tables:
+                rel_info = get_rel_field_info(rel_name, table_map, master_table)
+                if rel_info:
+                    # 查找主表中对应的关联字段并更新其 list_format
+                    rel_field_name = rel_info['field_name']
+                    rel_format = rel_info['list_format']
+                    found = False
+                    for field in master_fields:
+                        if field.get('name') == rel_field_name:
+                            field['list_format'] = rel_format
+                            field['list_fixed'] = 'R'
+                            field['form_enable'] = ''
+                            field['form_type'] = ''
+                            field['form_format'] = ''
+                            found = True
+                            break
+                    if not found:
+                        print(f"Warning: Rel field '{rel_field_name}' not found in master table '{master_name}', skipping")
+
+            # 处理 rel2 关联表：在主表中添加 rel2: 格式化字段（虚拟行）
+            for rel2_name in rel2_tables:
+                # 获取显式指定的中间表（如果有）
+                explicit_ref = group_info.get('rel2_ref', {}).get(rel2_name)
+                rel2_field = create_rel2_field(rel2_name, table_map, master_table, explicit_ref)
+                if rel2_field:
+                    master_fields.append(rel2_field)
+
             master_table['fields'] = master_fields
 
         # 确定所有需要生成的模块（主子表的主表 + 独立模块 + 所有子表）
         modules_to_generate = set()
+        rel2_middle_tables = set()  # rel2 中间表，需要创建模块但不生成菜单
 
         # 添加主子表的主表
-        for master_name, _ in master_detail_groups:
-            modules_to_generate.add(master_name)
+        for group_info in master_detail_groups:
+            modules_to_generate.add(group_info['master'])
 
         # 添加独立模块
         for name in standalone_modules:
@@ -1493,15 +2008,42 @@ def main():
                 modules_to_generate.add(name)
 
         # 添加所有子表（它们也是独立模块）
-        for _, detail_names in master_detail_groups:
-            for detail_name in detail_names:
+        for group_info in master_detail_groups:
+            for detail_name in group_info['sub']:
                 modules_to_generate.add(detail_name)
+
+        # 添加 rel 关联表（作为独立模块）
+        for group_info in master_detail_groups:
+            for rel_name in group_info['rel']:
+                if rel_name in table_map:
+                    modules_to_generate.add(rel_name)
+
+        # 添加 rel2 关联表（作为独立模块）
+        # 中间表单独处理：创建模块但不生成菜单
+        for group_info in master_detail_groups:
+            rel2_ref_tables = group_info.get('rel2_ref', {})  # {关联表名: 中间表名, ...}
+            for rel2_name in group_info['rel2']:
+                if rel2_name in table_map:
+                    modules_to_generate.add(rel2_name)
+                # 添加中间表（如果存在且指定了）
+                if rel2_name in rel2_ref_tables:
+                    ref_table = rel2_ref_tables[rel2_name]
+                    if ref_table in table_map:
+                        rel2_middle_tables.add(ref_table)
 
         # 处理所有需要生成的模块
         for table_info in tables:
             if table_info['table_name_cn'] in modules_to_generate:
+                # 判断是否为子表，若是则传递主表字段用于外键检测
+                master_table_fields = None
+                for group_info in master_detail_groups:
+                    if table_info['table_name_cn'] in group_info['sub']:
+                        if group_info['master'] in table_map:
+                            master_table_fields = table_map[group_info['master']].get('fields', [])
+                        break
+
                 module_info = design_module_config(table_info)
-                field_configs = design_field_configs(table_info, module_info)
+                field_configs = design_field_configs(table_info, module_info, master_table_fields)
                 menu_configs = design_menu_config(module_info, table_info)
                 modules.append({
                     'table_info': table_info,
@@ -1510,6 +2052,20 @@ def main():
                     'menu_configs': menu_configs
                 })
                 modules_to_generate.remove(table_info['table_name_cn'])
+
+        # 处理 rel2 中间表：创建模块但不生成菜单
+        for table_name in rel2_middle_tables:
+            if table_name in table_map:
+                table_info = table_map[table_name]
+                module_info = design_module_config(table_info)
+                field_configs = design_field_configs(table_info, module_info)
+                # 中间表不生成菜单
+                modules.append({
+                    'table_info': table_info,
+                    'module_info': module_info,
+                    'field_configs': field_configs,
+                    'menu_configs': []  # 空菜单，不生成菜单项
+                })
 
         # 如果还有未处理的模块（独立模块）
         for name in modules_to_generate:
@@ -1524,6 +2080,15 @@ def main():
                     'field_configs': field_configs,
                     'menu_configs': menu_configs
                 })
+
+        # 校验列表项格式化配置（rel/rel2/leaf/tree）
+        errors = validate_list_format_configs(modules, table_en_map, master_detail_groups)
+        if errors:
+            print("\n[校验失败] 发现以下问题：")
+            for err in errors:
+                print(f"  - {err}")
+            print("\n请修正后重新生成。")
+            sys.exit(1)
 
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         output_filename = f"多模块合并_{timestamp}.xlsx"

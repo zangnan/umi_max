@@ -324,18 +324,6 @@ assemble_config_util.module = {
         } else if (formatArr.indexOf('code_') > -1) {
           cols.codeTable = formatArr;
           // 自定义格式化,例:bgdNo
-        } else if (formatArr.indexOf('yy') > -1
-          || formatArr.indexOf('MM') > -1
-          || formatArr.indexOf('dd') > -1
-          || formatArr.indexOf('hh') > -1
-          || formatArr.indexOf('mm') > -1
-          || formatArr.indexOf('ss') > -1) {
-          formatArr = formatArr.replace('dd', 'DD');
-          cols.render = {
-            type: 'date',
-            format: formatArr,
-          };
-          // 码表格式的格式化,例:code_码表索引规则， 码表索引规则：码表索引 + 序号（01、02、03......）
         } else if (formatArr.toLowerCase() === 'media:imagepath') {
           mediaConfig.grid_list_card_field.imagepath = cols.dataIndex;
           // 媒体类型，自动增加media格式化
@@ -413,6 +401,18 @@ assemble_config_util.module = {
             type: 'switch',
             value: formatArr.replace('switch:', '')
           };
+        } else if (formatArr.indexOf('yy') > -1
+          || formatArr.indexOf('MM') > -1
+          || formatArr.indexOf('dd') > -1
+          || formatArr.indexOf('hh') > -1
+          || formatArr.indexOf('mm') > -1
+          || formatArr.indexOf('ss') > -1) {
+          formatArr = formatArr.replace('dd', 'DD');
+          cols.render = {
+            type: 'date',
+            format: formatArr,
+          };
+          // 码表格式的格式化,例:code_码表索引规则， 码表索引规则：码表索引 + 序号（01、02、03......）
         }
         // else if (formatArr === 'media') {
         //   cols.render = {
