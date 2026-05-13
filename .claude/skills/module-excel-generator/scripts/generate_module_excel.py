@@ -1227,11 +1227,14 @@ def generate_module_excel(
 
     # 字段行
     for field in table_info.get('fields', []):
+        # 键列：只有值为 p_key 时才录入，其他不录入
+        key_value = field.get('key', '')
+        key_value = key_value if key_value == 'p_key' else ''
         row = [
             field.get('name', ''),
             field.get('name_cn', ''),
             field.get('data_type', field.get('type', '')),
-            field.get('key', ''),
+            key_value,
             '',  # 默认值列暂不录入，保持为空
             field.get('required', ''),
             field.get('remark', '')
@@ -1676,11 +1679,14 @@ def generate_multi_module_excel(modules: list, output_path: str) -> bool:
             # 分隔行的 data_dict 为空，跳过（不写入表 Sheet）
             if 'data_dict' in field and field.get('data_dict') == '':
                 continue
+            # 键列：只有值为 p_key 时才录入，其他不录入
+            key_value = field.get('key', '')
+            key_value = key_value if key_value == 'p_key' else ''
             row = [
                 field.get('name', ''),
                 field.get('name_cn', ''),
                 field.get('data_type', field.get('type', '')),
-                field.get('key', ''),
+                key_value,
                 '',
                 field.get('required', ''),
                 field.get('remark', '')
