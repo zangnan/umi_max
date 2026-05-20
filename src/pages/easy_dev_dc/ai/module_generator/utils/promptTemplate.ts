@@ -89,21 +89,34 @@ moduleDesc: ""
 
 ## 模块识别规则
 1. 表名以 _ref、_relation、_mapping 结尾，或只包含3个字段（uuid + 两个外键）的表，通常是 rel2 中间表
-2. 子表需要包含指向主表的外键字段（如 person_uuid）
-3. rel 关联的字段在主表中（如 tag_uuid）
+2. **子表必须包含指向主表的外键字段，且外键字段名必须与主表主键名完全一致**
+3. rel 关联的字段在主表中，字段名必须与关联表主键名完全一致，类型为 varchar(1000)（如 rel:eg_m_tag，则主表字段名为 tag_uuid）
 
 ## 表结构设计要点
-1. 每个表必须有主键字段：name=uuid, key=p_key, type=varchar(32)
-2. 子表需要包含指向主表的外键：字段名 = 主表主键名（如 person_uuid）
-3. rel 关联：关联表主键是什么，主表中就存储什么名字的字段
+1. **每个表的主键字段名格式为：表名+uuid**（如 person 表的主键是 person_uuid，person_education 表的主键是 person_education_uuid）
+2. **子表必须包含指向主表的外键字段**：
+   - 外键字段名 = 主表主键名（必须完全一致，如主表主键是 person_uuid，子表外键也是 person_uuid）
+   - 外键字段的 nameCn 设为 "主表中文名ID"（如"人员管理ID"）
+   - 外键字段类型为 varchar(32)，required 为 "Y"
+3. **rel 关联字段规则（重要！必须严格遵守）**：
+   - rel 关联字段名 = 关联表主键名（如 rel:eg_m_tag，则主表字段名必须是 tag_uuid，不是 person_tag_uuid！）
+   - 字段名必须与关联表主键名完全一致，不带任何前缀
+   - rel 关联字段类型为 varchar(1000)，用于存储多个逗号分割的关联表主键
+
+### rel 关联字段示例
+当 moduleDesc 包含 rel:eg_m_tag 时：
+- 关联表 person_tag 的主键是 tag_uuid
+- 主表 person 的 rel 关联字段名必须是 tag_uuid（不是 person_tag_uuid！）
+- 错误示例：person_tag_uuid（带表名前缀，这是错误的！）
+- 正确示例：tag_uuid（与关联表主键名完全一致）
 4. rel2 关联：需要中间表，中间表包含两个外键分别指向主表和关联表
 
 ## 关键规则
 1. 表名格式：中文名 英文名（如"企业员工 hr_employee"）
 2. 模块key格式：eg_m_xxx（全部小写，下划线分隔）
 3. 字段名格式：^[a-z][a-z0-9_]*$（小写英文开头，允许字母、数字、下划线）
-4. 主键字段名：uuid（不带表名前缀）
-5. 外键字段：以 _uuid 结尾
+4. 主键字段名：表名+uuid（如 person_uuid）；子表外键字段名必须与主表主键名完全一致
+5. rel 关联字段：字段名 = 关联表主键名（如 rel:eg_m_tag，则主表字段名为 tag_uuid），类型为 varchar(1000)，用于存储多个逗号分割的关联表主键
 6. 数据类型：varchar(n), char(n), decimal(m,n), int(n), datetime, long
 
 请根据用户需求生成完整的模块配置JSON。

@@ -120,12 +120,12 @@ const ModuleGenerator: React.FC = () => {
         return;
       }
 
-      if (!row[CKEY.DICT_FIELD_NAME]) return;
-
+      // 跳过既无 fieldName 又无 grid_render 的行（非 leaf/rel/rel2 的空行）
       const fieldName = row[CKEY.DICT_FIELD_NAME] || '';
-      if (!fieldName) return;
+      const gridRender = row[CKEY.GRID_RENDER] || '';
+      if (!fieldName && !gridRender) return;
 
-      // 构建 app_module_field 完整数据
+      // 构建 app_module_field 完整数据（leaf/rel/rel2 行也需要保存）
       const fieldRow: any = {};
       // 遍历 SHEET_CONFIG_FIELD_NODE 获取所有字段
       DDIT_TOOL_CONSTANTS.SHEET_CONFIG_FIELD_NODE.forEach((item: any) => {

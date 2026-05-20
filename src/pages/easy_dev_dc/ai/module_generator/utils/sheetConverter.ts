@@ -243,56 +243,91 @@ const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
 
 /**
  * 创建 leaf 分隔行（主子表分隔行）
+ * 只设置5列：字段中文名、列表项开启、列表项列宽、列表项固定列、列表项格式化
  */
-const createLeafField = (childModuleKey: string, displayField: string, label: string): FieldSheetRow => {
-  // 使用默认配置
+const createLeafField = (childModuleKey: string, mainPkFieldName: string, label: string): FieldSheetRow => {
   const row = getDefaultFieldConfig();
-  row[CKEY.DICT_NAME] = '';
-  row[CKEY.DICT_FIELD_NAME] = '';
+  // 清空所有非关键字段，只保留需要的5列
+  DDIT_TOOL_CONSTANTS.SHEET_CONFIG_FIELD_NODE.forEach((item: any) => {
+    if (item.dataIndex !== CKEY.DICT_FIELD_DESC &&
+        item.dataIndex !== CKEY.GRID_USED &&
+        item.dataIndex !== CKEY.GRID_WIDTH &&
+        item.dataIndex !== CKEY.GRID_FIXED &&
+        item.dataIndex !== CKEY.GRID_RENDER) {
+      row[item.dataIndex] = '';
+    }
+  });
+  // 只设置这5列
   row[CKEY.DICT_FIELD_DESC] = label;
   row[CKEY.GRID_USED] = '1';
   row[CKEY.GRID_WIDTH] = '90';
   row[CKEY.GRID_FIXED] = 'R';
-  row[CKEY.GRID_RENDER] = `leaf:${childModuleKey}&${displayField}`;
+  row[CKEY.GRID_RENDER] = `leaf:${childModuleKey}&${mainPkFieldName}`;
   return row;
 };
 
 /**
  * 创建 rel 一对多关联字段配置
+ * 只设置7列：数据字典、字段名称、字段中文名、列表项开启、列表项列宽、列表项固定列、列表项格式化
  */
-const createRelField = (relModuleKey: string, displayField: string, relFieldName: string): FieldSheetRow => {
-  // 使用默认配置
+const createRelField = (
+  relModuleKey: string,
+  displayField: string,
+  relFieldName: string,
+  mainTableName: string,
+  mainTableFieldDesc: string
+): FieldSheetRow => {
   const row = getDefaultFieldConfig();
-  row[CKEY.DICT_NAME] = '';
+  // 清空所有非关键字段，只保留需要的7列
+  DDIT_TOOL_CONSTANTS.SHEET_CONFIG_FIELD_NODE.forEach((item: any) => {
+    if (item.dataIndex !== CKEY.DICT_NAME &&
+        item.dataIndex !== CKEY.DICT_FIELD_NAME &&
+        item.dataIndex !== CKEY.DICT_FIELD_DESC &&
+        item.dataIndex !== CKEY.GRID_USED &&
+        item.dataIndex !== CKEY.GRID_WIDTH &&
+        item.dataIndex !== CKEY.GRID_FIXED &&
+        item.dataIndex !== CKEY.GRID_RENDER) {
+      row[item.dataIndex] = '';
+    }
+  });
+  // 只设置这7列
+  row[CKEY.DICT_NAME] = mainTableName;
   row[CKEY.DICT_FIELD_NAME] = relFieldName;
-  row[CKEY.DICT_FIELD_DESC] = '';
-  row[CKEY.GRID_RENDER] = `rel:${relModuleKey}&${displayField}`;
+  row[CKEY.DICT_FIELD_DESC] = mainTableFieldDesc;
+  row[CKEY.GRID_USED] = '1';
+  row[CKEY.GRID_WIDTH] = '120';
   row[CKEY.GRID_FIXED] = 'R';
-  row[CKEY.GRID_HIDDEN] = '1';
-  row[CKEY.FORM_ITEM_USED] = '';
-  row[CKEY.FORM_ITEM_TYPE] = 'Hidden';
+  row[CKEY.GRID_RENDER] = `rel:${relModuleKey}&${displayField}`;
   return row;
 };
 
 /**
  * 创建 rel2 多对多关联虚拟字段
+ * 只设置5列：字段中文名、列表项开启、列表项列宽、列表项固定列、列表项格式化
  */
-const createRel2Field = (rel2ModuleKey: string, displayField: string, refModuleKey: string): FieldSheetRow => {
-  // 使用默认配置
+const createRel2Field = (
+  rel2ModuleKey: string,
+  displayField: string,
+  refModuleKey: string,
+  relTableNameCn: string
+): FieldSheetRow => {
   const row = getDefaultFieldConfig();
-  row[CKEY.DICT_NAME] = '';
-  row[CKEY.DICT_FIELD_NAME] = '';
-  row[CKEY.DICT_FIELD_DESC] = '';
-  // 英文 dataIndex
-  row[CKEY.DICT_NAME] = '';
-  row[CKEY.DICT_FIELD_NAME] = '';
-  row[CKEY.DICT_FIELD_DESC] = '';
+  // 清空所有非关键字段，只保留需要的5列
+  DDIT_TOOL_CONSTANTS.SHEET_CONFIG_FIELD_NODE.forEach((item: any) => {
+    if (item.dataIndex !== CKEY.DICT_FIELD_DESC &&
+        item.dataIndex !== CKEY.GRID_USED &&
+        item.dataIndex !== CKEY.GRID_WIDTH &&
+        item.dataIndex !== CKEY.GRID_FIXED &&
+        item.dataIndex !== CKEY.GRID_RENDER) {
+      row[item.dataIndex] = '';
+    }
+  });
+  // 只设置这5列
+  row[CKEY.DICT_FIELD_DESC] = relTableNameCn;
   row[CKEY.GRID_USED] = '1';
   row[CKEY.GRID_WIDTH] = '120';
   row[CKEY.GRID_FIXED] = 'R';
   row[CKEY.GRID_RENDER] = `rel2:${rel2ModuleKey}&${displayField}&${refModuleKey}`;
-  row[CKEY.FORM_ITEM_USED] = '';
-  row[CKEY.FORM_ITEM_TYPE] = '';
   return row;
 };
 
@@ -495,28 +530,19 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
 
     // 如果是主表，添加关联字段
     if (relations.length > 0) {
+      // 获取主表主键名
+      const mainTableFields = tableInfo.fields || [];
+      const mainPkField = mainTableFields.find(f => f.key === 'p_key');
+      const mainPkFieldName = mainPkField?.name || 'uuid';
+
       for (const relation of relations) {
         const relTableInfo = tableMap.get(relation.moduleKey.replace(/^eg_m_/, ''));
 
         if (relation.type === 'sub') {
           // 子表：添加 leaf 分隔行
           if (relTableInfo) {
-            const displayField = findDisplayField(relTableInfo.fields);
             const label = inferLeafLabel(relTableInfo.tableNameCn);
-            fieldSheet.push(createLeafField(relation.moduleKey, displayField, label));
-
-            // 为子表添加外键字段（如果不存在）
-            const mainTableFields = tableInfo.fields || [];
-            const mainPkField = mainTableFields.find(f => f.key === 'p_key');
-            if (mainPkField) {
-              const fkFieldName = mainPkField.name;
-              const subTableFields = relTableInfo.fields || [];
-              const hasFk = subTableFields.some(f => f.name === fkFieldName);
-              if (!hasFk) {
-                // 子表需要添加指向主表的外键
-                // 这个外键会被添加到子表的字段列表中
-              }
-            }
+            fieldSheet.push(createLeafField(relation.moduleKey, mainPkFieldName, label));
           }
         } else if (relation.type === 'rel') {
           // 一对多关联：主表中需要有关联字段
@@ -525,7 +551,30 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
             const relFieldName = relPkField?.name || '';
             const displayField = findDisplayField(relTableInfo.fields);
             if (relFieldName) {
-              fieldSheet.push(createRelField(relation.moduleKey, displayField, relFieldName));
+              // 删除主表已有的外键字段记录（可能是 AI 生成的 person_tag_uuid 或符合规则的 tag_uuid）
+              // 通过检查字段名是否以 relFieldName 结尾来匹配（如 person_tag_uuid 匹配 tag_uuid）
+              const existingIndex = fieldSheet.findIndex(
+                (row: any) => row[CKEY.DICT_NAME] === tableNameEn &&
+                       (row[CKEY.DICT_FIELD_NAME] === relFieldName ||
+                        row[CKEY.DICT_FIELD_NAME]?.endsWith(`_${relFieldName}`) ||
+                        row[CKEY.DICT_FIELD_NAME]?.endsWith(relFieldName))
+              );
+              if (existingIndex >= 0) {
+                fieldSheet.splice(existingIndex, 1);
+              }
+              // 创建新的 rel 关联字段记录（使用关联表的显示字段中文名）
+              const relDisplayField = relTableInfo.fields?.find(f => {
+                const fname = f.name?.toLowerCase() || '';
+                return fname !== 'uuid' && fname !== 'id' && fname.includes('name');
+              });
+              const mainTableFieldDesc = relDisplayField?.nameCn || relDisplayField?.name || '';
+              fieldSheet.push(createRelField(
+                relation.moduleKey,
+                displayField,
+                relFieldName,
+                tableNameEn,
+                mainTableFieldDesc,
+              ));
             }
           }
         } else if (relation.type === 'rel2') {
@@ -533,7 +582,12 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
           if (relTableInfo) {
             const displayField = findDisplayField(relTableInfo.fields);
             const refModuleKey = relation.refModuleKey || '';
-            fieldSheet.push(createRel2Field(relation.moduleKey, displayField, refModuleKey));
+            fieldSheet.push(createRel2Field(
+              relation.moduleKey,
+              displayField,
+              refModuleKey,
+              relTableInfo.tableNameCn,
+            ));
           }
         }
       }
