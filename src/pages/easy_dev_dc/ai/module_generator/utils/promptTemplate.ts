@@ -87,6 +87,12 @@ moduleName: "人员与人员权限关系表"
 moduleDesc: ""
 中间表不需要 moduleDesc，但需要在主表的 rel2 中指定
 
+示例4：树形模块（部门管理）
+moduleKey: "eg_m_department"
+moduleName: "部门管理"
+moduleDesc: ""
+树形模块不需要 moduleDesc
+
 ## 模块识别规则
 1. 表名以 _ref、_relation、_mapping 结尾，或只包含3个字段（uuid + 两个外键）的表，通常是 rel2 中间表
 2. **子表必须包含指向主表的外键字段，且外键字段名必须与主表主键名完全一致**
@@ -110,6 +116,39 @@ moduleDesc: ""
 - 错误示例：person_tag_uuid（带表名前缀，这是错误的！）
 - 正确示例：tag_uuid（与关联表主键名完全一致）
 4. rel2 关联：需要中间表，中间表包含两个外键分别指向主表和关联表
+
+## 树形模块识别与设计（重要！）
+如果用户需求描述涉及以下场景，需要设计树形模块：
+- 组织架构、部门管理、公司组织等层级结构
+- 分类目录、商品分类、菜单分类等树形分类
+- 区域划分、省市区等层级数据
+
+### 树形模块必需字段
+树形模块必须在表中包含以下三个字段：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| tree_id | varchar(32) | 树节点ID，作为主键 |
+| tree_name | varchar(100) | 树节点名称 |
+| tree_parent_id 或 parent_id | varchar(32) | 父节点ID，顶级为根节点 |
+
+### 树形模块示例
+用户需求："创建一个部门管理模块"
+例如：
+- tableNameCn: "部门管理"
+- tableNameEn: "sys_department"
+- fields:
+  - tree_id (varchar(32), p_key) - 部门ID
+  - tree_name (varchar(100)) - 部门名称
+  - parent_id (varchar(32)) - 上级部门ID
+  - department_code (varchar(32)) - 部门编码
+  - department_leader (varchar(64)) - 部门负责人
+
+### 树形模块特点
+树形模块会自动使用树形页面组件
+表单布局为 vertical（垂直布局）
+工具栏按钮简化（只保留增删改）
+列表项会自动设置 tree:key、tree:title、tree:parent_key 格式化
 
 ## 关键规则
 1. 表名格式：中文名 英文名（如"企业员工 hr_employee"）

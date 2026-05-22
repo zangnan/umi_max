@@ -47,6 +47,11 @@ const HOT_TOPICS = {
       description: '创建人员管理模块（主表），包含子表：人员学历管理、人员工作经历管理；关联表（rel）：人员性格标签管理；关联表（rel2）：人员权限管理（通过人员与人员权限关系表关联）',
       icon: <span style={{ color: '#722ed1', fontWeight: 700 }}>4</span>,
     },
+    {
+      key: '1-5',
+      description: '创建一个部门管理模块，包含部门名称、部门编码、上级部门等字段（树形结构）',
+      icon: <span style={{ color: '#eb2f96', fontWeight: 700 }}>5</span>,
+    },
   ],
 };
 

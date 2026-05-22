@@ -85,15 +85,19 @@ const parseModuleDesc = (moduleDesc: string): ModuleRelation[] => {
 };
 
 /**
- * 根据字段类型判断类别
+ * 根据字段类型判断类别（与 Python design_field_configs 逻辑同步）
  */
 const getFieldTypeCategory = (dataType: string): 'number' | 'date' | 'string' => {
   const dt = dataType.toLowerCase();
-  if (dt.includes('decimal') || dt.includes('int') || dt.includes('long')) {
-    return 'number';
-  }
-  if (dt.includes('date')) {
+  // 日期时间类型
+  if (dt.includes('date') || dt.includes('time') || dt.includes('year') || dt === 'timestamp' || dt === 'datetime') {
     return 'date';
+  }
+  // 数值类型
+  if (dt.includes('decimal') || dt.includes('numeric') || dt.includes('int') || dt.includes('bigint') ||
+      dt.includes('smallint') || dt.includes('tinyint') || dt.includes('float') || dt.includes('double') ||
+      dt.includes('real') || dt.includes('bit') || dt.includes('long')) {
+    return 'number';
   }
   return 'string';
 };
@@ -162,16 +166,37 @@ const getStringLength = (dataType: string): string => {
 
 /**
  * 推断单个字段的完整配置（只用英文 dataIndex）
+ * 与 Python design_field_configs 逻辑同步
  */
-const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
+const inferFieldConfig = (field: any, tableNameEn: string = '', isTreeMod: boolean = false): Partial<FieldSheetRow> => {
   const config: any = {};
 
   const fieldName = field.name || '';
+  const fieldNameLower = fieldName.toLowerCase();
   const fieldType = (field.type || '').toLowerCase();
   const typeCategory = getFieldTypeCategory(fieldType);
+  const isKey = field.key === 'p_key';
+
+  // 判断是否为外键字段（_uuid 结尾但非主键）
+  const isForeignKey = !isKey && fieldNameLower.endsWith('_uuid');
+
+  // 判断是否为树形模块特殊字段
+  const isTreeIdField = fieldNameLower.includes('tree_id') && !fieldNameLower.includes('tree_parent_id');
+  const isTreeNameField = fieldNameLower.includes('tree_name') && !fieldNameLower.includes('tree_parent_id');
+  const isTreeParentField = fieldNameLower.includes('tree_parent_id') ||
+    (fieldNameLower.includes('parent_id') && isTreeMod && !isKey);
+
+  // 树形字段的 grid_render 格式化（需要先设置，在主键/外键判断之前）
+  if (isTreeIdField) {
+    config[CKEY.GRID_RENDER] = 'tree:key';
+  } else if (isTreeNameField) {
+    config[CKEY.GRID_RENDER] = 'tree:title';
+  } else if (isTreeParentField) {
+    config[CKEY.GRID_RENDER] = 'tree:parent_key';
+  }
 
   // 主键字段
-  if (field.key === 'p_key') {
+  if (isKey) {
     config[CKEY.GRID_USED] = '1';      // 列表项开启
     config[CKEY.GRID_KEY] = '1';       // 列表项主键标识
     config[CKEY.GRID_HIDDEN] = '1';    // 列表项隐藏标识
@@ -181,10 +206,16 @@ const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
     config[CKEY.GRID_WIDTH] = fieldName === 'uuid' ? '0' : '100';
   }
   // 外键字段（_uuid 结尾但非主键）
-  else if (fieldName.endsWith('_uuid')) {
+  else if (isForeignKey) {
     config[CKEY.GRID_HIDDEN] = '1';
     config[CKEY.GRID_FIXED] = '';
     config[CKEY.FORM_ITEM_USED] = '';
+    config[CKEY.FORM_ITEM_TYPE] = 'Hidden';
+  }
+  // tree_parent_id 字段 - 表单隐藏
+  else if (isTreeParentField) {
+    config[CKEY.GRID_USED] = '1';
+    config[CKEY.FORM_ITEM_USED] = '1';
     config[CKEY.FORM_ITEM_TYPE] = 'Hidden';
   }
   else {
@@ -194,6 +225,10 @@ const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
       config[CKEY.GRID_RENDER] = 'YYYY-MM-DD';
       config[CKEY.FORM_ITEM_TYPE] = 'DatePicker';
       config[CKEY.FORM_ITEM_FORMAT] = 'YYYY-MM-DD';
+      // 筛选项配置（与 Python design_field_configs 同步）
+      config[CKEY.FILTER_ITEM_TYPE] = 'DatePicker';
+      config[CKEY.FILTER_ITEM_EXTEND] = 'range';
+      config[CKEY.FILTER_ITEM_LAYOUT] = '66';
     }
     // 数值类型
     else if (typeCategory === 'number') {
@@ -203,6 +238,10 @@ const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
       config[CKEY.GRID_ALIGN] = 'R';
       config[CKEY.FORM_ITEM_TYPE] = 'InputNumber';
       config[CKEY.FORM_ITEM_FORMAT] = numberFormat;
+      // 筛选项配置（与 Python design_field_configs 同步）
+      config[CKEY.FILTER_ITEM_TYPE] = 'InputNumber';
+      config[CKEY.FILTER_ITEM_EXTEND] = 'range';
+      config[CKEY.FILTER_ITEM_LAYOUT] = '66';
     }
     // 字符类型
     else if (fieldType.startsWith('varchar') || fieldType.startsWith('char')) {
@@ -211,31 +250,41 @@ const inferFieldConfig = (field: any): Partial<FieldSheetRow> => {
         config[CKEY.GRID_WIDTH] = '180';
         config[CKEY.GRID_ELLIPSIS] = '1';
       } else {
-        config[CKEY.GRID_WIDTH] = '120';
+        config[CKEY.GRID_WIDTH] = '100';
       }
+      // 默认值
+      config[CKEY.GRID_USED] = '1';
+      config[CKEY.FORM_ITEM_USED] = '1';
+      config[CKEY.FORM_ITEM_TYPE] = 'Input';
+      // 字符类型默认筛选类型为 Input
+      config[CKEY.FILTER_ITEM_TYPE] = 'Input';
+    }
+    // 其他类型默认 Input
+    else {
+      config[CKEY.GRID_WIDTH] = '100';
+      config[CKEY.GRID_USED] = '1';
+      config[CKEY.FORM_ITEM_USED] = '1';
+      config[CKEY.FORM_ITEM_TYPE] = 'Input';
     }
 
     // 调用 DDBunit2ADBUtil.getFieldDefaultRules 生成完整校验规则
-    const fieldObj = {
-      dictFieldNotNull: field.required,
-      dictFieldName: field.name,
-      dictFieldType: field.type,
-    };
-    const defaultRules = DDBunit2ADBUtil.getFieldDefaultRules({ fieldObj });
-    const formItemRule = defaultRules?.excelStr || '';
-    if (formItemRule) {
-      config[CKEY.FORM_ITEM_RULE] = formItemRule;
+    if (typeCategory !== 'date' && typeCategory !== 'number') {
+      const fieldObj = {
+        dictFieldNotNull: field.required,
+        dictFieldName: field.name,
+        dictFieldType: field.type,
+      };
+      const defaultRules = DDBunit2ADBUtil.getFieldDefaultRules({ fieldObj });
+      const formItemRule = defaultRules?.excelStr || '';
+      if (formItemRule) {
+        config[CKEY.FORM_ITEM_RULE] = formItemRule;
+      }
     }
 
     // 默认列宽
     if (!config[CKEY.GRID_WIDTH]) {
       config[CKEY.GRID_WIDTH] = '100';
     }
-
-    // 默认值
-    config[CKEY.GRID_USED] = '1';
-    config[CKEY.FORM_ITEM_USED] = '1';
-    config[CKEY.FORM_ITEM_TYPE] = 'Input';
   }
 
   return config;
@@ -361,15 +410,26 @@ const createModuleHeaderRow = (moduleName: string, moduleKey: string): FieldShee
 
 /**
  * 生成模块配置（31列默认值）
+ * 与 Python design_module_config 逻辑同步
  */
 const createModuleConfig = (moduleInfo: ModuleInfo, isTree: boolean = false): ModuleSheetRow => {
   const defaultConfig = getDefaultModuleConfig();
 
   // 根据模块类型设置特定默认值
   if (isTree) {
+    // 树形模块配置：工具栏按钮简化，只保留增删改
     defaultConfig[CKEY.FORM_LAYOUT_TYPE] = 'vertical';
     defaultConfig[CKEY.GRID_SELECTION_TYPE] = '';
+    defaultConfig[CKEY.GRID_COL_EDIT] = '';
+    defaultConfig[CKEY.GRID_COL_DEL] = '';
+    defaultConfig[CKEY.GRID_COL_DETAIL] = '';
+    defaultConfig[CKEY.TOOLBAR_DEFAULT_DOWNLOAD] = '';
+    defaultConfig[CKEY.TOOLBAR_DEFAULT_SETTING] = '';
+    defaultConfig[CKEY.TOOLBAR_DEFAULT_FULL] = '';
+    defaultConfig[CKEY.TOOLBAR_DEFAULT_RELOAD] = '';
+    defaultConfig[CKEY.TOOLBAR_DEFAULT_ADVANCED_FILTER] = '';
   } else {
+    // 普通模块配置
     defaultConfig[CKEY.GRID_SELECTION_TYPE] = 'checkbox';
     defaultConfig[CKEY.FORM_LAYOUT_TYPE] = 'horizontal';
     defaultConfig[CKEY.FORM_WIDTH] = '960';
@@ -395,13 +455,18 @@ const createModuleConfig = (moduleInfo: ModuleInfo, isTree: boolean = false): Mo
 /**
  * 生成菜单配置
  */
-const createMenuConfig = (moduleInfo: ModuleInfo, isTree: boolean = false): MenuSheetRow => {
+const createMenuConfig = (
+  moduleInfo: ModuleInfo,
+  isTree: boolean = false,
+  parentMenuId: string = '',
+  menuIdSuffix: string = ''
+): MenuSheetRow => {
   const defaultConfig = getDefaultMenuConfig();
 
   const result = {
     ...defaultConfig,
-    'menu_id': moduleInfo.moduleKey,
-    'menu_parent_id': '',
+    'menu_id': menuIdSuffix ? `${menuIdSuffix}` : moduleInfo.moduleKey,
+    'menu_parent_id': parentMenuId,
     'web_resource_code': '',
     'menu_name': moduleInfo.moduleName,
     'menu_path': `/aigenerator/cfgp/${moduleInfo.moduleKey}`,
@@ -414,6 +479,33 @@ const createMenuConfig = (moduleInfo: ModuleInfo, isTree: boolean = false): Menu
     'menu_full_screen': '0',
     'menu_type': '1',
     'menu_index': '',
+    'menu_role': '管理员',
+  } as MenuSheetRow;
+  return result;
+};
+
+/**
+ * 生成父级菜单（AI模块）
+ */
+const createParentMenuConfig = (parentMenuId: string): MenuSheetRow => {
+  const defaultConfig = getDefaultMenuConfig();
+
+  const result = {
+    ...defaultConfig,
+    'menu_id': parentMenuId,
+    'menu_parent_id': '',
+    'menu_name': 'AI模块',
+    'menu_path': '/aigenerator/cfgp',
+    'menu_light_path': '',
+    'menu_icon': 'CoffeeOutlined',
+    'menu_hide': '0',
+    'menu_redirect': '',
+    'menu_component': '',
+    'menu_active': '1',
+    'menu_full_screen': '0',
+    'menu_type': '1',
+    'menu_index': '',
+    'web_resource_code': '',
     'menu_role': '管理员',
   } as MenuSheetRow;
   return result;
@@ -476,8 +568,17 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
     moduleKeyToTableNameEn.set(m.moduleKey, foundTableNameEn || baseName);
   });
 
+  // 生成随机6位父菜单ID
+  const parentMenuId = Math.random().toString().slice(2, 8).padEnd(6, '0');
+  let menuIndex = 0;
+
+  // ===== 菜单：先插入父级菜单（AI模块） =====
+  menuSheet.push(createParentMenuConfig(parentMenuId));
+
   // 遍历每个模块生成数据
   jsonData.modules?.forEach((moduleInfo) => {
+    menuIndex++;
+    const menuIdSuffix = `${parentMenuId}${menuIndex.toString().padStart(2, '0')}`;
     // 从预建的映射中获取 tableNameEn，优先使用映射，否则 fallback 到直接提取
     const tableNameEn = moduleKeyToTableNameEn.get(moduleInfo.moduleKey) || moduleInfo.moduleKey.replace(/^eg_m_/, '');
     const tableInfo = tableMap.get(tableNameEn);
@@ -523,7 +624,7 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
       baseConfig[CKEY.DICT_FIELD_NAME] = field.name || '';
       baseConfig[CKEY.DICT_FIELD_DESC] = field.nameCn || '';
 
-      const inferredConfig = inferFieldConfig(field);
+      const inferredConfig = inferFieldConfig(field, tableNameEn, isTree);
       const finalConfig = { ...baseConfig, ...inferredConfig } as FieldSheetRow;
       fieldSheet.push(finalConfig);
     });
@@ -594,7 +695,7 @@ export const convertToSheets = (jsonData: AIResponseData): SheetData => {
     }
 
     // ===== Sheet 4: 菜单 =====
-    menuSheet.push(createMenuConfig(moduleInfo, isTree));
+    menuSheet.push(createMenuConfig(moduleInfo, isTree, parentMenuId, menuIdSuffix));
   });
 
   return {
