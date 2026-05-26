@@ -71,8 +71,8 @@ const DDThemeSetting: React.FC<any> = ({
       antdConfig.theme.algorithm = bb?.darkAlgorithm ? [darkAlgorithm] : [defaultAlgorithm];
       // antdConfig.theme.token = myUtil.text.cleanNulObject(merge(commonTheme.token, bb.token));
       // antdConfig.theme.components = { ...commonTheme.components, ...bb.components };
-      antdConfig.theme.token = merge(bb.token, commonTheme.token);
-      antdConfig.theme.components = merge(bb.components, commonTheme.components);
+      antdConfig.theme.token = merge(commonTheme.token, bb.token);
+      antdConfig.theme.components = merge(commonTheme.components, bb.components, );
       setAntdConfig({
         ...antdConfig,
       });

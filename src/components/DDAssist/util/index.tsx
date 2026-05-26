@@ -3144,7 +3144,7 @@ myUtil.theme = {
 {className: 'ant-menu-light>.ant-menu.ant-menu-inline .ant-menu-sub.ant-menu-inline', styleType: 'body', styleName: 'background', style: `${param?.layoutToken?.sider.colorMenuBackground} !important`},
 
 {className: '.dd_toolbar_wrap .dd-toolbar', styleType: 'body', styleName: 'background', style: 'transparent'},
-
+{className: '.dd-filter-wrap .dd-form .field-group', styleType: 'body', styleName: 'height', style: param?.token?.ddFilterHeight ? `${param?.token?.ddFilterHeight}px` : '30px'},
     ];
 
     fixedStyleArr.forEach((item: any) => {
