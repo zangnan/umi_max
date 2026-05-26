@@ -1,0 +1,171 @@
+// 插画风格 skin06.less
+// 基于 theme_test.tsx (illustrationTheme.ts) 的 CSS 类实现
+// 只实现 theme_test 中定义的组件样式，不推断、不添加
+
+.skin06 {
+  // ========== createStyles 定义的样式类 ==========
+
+  // illustrationBorder - 插画边框
+  .illustration-border {
+    border: 3px solid #2C2C2C;
+  }
+
+  // illustrationBox - 插画盒效果（border + boxShadow）
+  .illustration-box {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+  }
+
+  // buttonRoot - 按钮根样式（uppercase + letterSpacing）
+  .button-root {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  // modalContainer - 模态框容器（同 illustrationBox）
+  .modal-container {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+  }
+
+  // tooltipRoot - 提示框根样式
+  .tooltip-root {
+    padding: 8px;
+  }
+
+  // popupBox - 弹出盒效果
+  .popup-box {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+  }
+
+  // progressRail - 进度条轨道
+  .progress-rail {
+    border: 3px solid #2C2C2C;
+    box-shadow: 2px 2px 0 #2C2C2C;
+  }
+
+  // progressTrack - 进度条进度
+  .progress-track {
+    border: none;
+  }
+
+  // inputNumberActions - 数字输入框操作栏
+  .input-number-actions {
+    width: 12px;
+  }
+
+  // ========== 组件样式 ==========
+
+  // alert - className: styles.illustrationBorder
+  .ant-alert {
+    border: 3px solid #2C2C2C;
+  }
+
+  // modal - classNames: { container: styles.modalContainer }
+  .ant-modal {
+    .ant-modal-content {
+      border: 3px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+    }
+  }
+
+  // colorPicker - classNames: { root: styles.illustrationBox }, arrow: false
+  .ant-color-picker {
+    .ant-color-picker-trigger {
+      border: 3px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+    }
+  }
+
+  // popover - classNames: { container: styles.illustrationBox }
+  .ant-popover {
+    .ant-popover-inner {
+      border: 3px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+    }
+  }
+
+  // tooltip - classNames: { root: styles.tooltipRoot, container: styles.illustrationBox }, arrow: false
+  .ant-tooltip {
+    .ant-tooltip-inner {
+      padding: 8px;
+      border: 3px solid #2C2C2C;
+      box-shadow: 4px 4px 0 #2C2C2C;
+    }
+  }
+
+  // dropdown - classNames: { root: styles.popupBox }
+  .ant-dropdown-menu {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+  }
+
+  // select - classNames: { root: styles.illustrationBox, popup: { root: styles.popupBox } }
+  .ant-select {
+    .ant-select-selector {
+      border: 3px solid #2C2C2C !important;
+      box-shadow: 4px 4px 0 #2C2C2C;
+    }
+  }
+
+  .ant-select-dropdown {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+    border-radius: 16px;
+    background-color: #FFFFFF;
+  }
+
+  // input - classNames: { root: styles.illustrationBox }
+  // .ant-input {
+  //   border: 3px solid #2C2C2C;
+  //   box-shadow: 4px 4px 0 #2C2C2C;
+  // }
+  .ant-input-affix-wrapper, .ant-select, .ant-picker {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+  }
+  .ant-input-compact-item {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+  }
+
+  // inputNumber - classNames: { root: styles.illustrationBox, actions: styles.inputNumberActions }
+  .ant-input-number {
+    border: 3px solid #2C2C2C;
+    box-shadow: 4px 4px 0 #2C2C2C;
+
+    .ant-input-number-actions {
+      width: 12px;
+    }
+  }
+
+  // progress - classNames: { rail: styles.progressRail, track: styles.progressTrack }, styles: { rail: { height: 16 }, track: { height: 10 } }
+  .ant-progress {
+    .ant-progress-inner {
+      height: 16px;
+    }
+
+    .ant-progress-bg {
+      height: 10px;
+    }
+  }
+  
+  // Slider 滚动条
+  .ant-layout-sider {
+    ::-webkit-srollbar-track-piece{ border-radius:0; } // 滚动的滑块 background:none;
+    ::-webkit-scrollbar { width: 10px; height: 10px; } // 外层轨道
+    ::-webkit-scrollbar-thumb { height:50px; border-radius: 0; } // 滚动的滑块:hover   box-shadow: inset 0 0 5px rgba(0,0,0,0%); background: #74778c;
+    ::-webkit-scrollbar-thumb:vertical {height:50px;background-color:#979797;}
+    ::-webkit-scrollbar-thumb:hover { background: #616161 !important; }
+    ::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:#979797;}
+    ::-webkit-scrollbar-track { border-radius: 0; box-shadow: none !important; background: #dddddd; } // 内层滚动槽  box-shadow: inset 0 0 5px rgba(0,0,0,0%);
+  }
+}

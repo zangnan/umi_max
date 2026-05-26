@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Drawer, Form, Radio, Button, Divider, Space, theme } from 'antd';
+import { Drawer, Form, Radio, Select, Button, Divider, Space, theme } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import myUtil from '../DDAssist/util';
 import CONSTANTS from '../DDAssist/constants';
@@ -146,7 +146,7 @@ const DDThemeSetting: React.FC<any> = ({
             </Radio.Group>
           </Form.Item>
           <Form.Item name="skin" label="皮肤" tooltip="部分菜单效果刷新后生效">
-            <Radio.Group onChange={() => changeTheme()} options={myUtil.theme.getAllSkin()}/>
+            <Select onChange={() => changeTheme()} options={myUtil.theme.getAllSkin()}/>
           </Form.Item>
           <Form.Item name="gridBorder" label="列表边框">
             <Radio.Group onChange={() => changeTheme()}>

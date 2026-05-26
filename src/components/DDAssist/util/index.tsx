@@ -2808,6 +2808,10 @@ myUtil.theme = {
       { value: 'skin02', label: '暗色'},
       { value: 'skin03', label: '护眼'},
       { value: 'skin04', label: 'Github'},
+      { value: 'skin05', label: '卡通风格'},
+      { value: 'skin06', label: '插画风格'},
+      { value: 'skin07', label: '玻璃风格'},
+      { value: 'skin08', label: '极客风格'},
     ];
     return skinArr;
   },

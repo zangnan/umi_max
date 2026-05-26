@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProCard } from '@ant-design/pro-components';
-import { Button, Tag, Form, message, Spin, Divider, List, Avatar, Flex, Progress } from 'antd';
+import { Button, Tag, Form, message, Spin, Divider, List, Avatar, Flex, Progress, Card } from 'antd';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import { Typography } from 'antd';
 import { FooterToolbar } from '@ant-design/pro-components';
@@ -414,7 +414,7 @@ const TableList: React.FC<unknown> = () => {
       }
       if (excelMsg[i]?.msg?.length > 0) {
         tmpNode.push(<div style={{margin: '12px 0 0 0'}}>
-          <ProCard title={excelMsg[i]?.name || ''}>
+          <Card title={excelMsg[i]?.name || ''}>
             <List
               itemLayout="horizontal"
               dataSource={excelMsg[i].msg}
@@ -440,7 +440,7 @@ const TableList: React.FC<unknown> = () => {
                 </List.Item>
               )}
             />
-          </ProCard>
+          </Card>
         </div>)
       }
       for (let m = 0; m < excelMsg[i]?.msg?.length; m++) {
@@ -475,7 +475,7 @@ const TableList: React.FC<unknown> = () => {
       if (excelMsg[i]?.msg?.length > 0) {
         isShow = true;
         tmpNode.push(<div style={{margin: '12px 0 0 0'}}>
-          <ProCard title={excelMsg[i]?.name || ''}>
+          <Card title={excelMsg[i]?.name || ''}>
             <List
               itemLayout="horizontal"
               dataSource={excelMsg[i].msg || []}
@@ -501,7 +501,7 @@ const TableList: React.FC<unknown> = () => {
                 </List.Item>
               )}
             />
-          </ProCard>
+          </Card>
         </div>)
       }
     }
@@ -514,7 +514,7 @@ const TableList: React.FC<unknown> = () => {
   return (<>
     <Spin spinning={loading} delay={500}>
       <Typography.Title level={4}>系统构建</Typography.Title>
-      <ProCard>
+      <Card>
         <DDBaseForm config={formConfig} form={form} initialValues={{}} func={Func}/>
         <Divider titlePlacement="left" style={{marginTop: '48px'}}> <Typography.Title level={5}>插槽模块下载</Typography.Title></Divider>
         <div style={{lineHeight: '28px'}}>
@@ -524,7 +524,7 @@ const TableList: React.FC<unknown> = () => {
         <div style={{lineHeight: '28px'}}>
           <div><a href={downloadUrl3}><FileExcelOutlined /> 数据字典_字典导入模板</a></div>
         </div>
-      </ProCard>
+      </Card>
       {singleExcelMsgNodeFront(checkExcelMsg)}
       {singleExcelMsgNode(buildMsg)}
       <FooterToolbar >

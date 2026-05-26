@@ -29,7 +29,8 @@ const DDFilter: React.FC<FilterProps> = ({
     group: layoutType === 'modal' ? defaultLayoutModal : defaultLayout,
   },
 }) => {
-  const [searchHeight, setSearchHeight] = useState('30px');
+  let ddFilterHeight = `${myUtil.theme.getThemeToken().token?.ddFilterHeight || '30'}px`;
+  const [searchHeight, setSearchHeight] = useState(ddFilterHeight);
   const [expand, setExpand] = useState(false);
   const [toggleMore, setToggleMore] = useState(0);
 
@@ -50,7 +51,7 @@ const DDFilter: React.FC<FilterProps> = ({
 		if (expand === false) {
       setSearchHeight('auto');
 		} else {
-      setSearchHeight('30px');
+      setSearchHeight(ddFilterHeight);
 		}
   }
 

@@ -1,0 +1,201 @@
+// 玻璃风格 skin07.less
+// 基于 theme_test3.tsx (glassTheme.ts) 的 CSS 类实现
+// 只实现 theme_test3 中定义的组件样式，不推断、不添加
+
+.skin07 {
+  // ========== createStyles 定义的样式类 ==========
+
+  // glassBorder - 基础玻璃边框
+  .glass-border {
+    box-shadow:
+      inset 0 0 5px 2px rgba(255, 255, 255, 0.3),
+      inset 0 5px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  // glassBox - 玻璃盒效果（glassBorder + 背景 + blur）
+  .glass-box {
+    .glass-border;
+    background: color-mix(in srgb, #FFFFFF 15%, transparent);
+    backdrop-filter: blur(12px);
+  }
+
+  // ========== 组件样式 ==========
+
+  // app - 全局文字阴影
+  & {
+    text-shadow: 0 1px rgba(0,0,0,0.1);
+  }
+
+  // card - classNames: { root: styles.cardRoot }
+  .ant-card {
+    background-color: color-mix(in srgb, #FFFFFF 40%, transparent) !important;
+    backdrop-filter: blur(12px);
+  }
+
+  // modal - classNames: { container: styles.modalContainer }
+  .ant-modal {
+    .ant-modal-content {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+      backdrop-filter: none;
+    }
+  }
+
+  // button - classNames: { root: styles.buttonRoot + buttonRootDefaultColor }
+  .ant-btn:not(.ant-btn-link) {
+    box-shadow:
+      inset 0 0 5px 2px rgba(255, 255, 255, 0.3),
+      inset 0 5px 2px rgba(255, 255, 255, 0.2);
+
+    &-default {
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+
+  // alert - className: clsx(styles.glassBox, styles.notBackdropFilter)
+  .ant-alert {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    backdrop-filter: none;
+  }
+
+  // colorPicker - classNames: { root: clsx(styles.glassBox, styles.notBackdropFilter) }, arrow: false
+  .ant-color-picker {
+    .ant-color-picker-trigger {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent);
+      backdrop-filter: none;
+    }
+  }
+
+  // dropdown - classNames: { root: styles.dropdownRoot }
+  .ant-dropdown-menu {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    border-radius: 12px;
+
+    ul {
+      background: transparent;
+    }
+  }
+
+  // select - classNames: { root: clsx(styles.glassBox, styles.notBackdropFilter), popup: { root: styles.glassBox } }
+  .ant-select-dropdown {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    border-radius: 12px;
+  }
+
+  // datePicker - classNames: { root: clsx(styles.glassBox, styles.notBackdropFilter), popup: { container: styles.glassBox } }
+  .ant-picker {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    backdrop-filter: none;
+
+    &-panel {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent);
+      backdrop-filter: none;
+    }
+  }
+
+  // input / inputNumber - 背景在外层 div，否定选择器避免包装类输入框内层重复应用
+  .ant-input:not(.ant-input-affix-wrapper .ant-input),
+  .ant-input-number {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    backdrop-filter: none;
+  }
+
+  .ant-input-affix-wrapper {
+    background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    backdrop-filter: none;
+
+    .ant-input {
+      background: transparent !important;
+    }
+  }
+
+  // popover - classNames: { container: styles.glassBox }
+  .ant-popover {
+    .ant-popover-inner {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+    }
+  }
+
+  // switch - classNames: { root: styles.switchRoot }
+  .ant-switch {
+    border: none;
+    box-shadow:
+      inset 0 0 5px 2px rgba(255, 255, 255, 0.3),
+      inset 0 5px 2px rgba(255, 255, 255, 0.2);
+  }
+
+  // radio - classNames: { root: styles.radioButtonRoot }
+  .ant-radio-button-wrapper {
+    box-shadow:
+      inset 0 0 5px 2px rgba(255, 255, 255, 0.3),
+      inset 0 5px 2px rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.24) !important;
+    }
+
+    &-checked:not(.ant-radio-button-wrapper-disabled) {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent) !important;
+      backdrop-filter: blur(12px);
+      border-color: rgba(255, 255, 255, 0.28) !important;
+
+      &::before {
+        background-color: rgba(255, 255, 255, 0.18);
+      }
+    }
+  }
+
+  // segmented - className: styles.segmentedRoot
+  .ant-segmented {
+    background: transparent;
+    backdrop-filter: none;
+
+    .ant-segmented-thumb {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent);
+      backdrop-filter: blur(12px);
+    }
+
+    .ant-segmented-item-selected {
+      background: color-mix(in srgb, #FFFFFF 15%, transparent);
+      backdrop-filter: blur(12px);
+    }
+  }
+
+  // progress - classNames: { track: styles.glassBorder }, styles: { track: { height: 12 }, rail: { height: 12 } }
+  .ant-progress {
+    .ant-progress-inner {
+      background: transparent;
+    }
+
+    .ant-progress-track,
+    .ant-progress-bg {
+      height: 12px;
+    }
+  }
+
+  // tooltip - 来自 theme_test3 示例但未定义 classNames（使用 antd 默认样式）
+  .ant-tooltip {
+    .ant-tooltip-inner {
+      backdrop-filter: blur(8px);
+    }
+  }
+
+  .ant-pro-layout .ant-pro-layout-bg-list {
+    background-image: url(../img/bg7.jpg);
+    background-size: cover;
+  }
+
+  .dd_toolbar_wrap .dd-toolbar {
+    background-color: color-mix(in srgb, #FFFFFF 40%, transparent) !important;
+    margin: 12px 0;
+    border-radius: 12px;
+  }
+  .ant-pro-layout .ant-layout-sider.ant-pro-sider {
+    background: color-mix(in srgb, #ffffff 20%, transparent) !important;
+  }
+}

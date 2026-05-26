@@ -2,6 +2,10 @@ import theme_config_01 from './theme_config_01';
 import theme_config_02 from './theme_config_02';
 import theme_config_03 from './theme_config_03';
 import theme_config_04 from './theme_config_04';
+import theme_config_05 from './theme_config_05';
+import theme_config_06 from './theme_config_06';
+import theme_config_07 from './theme_config_07';
+import theme_config_08 from './theme_config_08';
 
 const theme_config_common: any = ({compact, borderRadius, fontSize}: any) => {
   return {
@@ -58,6 +62,10 @@ export const theme_config: any = {
   theme_config_02,
   theme_config_03,
   theme_config_04,
+  theme_config_05,
+  theme_config_06,
+  theme_config_07,
+  theme_config_08
 };
 
 export default theme_config_common;

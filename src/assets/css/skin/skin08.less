@@ -1,0 +1,139 @@
+// 极客风格 skin08.less
+// 基于 theme_test4.tsx (geekTheme.ts) 的 CSS 类实现
+// 只实现 theme_test4 中定义的组件样式，不推断、不添加
+
+.skin08 {
+  // ========== createStyles 定义的样式类 ==========
+
+  // lightBorder - 霓虹边框
+  .light-border {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // ========== 全局样式 ==========
+
+  // app - 霓虹发光文字阴影
+  & {
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+  }
+
+  // ========== 组件样式 ==========
+
+  // alert - className: styles.lightBorder
+  .ant-alert {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // button - classNames: { root: styles.buttonRoot + buttonRootSolid + buttonRootSolidDanger }
+  .ant-btn:not(.ant-btn-link) {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+
+    &-primary {
+      border: none;
+      font-weight: bolder;
+    }
+
+    &-danger {
+      box-shadow: 0 0 5px #FA5252;
+    }
+  }
+
+  // modal - classNames: { container: styles.modalContainer, header: styles.modalHeader, body: styles.modalBody, footer: styles.modalFooter }
+  .ant-modal {
+    .ant-modal-content {
+      border: 2px solid #39ff14;
+      box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+
+      .ant-modal-header {
+        border-bottom: 2px solid #39ff14;
+        box-shadow: inset 0 0 10px #39ff14;
+      }
+
+      .ant-modal-body {
+        // padding 默认即可
+      }
+
+      .ant-modal-footer {
+        // padding 默认即可
+      }
+    }
+  }
+
+  // colorPicker - classNames: { root: styles.lightBorder, body: styles.colorPickerBody }, arrow: false
+  .ant-color-picker {
+    .ant-color-picker-trigger {
+      border: 2px solid #39ff14;
+      box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+
+      &:hover {
+        box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+      }
+    }
+
+    .ant-color-picker-inner {
+      pointer-events: none;
+    }
+  }
+
+  // select - classNames: { root: styles.lightBorder }
+  .ant-select {
+    .ant-select-selector {
+      border: 2px solid #39ff14 !important;
+      box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+    }
+  }
+
+  // datePicker - classNames: { root: styles.lightBorder }
+  .ant-picker {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // input - 外层没有 affix-wrapper 时应用（使用否定选择器避免双层边框）
+  .ant-input:not(.ant-input-affix-wrapper .ant-input) {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // inputNumber - 始终应用（没有 affix-wrapper 包装）
+  .ant-input-number {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // affix-wrapper - Input.Password / 带前缀后缀的 Input，外层边框
+  .ant-input-affix-wrapper {
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+  }
+
+  // tooltip - classNames: { root: styles.tooltipRoot, container: styles.tooltipContainer }, arrow: false
+  .ant-tooltip {
+    .ant-tooltip-inner {
+      border: 2px solid #39ff14;
+      color: #39ff14;
+      box-shadow: 0 0 3px #39ff14, inset 0 0 10px #39ff14;
+    }
+  }
+
+  // progress - classNames: { track: styles.progressTrack }
+  .ant-progress {
+    .ant-progress-bg {
+      background: #39ff14 !important;
+    }
+  }
+  
+  // Slider 滚动条
+  .ant-layout-sider {
+    ::-webkit-srollbar-track-piece{ border-radius:0; } // 滚动的滑块 background:none;
+    ::-webkit-scrollbar { width: 10px; height: 10px; } // 外层轨道
+    ::-webkit-scrollbar-thumb { height:50px; border-radius: 0; } // 滚动的滑块:hover   box-shadow: inset 0 0 5px rgba(0,0,0,0%); background: #74778c;
+    ::-webkit-scrollbar-thumb:vertical {height:50px;background-color:#1a7909;}
+    ::-webkit-scrollbar-thumb:hover { background: #27ac0f !important; }
+    ::-webkit-scrollbar-thumb:horizontal{width:50px;background-color:#1a7909;}
+    ::-webkit-scrollbar-track { border-radius: 0; box-shadow: none !important; background: #12310c; } // 内层滚动槽  box-shadow: inset 0 0 5px rgba(0,0,0,0%);
+  }
+}

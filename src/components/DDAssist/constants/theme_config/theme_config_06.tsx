@@ -1,0 +1,85 @@
+const theme_config_06: any = {
+  darkAlgorithm: false,
+  layoutToken: {
+    bgLayout: '#FFF9F0',
+    header: {
+      colorBgHeader: '#FFFFFF',
+      colorHeaderTitle: '#2C2C2C',
+      colorTextMenu: '#2C2C2C',
+      colorTextMenuActive: '#52C41A',
+      colorTextMenuSelected: '#2C2C2C',
+      colorBgMenuItemHover: '#FFF0F6',
+      colorBgMenuItemSelected: '#FFF0F6',
+    },
+    sider: {
+      colorMenuBackground: '#FFFFFF',
+      colorTextMenuTitle: '#2C2C2C',
+      colorTextMenu: '#2C2C2C',
+      colorTextMenuSelected: '#2C2C2C',
+      colorTextMenuActive: '#52C41A',
+      colorTextMenuItemHover: '#2C2C2C',
+      colorBgMenuItemActive: '#FFF0F6',
+      colorBgMenuItemHover: '#FFF0F6',
+      colorBgMenuItemSelected: '#FFF0F6',
+      colorBgCollapsedButton: '#FFF0F6',
+      colorTextCollapsedButton: '#2C2C2C',
+      colorTextCollapsedButtonHover: '#52C41A',
+    }
+  },
+  token: {
+    colorText: '#2C2C2C',
+    colorPrimary: '#52C41A',
+    colorSuccess: '#51CF66',
+    colorWarning: '#FFD93D',
+    colorError: '#FA5252',
+    colorInfo: '#4DABF7',
+    colorBorder: '#2C2C2C',
+    colorBorderSecondary: '#505050',
+    lineWidth: 3,
+    lineWidthBold: 3,
+    borderRadius: 12,
+    borderRadiusLG: 16,
+    borderRadiusSM: 8,
+    controlHeight: 40,
+    controlHeightSM: 34,
+    controlHeightLG: 48,
+    fontSize: 15,
+    fontWeightStrong: 600,
+    colorBgBase: '#FFF9F0',
+    colorBgContainer: '#FFFFFF',
+    padding: 12,
+    cusBgLayout: '#FFF9F0',
+    cusBg1: '#f6f6f6',
+    ddFilterHeight: 44,
+  },
+  components: {
+    Button: {
+      primaryShadow: '4px 4px 0 #2C2C2C',
+      dangerShadow: '4px 4px 0 #2C2C2C',
+      defaultShadow: '4px 4px 0 #2C2C2C',
+      fontWeight: 600,
+    },
+    Modal: {
+      boxShadow: '4px 4px 0 #2C2C2C',
+    },
+    Card: {
+      boxShadow: '4px 4px 0 #2C2C2C',
+      colorBgContainer: '#FFF0F6',
+    },
+    Tooltip: {
+      colorBorder: '#2C2C2C',
+      borderRadius: 8,
+    },
+    Select: {
+      optionSelectedBg: 'transparent',
+    },
+    Slider: {
+      dotBorderColor: '#237804',
+      dotActiveBorderColor: '#237804',
+      colorPrimaryBorder: '#237804',
+      colorPrimaryBorderHover: '#237804',
+    },
+  },
+};
+
+export default theme_config_06;
