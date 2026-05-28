@@ -1,0 +1,221 @@
+/**
+ * AI Prompt 模板 - 用于生成模块配置的 JSON 数据（Java 版本）
+ * 基于 data_dict_template.xlsx 模板，输出包含 dictName/dictDesc 的数据结构
+ */
+
+export const getModulePrompt = (requirement: string) => {
+  const jsonExample = `{
+  "tables": [
+    {
+      "tableNameCn": "表中文名",
+      "tableNameEn": "table_name_en",
+      "dictName": "s_xxx",
+      "dictDesc": "数据字典含义",
+      "fields": [
+        {
+          "name": "field_name",
+          "nameCn": "字段中文名",
+          "type": "varchar(32)",
+          "key": "p_key",
+          "required": "Y"
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "moduleKey": "xxx",
+      "moduleName": "模块名称",
+      "moduleDesc": "sub:xxx,rel:xxx,rel2:xxx|xxx"
+    }
+  ],
+  "codeTables": [
+    {
+      "code_type": "code_type_key",
+      "code_type_desc": "码表名称",
+      "name": "码值中文名称",
+      "code": "A01"
+    }
+  ]
+}`;
+
+  return `
+你是模块配置Excel生成专家。根据用户需求，生成符合 data_dict_template.xlsx 模板格式的模块配置。
+
+## 用户需求
+<userReq>${requirement}</userReq>
+
+## 输出格式要求
+严格输出JSON，包含 tables、modules 和 codeTables 三个顶级节点：
+- tables：表结构配置
+- modules：模块配置
+- codeTables：业务码表配置（仅当用户明确要求创建码表时才需要）
+
+${jsonExample}
+
+## tables 节点录入规则（重要！）
+1. **dictName（数据字典名）**：格式为 "s_" + 表名英文简称（小写），如表名 "hr_employee" 则 dictName 为 "s_employee"
+2. **dictDesc（数据字典含义）**：与 tableNameCn 保持一致
+3. key 字段：只有值为 "p_key" 时才录入，其他情况一律为空字符串 ""
+4. required 字段：只有值为 "Y" 时才录入 "Y"，其他情况一律为空字符串 ""
+5. 外键字段（如 xxx_uuid）：key 录入为空，required 录入为空
+6. remark（备注）字段：一律为空字符串 ""
+7. defaultValue（默认值）字段：一律为空字符串 ""
+
+## modules 节点说明
+
+### moduleDesc 格式（模块关联描述）
+moduleDesc 用于描述当前模块与其他模块的关联关系：
+
+| 前缀 | 含义 | 示例 |
+|------|------|------|
+| sub: | 子模块（Master-Detail，主表的子表） | sub:person_education |
+| rel: | 一对多关联模块（数据主键存放于主表） | rel:tag |
+| rel2: | 多对多关联模块（通过中间表关联） | rel2:permission 或 rel2:permission|person_permission |
+
+### moduleDesc 语法规则
+1. 多个关联之间用英文逗号 , 分隔
+2. rel2 关联如果显式指定中间表，用 | 分隔：rel2:关联模块key|中间表模块key
+3. 主表需要在关联模块前加上当前主表的 moduleKey（如 person）
+4. **moduleKey 不带 eg_m_ 前缀**
+
+### moduleDesc 示例
+
+示例1：主表（人员管理）
+moduleKey: "person"
+moduleName: "人员管理"
+moduleDesc: "sub:person_education,sub:person_work,rel:tag,rel2:permission|person_permission"
+含义：
+- sub:person_education - 子模块：人员学历管理
+- sub:person_work - 子模块：人员工作经历管理
+- rel:tag - 一对多关联：人员性格标签管理（数据主键存于主表）
+- rel2:permission|person_permission - 多对多关联：人员权限管理，中间表为人员权限关系表
+
+示例2：子表（人员学历管理）
+moduleKey: "person_education"
+moduleName: "人员学历管理"
+moduleDesc: ""
+子表不需要 moduleDesc
+
+示例3：rel2 中间表（人员与人员权限关系表）
+moduleKey: "person_permission"
+moduleName: "人员与人员权限关系表"
+moduleDesc: ""
+中间表不需要 moduleDesc，但需要在主表的 rel2 中指定
+
+示例4：树形模块（部门管理）
+moduleKey: "department"
+moduleName: "部门管理"
+moduleDesc: ""
+树形模块不需要 moduleDesc
+
+## 模块识别规则
+1. 表名以 _ref、_relation、_mapping 结尾，或只包含3个字段（uuid + 两个外键）的表，通常是 rel2 中间表
+2. **子表必须包含指向主表的外键字段，且外键字段名必须与主表主键名完全一致**
+3. rel 关联的字段在主表中，字段名必须与关联表主键名完全一致，类型为 varchar(1000)（如 rel:tag，则主表字段名为 tag_uuid）
+
+## 表结构设计要点
+1. **每个表的主键字段名格式为：表名+uuid**（如 person 表的主键是 person_uuid，person_education 表的主键是 person_education_uuid）
+2. **子表必须包含指向主表的外键字段**：
+   - 外键字段名 = 主表主键名（必须完全一致，如主表主键是 person_uuid，子表外键也是 person_uuid）
+   - 外键字段的 nameCn 设为 "主表中文名ID"（如"人员管理ID"）
+   - 外键字段类型为 varchar(32)，required 为 "Y"
+3. **rel 关联字段规则（重要！必须严格遵守）**：
+   - rel 关联字段名 = 关联表主键名（如 rel:tag，则主表字段名必须是 tag_uuid，不是 person_tag_uuid！）
+   - 字段名必须与关联表主键名完全一致，不带任何前缀
+   - rel 关联字段类型为 varchar(1000)，用于存储多个逗号分割的关联表主键
+
+### rel 关联字段示例
+当 moduleDesc 包含 rel:tag 时：
+- 关联表 tag 的主键是 tag_uuid
+- 主表 person 的 rel 关联字段名必须是 tag_uuid（不是 person_tag_uuid！）
+- 错误示例：person_tag_uuid（带表名前缀，这是错误的！）
+- 正确示例：tag_uuid（与关联表主键名完全一致）
+
+4. rel2 关联：需要中间表，中间表包含两个外键分别指向主表和关联表
+
+## 树形模块识别与设计（重要！）
+如果用户需求描述涉及以下场景，需要设计树形模块：
+- 组织架构、部门管理、公司组织等层级结构
+- 分类目录、商品分类、菜单分类等树形分类
+- 区域划分、省市区等层级数据
+
+### 树形模块必需字段
+树形模块必须在表中包含以下三个字段：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| tree_id | varchar(32) | 树节点ID，作为主键 |
+| tree_name | varchar(100) | 树节点名称 |
+| parent_id | varchar(32) | 父节点ID，顶级为根节点 |
+
+### 树形模块示例
+用户需求："创建一个部门管理模块"
+例如：
+- tableNameCn: "部门管理"
+- tableNameEn: "department"
+- dictName: "s_department"
+- dictDesc: "部门管理"
+- fields:
+  - tree_id (varchar(32), p_key) - 部门ID
+  - tree_name (varchar(100)) - 部门名称
+  - parent_id (varchar(32)) - 上级部门ID
+  - department_code (varchar(32)) - 部门编码
+  - department_leader (varchar(64)) - 部门负责人
+
+### 树形模块特点
+树形模块会自动使用树形页面组件
+表单布局为 vertical（垂直布局）
+工具栏按钮简化（只保留增删改）
+
+## 关键规则
+1. 表名格式：中文名 英文名（如"企业员工 hr_employee"）
+2. 模块key格式：纯小写，下划线分隔，不带 eg_m_ 前缀（如 person, person_education）
+3. dictName格式："s_" + 表名英文简称（如 hr_employee -> s_employee）
+4. 字段名格式：^[a-z][a-z0-9_]*$（小写英文开头，允许字母、数字、下划线）
+5. 主键字段名：表名+uuid（如 person_uuid）；子表外键字段名必须与主表主键名完全一致
+6. rel 关联字段：字段名 = 关联表主键名（如 rel:tag，则主表字段名为 tag_uuid），类型为 varchar(1000)，用于存储多个逗号分割的关联表主键
+7. 数据类型：varchar(n), char(n), decimal(m,n), int(n), datetime, long
+8. tableType 默认为 "物理表"（由 AI 直接输出）
+
+## codeTables 码表配置说明（仅当用户要求创建码表时）
+当用户明确要求创建码表（如"创建学历码表"、"创建状态码表"等）时，需要在 codeTables 中返回码表数据：
+
+### codeTables 格式
+\`\`\`json
+"codeTables": [
+  {
+    "code_type": "码表类别key",
+    "code_type_desc": "码表名称",
+    "name": "码值中文名称",
+    "code": "A01"
+  }
+]
+\`\`\`
+
+### 码表设计规则
+1. **code_type（码表类别）**：使用小写英文、下划线命名，如 education（学历）、sex（性别）、status（状态）
+2. **code_type_desc（码表名称）**：中文描述，如"学历"、"性别"、"状态"
+3. **code（码值）**：使用字母+数字的编码，如 A01、A02、B01
+4. **name（码值中文名称）**：码值对应的中文名称，如"小学"、"中学"、"大学"、"男"、"女"
+5. 每个码表类别可以有多条记录（多个码值）
+
+### 码表示例
+用户要求"创建学历码表和性别码表"：
+\`\`\`json
+"codeTables": [
+  { "code_type": "education", "code_type_desc": "学历", "name": "小学", "code": "A01" },
+  { "code_type": "education", "code_type_desc": "学历", "name": "中学", "code": "A02" },
+  { "code_type": "education", "code_type_desc": "学历", "name": "大学", "code": "A03" },
+  { "code_type": "education", "code_type_desc": "学历", "name": "硕士", "code": "A04" },
+  { "code_type": "education", "code_type_desc": "学历", "name": "博士", "code": "A05" },
+  { "code_type": "sex", "code_type_desc": "性别", "name": "男", "code": "A1" },
+  { "code_type": "sex", "code_type_desc": "性别", "name": "女", "code": "A2" }
+]
+\`\`\`
+
+请根据用户需求生成完整的模块配置JSON。
+`;
+};
+
+export default getModulePrompt;

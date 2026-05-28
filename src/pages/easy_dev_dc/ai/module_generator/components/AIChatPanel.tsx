@@ -6,7 +6,7 @@ import { GlobalOutlined } from '@ant-design/icons';
 import { Bubble, Prompts, Sender } from '@ant-design/x';
 import { Flex, Avatar } from 'antd';
 import XMarkdown from '@ant-design/x-markdown';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import '@ant-design/x-markdown/themes/light.css';
 import '@ant-design/x-markdown/themes/dark.css';
 import { useMarkdownTheme } from '@/components/DDXai/DDXaiUtil';
@@ -105,9 +105,17 @@ const AIChatPanel: React.FC<AIChatPanelProps> = ({
   setInputValue,
 }) => {
   const [className] = useMarkdownTheme();
+  const chatListRef = useRef<HTMLDivElement>(null);
+
+  // 自动滚动到底部
+  useEffect(() => {
+    if (chatListRef.current) {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const chatList = (
-    <div style={{ flex: 1, overflow: 'auto', padding: '0 16px' }}>
+    <div ref={chatListRef} style={{ flex: 1, overflow: 'auto', padding: '0 16px' }}>
       {messages?.length ? (
         <Bubble.List
           items={messages?.map((i: any) => ({

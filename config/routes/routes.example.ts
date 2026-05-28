@@ -1,5 +1,6 @@
 export default [
   { name: '示例', icon: 'CodeOutlined', path: '/example', routes: [
+    { name: 'AI模块生成(Java)', path: '/example/ai/module_generator', component: './easy_dev/ai/module_generator' },
     { name: '测试临时', path: '/example/cfgp/eg_m_mts_tsjh', component: './example/test0001' },
     { name: '高级筛选', path: '/example/advanced_filter_01', component: './example/advanced_filter_01' },
     { name: 'X6', path: '/example/X6', routes: [
