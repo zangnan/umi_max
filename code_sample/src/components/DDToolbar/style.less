@@ -1,0 +1,45 @@
+@import "~@/assets/css/config.less";
+
+.dd_toolbar_wrap {
+  .dd-toolbar {
+    position: relative;
+    background-color: #f7f7f7;
+    margin: 0 0 0 0;
+    padding: 10px 0 10px 0;
+    overflow: hidden;
+    line-height: 30px;
+    .toolbar-title {
+      float: left;
+      font-size: @base_font_12x;
+      line-height: 32px;
+      .toolbar-title-icon {
+        position: relative;
+        top: 0;
+        display: inline-block;
+        width: 3px;
+        height: 10px;
+        margin-right: 5px;
+        background-color: @primary_color01;
+      }
+    }
+    .toobar-right {
+      float: right;
+      .grid_system_menu {
+        .ant-btn {
+          width: 30px;
+          padding: 0;
+          color: @font_color04;
+          border: 1px solid #bbbbbb;
+          border-top-right-radius: 0 !important;
+          border-bottom-right-radius: 0 !important;
+          &.ant-btn-icon-only {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-top-right-radius: 4px !important;
+            border-bottom-right-radius: 4px !important;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+scsbsj: 生成申报数据
+    scsbsj-qrscsbsj: 确认生成申报数据
+    scsbsj-sjjcydlb: 数据检查疑点列表
+    scsbsj-dybbxz: 打印报表下载
+    scsbsj-sbmxcx: 申报明细查询
+    scsbsj-scsjqk: 生成数据情况
+    scsbsj-sjhz: 数据汇总
+    scsbsj-zlsc: 资料上传
+sbsjcx: 申报数据查询
+    sbsjcx-lssbsjcx: 历史申报记录查询
+ydgl: 疑点管理

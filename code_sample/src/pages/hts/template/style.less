@@ -1,0 +1,67 @@
+@import "~@/assets/css/config.less";
+
+.steps-wrap {
+  background-color: #fff;
+  margin: 0 0 16px 0;
+  .step-title {
+    font-size: 14px;
+    line-height: 48px;
+    margin: 0 10px 0 16px;
+  }
+  div.ant-typography, .ant-typography p {
+    margin-bottom: 0;
+  }
+}
+
+.template_tab2 {
+  background-color: #ffffff;
+  &>.ant-tabs {
+    overflow: inherit;
+    &>.ant-tabs-nav {
+      margin-bottom: 0;
+    }
+  }
+  .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab, .ant-tabs-card > div > .ant-tabs-nav .ant-tabs-tab {
+    border: 0px solid #f0f0f0;
+    border-right: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    // &:not(:first-child) {
+    //   display: none;
+    // }
+  }
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+    background-color: #eaeaea;
+  }
+}
+
+.icon-nav-wrap {
+  padding: 20px;
+  .ant-pro-card-header-border {
+    background-color: #f0f2f7;
+    border-bottom: none;
+    padding: 5px 12px !important;
+    .ant-pro-card-title {
+      font-weight: bold;
+    }
+  }
+  .menu-content {
+    padding: 8px 0 0 60px;
+    cursor: pointer;
+    margin: 10px 0 40px 0;
+    position: relative;
+    .menu-img {
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      .icon {
+        height: 48px;
+        width: 48px;
+      }
+    }
+    .menu-txt {
+      display: inline-block;
+      line-height: 20px;
+    }
+  }
+}

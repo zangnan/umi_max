@@ -1,0 +1,42 @@
+@import '~antd/lib/style/themes/default.less';
+
+.dd_modal_wrap {
+  .ant-modal-body {
+    max-height: 450px;
+    overflow-y: auto;
+    .dd_modal_content {
+      position: relative;
+      padding: 0 10px 0 40px;
+      &.form {
+        padding: 0;
+      }
+      .header {
+        margin: 0 0 15px 0;
+        .icon {
+          font-size: 22px;
+          line-height: 22px;
+          display: inline-block;
+          position: absolute;
+          left: 8px;
+          top: 1px;
+        }
+        .info {
+          font-size: 16px;
+          display: inline-block;
+          color: #272424;
+        }
+      }
+      .body {
+        .item {
+          margin: 0;
+          line-height: 30px;
+        }
+      }
+      &.info .icon { color: #1990FF ; }
+      &.success .icon { color: #52C41A; }
+      &.error .icon { color: #F5212D; }
+      &.warning .icon { color: #FAAD15; }
+      &.question .icon { color: #FAAD15; }
+    }
+  }
+}

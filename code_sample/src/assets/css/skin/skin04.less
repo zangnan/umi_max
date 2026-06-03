@@ -1,0 +1,255 @@
+@import "~@/assets/css/config.less";
+
+// **********************************************************************************
+// 颜色
+// **********************************************************************************
+@theme04_color01: #D1E8FF;  // 页头
+@theme04_color02: #506375;  // 页头hover, input bg
+@theme04_color03: #32465A;  // 菜单
+
+.theme04 {
+  // header
+  .ant-pro-basicLayout .ant-layout-header {
+    color: @theme04_color01;
+    background: @theme04_color03;
+    .ant-pro-global-header, .ant-pro-top-nav-header {
+      background: @theme04_color03;
+      .ant-select-single .ant-select-selector .ant-select-selection-search-input {
+        background-color: @theme04_color02;
+        border-color: transparent;
+        color: @theme04_color01;
+        &:hover {
+          border-color: @theme04_color01;
+        }
+        &::-webkit-input-placeholder {
+          color: @theme04_color01 !important;
+          font-style: italic;
+          opacity: 0.7;
+        }
+        &::-moz-input-placeholder {
+          color: @theme04_color01 !important;
+          font-style: italic;
+          opacity: 0.7;
+        }
+        &::-ms-input-placeholder {
+          color: @theme04_color01 !important;
+          font-style: italic;
+          opacity: 0.7;
+        }
+      }
+      .header_action_link {
+        border: 1px solid @theme04_color01;
+        &:hover {
+          background-color: @theme04_color02;
+        }
+      }
+      .ant-btn.header_action_btn {
+        border: 1px solid @theme04_color01;
+        &:hover {
+          background-color: @theme04_color02;
+          color: #D1E8FF;
+        }
+      }
+      .header_action_icon {
+        &:hover {
+          background-color: @theme04_color02;
+        }
+      }
+      .ant-dropdown-trigger {
+        .ant-badge-count {
+          background: #F07800;
+        }
+        .anticon {
+          color: @theme04_color01;
+        }
+        .anticon-user {
+          background-color: #1B7FD9 !important;
+          color: #ffffff;
+        }
+      }
+      .anticon {
+        color: @theme04_color01;
+      }
+      .ant-pro-global-header-logo {
+        h1 {
+          color: #ffffff;
+        }
+      }
+      .ant-menu.ant-menu-dark .ant-menu-item-selected,
+      .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+        background-color: #1e2a36;
+      }
+      .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
+        background-color: #1e2a36;
+      }
+      .ant-menu-horizontal > .ant-menu-item a {
+        color: @theme04_color01;
+      }
+    }
+  }
+
+  .ant-menu.ant-menu-dark,
+  .ant-menu-dark .ant-menu-sub,
+  .ant-menu.ant-menu-dark .ant-menu-sub {
+    background: @theme04_color03;
+    .ant-menu-item a {
+      color: @theme04_color01;
+  }
+    .ant-menu-item a:hover {
+      color: #ffffff;
+    }
+  }
+
+  // left
+  .ant-layout-sider.ant-pro-sider {
+    background: #DDE0E3;
+    .ant-pro-sider-logo {
+      h1 {
+        color: #ffffff;
+      }
+    }
+    .ant-menu {
+      color: @theme04_color03;
+      .ant-menu-item a {
+        color: @theme04_color03;
+      }
+      .ant-menu-item-selected {
+        color: #32465a;
+      }
+      .ant-menu-item-active,
+      .ant-menu-item:hover,
+      .ant-menu-submenu-active,
+      .ant-menu-submenu-open,
+      .ant-menu-submenu-selected,
+      .ant-menu-submenu-title:hover {
+        color: @theme04_color03 !important;
+        background-color: transparent;
+      }
+      &.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+        background-color: rgb(255 255 255 / 0.7);
+      }
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow:before,
+      .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-title .ant-menu-submenu-arrow:before {
+        background: @theme04_color03;
+      }
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow,
+      .ant-menu-sub .ant-menu-submenu-title .ant-menu-submenu-arrow,
+      .ant-menu-submenu-title .ant-menu-submenu-arrow {
+        opacity: .45;
+      }
+      .ant-menu-item-active,
+      .ant-menu-item:hover,
+      .ant-menu-submenu-active,
+      .ant-menu-submenu-open,
+      .ant-menu-submenu-selected,
+      .ant-menu-submenu-title:hover {
+        color: @theme04_color03 !important;
+      }
+      .ant-menu-item:hover>span>a,
+      .ant-menu-submenu-active>a,
+      .ant-menu-submenu-active>span>a,
+      .ant-menu-submenu-open>a,
+      .ant-menu-submenu-open>span>a,
+      .ant-menu-submenu-selected>a,
+      .ant-menu-submenu-selected>span>a,
+      .ant-menu-submenu-title:hover>a,
+      .ant-menu-submenu-title:hover>span>a {
+        // color: @theme04_color03 !important;
+        color: @border_color05 !important;
+      }
+
+      
+      .ant-menu-item:hover>span>span>a,
+      .ant-menu-submenu-active>a,
+      .ant-menu-submenu-active>span>span>a,
+      .ant-menu-submenu-open>a,
+      .ant-menu-submenu-open>span>span>a,
+      .ant-menu-submenu-selected>a,
+      .ant-menu-submenu-selected>span>span>a,
+      .ant-menu-submenu-title:hover>a,
+      .ant-menu-submenu-title:hover>span>span>a {
+        color: @border_color05 !important;
+      }
+
+      .ant-menu-item-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-item-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before,
+      .ant-menu-item:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-item:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before,
+      .ant-menu-submenu-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before,
+      .ant-menu-submenu-open>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-open>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before,
+      .ant-menu-submenu-selected>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-selected>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before,
+      .ant-menu-submenu-title:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow:after,
+      .ant-menu-submenu-title:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow:before {
+        background: @theme04_color03 !important;
+      }
+      .ant-menu-item-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow,
+      .ant-menu-item:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow,
+      .ant-menu-submenu-active>.ant-menu-submenu-title>.ant-menu-submenu-arrow,
+      .ant-menu-submenu-open>.ant-menu-submenu-title>.ant-menu-submenu-arrow,
+      .ant-menu-submenu-selected>.ant-menu-submenu-title>.ant-menu-submenu-arrow,
+      .ant-menu-submenu-title:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow {
+        opacity: 1;
+      }
+      .ant-pro-sider-collapsed-button {
+        border-top: 1px solid #32465A33 !important;
+      }
+      .ant-menu-item::after {
+        border-right: 3px solid #ffffff !important;
+    }
+    }
+  }
+  .ant-menu-inline-collapsed-tooltip {
+    a,
+    a:hover {
+      color: #32465A;
+      .anticon {
+        display: none
+      }
+      .ant-tooltip-arrow-content {
+        background-color: rgb(255 255 255);
+      }
+    }
+    .ant-tooltip-arrow-content {
+      background-color: rgb(255 255 255);
+    }
+  }
+
+  .ant-tooltip.ant-menu-inline-collapsed-tooltip {
+
+    .ant-tooltip-content {
+      .ant-tooltip-inner {
+        background-color: #fff;
+        color: @theme04_color03;
+      }
+    }
+  }
+  .ant-menu-submenu-selected .ant-menu-submenu-expand-icon,
+  .ant-menu-submenu-selected .ant-menu-submenu-arrow {
+    color: #1890ff;
+  }
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+    background: #0854a0;
+  }
+  .ant-steps-item-process .ant-steps-item-icon {
+      border-color: #0854a0;
+  }
+  .ant-steps-navigation .ant-steps-item::before {
+    background-color: #0854a0;
+  }
+  .ant-steps-item-finish .ant-steps-item-icon {
+    border-color: #0854a0;
+    &>.ant-steps-icon {
+      color: #0854a0;
+    }
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #0a6ed1;
+  }
+}

@@ -1,0 +1,104 @@
+/**
+ * title: 发票开具管理配置项-红字发票
+ */
+const unitConfig: any = {};
+
+// 配置项
+unitConfig.unit_key = 'CX_CKFPKJ_FPGL_ZXKP';
+unitConfig.page_id = 'CX_CKFPKJ_FPGL_ZXKP';
+unitConfig.grid_show_serial_number = false;                                           // 是否显示序号，可选
+unitConfig.click_checked = '1';                                                       // 是否开启单击或双击勾选事件，1单击勾选，2双击勾选，默认点击不勾选
+unitConfig.form_save_check = false;
+unitConfig.grid_row_key = 'fpsqduuid';
+unitConfig.grid_handle_width = 120;
+unitConfig.module_type = 'QZ_type';
+unitConfig.export_key = 'CX_CKFPKJ_FPGL_ZXKP_FPZTGZ_HP_EXCEL';
+unitConfig.gridParams = {
+  initSearchModal: [
+    { property: 'cxlx', value: "6", op: 'zdy' },
+  ],
+}
+
+// 配置项：列表列
+unitConfig.grid_columns = [
+  { title: '报关单号', dataIndex: 'bgdhgbhjh', width: 180, fixed: 'left', ellipsis: { showTitle: false }, render: { func: 'renderFpkjglBgdh' } },
+  { title: '单据号', dataIndex: 'djbh', width: 180, fixed: 'left', sorter: true },
+  { title: '发票状态', dataIndex: 'fpkjztDm', width: 150,codeTable: ['CODE_DM_ZXSB_FPKJZT', '04'], ellipsis: true,
+    filter: {
+      type: 'Select',
+      codeTable: ['CODE_DM_ZXSB_FPKJZT', '04'],
+    },
+  },
+  { title: '失败原因', dataIndex: 'sbyy1', width: 180, ellipsis: true},
+  { title: '申请红冲时间', dataIndex: 'sqfpkjsj', width: 140, sorter: true, render: { type: 'date', format: 'yyyy-MM-DD HH:mm' }, },
+  { title: '原数电票号码/发票号码', dataIndex: 'lzfphm', width: 200, sorter: true ,hidden:false},
+  { title: '原发票代码', dataIndex: 'lzfpdm', width: 140, sorter: true ,hidden:false},
+  { title: '开票日期', dataIndex: 'kprq', width: 90, sorter: true, render: { type: 'date', format: 'yyyy-MM-DD' } },
+  { title: '开票金额', dataIndex: 'je', width: 140, align: 'right', render: { type: 'number', format: '0,0.00' } },
+  { title: '税额', dataIndex: 'se', width: 140, align: 'right', render: { type: 'number', format: '0,0.00' } },
+  { title: '备注', dataIndex: 'bz', width: 180, ellipsis: true },
+  {
+    title: '发票种类', dataIndex: 'fpzlDm1', width: 150, render: { func: 'renderFpkjglFplx' }, filter: {
+      type: 'Select',
+      list: [
+        { text: '增值税电子普通发票', value: '4' },
+        { text: '增值税普通发票', value: '3' },
+        { text: '数电票（普通发票）', value: '5' },
+      ],
+    }
+  },
+  {
+    title: '开具方式', dataIndex: 'fpkjfsDm', width: 110, codeTable: ['CODE_DM_ZXSB_FPKJSJLY', '01'],
+    filter: {
+      type: 'Select',
+      codeTable: ['CODE_DM_ZXSB_FPKJSJLY', '01'],
+    },
+  },
+];
+
+// 配置项：列表筛选项
+unitConfig.filter_items = [
+  { name: 'bgdhgbhjh', label: '18位或后4位报关单号/统一编号', type: 'Input' },
+  { name: 'lzfphm', label: '原数电票号码/发票号码', type: 'Input' },
+  { name: 'sqfpkjsj', label: '申请红冲时间', type: 'DatePicker', range: true },
+  // { name: 'kprq', label: '开票日期', type: 'DatePicker', range: true },
+  // { name: 'fphm', label: '数电票号码/发票号码', type: 'Input' },
+  // { name: 'fpDm', label: '发票代码', type: 'Input' },
+  { name: 'sbyy1', label: '失败原因', type: 'Input'},
+
+];
+
+// 配置项：工具栏
+unitConfig.toolbar_default = {
+  setting: true,
+  reload: true,
+  full: true,
+  download: true,
+};
+
+// 配置项：自定义工具栏
+unitConfig.costomer_toobar = [
+  { name: '更新状态', func: 'handleUpdateHz' }, // 完成
+  { name: '重新开票', func: 'handleFphc' },
+  { name: '删除', func: 'deleteHz' }, // 完成
+];
+
+// 配置项：筛选_快捷筛选 列表上方，标题和区域 第二层筛选
+unitConfig.grid_filter_quick = [
+  {
+    name: 'fplx',
+    type: 'Select',
+    defaultValue: '2',
+    onChange: 'handleOnChangeFplx',
+    op: 'zdy',
+    searchFlag: false,
+    searchModelBz: false,
+    list: [
+      { label: '蓝字发票', value: '1', },
+      { label: '红字发票', value: '2' },
+      // { label: '作废发票', value: '3' },
+    ],
+  },
+];
+
+export default unitConfig;

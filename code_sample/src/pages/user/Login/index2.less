@@ -1,0 +1,220 @@
+@import '~antd/es/style/themes/default.less';
+
+// 登录 ***********************************************
+.container {
+  // display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+  padding-top: 66px;
+  background-color: #f9fafb;
+}
+
+.lang {
+  width: 100%;
+  height: 40px;
+  line-height: 44px;
+  text-align: right;
+  :global(.ant-dropdown-trigger) {
+    margin-right: 24px;
+  }
+}
+
+.content {
+  flex: 1;
+  padding: 32px 0;
+}
+.ant-pro-form-login-title {
+  color: #666666;
+  font-weight: normal;
+  font-size: 24px;
+  margin-bottom: 0px;
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 19px 0 20px 0;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .container {
+    padding-top: 66px;
+  }
+
+  .content {
+    padding: 0 0 24px;
+  }
+}
+
+.icon {
+  margin-left: 8px;
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: color 0.3s;
+
+  &:hover {
+    color: @primary-color;
+  }
+}
+.loginForm {
+  background-color: #fff;
+  width: 480px;
+  height: 390px;
+  padding: 10px 20px 22px 20px;
+  border-radius: 12px;
+  margin-top: 19px;
+  // margin-left: -50px;
+  box-shadow: 0 1px 2px 0 rgba(16,24,40,.06), 0 1px 3px 0 rgba(16,24,40,.1);
+}
+.loginTitleEN {
+  font-size: 24px;
+  color: #0854A0;
+  margin-right: 10px;
+}
+.loginTitleCN {
+  font-size: 14px;
+  color: #999;
+}
+.loginUserName {
+  :global(.ant-form-item) {
+    margin-bottom: 16px !important;
+    font-size: 12px !important;
+  }
+  :global(.ant-form-item-with-help) :global(.ant-form-item-explain) {
+    min-height: 8px;
+  }
+  :global(.ant-input-affix-wrapper) {
+    border-radius: 8px !important;
+    border: 1px solid #d0d5dd !important;
+  }
+  :global(.ant-input-affix-wrapper:hover) {
+    border-color: #197De1 !important;
+  }
+  :global(.ant-input-affix-wrapper) > :global(input.ant-input) {
+    font-size: 14px;
+    height: 48px !important;
+  }
+  :global(.ant-btn) {
+    height: 36px !important;
+  }
+  :global(.ant-btn-primary) {
+    background-color: #0854a0 !important;
+    border-color: #0854a0 !important;
+  }
+  :global(.ant-form-item-explain), :global(.ant-form-item-extra) {
+    position: absolute;
+    top: 32px;
+  }
+  :global(.ant-input-prefix) {
+    color: #8CBEF0;
+  }
+}
+.footerText {
+  color: #C3CED9;
+  text-align: center;
+}
+
+.bgPage {
+  margin: -20px;
+  background-color: #fff;
+  width: 100vw;
+  height: calc(100vh - 44px);
+  position: relative;
+}
+.bgPageText {
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: #999999;
+  text-align: center;
+  position: absolute;
+  top: 445px;
+  width: 400px;
+  left: 50%;
+  margin-left: -200px;
+}
+.error404 {
+  background: url('~@/assets/css/img/404.png') center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 497px;
+  height: 570px;
+  margin: 0 auto;
+}
+.dlogin_wrap {
+
+  .ant-btn-primary {
+    border-color: #2f54eb;
+    background-color: #2f54eb;
+    border-radius: 8px !important;
+    height: 36px !important;
+  }
+  .ant-pro-form-login-main {
+    width: 480px;
+    position: relative;
+  }
+  .dd_title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    img {
+
+    }
+  }
+  .dd_wel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    h3 {
+      font-weight: bold;
+    }
+  }
+  .ant-pro-form-login-header {
+    height: auto;
+    line-height: normal;
+  }
+  .ant-tabs-centered > .ant-tabs-nav .ant-tabs-nav-wrap:not([class*='ant-tabs-nav-wrap-ping']),
+  .ant-tabs-centered > div > .ant-tabs-nav .ant-tabs-nav-wrap:not([class*='ant-tabs-nav-wrap-ping']) {
+    justify-content: initial;
+  }
+  .ant-pro-form-login-main .ant-tabs-nav-list {
+    margin: 0;
+    font-size: 16px;
+  }
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #3853e2 !important;
+  }
+  .ant-tabs-ink-bar {
+    background: #3853e2;
+  }
+  .ant-tabs-tab {
+    padding: 9px 0;
+  }
+  .ant-tabs-top, .ant-tabs-bottom {
+    margin-bottom: 4px !important;
+  }
+  .ant-form-item-label > label {
+    color: #656575;
+  }
+  .ant-tabs-tab + .ant-tabs-tab {
+    margin: 0 0 0 38px;
+  }
+  .ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    color: #b00b00;
+  }
+  .dd-left {
+    right: 405px;
+  }
+  .dd-header-drop-menu {
+    background-color: #ffffff !important;
+  }
+}
+.dlogin_wrap_smdl {
+  .ant-btn-primary {
+    display: none;
+  }
+}

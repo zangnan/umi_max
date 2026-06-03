@@ -1,0 +1,8 @@
+{
+  "name": "ant-design-pro",
+  "version": "2.3.1",
+  "author": "DDIT Architecture Group",
+  "description": "An out-of-box UI solution for enterprise applications",
+  "private": true,
+  "main": "main.js"
+}

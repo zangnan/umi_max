@@ -1,0 +1,325 @@
+@import "~@/assets/css/config.less";
+
+.dd_fp_wrap {
+  .ant-pro-card-split-horizontal {
+    border-bottom: 1px solid #f07800;
+  }
+
+  .SplitPane.vertical {
+    height: auto !important;
+  }
+
+  .dd_fpsqd_wrap {
+    position: relative;
+    padding: 0px 0px 0px 350px;
+    background-color: #f7f7f7;
+    height: calc(100vh - 153px);
+    overflow-y: hidden;
+  }
+
+  .lay_wrap_left {
+    background-color: #f7f7f7;
+    padding: 0 20px;
+    min-width: 280px;
+    overflow-x: hidden;
+    border-right: 1px solid #f07800;
+
+    .left_content {
+      width: 320px;
+
+      .ant-checkbox-group {
+        display: block;
+      }
+
+      .ant-list {
+        overflow-x: hidden;
+
+        .ant-list-item {
+          padding: 0;
+
+          .ant-checkbox-group {
+            width: 100%;
+          }
+
+          &:hover,
+          &.selected {
+            .ant-pro-card {
+              background-color: #E6F0FA;
+            }
+
+            border-bottom: 1px solid rgba(8, 84, 160, 100);
+          }
+        }
+      }
+
+      .left_toolbar {
+        line-height: 40px;
+        text-align: right;
+      }
+
+      .left_card_header {
+        background-color: #ededed;
+        padding: 0 12px;
+        line-height: 40px;
+        color: @font_color01;
+        position: relative;
+
+        .lch_title {
+          margin: 0 0 0 10px;
+        }
+
+        .lch_btn {
+          position: absolute;
+          right: 20px;
+          top: 0;
+          cursor: pointer;
+        }
+      }
+
+      .ant-pro-card {
+        cursor: pointer;
+        -webkit-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+
+        .ant-pro-card-header {
+          position: relative;
+
+          .ant-pro-card-title {
+            font-size: 15px;
+            width: 100%;
+
+            .dcl_title {
+              margin-left: 10px;
+            }
+
+            .dcl_title_sq {
+              font-size: 14px;
+              margin-left: 10px;
+
+              .dcl_title_sq_jshj {
+                line-height: 25px;
+                float: right;
+              }
+            }
+          }
+        }
+
+        .ant-pro-card-body {
+          padding: 5px 20px 10px 38px !important;
+          border-bottom: 1px solid #cccccc;
+
+          .dd_card_list {
+            position: relative;
+
+            .dcl_item {
+              color: #6A6D70;
+              line-height: 24px;
+              font-size: 13px;
+
+              .dcl_item_h {
+                // color: @primary_color04;
+                font-weight: bold;
+                margin: 0 2px;
+              }
+            }
+
+            .dcl_item_abs {
+              position: absolute;
+              bottom: -0;
+              right: 0;
+              color: #333639;
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .lay_wrap_right {
+    padding: 0 20px 0 20px;
+    background-color: #f7f7f7;
+
+    .ant-tabs-top>.ant-tabs-nav::before,
+    .ant-tabs-bottom>.ant-tabs-nav::before,
+    .ant-tabs-top>div>.ant-tabs-nav::before,
+    .ant-tabs-bottom>div>.ant-tabs-nav::before {
+      border-bottom: 1px solid #cccccc;
+    }
+
+    &.full_screen_view {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+  }
+}
+
+.des {
+  .ant-descriptions-view {
+    background-color: #ededed;
+    border-bottom: 1px solid @font_color04;
+    padding: 20px 20px 0 20px;
+
+    .ant-descriptions-row>th,
+    .ant-descriptions-row>td {
+      padding-bottom: 3px;
+    }
+
+    .des1 {
+      padding-bottom: 15px !important;
+
+      .ant-descriptions-item-label,
+      .ant-descriptions-item-content {
+        font-size: 18px;
+        color: #333639;
+      }
+    }
+
+    .des2 {
+
+      .ant-descriptions-item-label,
+      .ant-descriptions-item-content {
+        color: @font_color04;
+      }
+    }
+
+    .des3 {
+
+      .ant-descriptions-item-label,
+      .ant-descriptions-item-content {
+        color: #6A6D70;
+      }
+    }
+  }
+}
+
+.fpsqd-search {
+  height: 45px;
+  margin-top: -14px;
+
+  .ant-form-item-label {
+    display: none;
+  }
+
+  .ant-space-item {
+    margin-top: 2px;
+  }
+}
+
+.fpsqd-row-expand {
+  .ant-checkbox-wrapper {
+    display: none;
+  }
+
+  .ant-table-selection-column {
+    display: none;
+  }
+}
+
+.fpsqd_qrkp_bzcheck {
+  width: 97%;
+  height: 300px;
+  border: 2px solid #d3ceca;
+  padding: 10px 20px;
+  margin-left: -20px;
+  overflow-y: auto;
+}
+
+.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table>tbody>.fpsqd-row-expand td:nth-child(2) {
+  border-right: 1px solid transparent !important;
+}
+
+.edit_bg1 {
+  background-color: #f5ede6;
+}
+
+.edit_bg2 {
+  background-color: #f7f7f7;
+}
+
+.t_right {
+  text-align: right;
+}
+
+.fpsqd_tz_drawer {
+  .ant-drawer-body {
+    padding: 20px !important;
+
+    .fpsqdtz_wrap {
+      .ant-pro-card {
+        .ant-pro-card-body {
+
+          // padding: 0 !important;
+          .ant-table {
+            .ant-table-thead>tr>th {
+              background-color: #f2f2f2 ! important;
+            }
+
+            .ant-table-tbody>tr.ant-table-row.fpsqd-row-expand>td {
+              background: #efefef;
+              color: #32363a;
+              font-weight: bold;
+              padding: 5px 15px;
+              // button {
+              //   display: none;
+              // }
+            }
+
+            .ant-table-tbody>tr.ant-table-row.ant-table-row-level-1>td {
+              button {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.dd_ant_table_group {
+  .ant-table {
+    .ant-table-thead>tr>th {
+      background-color: #f2f2f2 ! important;
+    }
+
+    .ant-table-tbody>tr.ant-table-row.ddatg_group_title>td {
+      background: #efefef;
+      color: #32363a;
+      font-weight: bold;
+      padding: 5px 15px;
+    }
+
+    .ant-table-tbody>tr.ant-table-row>td {
+      .ant-table-row-indent+.ant-table-row-expand-icon {
+        display: none;
+      }
+    }
+
+    .ant-table-tbody>tr.ant-table-row.ddatg_group_title>td {
+      .ant-table-row-indent+.ant-table-row-expand-icon {
+        display: inline-flex;
+      }
+    }
+
+    // .ant-table-tbody>tr.ant-table-row.ddatg_group_title>td {
+    //   button {
+    //     display: none;
+    //   }
+    // }
+  }
+}
+
+.lay_wrap_07 {
+  flex: auto;
+  min-width: 0;
+
+  .lay_wrap_right {
+    flex: auto;
+    min-width: 0;
+  }
+}

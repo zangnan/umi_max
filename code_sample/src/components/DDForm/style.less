@@ -1,0 +1,236 @@
+@import "~@/assets/css/config.less";
+
+
+.dd-form {
+  .ant-rate {
+    margin: -3px 0 0 0 !important;
+  }
+  .ant-form-item-explain, .ant-form-item-extra {
+    min-height: 14px;
+    line-height: 12px;
+  }
+  .grid-form,
+  .simple-form {
+    padding: 0px 20px !important;
+    .ant-row {
+      .label {
+        padding: 0 5px;
+        text-align: right;
+        line-height: 16px;    // 文字折行
+        // margin-top: 6px;      // 文字折行
+        overflow: unset;
+        .labeltext {
+            display: inline-flex;
+            align-items: center;
+            height: 32px;
+        }
+        .labeltext-overflow {
+          // display: -webkit-box; 
+          // overflow: hidden; 
+          // -webkit-line-clamp:2; /* 2表示限制为2行 */
+          // -webkit-box-orient: vertical;
+          // text-overflow: ellipsis;
+          // width: calc(100% - 10px);
+          line-height: 16px;
+          width: calc(100% - 10px);
+          white-space: inherit!important;
+          overflow: hidden;
+          height: 32px;
+          position: relative;
+        }
+        .labeltext-overflow span {
+          text-align: right;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          background-color: #fff;
+          padding: 0 10px;
+        }
+        .anticon {
+          margin-left: 3px;
+          cursor: pointer;
+        }
+        .required:before {
+          display: inline-block;
+          margin-right: 4px;
+          color: #ff4d4f;
+          font-size: 14px;
+          font-family: SimSun, sans-serif;
+          line-height: 1;
+          content: '*';
+        }
+      }
+      .vertical_form_item {
+        margin: 5px 20px;
+        .label {
+          text-align: left;
+          .labeltext {
+              height: 18px;
+          }
+        }
+      }
+      .ant-form-item-label {
+        label {
+          display: none;
+        }
+      }
+      .textArea-bottom {
+        margin-bottom: 18px !important;
+      }
+    }
+    .ant-form-item {
+      min-height: 48px !important;
+      margin-bottom: 0 !important;
+      .ant-form-item-control {
+        line-height: 30px !important;
+        .ant-form-explain,
+        .ant-form-extra {
+          margin-top: -2px !important;
+        }
+        .avatar-uploader {
+          height: 72px !important;
+          .ant-upload.ant-upload-select-picture-card {
+            height: 64px !important;
+            width: 64px !important;
+          }
+          .ant-upload-list-picture .ant-upload-list-item,
+          .ant-upload-list-picture-card .ant-upload-list-item {
+            padding: 0px;
+          }
+          .ant-upload-list-picture-card-container {
+            height: 64px !important;
+            width: 64px !important;
+          }
+          .anticon.anticon-eye {
+            display: none;
+          }
+        }
+        .ant-select-multiple .ant-select-selection-item {
+          height: initial;
+          margin-top: -5px;
+          margin-bottom: 0px;
+      }
+      }
+      .ant-form-item-label {
+        line-height: initial !important;
+      }
+      .item-info {
+        position: relative;
+        top: -5px;
+        margin: 0 0 0 3px;
+        color: @primary_color02;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+    .title {
+      margin: 0 -20px 20px -20px;
+      padding: 0 10px;
+      font-weight: normal;
+      font-size: @base_font_14x;
+      line-height: 32px;
+      background-color: @gray_color03;
+      .anticon {
+        margin-right: 5px;
+      }
+    }
+    .title2 {
+      margin: 0 -20px 20px -20px;
+      padding: 0 40px;
+      font-weight: normal;
+      font-size: @base_font_14x;
+      border-bottom: 1px solid #a5abb5;
+      line-height: 32px;
+      .anticon {
+        margin-right: 5px;
+      }
+    }
+    .title3 {
+      margin: 0 -20px 20px -20px;
+      padding: 0 70px;
+      font-weight: normal;
+      font-size: @base_font_14x;
+      line-height: 32px;
+      .anticon {
+        margin-right: 5px;
+      }
+    }
+    .ant-input-group.ant-input-group-compact {
+      .site-input-split {
+        border-color: #89919a;
+        background-color: #fff;
+        width: 32px;
+        border-Left: 0;
+        border-right: 0;
+        pointer-events: none;
+        border-radius: 0 !important;
+      }
+      .site-input-right {
+        border-left-width: 0;
+        &.site-input-right:hover,
+        &.site-input-right:focus {
+          border-left-width: 1px;
+        }
+      } 
+      .inputnumber-range-left {
+        height: 30px;
+        width: calc(50% - 15px) !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+      .inputnumber-range-right {
+        height: 30px;
+        width: calc(50% - 15px) !important;
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+        border-left-width: 0;
+        &.site-input-right:hover,
+        &.site-input-right:focus {
+          border-left-width: 1px;
+        }
+      }
+    }
+    /* ------------------------------------ *\
+      # 查询条件
+    \* ------------------------------------ */
+    &.search-filter {
+      padding: 0 !important;
+      margin: 0;
+      background-color: @gray_color03;
+      background-color: #ffffff;
+      position: relative;
+      .filter_panel_toggle {
+        display: inline-block;
+        width: 20px;
+        height: 18px;
+        line-height: 14px;
+        color: #F07800;
+        border: 1px solid #F07800;
+        background-color: #ffffff;
+        border-radius: 3px;
+        position: absolute;
+        left: 50%;
+        bottom: -10px;
+        z-index: 4;
+        font-size: 12px;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+  .input-tags {
+    .ant-select-arrow, .ant-picker-suffix {
+      color: #0854a0 !important;
+      display: none;
+    }
+  }
+  .intro_detail_h1 {
+    margin: 24px 0 10px 0;
+  }
+  .intro_detail_h1:first-child {
+    margin: 0 0 10px 0;
+  }
+  .intro_detail_h2 {
+    margin: 8px 0 8px 24px;
+  }
+}

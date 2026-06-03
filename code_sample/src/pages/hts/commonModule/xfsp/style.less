@@ -1,0 +1,148 @@
+@import "~@/assets/css/config.less";
+
+.lay_wrap_hgckhwbgd {
+  .ckbgd-table {
+    border: 2px solid #333;
+    width: 927px;
+    // max-width: 935px;
+    table-layout: fixed;
+
+    th,
+    td {
+      vertical-align: middle;
+      line-height: 20px;
+      height: 40px;
+      font-size: 15px;
+      border: 1px solid #333;
+      padding: 0 11px;
+    }
+
+    .tableTitle {
+      background-color: #f0f0f0;
+    }
+
+    .label-name {
+      // width: 300px;
+      color: #333;
+    }
+
+    .label-text {
+      // width: 200px;
+      color: #666;
+    }
+
+    .noborder-b {
+      border-bottom: 1px solid transparent;
+    }
+
+    .noborder-r {
+      border-right: 1px solid transparent;
+    }
+
+    .ckbgd-tb-table {
+      td {
+        border: none;
+        font-size: 13px;
+      }
+
+      th {
+        border: none;
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+.dd_modal_wrap {
+  .ant-modal-body {
+    max-height: 450px;
+    overflow-y: auto;
+
+    .dd_modal_content {
+      position: relative;
+      padding: 0 10px 0 40px;
+
+      &.form {
+        padding: 0;
+      }
+
+      .header {
+        margin: 0 0 15px 0;
+
+        .icon {
+          font-size: 22px;
+          line-height: 22px;
+          display: inline-block;
+          position: absolute;
+          left: 8px;
+          top: 1px;
+        }
+
+        .info {
+          font-size: 16px;
+          display: inline-block;
+          color: #272424;
+        }
+      }
+
+      .body {
+        .item {
+          margin: 0;
+          line-height: 30px;
+        }
+      }
+
+      &.info .icon {
+        color: #1990FF;
+      }
+
+      &.success .icon {
+        color: #52C41A;
+      }
+
+      &.error .icon {
+        color: #F5212D;
+      }
+
+      &.warning .icon {
+        color: #FAAD15;
+      }
+
+      &.question .icon {
+        color: #FAAD15;
+      }
+    }
+  }
+}
+
+.errorTable {
+  width: 100%;
+  border: 1px solid #999;
+  margin-top: 15px;
+
+  th,
+  td {
+    vertical-align: middle;
+    line-height: 20px;
+    height: 30px;
+    font-size: 13px;
+    border: 1px solid #999;
+    padding: 0 5px;
+  }
+
+  .errorTableText {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 385px;
+  }
+}
+
+.dyStyle {
+  .groupTit {
+    background-color: #f1f4f7;
+    padding: 0 10px;
+    line-height: 32px;
+    margin: 0 0 20px 0;
+  }
+}

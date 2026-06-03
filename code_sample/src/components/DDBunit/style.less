@@ -1,0 +1,130 @@
+@import "~@/assets/css/config.less";
+
+.main_pro_card {
+  .ant-pro-card-split-horizontal {
+      border-bottom: 1px solid @primary_color02;
+  }
+  .grid_header_info_wrap {
+    display: inline-block;
+    .title {
+      font-size: 16px;
+      color: @font_color01;
+      margin-right: 20px;
+    }
+    .grid_header_tatal {
+      margin: 0 15px 0 0;
+      display: inline-block;
+      .tnum {
+        margin: 0 5px;
+      }
+      .txt_b {
+        margin: 0;
+      }
+    }
+    .grid_header_info {
+      display: inline-block;
+      .grid_header_info_group {
+        margin-right: 15px;
+        display: inline-block;
+      }
+    }
+    .grid_header_info_customer {
+      display: inline-block;
+    }
+    .txt_b {
+      margin: 0 3px;
+    }
+    .txt_h {
+      color: @font_color02;
+    }
+  }
+  .dd_quick_filter {
+    position: relative;
+    top: -1px;
+    .ant-form-item-explain, .ant-form-item-extra {
+      margin-top: -51px;
+      background-color: #f7f7f7;
+    }
+    .site-input-split {
+      background-color: #fff;
+      width: 30px;
+      border-Left: 0;
+      border-right: 0;
+      pointer-events: none;
+      border-radius: 0 !important;
+    }
+    .site-input-right {
+      border-left-width: 0;
+      &.site-input-right:hover,
+      &.site-input-right:focus {
+        border-left-width: 1px;
+      }
+    }
+
+    .grid-filter-input-search-noBtn {
+      .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
+        border-top-right-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+      }
+      .ant-input-group-addon {
+        display: none;
+      }
+    }
+  }
+}
+.dd_grid_icon {
+  .anticon {
+    margin-right: 5px;
+    &.anticon-warning {
+      color: @primary_color02;
+    }
+    &.anticon-check {
+      color: @primary_color03;
+    }
+    &.anticon-stop {
+      color: @primary_color01;
+    }
+    &.anticon-transaction{
+      color: @primary_color04;
+    }
+    &.anticon-stop {
+      color: @primary_color01;
+    }
+  }
+}
+.quick-filter-input-range {
+  .ant-form-item-control {
+    top:-62px;
+    margin-left:130px;
+  }
+}
+.layout_tz {
+  .ant-table-wrapper {
+    border-top: 0px solid #7d7d7d;
+  }
+  th{
+    text-align: center !important;
+  }
+}
+// 列表内部滚动条布局
+.layout_grid_scroll {
+  .dd-filter-wrap {
+    .ant-pro-card-body {
+      position: relative;
+      height: 68px;
+      .dd-form {
+        position: absolute;
+        z-index: 999;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        .search-filter {
+          padding: 0 20px 0 20px !important;
+          top: 20px;
+          border-bottom: 1px solid @primary_color02;
+        }
+      }
+    }
+  }
+}

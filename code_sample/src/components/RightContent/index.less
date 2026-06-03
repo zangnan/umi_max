@@ -1,0 +1,147 @@
+@import '~antd/es/style/themes/default.less';
+@import "~@/assets/css/config.less";
+
+@pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+
+.menu {
+  :global(.anticon) {
+    margin-right: 8px;
+  }
+  :global(.ant-dropdown-menu-item) {
+    min-width: 160px;
+  }
+}
+.headerLeft {
+  padding: 0 100px 0 0;
+  a {
+    color: #333333;
+    margin: 0px 20px 0 0;
+    border-bottom: 2px solid transparent;
+    height: 48px;
+    padding: 0px 5px;
+    line-height: 48px;
+    display: inline-block;
+    &.active {
+      color: #1890ff;
+      border-bottom: 2px solid #1890ff;
+    }
+  }
+}
+.header_action_link {
+  margin: 0 10px 0 0;
+  height: 24px !important;
+  line-height: 24px;
+  padding: 0 15px !important;
+  border: 1px solid #d9d9d9;
+}
+.ant-btn.header_action_btn {
+  margin: 0 10px 0 0;
+  height: 24px !important;
+  line-height: 24px !important;
+  padding: 0px 12px !important;
+  border: 1px solid #D1E8FF;
+  background-color: transparent;
+  color: #D1E8FF;
+}
+.ant-btn.header_action_btn:focus {
+  color: #D1E8FF;
+  border-color: #D1E8FF;
+}
+.avatar_user {
+  .anticon.anticon-user {
+    color: #fff;
+  }
+}
+.right {
+  // width: 100%;
+  display: flex;
+  float: right;
+  height: @height_header;
+  margin-left: auto;
+  overflow: hidden;
+  .action {
+    display: flex;
+    align-items: center;
+    height: @height_header;
+    padding: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    > span {
+      vertical-align: middle;
+    }
+    .icon {
+      font-size: 18px;
+    }
+    &:hover {
+      background: @pro-header-hover-bg;
+    }
+    &:global(.opened) {
+      background: @pro-header-hover-bg;
+    }
+  }
+  .ant-space-item:last-child {
+    font-size: 20px;
+    color: red;
+    span {
+      padding-right: 10px;
+    }
+  }
+  .search {
+    padding: 0px 10px;
+    &:hover {
+      background: transparent;
+    }
+  }
+  .account {
+    .avatar {
+      margin-right: 0;
+      vertical-align: top;
+      background: rgba(255, 255, 255, 0.85);
+      background: #1B7FD9;
+      color: #fff;
+      .menuLink {
+        color: #1b7ed8;
+      }
+    }
+  }
+}
+
+.dark {
+  .action {
+    &:hover {
+      background: #252a3d;
+    }
+    &:global(.opened) {
+      background: #252a3d;
+    }
+  }
+}
+
+@media only screen and (max-width: @screen-md) {
+  :global(.ant-divider-vertical) {
+    vertical-align: unset;
+  }
+  .name {
+    display: none;
+  }
+  .right {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    .account {
+      .avatar {
+        margin-right: 0;
+      }
+    }
+    .search {
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .right {
+    .search {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,255 @@
+@import '~antd/lib/style/themes/default.less';
+
+// 左&右
+.lay_wrap_01 {
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+
+  .lay_wrap_left {
+    flex: 0 0 200px;
+    background-color: #dbdbdb;
+  }
+
+  .lay_wrap_right {
+    flex: 1;
+    height: 100%;
+    background-color: antiquewhite;
+  }
+}
+
+.lay_wrap_04 {
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+
+  .lay_wrap_left {
+    flex: 1;
+    background-color: #dbdbdb;
+  }
+
+  .lay_wrap_right {
+    flex: 0 0 200px;
+    height: 100%;
+    background-color: antiquewhite;
+  }
+}
+
+// 左&右（上下）1
+.lay_wrap_02 {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .lay_wrap_left {
+    flex-basis: 200px; //定高
+    flex-shrink: 0;
+    background-color: #dbdbdb;
+  }
+
+  .lay_wrap_right {
+    flex: 9;
+    display: flex;
+    background-color: #b4b4b4;
+    flex-shrink: 0;
+    flex-direction: column;
+
+    .lay_wrap_top {
+      flex-basis: 200px; //定高
+      flex-shrink: 0;
+      background-color: #c2c2c2;
+    }
+
+    .lay_wrap_bottom {
+      flex: 1;
+      background-color: antiquewhite;
+    }
+  }
+}
+
+// 左&右（上下）2
+.lay_wrap_05 {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .lay_wrap_left {
+    flex-basis: 200px; //定宽
+    background-color: #dbdbdb;
+    flex-shrink: 0; //如果希望缩小时宽度不被压缩可以使用这个
+  }
+
+  .lay_wrap_right {
+    flex: 9;
+    display: flex;
+    background-color: #b4b4b4;
+    flex-direction: column;
+
+    .lay_wrap_top {
+      flex: 1;
+      background-color: #6fbdd4;
+    }
+
+    .lay_wrap_bottom {
+      background-color: rgb(248, 206, 150);
+      flex-basis: 200px; //定高
+    }
+  }
+}
+
+// 上下
+.lay_wrap_03 {
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .lay_wrap_top {
+    height: 200px;
+    flex: 0 0 200px;
+    background-color: #dbdbdb;
+  }
+
+  .lay_wrap_bottom {
+    flex: 1;
+    background-color: antiquewhite;
+  }
+}
+
+//上下拖动
+.lay_wrap_06 {
+  background-color: #b4b4b4;
+
+  .lay_wrap_top {
+    background-color: #6fbdd4;
+    width: 100%;
+  }
+
+  .lay_wrap_bottom {
+    background-color: rgb(248, 206, 150);
+    height: 100%;
+  }
+}
+
+//左右拖动
+.lay_wrap_07 {
+
+  // background-color: #b4b4b4;
+  .lay_wrap_left {
+    // background-color: #6fbdd4;
+    height: calc(100vh - 44px - 40px - 69px);
+  }
+
+  .lay_wrap_right {
+    //  background-color: rgb(248, 206, 150);
+    height: calc(100vh - 44px - 40px - 69px);
+  }
+}
+
+//上下左右拖动
+.lay_wrap_08 {
+  .lay_wrap_left {
+    background-color: antiquewhite;
+    height: 100%;
+  }
+
+  .lay_wrap_top {
+    background-color: #6fbdd4;
+    width: 100%;
+  }
+
+  .lay_wrap_bottom {
+    background-color: rgb(248, 206, 150);
+    height: 100%;
+  }
+}
+
+//拖动必要样式
+.Resizer {
+  background: @primary_color02;
+  z-index: 1;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+}
+
+.Resizer:hover {
+  transition: all 0.5s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+}
+
+.Resizer.horizontal:hover {
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+}
+
+.Resizer.vertical {
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: -2px;
+    margin-top: -10px;
+    content: "";
+    margin: 0px 0px;
+    display: inline-block;
+    width: 4px;
+    height: 30px;
+    background-color: #f7f7f7;
+    border-right: 3px dotted @primary_color02;
+  }
+}
+
+.Resizer.vertical:hover {
+  border-left: 5px solid rgba(0, 0, 0, 0.05);
+  border-right: 5px solid rgba(0, 0, 0, 0.05);
+
+  &::after {
+    background-color: #dedede;
+  }
+}
+
+.Resizer.disabled {
+  cursor: not-allowed;
+}
+
+.Resizer.disabled:hover {
+  border-color: transparent;
+}
+
+.dd_layout_form_01 {
+  .ddlf01_footer {
+    text-align: center;
+    .ant-pro-card-body {
+      padding: 10px !important;
+    }
+  }
+}
+
+.dd_data_page_modal {
+  .ant-drawer-body {
+    padding: 0;
+    background-color: #f7f7f7;
+  }
+}

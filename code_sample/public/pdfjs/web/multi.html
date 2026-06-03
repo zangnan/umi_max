@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PDF预览</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    .bar { display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid #eee; }
+    .bar button { padding: 6px 10px; }
+    .bar select { padding: 6px; }
+    .info { margin-left: auto; }
+    .wrap { height: calc(100% - 50px); }
+    .wrap iframe { width: 100%; height: 100%; border: 0; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <button id="prevFile">上一文件</button>
+    <select id="fileSelect"></select>
+    <button id="nextFile">下一文件</button>
+    <button id="prevPage" style="margin-left:16px">上一页</button>
+    <button id="nextPage">下一页</button>
+    <div class="info" id="info"></div>
+  </div>
+  <div class="wrap"><iframe id="viewer" src="about:blank"></iframe></div>
+  <script>
+    var search = location.search.replace(/^\?/, '');
+    var params = {};
+    search.split('&').forEach(function(p){ if(!p) return; var kv = p.split('='); params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1]||''); });
+    var key = params.key || '';
+    var listStr = key ? sessionStorage.getItem(key) : '';
+    var files = [];
+    try { files = listStr ? JSON.parse(listStr) : []; } catch(e) { files = []; }
+    var index = 0;
+    var pages = 0;
+    var page = 1;
+    var viewer = document.getElementById('viewer');
+    var fileSelect = document.getElementById('fileSelect');
+    var prevFileBtn = document.getElementById('prevFile');
+    var nextFileBtn = document.getElementById('nextFile');
+    var prevPageBtn = document.getElementById('prevPage');
+    var nextPageBtn = document.getElementById('nextPage');
+    var info = document.getElementById('info');
+    function renderSelect(){ fileSelect.innerHTML = ''; files.forEach(function(f,i){ var opt = document.createElement('option'); opt.value = i; opt.textContent = f.name || ('文件'+(i+1)); fileSelect.appendChild(opt); }); fileSelect.value = index; }
+    function updateInfo(){ info.textContent = (files[index]?.name || '') + (pages? ('  第'+page+'/'+pages+'页') : ''); prevFileBtn.disabled = index<=0; nextFileBtn.disabled = index>=files.length-1; prevPageBtn.disabled = !pages || page<=1; nextPageBtn.disabled = !pages || page>=pages; }
+    function requestFile(i){ if(!window.opener) return; window.opener.postMessage({ type: 'pdf_multi_request', key: key, index: i }, '*'); }
+    function loadFile(i){ if(i<0 || i>=files.length) return; index = i; var f = files[i]; page = 1; pages = 0; renderSelect(); updateInfo(); if(f.file){ viewer.src = 'viewer.html?file='+encodeURIComponent(f.file)+'&name='+encodeURIComponent(f.name||('文件'+(i+1))); } else { viewer.src = 'about:blank'; requestFile(i); } }
+    var timer = null;
+    viewer.addEventListener('load', function(){ if(timer){ clearInterval(timer); timer=null; } var win = viewer.contentWindow; function tryInit(){ try{ var app = win && win.PDFViewerApplication; if(app && app.pagesCount){ pages = app.pagesCount; page = app.page||1; updateInfo(); return true; } }catch(e){} return false; } if(!tryInit()){ timer = setInterval(function(){ if(tryInit()){ clearInterval(timer); timer=null; } }, 200); } });
+    prevFileBtn.addEventListener('click', function(){ if(index>0){ loadFile(index-1); } });
+    nextFileBtn.addEventListener('click', function(){ if(index<files.length-1){ loadFile(index+1); } });
+    fileSelect.addEventListener('change', function(){ var v = Number(fileSelect.value||0); loadFile(v); });
+    prevPageBtn.addEventListener('click', function(){ var win = viewer.contentWindow; if(!win) return; var app = win.PDFViewerApplication; if(!app) return; var cur = app.page||page||1; if(cur>1){ app.page = cur-1; page = cur-1; updateInfo(); } });
+    nextPageBtn.addEventListener('click', function(){ var win = viewer.contentWindow; if(!win) return; var app = win.PDFViewerApplication; if(!app) return; var cur = app.page||page||1; if(pages && cur<pages){ app.page = cur+1; page = cur+1; updateInfo(); } });
+    window.addEventListener('message', function(e){ var d = e && e.data || {}; if(!d) return; if(d.type === 'pdf_multi_response' && d.key === key){ var idx = Number(d.index); var f = files[idx]; if(!f) return; f.file = d.file; f.name = d.name || f.name; if(index === idx){ viewer.src = 'viewer.html?file='+encodeURIComponent(f.file)+'&name='+encodeURIComponent(f.name||('文件'+(idx+1))); page = 1; pages = 0; renderSelect(); updateInfo(); } }
+      if(d.type === 'pdf_multi_error' && d.key === key){ var idx2 = Number(d.index); if(index === idx2){ info.textContent = (files[index]?.name || '') + ' 加载失败'; } }
+    });
+    if(files.length){ loadFile(0); }
+  </script>
+</body>
+</html>
