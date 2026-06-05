@@ -4287,6 +4287,8 @@ myUtil.api = {
       window.location.href.indexOf('/ai/theme') > -1) {
     } else if(window.location.href.indexOf('/example/') > -1) {
       apiPrefix = API_URL_EXAMPLE;
+    } else if(window.location.href.indexOf('/hts/') > -1) {
+      apiPrefix = API_URL_HTS;
     }
     return apiPrefix;
   },

@@ -178,6 +178,10 @@ export const layout = ({ initialState }: any) => {
           if (menuExample) {
             newMenuInfo = [...newMenuInfo, menuExample];
           }
+          const menuHts = defaultMenuData.find((tmp: any) => tmp.name === '慧退税');
+          if (menuHts) {
+            newMenuInfo = [...newMenuInfo, menuHts];
+          }
         }
 
         return newMenuInfo;

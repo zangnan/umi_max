@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 
 let proBase = process.env.NODE_ENV === 'production' ? 'ddittoolV0.2' : '';
 const { build_env } = process.env;
-let accessClientId = 'access_test';
+// let accessClientId = 'access_test';
+let accessClientId = 'dditSaas';
 let sysTitle = '应用开发工具';
 let envType = '';
 let versionDate = dayjs(new Date()).format('YYMMDD.hhmm');
@@ -99,6 +100,7 @@ export default defineConfig({
     EXAMPLE_MENU_SHOW: false, // 是否显示示例菜单 后端菜单下生效
     ACCESS_CLIENT_ID: accessClientId, // 是否采用本地菜单
     API_URL_EXAMPLE: '', // 示例mock数据
+    API_URL_HTS: '', // 慧退税
     ENV_TYPE: envType, // 后端环境类型
     SYS_TITLE: sysTitle,
     VERSION_DATE: versionDate,

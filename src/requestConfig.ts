@@ -4,6 +4,7 @@ import { message, notification } from 'antd';
 import { history } from '@umijs/max';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
+import cktsUtil from '@/pages/hts/cktsUtil';
 
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -104,12 +105,15 @@ export const requestConfig: RequestConfig = {
       if (accessToken && config?.url?.indexOf('/hx/qx/token/oauth') === -1) {
         authHeader.accessToken = accessToken;
       }
+      // HTS 业务逻辑封装在 cktsUtil.api.handleHtsRequest 中
+      // 必须在 headers 构造**之前**调用，否则 authHeader 的就地修改不会反映到 headers
+      const finalConfig = cktsUtil.api.handleHtsRequest(config, authHeader);
       const headers: any = {
-        ...config?.headers,
+        ...finalConfig?.headers,
         ...authHeader,
         // withCredentials: true,
       };
-      return { ...config, headers,
+      return { ...finalConfig, headers,
         // withCredentials: true
       };
     },

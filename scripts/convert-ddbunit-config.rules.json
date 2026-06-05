@@ -1,0 +1,41 @@
+{
+  "prependImports": [
+    "import CONSTANTS from '@/components/DDAssist/constants';"
+  ],
+  "removeImports": [
+    "import myUtil from '@/pages/common/myUtil';"
+  ],
+  "renames": {
+    "unit_key": "module_key",
+    "click_checked": "grid_click_checked",
+    "costomer_toobar": "customer_toolbar",
+    "grid_show_data_num": "toolbar_show_grid_checked_num"
+  },
+  "toolbarRenames": {
+    "tssb_download": "download"
+  },
+  "removes": [
+    "wm_grid_columns",
+    "export_key",
+    "export_large",
+    "module_type"
+  ],
+  "preserveKeys": {
+    "layout_type": "tz"
+  },
+  "header": {
+    "referenceFile": "src/pages/example/json_page/unit/config.tsx",
+    "protocolFile": "src/components/DDBunit/DDBunit2.types.ts"
+  },
+  "route": {
+    "enabled": true,
+    "cktsFile": "config/routes/routes.ckts.ts",
+    "nameMapping": {
+      "monthData": "月度计划",
+      "seasonData": "季度计划",
+      "yearData": "年度计划"
+    },
+    "pathTemplate": "/hts/saasMdt/tuiShuiJiHua/{basename}",
+    "_pathTemplateNote": "r9 起 path/component 默认从 outPath 反向派生；pathTemplate 仅在 outPath 不可派生时作为回退使用。保留此字段仅为向后兼容历史 fixture 和脚本。"
+  }
+}

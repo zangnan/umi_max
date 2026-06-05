@@ -50,6 +50,7 @@ export default defineConfig({
     LOCAL_MENU: false, // 是否采用本地菜单
     ENV_TYPE: 'node', // 后端环境类型
     EXAMPLE_MENU_SHOW: true, // 是否显示示例菜单 后端菜单下生效
+    API_URL_HTS: 'http://192.168.0.134:4111/cktsgl/v1', // 慧退税
 
     // 正式库 联调环境  v0.1
     // API_URL_BASE: 'http://192.168.0.194:18088',  // 正式库 联调环境  v0.1

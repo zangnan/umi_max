@@ -1,6 +1,7 @@
 import routesEasyDev from './routes/routes.easyDev';
 import routesEasyDevDc from './routes/routes.easyDevDc';
 import routesExample from './routes/routes.example';
+import routesCkts from './routes/routes.ckts';
 
 let routes: any = [
   { path: '/user', layout: false, routes: [
@@ -47,6 +48,7 @@ let routes: any = [
 ];
 
 // routes = process.env.NODE_ENV !== 'production' ? routesExample.concat(routes) : [].concat(routes);
+routes = routesCkts.concat(routes);
 routes = routesExample.concat(routes);
 routes = routesEasyDev.concat(routes);
 routes = routesEasyDevDc.concat(routes);

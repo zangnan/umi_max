@@ -19,3 +19,7 @@
 .mcp.json
 __pycache__
 /.agents
+
+# r9: convert-ddbunit-config 测试运行器临时产物（路由生成 fixture 用）
+/scripts/__fixtures__/__src_layout__
+/scripts/__fixtures__/__tmp_routes_ckts.ts

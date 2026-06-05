@@ -1,0 +1,14 @@
+{
+  "prependImports": [
+    "import CONSTANTS from '@/components/DDAssist/constants';"
+  ],
+  "renames": {},
+  "toolbarRenames": {},
+  "removes": [],
+  "route": {
+    "enabled": true,
+    "cktsFile": "scripts/__fixtures__/__tmp_routes_ckts.ts",
+    "nameMapping": {},
+    "pathTemplate": null
+  }
+}

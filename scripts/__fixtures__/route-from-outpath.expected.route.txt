@@ -1,0 +1,1 @@
+{ name: 'route-from-outpath 测试 - 验证 r9 路由从 outPath 派生', path: '/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/route-from-outpath', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/route-from-outpathIndex' },
