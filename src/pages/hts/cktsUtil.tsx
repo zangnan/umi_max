@@ -8,6 +8,11 @@ export async function xj(param: any) {
   return request(`${API_URL_HTS}/hx/ty/commonextbtn/xj`, { method: 'POST', data: param });
 }
 
+// [表单通用业务] 序号重排
+export async function xhcp(param: any) {
+  return request(`${API_URL_HTS}/hx/ty/commonextbtn/xhcp`, { method: 'POST', data: param });
+}
+
 const cktsUtil: any = {};
 
 /**
@@ -277,6 +282,25 @@ cktsUtil.cktsCommonSum = (param: any) => {
       }
     })
 }
+
+// 原在线申报系统模块：序号重排
+cktsUtil.cktsCommonXhcp = (param: any) => {
+  const { refCktsXhcp, unit_key, unit_lcswsx_dm, unitRef, ssq, sbpc, gridData = [] } = param;
+  const cktsOrder = param?.ckts_order ?? 0;
+  if (!cktsOrder || cktsOrder <= 0) return;
+  // 从 gridData 首行提取 ssq/sbpc 默认值（与 code_sample 范式一致）
+  // 业务模块入参 ssq/sbpc 优先（如果有），否则取 gridData[0]
+  const defaultSsq = ssq ?? gridData[0]?.ssq ?? '';
+  const defaultSbpc = sbpc ?? gridData[0]?.sbpc ?? '';
+  refCktsXhcp.current?.showModal?.({
+    type: cktsOrder,
+    lcswsxDm: unit_lcswsx_dm,
+    ssq: defaultSsq,
+    sbpc: defaultSbpc,
+    ywCxBz: 'XHCP_' + unit_key,
+    unitRef,
+  });
+};
 
 // 获取流转税务事项代码
 cktsUtil.getLcswsxDm = (unit_constant: any) => {
