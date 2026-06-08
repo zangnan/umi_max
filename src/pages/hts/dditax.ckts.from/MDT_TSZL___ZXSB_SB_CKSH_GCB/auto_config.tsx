@@ -147,7 +147,7 @@ unitConfig.grid_handle_columns_default = {
   delete: false,                     	// 是否显示删除链接，默认关闭
 };
 
-unitConfig.customer_toolbar = [{ name: '小计', key: 'xj', func: 'handleXj' },{ name: '序号重排', key: 'xhcp_4', func: 'handleXhcp', param: 4 },
+unitConfig.customer_toolbar = [
 	{ name: '收汇提取', key: 'mdtShTq', func: 'mdtShTq' },
 	{ name: '模板下载', key: 'mdtShMbxz', func: 'mdtShMbxz' },
 	{ name: '导入', key: 'mdtShDr', func: 'mdtShDr' },

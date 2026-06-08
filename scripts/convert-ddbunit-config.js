@@ -615,20 +615,8 @@ function addEllipsisForBusinessTypeCode(content, configVar) {
  */
 
 const TOOLBAR_DEFAULT_RULES = [
-  {
-    name: '序号重排',
-    fieldName: 'ckts_order',
-    valueMatcher: /ckts_order\s*:\s*(-?\d+(?:\.\d+)?)/,
-    buildEntry: (valueN) =>
-      `{ name: '序号重排', key: 'xhcp_${valueN}', func: 'handleXhcp', param: ${valueN} }`,
-  },
-  {
-    name: '小计',
-    fieldName: 'ckts_sum',
-    valueMatcher: /ckts_sum\s*:\s*true/,
-    buildEntry: () =>
-      `{ name: '小计', key: 'xj', func: 'handleXj' }`,
-  },
+  // 注意："序号重排"和"小计"不再自动添加到 customer_toolbar；
+  // 业务能力分别由 DDBunit2_CKTS 内部 ckts_order / ckts_sum 配置统一接管。
   // 未来加：ckts_download / ckts_upload / ...
 ];
 
@@ -1166,7 +1154,7 @@ function generateIndexPage({ configImportName, funImportName }) {
   // configImportName: config 文件 basename（不含扩展名），如 'monthDataConfig'
   // funImportName: fun 文件 basename（不含扩展名），如 'monthDataFun'
   return `import React from 'react';
-import DDBunit2 from '@/components/DDBunit/DDBunit2';
+import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './${configImportName}';
 import Func from './${funImportName}';
 

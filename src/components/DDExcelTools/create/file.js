@@ -781,6 +781,9 @@ unitConfig.toolbar_default = {
 	full: ${xlsxBtnToolbarFull}, // 是否显示全屏按钮，默认关闭
 	download: ${xlsxBtnToolbarDownload}, // 是否显示导出按钮，默认关闭
 	upload: ${xlsxBtnToolbarUpload},  // 是否显示导入按钮，默认关闭
+	// CKTS 业务字段（与示例代码保持一致：true/4；不需要小计的模块可在 auto_config.tsx 中覆盖为 false/0）
+	ckts_sum: true,
+	ckts_order: 4,
 };
 
 // 配置项：列表操作列
@@ -804,7 +807,7 @@ export default unitConfig;
 		let filePathIndex = path.resolve(__dirname, `${targetDir}\\index.tsx`);	// auto_config.tsx文件及路径
 		let htmlCodeIndex =
 			`import React, { useContext, useState, useEffect, useRef } from 'react';
-import DDBunit2A from '@/components/DDBunit/DDBunit2A';
+import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './auto_config';
 import Func from './f';
 
@@ -812,7 +815,7 @@ const Unit2: React.FC<unknown> = () => {
 const myConfig = { ...unitConfig };
 
 return <>
-	<DDBunit2A config={myConfig} func={Func} />
+	<DDBunit2 config={myConfig} func={Func} />
 </>;
 };
 

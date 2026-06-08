@@ -1,6 +1,12 @@
 import { request } from 'umi';
 import { queryList, saveOrUpdate, queryForm } from '@/services/hts/api';
 import CONSTANTS from '@/components/DDAssist/constants';
+import { message } from 'antd';
+
+// [表单通用业务] 小计
+export async function xj(param: any) {
+  return request(`${API_URL_HTS}/hx/ty/commonextbtn/xj`, { method: 'POST', data: param });
+}
 
 const cktsUtil: any = {};
 
@@ -238,6 +244,50 @@ cktsUtil.api = {
   testAAA() {
 
   },
+}
+
+// 原在线申报系统模块：小计
+cktsUtil.cktsCommonSum = (param: any) => {
+  const { refCktsSum, unit_key, unit_lcswsx_dm, gridData, gridParams, setMasker,selectionRowKeys } = param;
+    if (gridData.length === 0) {
+      // message.info(intl2.formatMessage({ id: 'message_no_data_common_sum' }));
+      message.info('message_no_data_common_sum');
+      return;
+    }
+    setMasker(true);
+    const obj = [...gridParams?.searchModel];
+    if(selectionRowKeys && selectionRowKeys.length>0){
+      obj.push({"type": 1,"property": "uuid","values": selectionRowKeys,"op": "ain"});
+    }
+    const paramTmp = {
+      lcswsxDm: unit_lcswsx_dm,
+      ywCxBz: 'XJ_' + unit_key,
+      adQuery: obj,
+    }
+
+    xj(paramTmp).then((response) => {
+      const { code, body } = response;
+      setMasker(false);
+      if (code === '200') {
+        refCktsSum.current!.showModal({
+          gridData: body.rows
+        });
+      } else {
+        message.info('获取数据失败');
+      }
+    })
+}
+
+// 获取流转税务事项代码
+cktsUtil.getLcswsxDm = (unit_constant: any) => {
+  let arr = unit_constant?.split(',') || [];
+  for (let i = 0; i < arr.length; i++) {
+    let tmp = arr[i].split('=');
+    if (tmp[0] === 'lcswsxDm') {
+      return tmp[1] || '';
+    }
+  }
+  return '';
 }
 
 export default cktsUtil;

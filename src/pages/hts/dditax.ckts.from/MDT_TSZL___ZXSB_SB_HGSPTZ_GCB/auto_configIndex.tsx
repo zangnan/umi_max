@@ -1,5 +1,5 @@
 import React from 'react';
-import DDBunit2 from '@/components/DDBunit/DDBunit2';
+import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './auto_config';
 import Func from './auto_configFun';
 
