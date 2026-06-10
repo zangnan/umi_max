@@ -29,10 +29,11 @@ seasonConfig.grid_columns = [
 ];
 
 //外贸
+
 // 配置项：筛选_快捷筛选 列表上方，标题和区域 第二层筛选
 seasonConfig.filter_items = [
   { name: 'nd', label: '年度', type: 'Input' },
-  { name: 'jd', label: '季度', type: 'Select', codeTable: ['CODE_STATIC_DM_JD', '01']},
+  { name: 'jd', label: '季度', type: 'Select', codeTable: 'CODE_STATIC_DM_JD:01'},
   { name: 'bz', label: '备注', type: 'Input' },
 ];
 

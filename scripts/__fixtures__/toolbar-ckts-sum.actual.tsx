@@ -18,5 +18,5 @@ myConfig.toolbar_default = {
   ckts_order: 4,
   ckts_sum: true,
 };
-myConfig.customer_toolbar = [{ name: '序号重排', key: 'xhcp_4', func: 'handleXhcp', param: 4 },{ name: '小计', key: 'xj', func: 'handleXj' }];
+myConfig.customer_toolbar = [];
 myConfig.handle_columns = [];

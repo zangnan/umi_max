@@ -101,6 +101,13 @@
  *       autoSize: { minRows: 3, maxRows: 3 }
  *       layout: CONSTANTS.DEFAULT_FORM_LAYOUT_100P_ROW
  *   bracket-depth 扫描处理 layout 的嵌套 {}。
+ *
+ * r15 增强：codeTable 数组 → 字符串 转换
+ *   旧：源文件 filter_items / form_items / grid_columns / grid_columns_tj 节点里
+ *       `codeTable: ['<key>', '<view>']` 形式的码表配置（DDBunit2 旧协议）
+ *   新：`codeTable: '<key>:<view>'`（DDBunit2_CKTS 新协议，与 getCode(key, viewKey) 配合）
+ *   复用 r11 框架：仅 push 一项到 SPECIAL_FIELD_RULES，主流程不变。
+ *   仅匹配两元素字符串字面量数组；3+ 元素 / 含表达式 / 已是字符串形式 全部原样保留。
  */
 const fs = require('fs');
 const path = require('path');
@@ -533,6 +540,10 @@ const SPECIAL_FIELD_RULES = [
     name: 'form_items TextArea 项标准化',
     apply: normalizeTextAreaFormItems,
   },
+  {
+    name: 'codeTable 数组 → 字符串 (r15)',
+    apply: transformCodeTableArrays,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -883,6 +894,68 @@ function transformTextAreaFormItem(content, configVar) {
  */
 function normalizeTextAreaFormItems(content, configVar) {
   return transformTextAreaFormItem(content, configVar);
+}
+
+// =================== r15：codeTable 数组 → 字符串 转换 ===================
+
+/**
+ * r15 规则：filter_items / form_items / grid_columns / grid_columns_tj 块内
+ *   `codeTable: ['<key>', '<view>']` → `codeTable: '<key>:<view>'`
+ *
+ * 行为细节：
+ *   - 作用域严格限定在 4 个目标块；其它位置（如 grid_handle_columns 等）的 codeTable 不动
+ *   - 仅匹配两元素字符串字面量数组（单/双引号均可；元素间空白容忍）
+ *   - 不匹配 3+ 元素数组、含变量/表达式的数组、已是字符串形式 —— 全部原样保留
+ *   - 输出统一单引号 `codeTable: 'X:Y'`，与项目源码风格一致
+ *   - 幂等：已转换的字符串形式不会再次匹配
+ *
+ * @param {string} content
+ * @param {string} configVar
+ * @returns {{ content: string, count: number }}
+ */
+function transformCodeTableArrays(content, configVar) {
+  const blockKeys = ['filter_items', 'form_items', 'grid_columns', 'grid_columns_tj'];
+  let out = content;
+  let count = 0;
+
+  for (const blockKey of blockKeys) {
+    // 1) 找 <configVar>.<blockKey> = [ 起点
+    const startRe = new RegExp(`${escapeRegExp(configVar)}\\.${blockKey}\\s*=\\s*\\[`);
+    const startMatch = startRe.exec(out);
+    if (!startMatch) continue;
+
+    // 2) bracket-depth 扫描找匹配 ]
+    const startIdx = startMatch.index + startMatch[0].length;
+    let depth = 1;
+    let i = startIdx;
+    while (i < out.length && depth > 0) {
+      const ch = out[i];
+      if (ch === '[') depth++;
+      else if (ch === ']') depth--;
+      if (depth === 0) break;
+      i++;
+    }
+    if (depth !== 0) continue; // 不闭合，放弃该块
+    const endIdx = i;
+
+    // 3) 块内匹配两元素字符串字面量数组
+    //    捕获：q1, key, q2, view
+    //    q1/q2 容忍单/双引号；元素间空白容忍
+    const codeTableRe = /codeTable\s*:\s*\[\s*(['"])([^'"]+)\1\s*,\s*(['"])([^'"]+)\3\s*\]/g;
+    const block = out.slice(startIdx, endIdx);
+    let blockCount = 0;
+    const newBlock = block.replace(codeTableRe, (_match, _q1, key, _q2, view) => {
+      blockCount++;
+      return `codeTable: '${key}:${view}'`;
+    });
+
+    if (blockCount > 0) {
+      out = out.slice(0, startIdx) + newBlock + out.slice(endIdx);
+      count += blockCount;
+    }
+  }
+
+  return { content: out, count };
 }
 
 // =================== render 函数形式转换 ===================

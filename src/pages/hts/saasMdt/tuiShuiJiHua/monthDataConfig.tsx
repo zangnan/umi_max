@@ -39,6 +39,7 @@ monthConfig.grid_columns = [
 ];
 
 //外贸
+
 // 配置项：筛选_快捷筛选 列表上方，标题和区域 第二层筛选
 monthConfig.filter_items = [
   { name: 'sbny', label: '申报年或申报年月', type: 'Input' },

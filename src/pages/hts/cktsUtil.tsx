@@ -140,8 +140,12 @@ cktsUtil.api = {
    * 处理 HTS 请求的拦截逻辑（在原 return 之前调用）
    *
    * 在原 return 之前调用此方法，**就地修改**：
-   *   - config.url：HTS URL 路径转换（/dict/automatic/exp/bs/queryPager → /hx/ty/crud/queryPager）
-   *   - config.data：HTS body 转换（删 searchModel2 + 注入 headerSearchModel: []）
+   *   - config.url：HTS URL 路径转换
+   *       - /dict/automatic/exp/bs/queryPager → /hx/ty/crud/queryPager
+   *       - /dict/automatic/exp/bs/getCodeList → /hx/ty/code/getCode
+   *   - config.data：HTS body 转换
+   *       - queryPager：删 searchModel2 + 注入 headerSearchModel: []
+   *       - getCodeList：data.dictCodeId = "X:Y" → { codeStoreKey: "X", codeViewKey: "Y" }
    *   - authHeader.ftype = 'fa'（HTS 任意请求都加，包括 OAuth 端点本身）
    *   - authHeader.accessToken：HTS 请求用 accessTokenCkts 替换主应用 token
    *
@@ -190,6 +194,29 @@ cktsUtil.api = {
           ...restData,
           headerSearchModel: [],
         };
+      }
+    }
+
+    // 5. getCodeList 端点转换
+    //    URL:  /dict/automatic/exp/bs/getCodeList → /hx/ty/code/getCode
+    //    body: { dictCodeId: 'X:Y' } → { codeStoreKey: 'X', codeViewKey: 'Y' }
+    //         （无冒号时：codeStoreKey = 整串, codeViewKey = ''）
+    if (url.indexOf('/dict/automatic/exp/bs/getCodeList') > -1) {
+      config.url = config.url.replace(
+        '/dict/automatic/exp/bs/getCodeList',
+        '/hx/ty/code/getCode',
+      );
+      if (typeof config?.data === 'object' && config.data !== null) {
+        const dictCodeId = config.data.dictCodeId;
+        if (typeof dictCodeId === 'string') {
+          const colonIdx = dictCodeId.indexOf(':');
+          const { dictCodeId: _omit, ...restData } = config.data;
+          config.data = {
+            ...restData,
+            codeStoreKey: colonIdx >= 0 ? dictCodeId.slice(0, colonIdx) : dictCodeId,
+            codeViewKey: colonIdx >= 0 ? dictCodeId.slice(colonIdx + 1) : '',
+          };
+        }
       }
     }
 

@@ -28,6 +28,7 @@ yearConfig.grid_columns = [
 ];
 
 //外贸
+
 // 配置项：筛选_快捷筛选 列表上方，标题和区域 第二层筛选
 yearConfig.filter_items = [
   { name: 'nd', label: '年度', type: 'Input' },

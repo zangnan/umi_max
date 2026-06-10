@@ -20,5 +20,5 @@ myConfig.toolbar_default = {
   full: true,
   ckts_order: 4,
 };
-myConfig.customer_toolbar = [{ name: '序号重排', key: 'xhcp_4', func: 'handleXhcp', param: 4 }];
+myConfig.customer_toolbar = [];
 myConfig.handle_columns = [];

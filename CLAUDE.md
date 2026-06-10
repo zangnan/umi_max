@@ -195,3 +195,54 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 - 提交推送代码前先告知用户，由用户决定是否提交
 - 记录变更信息到 CLAUDE.md 而非自动提交
+
+## 待提交变更（2026-06-10）
+
+### r15：codeTable 数组 → 字符串 转换规则
+
+**背景**：`scripts/convert-ddbunit-config.js` 把旧版 DDBunit2 协议 config 转为新协议。
+源文件（`code_sample/src/pages/hts/dditax.ckts.from/.../auto_config.tsx` 等）在
+`filter_items` / `form_items` / `grid_columns` / `grid_columns_tj` 四个节点的项对象
+里大量使用 `codeTable: ['<key>', '<view>']` 数组形式（DDBunit2 旧协议）。新协议
+（DDBunit2_CKTS）只接受 `codeTable: '<key>:<view>'` 字符串形式（与运行时
+`@/components/DDAssist/util/index.tsx` 中 `getCode(key, viewKey)` 配合）。如不转换，
+生成的 `src/pages/hts/.../auto_config.tsx` 在 DDBunit2_CKTS 加载时会因解析失败而抛错
+或下拉不出数据。
+
+**实现**：复用现有 r11/r14 SPECIAL_FIELD_RULES 框架（`scripts/convert-ddbunit-config.js`），
+新增 `transformCodeTableArrays(content, configVar)` 函数，扫描 4 个目标块内两元素
+字符串数组字面量，转换为字符串形式。注册为第 4 条规则。
+
+**改动文件**：
+- [scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js) — 加 r15
+  头部注释、新增 `transformCodeTableArrays` 函数（[scripts/convert-ddbunit-config.js:899-951](scripts/convert-ddbunit-config.js#L899-L951)）、
+  在 [SPECIAL_FIELD_RULES](scripts/convert-ddbunit-config.js#L530-L549) 追加新规则条目
+- 新增测试 fixture：
+  - [scripts/__fixtures__/codeTable-array-to-string.input.tsx](scripts/__fixtures__/codeTable-array-to-string.input.tsx)
+  - [scripts/__fixtures__/codeTable-array-to-string.expected.tsx](scripts/__fixtures__/codeTable-array-to-string.expected.tsx)
+  - [scripts/__fixtures__/codeTable-array-to-string.actual.tsx](scripts/__fixtures__/codeTable-array-to-string.actual.tsx)（test runner 自动生成）
+
+**行为细节**：
+- 作用域严格限定在 4 个目标块；其它位置的 `codeTable` 不动
+- 仅匹配两元素字符串字面量数组（单/双引号均可；元素间空白容忍）
+- 不匹配 3+ 元素数组、含变量/表达式的数组、已是字符串形式 —— 全部原样保留
+- 输出统一单引号 `codeTable: 'X:Y'`，与项目源码风格一致
+- 幂等：已转换的字符串形式不会再次匹配
+
+**端到端验证**：对
+`code_sample/src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.tsx`
+跑 convert，r15 命中 9 处（filter_items 2 + form_items 7），全部正确转为字符串形式：
+
+```
+[convert] r11 codeTable 数组 → 字符串 (r15): 命中 9 处
+```
+
+**测试验证**：`npm run test:convert-config` → 13 通过 / 2 失败
+（失败的 `default-nodes-and-xhcp` 与 `toolbar-ckts-sum` 是**预先存在**的失败：
+`TOOLBAR_DEFAULT_RULES` 已被清空，但 fixture 期望未更新。与本次 r15 改动无关）。
+
+**待用户决定**：以下文件改动由端到端验证产生，用户可按需决定是否提交：
+
+- `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.tsx`（9 处 codeTable 转换）
+- `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.README.md`（重新生成）
+- `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configIndex.tsx`（重新生成）
