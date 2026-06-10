@@ -198,6 +198,37 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 ## 待提交变更（2026-06-10）
 
+### HTS queryPager: data.key 追加 _CX 后缀（18 个业务模块 key 前缀匹配）
+
+**背景**：[src/pages/hts/cktsUtil.tsx](src/pages/hts/cktsUtil.tsx) 的 `handleHtsRequest`
+step 4（queryPager body 转换）原本只删 `searchModel2` + 注入 `headerSearchModel: []`。
+部分业务模块（如 MDT_ZXSB_SB_MDT_TSSB 等）的 `data.key` 需追加 `_CX` 后缀以路由到
+HTS 服务端的查询端点，否则列表查不到数据。
+
+**改动**：在 step 4 的 inner `if (typeof config?.data === 'object' && config.data !== null)`
+块尾部，新增 `if (...)` 条件：检测 `config.data.key` 是否含以下 18 个业务前缀之一，
+命中则追加 `_CX`：
+
+| 业务前缀 | 业务前缀 | 业务前缀 |
+| --- | --- | --- |
+| `MDT_ZXSB_SB_MDT_TSSB` | `MDT_ZXSB_SB_MDT_TSJH` | `TSZL_ZXSB_SB_HGSPTZ` |
+| `TSZL_ZXSB_SB_CKSH` | `TSZL_ZXSB_SB_MDT_CYSM` | `MDT_ZXSB_SB_MDT_STZC` |
+| `MDT_ZXSB_SB_MDT_YFSJ` | `MDT_ZXSB_SB_MDT_SYYK` | `MTS_ZXSB_SB_MTS_TSSB` |
+| `MTS_ZXSB_SB_MTS_TSJH` | `MTS_ZXSB_SB_MTS_TZSB` | `DBTS_ZXSB_SB_DB_TSSB` |
+| `QTYW_ZXSB_SB_CKXXCX` | `ZMKJ_ZXSB_ZM_TYYBSWTS` | `ZMKJ_ZXSB_ZM_DLCK` |
+| `MTS_ZXSB_SB_MTS_YSFWCK` | `QTYW_ZXSB_TY_KJDSHWC_HSTZ` | `QTYW_ZXSB_TY_KJDSHWC_HSSB` |
+
+**文件**：仅修改 [src/pages/hts/cktsUtil.tsx](src/pages/hts/cktsUtil.tsx)，无其它文件改动。
+
+**实现细节**：
+- 使用 `config.data.key?.indexOf(...)` 可选链，`key` 为 undefined 时自动短路为 false
+  （不需要额外 `typeof` 判断）
+- 用户原伪码用 `options?.data.key`，实际变量名为 `config`（与本方法其它步骤保持一致），
+  改动时统一替换
+- 与 step 4 现有 `searchModel2` 删除、`headerSearchModel: []` 注入共存；
+  `headerSearchModel: []` 注入在前，key 后缀追加在后，互不影响
+- 18 个 `||` 链式判断按用户原伪码风格保留（每项一行，便于扫读）
+
 ### auto_configIndex.tsx 生成：参照文件 + initSearchModal 注入
 
 **背景**：[scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js) 原本用

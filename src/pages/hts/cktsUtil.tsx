@@ -186,14 +186,37 @@ cktsUtil.api = {
       }
     }
 
-    // 4. body 转换（仅 /hx/ty/crud/queryPager：删 searchModel2 + 注入 headerSearchModel: []）
-    if (url.indexOf('/hx/ty/crud/queryPager') > -1) {
+    // 4. body 转换（仅 /dict/automatic/exp/bs/queryPager：删 searchModel2 + 注入 headerSearchModel: []）
+    if (url.indexOf('/dict/automatic/exp/bs/queryPager') > -1) {
       if (typeof config?.data === 'object' && config.data !== null) {
         const { searchModel2, ...restData } = config.data;
         config.data = {
           ...restData,
-          headerSearchModel: [],
+          // headerSearchModel: [],
         };
+        // 部分业务模块 key 需追加 _CX 后缀以路由到查询端点（与 HTS 服务端约定）
+        if (
+          config.data.key?.indexOf('MDT_ZXSB_SB_MDT_TSSB') > -1 ||
+          config.data.key?.indexOf('MDT_ZXSB_SB_MDT_TSJH') > -1 ||
+          config.data.key?.indexOf('TSZL_ZXSB_SB_HGSPTZ') > -1 ||
+          config.data.key?.indexOf('TSZL_ZXSB_SB_CKSH') > -1 ||
+          config.data.key?.indexOf('TSZL_ZXSB_SB_MDT_CYSM') > -1 ||
+          config.data.key?.indexOf('MDT_ZXSB_SB_MDT_STZC') > -1 ||
+          config.data.key?.indexOf('MDT_ZXSB_SB_MDT_YFSJ') > -1 ||
+          config.data.key?.indexOf('MDT_ZXSB_SB_MDT_SYYK') > -1 ||
+          config.data.key?.indexOf('MTS_ZXSB_SB_MTS_TSSB') > -1 ||
+          config.data.key?.indexOf('MTS_ZXSB_SB_MTS_TSJH') > -1 ||
+          config.data.key?.indexOf('MTS_ZXSB_SB_MTS_TZSB') > -1 ||
+          config.data.key?.indexOf('DBTS_ZXSB_SB_DB_TSSB') > -1 ||
+          config.data.key?.indexOf('QTYW_ZXSB_SB_CKXXCX') > -1 ||
+          config.data.key?.indexOf('ZMKJ_ZXSB_ZM_TYYBSWTS') > -1 ||
+          config.data.key?.indexOf('ZMKJ_ZXSB_ZM_DLCK') > -1 ||
+          config.data.key?.indexOf('MTS_ZXSB_SB_MTS_YSFWCK') > -1 ||
+          config.data.key?.indexOf('QTYW_ZXSB_TY_KJDSHWC_HSTZ') > -1 ||
+          config.data.key?.indexOf('QTYW_ZXSB_TY_KJDSHWC_HSSB') > -1
+        ) {
+          config.data.key = config.data.key + '_CX';
+        }
       }
     }
 
