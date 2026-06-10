@@ -198,6 +198,69 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 ## 待提交变更（2026-06-10）
 
+### auto_configIndex.tsx 生成：参照文件 + initSearchModal 注入
+
+**背景**：[scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js) 原本用
+固定模板生成 `auto_configIndex.tsx`。但 65+ 个 `code_sample/src/pages/hts/dditax.ckts.from/*/index.tsx`
+源文件（与 `auto_config.tsx` 同目录）里大量使用
+`myConfig.gridParams = { initSearchModal: [...] }` 自定义筛选项默认值。生成的
+`auto_configIndex.tsx` 没有这段逻辑，DDBunit2_CKTS 加载后 `initSearchModal` 缺失，
+列表页打开时筛选项为空。
+
+**改动**：
+1. 新增 CLI 参数 `--index <name>`：值参数（basename，无扩展名），同目录下 `<name>.tsx`
+2. 不传 `--index`：默认查找源同目录的 `index.tsx`
+3. 新增 `extractInitSearchModalFromFile(refPath)` 辅助函数：正则定位
+   `initSearchModal: [` 起点，bracket-depth 扫描 `[...]` 边界，**原样抽取**整段文本
+   （不做合法性检查 —— 函数调用 / 外部引用由用户自行修）
+4. `generateIndexPage` 新增 `initSearchModal` 参数：命中时用「注入模板」
+   （spread `myConfig = { ...unitConfig }` 后覆盖 `myConfig.gridParams = { ${段} }`）；
+   未命中时仍用「标准模板」（与改造前完全一致）
+5. 找不到参照文件 / 参照文件无 `initSearchModal` → **silent fallback** 到标准模板（不打 log）
+6. 扩展 [test-convert-ddbunit-config.js](scripts/test-convert-ddbunit-config.js)：
+   `getFixtures` 加 `expectedIndex` / `expectedFun` / `indexRef` 三种 kind 检测；
+   fixture 含 `expectedIndex` / `expectedFun` 时不传 `--no-page`；含 `indexRef` 时
+   自动传 `--index <fxName>.ref`；diff 失败时打印明确错误并计入 failed
+7. **UnitUtil.getLcswsxDm 自动重写**：参照文件含
+   `UnitUtil.getLcswsxDm(<any-var>.unit_constant)` 时，工具自动重写为
+   `cktsUtil.getLcswsxDm(myConfig.unit_constant)`，并在生成文件顶部追加
+   `import cktsUtil from '@/pages/hts/cktsUtil';`。
+   标志 `needsCktsUtilImport` 由 `extractInitSearchModalFromFile` 返回，传入
+   `generateIndexPage` 后按需加 import 行；literal-only 段不会被加 import
+
+**改动文件**：
+- [scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js) — 头部注释、辅助函数、
+  `generateIndexPage` 签名、main() 串联
+- [scripts/test-convert-ddbunit-config.js](scripts/test-convert-ddbunit-config.js) — 3 种新 fixture kind + CLI 调整 + diff 逻辑
+- 新增 fixture：
+  - [scripts/__fixtures__/index-from-reference.input.tsx](scripts/__fixtures__/index-from-reference.input.tsx)
+  - [scripts/__fixtures__/index-from-reference.expected.tsx](scripts/__fixtures__/index-from-reference.expected.tsx)
+  - [scripts/__fixtures__/index-from-reference.ref.tsx](scripts/__fixtures__/index-from-reference.ref.tsx)
+  - [scripts/__fixtures__/index-from-reference.expected.index.tsx](scripts/__fixtures__/index-from-reference.expected.index.tsx)
+  - [scripts/__fixtures__/index-from-reference.actualIndex.tsx](scripts/__fixtures__/index-from-reference.actualIndex.tsx)（test runner 自动生成）
+  - [scripts/__fixtures__/cktsUtil-rewrite.input.tsx](scripts/__fixtures__/cktsUtil-rewrite.input.tsx)
+  - [scripts/__fixtures__/cktsUtil-rewrite.expected.tsx](scripts/__fixtures__/cktsUtil-rewrite.expected.tsx)
+  - [scripts/__fixtures__/cktsUtil-rewrite.ref.tsx](scripts/__fixtures__/cktsUtil-rewrite.ref.tsx)
+  - [scripts/__fixtures__/cktsUtil-rewrite.expected.index.tsx](scripts/__fixtures__/cktsUtil-rewrite.expected.index.tsx)
+  - [scripts/__fixtures__/cktsUtil-rewrite.actualIndex.tsx](scripts/__fixtures__/cktsUtil-rewrite.actualIndex.tsx)（test runner 自动生成）
+
+**端到端验证**：
+- 默认（源同目录有 `index.tsx`）：
+  ```
+  node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_TSSB_GCB\auto_config.tsx
+  → [convert] 参照文件已抽取 initSearchModal: code_sample\...\index.tsx
+  → auto_configIndex.tsx 含 myConfig.gridParams = { initSearchModal: [{ property: 'cdDm', value: '25030101', op: 'zdy' }] }
+  ```
+- 显式 `--index monthDataTab`：
+  ```
+  node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\saasMdt\tuiShuiJiHua\monthDataConfig.tsx --index monthDataTab
+  → 命中 monthDataTab.tsx，注入 initSearchModal
+  ```
+- Silent fallback：`--index nonexistentRef` → 0 行 log，标准模板生成
+
+**测试**：`npm run test:convert-config` → 15 通过（含新增 `index-from-reference` + `cktsUtil-rewrite`）
+/ 2 失败（预存在的 default-nodes-and-xhcp / toolbar-ckts-sum，与本次改动无关）。
+
 ### r15：codeTable 数组 → 字符串 转换规则
 
 **背景**：`scripts/convert-ddbunit-config.js` 把旧版 DDBunit2 协议 config 转为新协议。

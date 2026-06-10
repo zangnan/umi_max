@@ -13,6 +13,10 @@
  *   - --page / --fun 不传时自动派生：与 --out 同文件夹，文件名后缀分别加 _index / _fun
  *   - --no-page 同时禁用 index + fun 页面
  *   - --no-fun 仅禁用 fun 页面（仍生成 index）
+ *   - --index <name>            index 页面参照文件 basename（无扩展名），
+ *                               同目录下 <name>.tsx；缺省 = 同目录下 index.tsx
+ *                               命中后把参照里的 `initSearchModal: [...]` 段
+ *                               原样注入到生成的 auto_configIndex.tsx
  *   - --no-route 禁用 routes.ckts.ts 自动追加（默认追加到慧退税父路由下）
  *
  * 完整参数：
@@ -22,6 +26,7 @@
  *   [--no-readme]                禁用 README 生成
  *   [--no-page]                  禁用 index + fun 页面
  *   [--no-fun]                   仅禁用 fun 页面（仍生成 index）
+ *   [--index <name>]             index 参照文件 basename（无扩展名），同目录下 <name>.tsx
  *   [--no-route]                 禁用 routes.ckts.ts 自动追加
  *   [--config-var <name>]        显式指定配置变量名（默认自动检测）
  *   [--rules <rules.json>]       自定义规则文件（默认内置）
@@ -1223,9 +1228,119 @@ function generateReadme({ srcFile, outFile, configVar, actions, rules }) {
 }
 
 // =================== index/fun 页面模板 ===================
-function generateIndexPage({ configImportName, funImportName }) {
-  // configImportName: config 文件 basename（不含扩展名），如 'monthDataConfig'
-  // funImportName: fun 文件 basename（不含扩展名），如 'monthDataFun'
+/**
+ * 从参照文件（如源 auto_config.tsx 同目录的 index.tsx）抽取
+ *   `initSearchModal: [...]` 段的原始文本
+ *
+ * 行为：
+ *   - 文件不存在 / 读失败 / 段不存在 → 返 null（**不抛错**，
+ *     由调用方走 silent fallback 到标准模板）
+ *   - 段含 `UnitUtil.getLcswsxDm(...)` → **自动重写**为
+ *     `cktsUtil.getLcswsxDm(myConfig.unit_constant)`，并把
+ *     `needsCktsUtilImport` 标 true
+ *   - 段含其它函数调用 / 外部引用 → **原样抽取**（不做合法性检查），
+ *     编译期错误由用户手动修
+ *
+ * 算法：正则定位 `initSearchModal: [` 起点，bracket-depth 扫描
+ *   找匹配 `]`，与脚本内 transformTextAreaFormItem / extractFieldFromToolbarDefault
+ *   同款手法
+ *
+ * @param {string} refPath - 参照文件绝对路径
+ * @returns {{ text: string, needsCktsUtilImport: boolean }|null}
+ *          text = 含 'initSearchModal:' 前缀的整段文本（已重写 UnitUtil）
+ *          needsCktsUtilImport = true 表示生成文件需 import cktsUtil
+ *          或 null（不命中 / 文件缺失）
+ */
+function extractInitSearchModalFromFile(refPath) {
+  if (!refPath || !fs.existsSync(refPath)) return null;
+  let content;
+  try {
+    content = fs.readFileSync(refPath, 'utf-8');
+  } catch (_err) {
+    return null;
+  }
+
+  // 找首次出现位置
+  const startRe = /initSearchModal\s*:\s*\[/;
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return null;
+
+  // bracket-depth 扫描 [] 配对
+  const startIdx = startMatch.index + startMatch[0].length;
+  let depth = 1;
+  let i = startIdx;
+  while (i < content.length && depth > 0) {
+    const ch = content[i];
+    if (ch === '[') depth++;
+    else if (ch === ']') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return null;
+  const endIdx = i; // 指向 ]
+
+  let text = content.slice(startMatch.index, endIdx + 1);
+
+  // 重写 UnitUtil.getLcswsxDm(<any-var>.unit_constant) → cktsUtil.getLcswsxDm(myConfig.unit_constant)
+  //   兼容 config.unit_constant / myConfig.unit_constant 等任意 var 前缀（统一改为 myConfig）
+  //   兼容函数调用前后的任意空白
+  let needsCktsUtilImport = false;
+  if (/\bcktsUtil\./.test(text)) {
+    // 段里已经直接引用 cktsUtil.X —— 也需要加 import
+    needsCktsUtilImport = true;
+  }
+  if (/\bUnitUtil\.getLcswsxDm\b/.test(text)) {
+    text = text.replace(
+      /UnitUtil\.getLcswsxDm\(\s*[A-Za-z_$][\w$]*\s*\.\s*unit_constant\s*\)/g,
+      'cktsUtil.getLcswsxDm(myConfig.unit_constant)',
+    );
+    needsCktsUtilImport = true;
+  }
+
+  return { text, needsCktsUtilImport };
+}
+
+/**
+ * 生成 index 页面（auto_configIndex.tsx）
+ *
+ * @param {object} options
+ * @param {string} options.configImportName - config 文件 basename（无扩展名），如 'auto_config'
+ * @param {string} options.funImportName    - fun 文件 basename（无扩展名），如 'auto_configFun'
+ * @param {string|null} [options.initSearchModal]
+ *        - 来自参照文件（`--index` / 默认 index.tsx）的 `initSearchModal: [...]` 段（已重写 UnitUtil）
+ *        - 命中：使用「注入模板」（在 myConfig.gridParams 中嵌入该段）
+ *        - null：使用「标准模板」（与改造前完全一致）
+ * @param {boolean} [options.needsCktsUtilImport]
+ *        - true：在「注入模板」顶部加 `import cktsUtil from '@/pages/hts/cktsUtil';`
+ *        - 由 extractInitSearchModalFromFile 检测
+ *          （段含 cktsUtil.X 调用 或 原 UnitUtil.getLcswsxDm 调用时为 true）
+ */
+function generateIndexPage({ configImportName, funImportName, initSearchModal, needsCktsUtilImport }) {
+  if (initSearchModal) {
+    // 注入模板：参照文件含 initSearchModal 时使用
+    const cktsUtilImportLine = needsCktsUtilImport
+      ? "import cktsUtil from '@/pages/hts/cktsUtil';\n"
+      : '';
+    return `import React from 'react';
+${cktsUtilImportLine}import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import unitConfig from './${configImportName}';
+import Func from './${funImportName}';
+
+const Unit: React.FC<unknown> = () => {
+  // 改变默认配置项
+  const myConfig = { ...unitConfig };
+  myConfig.gridParams = {
+    ${initSearchModal},
+  };
+
+  return <>
+    <DDBunit2 config={myConfig} func={Func} />
+  </>;
+};
+export default Unit;
+`;
+  }
+  // 标准模板：与改造前一致（无 initSearchModal 注入）
   return `import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './${configImportName}';
@@ -1430,10 +1545,30 @@ function main() {
       ? configImportName.slice(0, -'Config'.length) + 'Fun'
       : configImportName + 'Fun';
 
+    // 解析参照文件 → 抽取 initSearchModal
+    //   - 默认：<srcDir>/index.tsx（与源 auto_config.tsx 同目录）
+    //   - --index <name>：<srcDir>/<name>.tsx
+    //   - 文件不存在 / 无 initSearchModal → silent fallback（initSearchModal = null）
+    let initSearchModal = null;
+    let needsCktsUtilImport = false;
+    if (args['no-index'] !== true) {
+      const srcDir = path.dirname(args.src);
+      const refBase = typeof args.index === 'string' && args.index.length > 0
+        ? args.index
+        : 'index';
+      const refPath = path.join(srcDir, `${refBase}.tsx`);
+      const extracted = extractInitSearchModalFromFile(refPath);
+      if (extracted) {
+        initSearchModal = extracted.text;
+        needsCktsUtilImport = extracted.needsCktsUtilImport;
+        console.log(`[convert] 参照文件已抽取 initSearchModal: ${refPath}`);
+      }
+    }
+
     fs.mkdirSync(path.dirname(args.page.indexFile), { recursive: true });
     fs.writeFileSync(
       args.page.indexFile,
-      generateIndexPage({ configImportName, funImportName }),
+      generateIndexPage({ configImportName, funImportName, initSearchModal, needsCktsUtilImport }),
       'utf-8',
     );
     console.log(`[convert] 已生成 index 页面: ${args.page.indexFile}`);

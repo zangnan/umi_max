@@ -58,6 +58,17 @@ function getFixtures() {
     } else if (f.endsWith('.expected.route.txt')) {
       base = f.replace(/\.expected\.route\.txt$/, '');
       kind = 'expectedRoute';
+    } else if (f.endsWith('.expected.index.tsx')) {
+      base = f.replace(/\.expected\.index\.tsx$/, '');
+      kind = 'expectedIndex';
+    } else if (f.endsWith('.expected.fun.tsx')) {
+      base = f.replace(/\.expected\.fun\.tsx$/, '');
+      kind = 'expectedFun';
+    } else if (f.endsWith('.ref.tsx')) {
+      // 参照文件：与 .input.tsx 同目录，basename = <fxName>.ref
+      // 命中后 test runner 自动传 --index <fxName>.ref
+      base = f.replace(/\.ref\.tsx$/, '');
+      kind = 'indexRef';
     } else {
       continue;
     }
@@ -131,7 +142,16 @@ for (const fx of getFixtures()) {
   // 默认 --no-readme --no-page --no-fun --no-route 避免污染项目目录
   // 仅当 fixture 有 expectedReadme 时才传 --readme（覆盖 --no-readme）
   // r9：若 fixture 有 expectedRoute，不传 --no-route，让工具写入临时 ckts 文件
-  const args = ['--src', fx.input, '--out', outPath, '--no-readme', '--no-page', '--no-fun'];
+  // 扩展：fixture 有 expectedIndex / expectedFun 时不传 --no-page，让工具生成 index/fun
+  // 扩展：fixture 有 indexRef（<fxName>.ref.tsx）时自动传 --index <fxName>.ref
+  const wantsIndexOrFun = !!(fx.expectedIndex || fx.expectedFun);
+  const args = ['--src', fx.input, '--out', outPath, '--no-readme'];
+  if (!wantsIndexOrFun) {
+    args.push('--no-page', '--no-fun');
+  }
+  if (fx.indexRef) {
+    args.push('--index', `${fx.name}.ref`);
+  }
   if (fx.expectedRoute) {
     // r9：让工具把路由写入临时 ckts 文件
     if (!fx.rules) {
@@ -200,6 +220,48 @@ for (const fx of getFixtures()) {
     if (routeErr) {
       console.error(`[FAIL] ${fx.name}: 路由条目不匹配`);
       console.error(routeErr);
+      failed++;
+      failedNames.push(fx.name);
+      continue;
+    }
+  }
+
+  // 扩展：校验 index 页面（actualIndex.tsx 来自 convert 的 derivePagePaths）
+  if (fx.expectedIndex) {
+    const actualIndexPath = path.join(FIXTURES_DIR, `${fx.name}.actualIndex.tsx`);
+    if (!fs.existsSync(actualIndexPath)) {
+      console.error(`[FAIL] ${fx.name}: 期望有 index 页面但工具未生成`);
+      failed++;
+      failedNames.push(fx.name);
+      continue;
+    }
+    const actualIndex = fs.readFileSync(actualIndexPath, 'utf-8');
+    const expectedIndex = fs.readFileSync(fx.expectedIndex, 'utf-8');
+    const indexDiff = diff(expectedIndex, actualIndex);
+    if (indexDiff) {
+      console.error(`[FAIL] ${fx.name}: index 输出与期望不一致`);
+      console.error(indexDiff);
+      failed++;
+      failedNames.push(fx.name);
+      continue;
+    }
+  }
+
+  // 扩展：校验 fun 页面
+  if (fx.expectedFun) {
+    const actualFunPath = path.join(FIXTURES_DIR, `${fx.name}.actualFun.tsx`);
+    if (!fs.existsSync(actualFunPath)) {
+      console.error(`[FAIL] ${fx.name}: 期望有 fun 页面但工具未生成`);
+      failed++;
+      failedNames.push(fx.name);
+      continue;
+    }
+    const actualFun = fs.readFileSync(actualFunPath, 'utf-8');
+    const expectedFun = fs.readFileSync(fx.expectedFun, 'utf-8');
+    const funDiff = diff(expectedFun, actualFun);
+    if (funDiff) {
+      console.error(`[FAIL] ${fx.name}: fun 输出与期望不一致`);
+      console.error(funDiff);
       failed++;
       failedNames.push(fx.name);
       continue;

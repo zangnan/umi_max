@@ -7,7 +7,9 @@ const Unit: React.FC<unknown> = () => {
   // 改变默认配置项
   const myConfig = { ...unitConfig };
   myConfig.gridParams = {
-    initSearchModal: [ { property: 'tjqlxDm', value: '1', op: 'zdy' } ],
+    initSearchModal: [
+      { property: 'tjqlxDm', value: '1', op: 'zdy' },
+    ],
   };
 
   return <>
