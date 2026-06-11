@@ -6,10 +6,10 @@ import Func from './auto_configFun';
 const Unit: React.FC<unknown> = () => {
   // 改变默认配置项
   const myConfig = { ...unitConfig };
-  myConfig.form_api_save = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
+  myConfig.api_form_edit = `/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
   myConfig.form_api_save_upload = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
 
-  myConfig.form_api_delete = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/deleteSyyk`; // api 表单删除
+  myConfig.api_form_delete = `/yw/bszx/mdt/ysfw/syyk/deleteSyyk`; // api 表单删除
 
   myConfig.toolbar_default.tssb_download = true;
   myConfig.toolbar_default.ckts_download = false;

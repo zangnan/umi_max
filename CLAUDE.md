@@ -198,6 +198,92 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 ## 待提交变更（2026-06-11）
 
+### r16: form_api_save / form_api_delete 转换规则（重命名 + 剥 ${API_URL_BASE} 前缀）
+
+**背景**：现有 4 条 SPECIAL_FIELD_RULE（r11 / r14 / r15）覆盖 ellipsis / 默认节点
+/ TextArea / codeTable 等字段变换，但**键名 + 模板字面量**这种**复合**转换还没
+覆盖。code_sample 16 个文件 / 47 处 `form_api_save` / `form_api_delete` 字段
+（值形如 `` `${API_URL_BASE}/xxx` ``），按业务新协议应改为：
+
+- 源：`myConfig.form_api_save = \`${API_URL_BASE}/xxx\`;`
+- 目标：`myConfig.api_form_edit = \`/xxx\`;`
+- 源：`myConfig.form_api_delete = \`${API_URL_BASE}/xxx\`;`
+- 目标：`myConfig.api_form_delete = \`/xxx\`;`
+
+**关键设计点**：
+
+- 既有 `rules.renames` 用 `\b` 词边界匹配 → 加 `form_api_save` → `api_form_edit`
+  自动不会误改 `form_api_save_upload`（下划线属 `\w`，无 word boundary）✓
+- 但 `renames` **只改 key 不改 value**，无法剥离 `${API_URL_BASE}` 前缀
+- 因此新增**单一 transform** 同时做 key 重命名 + value 前缀剥离，
+  复用两次（SPECIAL_FIELD_RULES + `extractMyConfigAdjustments` 内调用）
+
+**数据扫描**（[code_sample/src/pages/hts/dditax.ckts.from/](code_sample/src/pages/hts/dditax.ckts.from/) 16 个文件）：
+
+| 分布 | 文件数 | 转换机制 |
+|---|---|---|
+| 顶层 `unitConfig` 已有 `form_api_save` | 6 / 16 | SPECIAL_FIELD_RULE（r16）处理 |
+| 仅 `index.tsx` 调整块里有 `form_api_save` | 10 / 16 | `extractMyConfigAdjustments` 内调用同一函数 |
+
+`form_api_save_upload` 在 13/16 文件共存 — 用户决策**保持原样**（\b 词边界
+已自动保护，无需额外防护）。
+
+**改动**：
+
+1. **新增 `transformFormApiSaveDelete(content, configVar)`**：
+   紧贴 `transformCodeTableArrays`（r15，[line 921-964](scripts/convert-ddbunit-config.js#L921-L964)）下方。
+   - 两次 `.replace`，分别处理 `form_api_save` 和 `form_api_delete`
+   - regex 模板：
+     ```
+     (<configVar>\.)\bform_api_(save|delete)\b(\s*=\s*)`\${API_URL_BASE}(/[^`]*)`
+     ```
+   - 替换：保留 `<configVar>.`，key 改 `api_form_edit` / `api_form_delete`，
+     值保留 `/...` 段
+   - `\b` 词边界保护 `form_api_save_upload` 变体
+
+2. **注册为 SPECIAL_FIELD_RULE 第 5 条**（[line 535-554](scripts/convert-ddbunit-config.js#L535-L554)）
+   ```js
+   {
+     name: 'form_api_save/delete 重命名 + 剥 ${API_URL_BASE} 前缀 (r16)',
+     apply: transformFormApiSaveDelete,
+   }
+   ```
+   主流程 `applySpecialFieldRules` 循环自动调度
+
+3. **在 `extractMyConfigAdjustments` 内调用**（[line 1358-1771](scripts/convert-ddbunit-config.js#L1358-L1771)）：
+   插入位置 = `stripGridParamsBlock` 之后、Change 1（`myUtil.menu` 重写）之前
+   ```js
+   {
+     const r16 = transformFormApiSaveDelete(text, 'myConfig');
+     if (r16.count > 0) {
+       text = r16.content;
+     }
+   }
+   ```
+   `configVar` 硬编码 `'myConfig'`（参照文件里固定用法）
+
+4. **新增 fixture `form-api-save-delete-rename`**（4 个文件）：
+   - `form-api-save-delete-rename.input.tsx`：顶层 `unitConfig` 场景测试
+   - `form-api-save-delete-rename.ref.tsx`：调整块场景测试
+   - `form-api-save-delete-rename.expected.tsx` / `.expected.index.tsx`：期望输出
+
+**端到端验证**：
+
+| 目录 | 场景 | 结果 |
+|---|---|---|
+| `MDT___ZXSB_SB_MDT_SYYK_GCB` | 调整块含 3 字段 | `form_api_save` → `api_form_edit`（剥前缀）；`form_api_save_upload` 保持；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
+| `MDT___ZXSB_SB_MDT_YFSJ_GCB` | 顶层 `unitConfig` 含 2 字段（无裸 save）| `form_api_save_upload` 保持；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
+
+**测试**：`npm run test:convert-config` → **20 通过**（含新增 `form-api-save-delete-rename`）
+/ 2 失败（预存在的 default-nodes-and-xhcp / toolbar-ckts-sum，与本次无关）
+
+**已知限制**（用户决策接受）：
+- 不处理 `form_api_save_upload` 变体（用户明确决策保持原样）
+- 不处理 value 不是 `${API_URL_BASE}/X` 字面量前缀的情况（裸路径、函数调用、模板内嵌表达式等）—— 不匹配 → 保持原样
+- 不重命名 `form_api_delete_upload`（即便存在）—— 词边界自动保护
+
+## 待提交变更（2026-06-11）
+
 ### myUtil.menu.getMenuObjByPath 重写 + Func.getOtherRef ref 自动补 useRef
 
 **背景**：上一轮实现了 `extractMyConfigAdjustments` 抽取 myConfig 调整块与

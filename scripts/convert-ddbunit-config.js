@@ -549,6 +549,12 @@ const SPECIAL_FIELD_RULES = [
     name: 'codeTable 数组 → 字符串 (r15)',
     apply: transformCodeTableArrays,
   },
+  {
+    // r16: form_api_save → api_form_edit，form_api_delete → api_form_delete
+    //   同步剥离值里的 ${API_URL_BASE} 前缀；\b 词边界保护 form_api_save_upload
+    name: 'form_api_save/delete 重命名 + 剥 ${API_URL_BASE} 前缀 (r16)',
+    apply: transformFormApiSaveDelete,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -959,6 +965,52 @@ function transformCodeTableArrays(content, configVar) {
       count += blockCount;
     }
   }
+
+  return { content: out, count };
+}
+
+// =================== r16: form_api_save / form_api_delete 转换 ===================
+/**
+ * r16: 把
+ *   `<configVar>.form_api_save = \`${API_URL_BASE}/X\`;`
+ *     → `<configVar>.api_form_edit = \`/X\`;`
+ *   `<configVar>.form_api_delete = \`${API_URL_BASE}/X\`;`
+ *     → `<configVar>.api_form_delete = \`/X\`;`
+ *
+ *   - 一次性重命名 key + 剥离 value 里的 `${API_URL_BASE}` 前缀
+ *   - 用 `\b` 词边界保护 `form_api_save_upload` 变体（用户决策：保持原样）
+ *   - 只匹配有 `${API_URL_BASE}` 前缀的值（裸路径/函数调用等不匹配，保持原样）
+ *   - 复用两次：注册为 SPECIAL_FIELD_RULE（处理顶层 unitConfig）+
+ *     在 extractMyConfigAdjustments 内调用（处理 myConfig 调整块）
+ *
+ * @param {string} content
+ * @param {string} configVar  'unitConfig' / 'myConfig' / 其它
+ * @returns {{ content: string, count: number }}
+ */
+function transformFormApiSaveDelete(content, configVar) {
+  let out = content;
+  let count = 0;
+
+  // form_api_save → api_form_edit
+  // 关键：\b 词边界保护 form_api_save_upload（_ 属 \w，无 word boundary）
+  const saveRe = new RegExp(
+    `(${escapeRegExp(configVar)}\\.)\\bform_api_save\\b(\\s*=\\s*)\`\\$\\{API_URL_BASE\\}(/[^\\\`]*)\``,
+    'g',
+  );
+  out = out.replace(saveRe, (_match, prefix, eq, path) => {
+    count++;
+    return `${prefix}api_form_edit${eq}\`${path}\``;
+  });
+
+  // form_api_delete → api_form_delete（词序 swap，但严格按用户指令）
+  const deleteRe = new RegExp(
+    `(${escapeRegExp(configVar)}\\.)\\bform_api_delete\\b(\\s*=\\s*)\`\\$\\{API_URL_BASE\\}(/[^\\\`]*)\``,
+    'g',
+  );
+  out = out.replace(deleteRe, (_match, prefix, eq, path) => {
+    count++;
+    return `${prefix}api_form_delete${eq}\`${path}\``;
+  });
 
   return { content: out, count };
 }
@@ -1744,6 +1796,15 @@ function extractMyConfigAdjustments(content) {
   text = stripGridParamsBlock(text);
   text = text.replace(/^\s*\n/, '').replace(/\s+$/, '');
   if (!text) return null;
+
+  // 6.5) r16: form_api_save → api_form_edit，form_api_delete → api_form_delete
+  //      同步剥离值里的 ${API_URL_BASE} 前缀（与 SPECIAL_FIELD_RULES 注册同一函数）
+  {
+    const r16 = transformFormApiSaveDelete(text, 'myConfig');
+    if (r16.count > 0) {
+      text = r16.content;
+    }
+  }
 
   // 7) Change 1: myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath
   //    替换后调整块里不再有 myUtil.menu 子模块引用，生成的 auto_configIndex.tsx

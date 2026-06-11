@@ -163,11 +163,21 @@ cktsUtil.api = {
     }
 
     // 1. URL 路径转换（仅 /dict/automatic/exp/bs/queryPager → /hx/ty/crud/queryPager）
-    if (url.indexOf('/dict/automatic/exp/bs/') > -1) {
+    if (url.indexOf('/dict/automatic/exp/bs/queryPager') > -1) {
       config.url = url.replace(
         '/dict/automatic/exp/bs/queryPager',
         '/hx/ty/crud/queryPager',
       );
+    } else if (url.indexOf('/dict/automatic/exp/bs/queryForm') > -1) {
+      config.url = url.replace(
+        '/dict/automatic/exp/bs/queryForm',
+        '/hx/ty/crud/queryForm',
+      );
+    } else if (url.indexOf('/dict/automatic/exp/bs/saveOrUpdate') > -1) {
+      // config.url = url.replace(
+      //   '/dict/automatic/exp/bs/saveOrUpdate',
+      //   '/hx/ty/crud/queryForm',
+      // );
     }
 
     // 2. ftype 注入（HTS 任意请求都加，包括 OAuth 端点本身）
