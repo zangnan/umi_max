@@ -16,8 +16,8 @@ unitConfig.unit_constant = 'lcswsxDm=LCSXA081038001'; // 配置常量
 unitConfig.export_key1 = 'SAAS_TSSB_MXCJ_CKSH_SC_DC'; // 采集导出key
 unitConfig.export_key2 = 'SAAS_SJGL_SWFKCX_MDT_CKSH_DC'; // 统计导出key
 unitConfig.export_key3 = 'SAAS_TSSB_MDT_SBMXCK_CKSH_DC'; // 申报结果查询导出key
-unitConfig.form_api_delete=`${API_URL_BASE}/yw/tssb/cksh/deleteCksh`;
-unitConfig.form_api_save=`${API_URL_BASE}/yw/tssb/cksh/saveCksh`;
+unitConfig.api_form_delete=`/yw/tssb/cksh/deleteCksh`;
+unitConfig.api_form_edit=`/yw/tssb/cksh/saveCksh`;
 unitConfig.form_api_save_upload = `${API_URL_BASE}/yw/tssb/cksh/saveCksh`;
 unitConfig.form_save_add_flag = true;	// 表单保存并添加开关
 

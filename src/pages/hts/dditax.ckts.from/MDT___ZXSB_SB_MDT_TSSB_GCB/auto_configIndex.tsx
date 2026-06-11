@@ -11,9 +11,9 @@ const Unit: React.FC<unknown> = () => {
   const hwccjRef: any = useRef();    // 海外仓冲减
   // 改变默认配置项
   const myConfig = { ...unitConfig };
-  myConfig.form_api_save = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tssb/updateHwlwTssb`; // api 表单更新
+  myConfig.api_form_edit = `/yw/bszx/mdt/hwlw/tssb/updateHwlwTssb`; // api 表单更新
   myConfig.form_api_save_upload = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tssb/updateHwlwTssb`; // api 表单更新
-  myConfig.form_api_delete = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tssb/deleteHwlwTssb`; // api 表单删除
+  myConfig.api_form_delete = `/yw/bszx/mdt/hwlw/tssb/deleteHwlwTssb`; // api 表单删除
   // 开启批量修改
   myConfig.toolbar_default.batchEdit = true;
 

@@ -25,6 +25,7 @@ import DDBunit2 from '@/components/DDBunit/DDBunit2';
 import CKTS_Sjxj from '@/pages/hts/commonModule/xj/xj';
 import CKTS_Xhcp from '@/pages/hts/commonModule/xhcp/xhcp';
 import cktsUtil from '@/pages/hts/cktsUtil';
+import CONSTANTS from '@/components/DDAssist/constants';
 import { DDBunit2Props } from '@/components/DDBunit/DDBunit2.types';
 import { DDBunit2CKTSConfig } from './DDBunit2_CKTS.types';
 
@@ -90,6 +91,18 @@ const DDBunit2_CKTS: React.FC<DDBunit2Props> = (props) => {
   // DDBunit2 的 getCustomerToobar() 会渲染它们，位置在工具栏 toobar-right Space 内
   const enhancedConfig = {
     ...config,
+    // CKTS 业务约定：form check URL 末尾追加 /<module_key>_CHECK。
+    // DDBunit2.tsx:232 拼 apiFormCheck = apiPrefix + config.api_form_check，
+    // 改写后的 api_form_check 已含后缀，line 637 传给 DDBunitFun.handleSave 的
+    // apiFormCheck 自动带 /<module_key>_CHECK。等效于改 DDBunit2.tsx:637，
+    // 但仅作用于 CKTS 消费者，不动 DDBunit2。
+    // 守卫只看 module_key：业务模块若没显式设 api_form_check，DDBunit2 自身
+    // 会回退到 CONSTANTS.DEFAULT_API.FORM_CHECK；我们在 wrapper 层就拿到
+    // 同样的回退路径并拼上后缀，保证与"line 637 改写"语义一致
+    // （line 637 操作的是已经拼好的完整 URL，含默认常量）。
+    api_form_check: config?.module_key
+      ? `${(config?.api_form_check || CONSTANTS.DEFAULT_API.FORM_CHECK).replace(/\/+$/, '')}/${config.module_key}_CHECK`
+      : config?.api_form_check,
     customer_toolbar: [
       ...(config?.customer_toolbar || []).filter(
         (item: any) => !CKTS_INTERNAL_FUNCS.includes(item?.func),
