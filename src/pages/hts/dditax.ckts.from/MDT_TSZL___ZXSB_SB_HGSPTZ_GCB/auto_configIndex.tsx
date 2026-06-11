@@ -7,6 +7,10 @@ import Func from './auto_configFun';
 const Unit: React.FC<unknown> = () => {
   // 改变默认配置项
   const myConfig = { ...unitConfig };
+  // 导入
+  myConfig.import_key = 'SAAS_TSSB_MXCJ_HGSPTZ_SC_DR';
+  myConfig.toolbar_default.tssb_download = true;
+  myConfig.toolbar_default.ckts_download = false;
   myConfig.gridParams = {
     initSearchModal: [
       { property: 'lcswsxDm', value: cktsUtil.getLcswsxDm(myConfig.unit_constant), op: 'al' },

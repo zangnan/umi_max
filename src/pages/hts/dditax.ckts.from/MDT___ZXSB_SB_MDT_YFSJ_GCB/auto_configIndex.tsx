@@ -4,8 +4,34 @@ import unitConfig from './auto_config';
 import Func from './auto_configFun';
 
 const Unit: React.FC<unknown> = () => {
+  // 改变默认配置项
+  const myConfig = { ...unitConfig };
+  const dataIndexellipsis = ['hth', 'cktszmbh', 'cktmsywlxdmjh'];
+  myConfig.grid_columns.forEach((item: any) => {
+    if (dataIndexellipsis.length > 0 && dataIndexellipsis.indexOf(item.dataIndex) > -1) {
+      item.ellipsis = true;
+    }
+    if (item.dataIndex === 'cktmsywlxmcjh') {
+      item.width = 260;
+    }
+  })
+  myConfig.grid_columns_tj.forEach((item: any) => {
+    if (dataIndexellipsis.length > 0 && dataIndexellipsis.indexOf(item.dataIndex) > -1) {
+      item.ellipsis = true;
+    }
+    if (item.dataIndex === 'cktmsywlxmcjh') {
+      item.width = 260;
+    }
+  })
+
+  // 导入
+  myConfig.import_key = 'SAAS_TSSB_MXCJ_YFSJ_DR';
+
+  myConfig.toolbar_default.tssb_download = true;
+  myConfig.toolbar_default.ckts_download = false;
+
   return <>
-    <DDBunit2 config={unitConfig} func={Func} />
+    <DDBunit2 config={myConfig} func={Func} />
   </>;
 };
 export default Unit;

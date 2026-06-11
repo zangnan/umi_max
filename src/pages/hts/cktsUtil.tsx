@@ -1,5 +1,6 @@
 import { request } from 'umi';
 import { queryList, saveOrUpdate, queryForm } from '@/services/hts/api';
+import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message } from 'antd';
 
@@ -298,6 +299,34 @@ cktsUtil.api = {
 
   testAAA() {
 
+  },
+}
+
+cktsUtil.menu = {
+  // 根据路径取当前节点菜单
+  getMenuObjByPath: (path: any) => {
+    if (!path) {
+      return;
+    }
+    let targetMenuObj;
+    const usermenu = myUtil.sessionStore.getItem('usermenu') || [];
+    const foreachData = (menuTreeParam: any) => {
+      if (!menuTreeParam || menuTreeParam.lenght === 0) {
+        return;
+      }
+      for (let i = 0; i < menuTreeParam.length; i++) {
+        if (menuTreeParam[i].path == path) {
+          targetMenuObj = menuTreeParam[i];
+          break;
+        } else {
+          if (menuTreeParam[i].routes && menuTreeParam[i].routes.length > 0) {
+            foreachData(menuTreeParam[i].routes);
+          }
+        }
+      }
+    }
+    foreachData(usermenu);
+    return targetMenuObj;
   },
 }
 

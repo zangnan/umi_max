@@ -1229,29 +1229,34 @@ function generateReadme({ srcFile, outFile, configVar, actions, rules }) {
 
 // =================== index/fun 页面模板 ===================
 /**
- * 从参照文件（如源 auto_config.tsx 同目录的 index.tsx）抽取
- *   `initSearchModal: [...]` 段的原始文本
+ * 从参照文件（如源 auto_config.tsx 同目录的 index.tsx）抽取 index 页面的 customization
+ *   - initSearchModal: [...] 段（含 UnitUtil → cktsUtil 重写）
+ *   - myConfig 调整块：const myConfig = ...; 与 return <>; 之间的整段代码
  *
  * 行为：
- *   - 文件不存在 / 读失败 / 段不存在 → 返 null（**不抛错**，
+ *   - 文件不存在 / 读失败 / 两类 customization 都不存在 → 返 null（**不抛错**，
  *     由调用方走 silent fallback 到标准模板）
- *   - 段含 `UnitUtil.getLcswsxDm(...)` → **自动重写**为
+ *   - 两类 customization 互相独立：可能只有其一、可能都有
+ *   - initSearchModal 段含 `UnitUtil.getLcswsxDm(...)` → **自动重写**为
  *     `cktsUtil.getLcswsxDm(myConfig.unit_constant)`，并把
  *     `needsCktsUtilImport` 标 true
- *   - 段含其它函数调用 / 外部引用 → **原样抽取**（不做合法性检查），
- *     编译期错误由用户手动修
+ *   - myConfig 调整块 **原样保留**（不做合法性检查；含函数调用 / 外部引用时
+ *     编译期错误由用户手动修）
  *
- * 算法：正则定位 `initSearchModal: [` 起点，bracket-depth 扫描
- *   找匹配 `]`，与脚本内 transformTextAreaFormItem / extractFieldFromToolbarDefault
- *   同款手法
+ * 算法：
+ *   - initSearchModal：正则定位 `initSearchModal: [` 起点，bracket-depth 扫描
+ *     找匹配 `]`，与脚本内 transformTextAreaFormItem 同款手法
+ *   - myConfig 调整块：见 extractMyConfigAdjustments 文档
  *
  * @param {string} refPath - 参照文件绝对路径
- * @returns {{ text: string, needsCktsUtilImport: boolean }|null}
- *          text = 含 'initSearchModal:' 前缀的整段文本（已重写 UnitUtil）
- *          needsCktsUtilImport = true 表示生成文件需 import cktsUtil
- *          或 null（不命中 / 文件缺失）
+ * @returns {{
+ *   initSearchModal?: { text: string, needsCktsUtilImport: boolean },
+ *   myConfigAdjustments?: { text: string },
+ * }|null}
+ *          - 字段缺失 = 参照里没有这类 customization
+ *          - 或 null（不命中 / 文件缺失）
  */
-function extractInitSearchModalFromFile(refPath) {
+function extractIndexCustomizationsFromFile(refPath) {
   if (!refPath || !fs.existsSync(refPath)) return null;
   let content;
   try {
@@ -1260,6 +1265,30 @@ function extractInitSearchModalFromFile(refPath) {
     return null;
   }
 
+  // 1) 抽取 initSearchModal: [...] 段
+  const initSearchModal = extractInitSearchModalBlock(content);
+
+  // 2) 抽取 myConfig 调整块（const myConfig = ...; 与 return <>; 之间）
+  const myConfigAdjustments = extractMyConfigAdjustments(content);
+
+  if (!initSearchModal && !myConfigAdjustments) return null;
+  const result = {};
+  if (initSearchModal) result.initSearchModal = initSearchModal;
+  if (myConfigAdjustments) result.myConfigAdjustments = myConfigAdjustments;
+  return result;
+}
+
+/**
+ * 从参照文件内容中抽取 `initSearchModal: [...]` 段的原始文本
+ *   - 含 `UnitUtil.getLcswsxDm(...)` → 自动重写为 `cktsUtil.getLcswsxDm(myConfig.unit_constant)`
+ *   - 含 cktsUtil.X 直接调用 → 标记 needsCktsUtilImport = true（虽然此处已重写完，
+ *     仍需要在生成文件顶部加 import）
+ *   - 其它原样保留
+ *
+ * @param {string} content
+ * @returns {{ text: string, needsCktsUtilImport: boolean }|null}
+ */
+function extractInitSearchModalBlock(content) {
   // 找首次出现位置
   const startRe = /initSearchModal\s*:\s*\[/;
   const startMatch = startRe.exec(content);
@@ -1300,48 +1329,522 @@ function extractInitSearchModalFromFile(refPath) {
   return { text, needsCktsUtilImport };
 }
 
+// ============================================================================
+// Change 1: myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath 重写
+// ============================================================================
+
+/**
+ * 把 text 中所有 `myUtil.menu.getMenuObjByPath(<args>)` 重写为
+ *   `cktsUtil.menu.getMenuObjByPath(<args>)`。
+ *   - 用字符级括号配对定位 <args> 范围（不被外层 if/while 的括号误吞）
+ *   - 跳过字符串字面量（`'` `"` `` ` ``，含 `\` 转义），避免误把字符串里的
+ *     ')' 当成参数结束
+ *   - 不匹配字符串/注释里的 `myUtil.menu.getMenuObjByPath`（实际数据无此场景）
+ *
+ * @param {string} text
+ * @returns {string}
+ */
+function rewriteGetMenuObjByPathCalls(text) {
+  const from = 'myUtil.menu.getMenuObjByPath';
+  const to = 'cktsUtil.menu.getMenuObjByPath';
+  let out = '';
+  let i = 0;
+  while (i < text.length) {
+    const idx = text.indexOf(from, i);
+    if (idx === -1) {
+      out += text.slice(i);
+      break;
+    }
+    out += text.slice(i, idx);
+    out += to;
+    let j = idx + from.length;
+    // 跳过空白 + 找 '('
+    while (j < text.length && /\s/.test(text[j])) j++;
+    if (text[j] !== '(') {
+      // 非函数调用形式，理论不应发生；保守：跳过这段 from 继续
+      i = idx + from.length;
+      continue;
+    }
+    out += text[j]; // '('
+    j++;
+    // paren-depth 扫描拷贝到匹配的 ')'，含字符串字面量保护
+    let depth = 1;
+    while (j < text.length && depth > 0) {
+      const ch = text[j];
+      if (ch === '(') {
+        depth++;
+        out += ch;
+        j++;
+      } else if (ch === ')') {
+        depth--;
+        out += ch;
+        j++;
+      } else if (ch === "'" || ch === '"' || ch === '`') {
+        const quote = ch;
+        out += ch;
+        j++;
+        while (j < text.length) {
+          out += text[j];
+          if (text[j] === '\\' && j + 1 < text.length) {
+            out += text[j + 1];
+            j += 2;
+            continue;
+          }
+          if (text[j] === quote) {
+            j++;
+            break;
+          }
+          j++;
+        }
+      } else {
+        out += ch;
+        j++;
+      }
+    }
+    i = j;
+  }
+  return out;
+}
+
+// ============================================================================
+// Change 2: Func.getOtherRef 中 push 的 ref 自动补 useRef 定义（preRefBlock）
+// ============================================================================
+
+/**
+ * 扫描 content 中所有 `Func.getOtherRef = () => { ... }` 块，
+ * 提取 `otherRef.push(<name>)` 中的 ref 名字（出现顺序）。
+ *   - 支持 `() =>` 和 `function ()` 两种形式
+ *   - 用字符级 brace-depth + 字符串/注释跳过定位方法体
+ *   - 返回 string[]
+ *
+ * @param {string} content
+ * @returns {string[]}
+ */
+function extractFuncGetOtherRefPushes(content) {
+  const targets = [];
+  const re = /Func\.getOtherRef\s*=\s*(?:\(\s*\)\s*=>|function\s*\(\s*\))/g;
+  let m;
+  while ((m = re.exec(content)) !== null) {
+    // 找匹配的 '{'
+    let i = m.index + m[0].length;
+    while (i < content.length && /\s/.test(content[i])) i++;
+    if (content[i] !== '{') continue;
+    i++;
+    const bodyStart = i;
+    let depth = 1;
+    let inString = null;
+    let escaped = false;
+    while (i < content.length && depth > 0) {
+      const ch = content[i];
+      if (inString) {
+        if (escaped) escaped = false;
+        else if (ch === '\\') escaped = true;
+        else if (ch === inString) inString = null;
+      } else {
+        if (ch === "'" || ch === '"' || ch === '`') inString = ch;
+        else if (ch === '/' && content[i + 1] === '/') {
+          // 行注释
+          while (i < content.length && content[i] !== '\n') i++;
+          continue;
+        } else if (ch === '/' && content[i + 1] === '*') {
+          // 块注释
+          i += 2;
+          while (i < content.length - 1 && !(content[i] === '*' && content[i + 1] === '/')) i++;
+          i += 1;
+          continue;
+        } else if (ch === '{') depth++;
+        else if (ch === '}') {
+          depth--;
+          if (depth === 0) break;
+        }
+      }
+      i++;
+    }
+    const body = content.slice(bodyStart, i);
+    // 提取 otherRef.push(<name>)
+    const pushRe = /otherRef\.push\s*\(\s*([A-Za-z_$][\w$]*)\s*\)/g;
+    let pm;
+    while ((pm = pushRe.exec(body)) !== null) {
+      targets.push(pm[1]);
+    }
+  }
+  return targets;
+}
+
+/**
+ * 扫描 content 中所有 useRef 声明，收集 (name → {line, index}) 对。
+ *   - 匹配 `const <name>: any = useRef(...);` / `const <name> = useRef(...);`
+ *          / `let <name> = useRef(...);` / `var <name> = useRef(...);`
+ *   - 容忍可选类型注解（`any` / `<any>` / `<HTMLDivElement>`）
+ *   - line 取整行（含紧邻 `// 注释`）直到下一个 `\n`
+ *   - index 是声明在 content 中的字符位置（用于过滤 adjustments 范围）
+ *   - 同名重复声明时保留第一个
+ *
+ * @param {string} content
+ * @returns {Map<string, { line: string, index: number }>}
+ */
+function collectUseRefDeclarations(content) {
+  const result = new Map();
+  const re = /^[ \t]*(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*(?::\s*[A-Za-z_$<>,\s\[\]\|]+)?\s*=\s*useRef\s*\([^)]*\)\s*;?/gm;
+  let m;
+  while ((m = re.exec(content)) !== null) {
+    const name = m[1];
+    if (result.has(name)) continue;
+    // 取整行（从匹配起点到下一个换行符）
+    const lineEnd = content.indexOf('\n', m.index);
+    const line = lineEnd === -1
+      ? content.slice(m.index)
+      : content.slice(m.index, lineEnd);
+    result.set(name, { line, index: m.index });
+  }
+  return result;
+}
+
+/**
+ * 给定 (pushes, declarations, adjStart, adjEnd)，输出 preRefBlock 字符串。
+ *   - 对每个 push 的 ref：
+ *     - declarations 找不到 → 生成默认 `  const <name>: any = useRef();`
+ *     - declarations 找到但声明在 adjustments 范围 [adjStart, adjEnd) 内
+ *       → 跳过（声明已随 adjustments text 注入到 myConfig 之后，重复注入会
+ *         触发 "Cannot redeclare block-scoped variable"）
+ *     - declarations 找到且声明在 adjustments 范围外（典型：参照文件把
+ *       useRef 放在 myConfig 之前）→ 复用原 declaration（含紧邻 `// 注释`）
+ *   - 顺序：参照文件中的 push 出现顺序
+ *   - 多行：每条声明独占一行，末尾统一加 `\n`
+ *   - 全部跳过 / pushes 为空 → 返回 ''
+ *
+ * @param {string[]} pushes
+ * @param {Map<string, { line: string, index: number }>} declarations
+ * @param {number} adjStart  adjustments 范围起点（initEnd + 1）
+ * @param {number} adjEnd    adjustments 范围终点（returnStart，不含）
+ * @returns {string}
+ */
+function buildPreRefBlock(pushes, declarations, adjStart, adjEnd) {
+  if (pushes.length === 0) return '';
+  const lines = [];
+  for (const name of pushes) {
+    const info = declarations.get(name);
+    if (info) {
+      // 声明在 adjustments 范围内 → 已在 text 中，跳过注入
+      if (info.index >= adjStart && info.index < adjEnd) {
+        continue;
+      }
+      // 声明在 adjustments 范围外 → 注入到 preRefBlock
+      lines.push(info.line);
+    } else {
+      // 没有声明 → 生成默认
+      lines.push(`  const ${name}: any = useRef();`);
+    }
+  }
+  if (lines.length === 0) return '';
+  return lines.join('\n') + '\n';
+}
+
+/**
+ * 从参照文件内容中抽取 myConfig 调整块：即 `const myConfig = ...;` 之后、
+ * 同一 brace depth（函数体顶层）的 `return <` 关键字之前的整段代码
+ *
+ * 涵盖（不限）：
+ *   - myConfig.grid_columns.forEach(...)  / myConfig.grid_columns_tj.forEach(...)
+ *   - myConfig.form_items.forEach(...)
+ *   - myConfig.X = Y / myConfig.X[Y] = Z 直接赋值
+ *   - if/else 块里对 myConfig 的多种 mutation
+ *
+ * 用户决策：**原样保留**（不做 `config` → `myConfig` 重写），依赖参照文件
+ * 使用 `myConfig.X` 写法。若某参照使用 `config.X`（直接 mutate 导入模块），
+ * 用户需手动调整参照。
+ *
+ * 算法：
+ *   1. 正则 /const myConfig = / 找初始化起点
+ *   2. 复用 findAssignmentEnd 模式（见脚本 308-356 行附近）的深度跟踪
+ *      找初始化表达式结束（顶层 ; 或 \n）
+ *   3. 从初始化结束位置起，继续深度扫描，在 brace depth = 1 时找
+ *      return 关键字（容忍字符串 / 注释 / 正则字面量内的 return 误匹配）
+ *   4. 抽取起点到 return 前的整段文本，trim 首尾空白
+ *   5. 无 const myConfig 或无顶层 return → 返 null
+ *
+ * 变更：
+ *   - Change 1: 抽取后用 `rewriteGetMenuObjByPathCalls` 把
+ *     `myUtil.menu.getMenuObjByPath` → `cktsUtil.menu.getMenuObjByPath`
+ *   - Change 2: 抽取前用 `extractFuncGetOtherRefPushes` 找 push 的 ref，
+ *     与 `collectUseRefDeclarations` 全 content 中的 useRef 声明交叉，
+ *     拼成 `preRefBlock`（注入到生成的 myConfig 之前）
+ *   - 返回值新增 `needsCktsUtilImport`（重写后含 cktsUtil. 时为 true）
+ *   - 返回值新增 `preRefBlock`（Change 2 输出，无 ref 时为空串）
+ *   - `needsUseRefImport` 改为：text 含 useRef( 或 preRefBlock 非空
+ *
+ * @param {string} content
+ * @returns {{ text: string, needsMyUtilImport: boolean, needsCktsUtilImport: boolean, needsUseRefImport: boolean, preRefBlock: string }|null}
+ */
+function extractMyConfigAdjustments(content) {
+  // 1) 找 const myConfig = 起点（跳过 // 注释里的匹配 —— 参照文件里
+  //    经常留有 `// const myConfig = {...unitConfig};` 之类的旧实现痕迹，
+  //    不能让它被错误识别为 initializer 起点）
+  let initMatch = null;
+  const initRe = /const\s+myConfig\s*=\s*/g;
+  let m;
+  while ((m = initRe.exec(content)) !== null) {
+    // 检查匹配位置是否在 // 注释行内（行首到此位置是空白 + //）
+    let lineStart = m.index;
+    while (lineStart > 0 && content[lineStart - 1] !== '\n') lineStart--;
+    const linePrefix = content.slice(lineStart, m.index);
+    if (!/^\s*\/\//.test(linePrefix)) {
+      initMatch = m;
+      break;
+    }
+    // regex.lastIndex 已自动推进到 m.index + 1，继续循环找下一个
+  }
+  if (!initMatch) return null;
+
+  // 2) 找初始化表达式的结束（顶层 ; 或 \n）
+  //    复用 findAssignmentEnd 的深度扫描循环（复制其骨架，不抽公共函数以避免大改）
+  const initAssignStart = initMatch.index;
+  const eqIdx = content.indexOf('=', initAssignStart);
+  if (eqIdx === -1) return null;
+
+  let i = eqIdx + 1;
+  const depth = { brace: 0, bracket: 0, paren: 0 };
+  let inString = null;
+  let escaped = false;
+  let initEnd = -1;
+  while (i < content.length) {
+    const ch = content[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === inString) {
+        inString = null;
+      }
+    } else {
+      if (ch === "'" || ch === '"' || ch === '`') {
+        inString = ch;
+      } else if (ch === '{') {
+        depth.brace++;
+      } else if (ch === '}') {
+        depth.brace--;
+      } else if (ch === '[') {
+        depth.bracket++;
+      } else if (ch === ']') {
+        depth.bracket--;
+      } else if (ch === '(') {
+        depth.paren++;
+      } else if (ch === ')') {
+        depth.paren--;
+      } else if (
+        (ch === ';' || ch === '\n') &&
+        depth.brace === 0 &&
+        depth.bracket === 0 &&
+        depth.paren === 0
+      ) {
+        initEnd = i;
+        break;
+      }
+    }
+    i++;
+  }
+  if (initEnd === -1) return null;
+
+  // 3) 从 initEnd 之后继续深度扫描，找函数体顶层（brace depth = 1）的 `return`
+  //    depth 含义：进入 `=> {` 后 brace=1；嵌套 if/for 块内 brace=2
+  //    目标：在 brace=1 时（即函数体顶层）找 `return`
+  //    假设：函数体在模块顶层（Index = () => { ... } 形式）；对于 IIFE 等包装情况
+  //    留作后续增强（用户决策：本期只覆盖常见 case）
+  let returnStart = -1;
+  i = initEnd + 1;
+  inString = null;
+  escaped = false;
+  // 关键：初始化表达式的终止符 (; 或 \n) 是在函数体顶层，所以进入第二步扫描时
+  // 我们已经在函数体内部（brace=1），不是模块顶层（brace=0）
+  const depth2 = { brace: 1, bracket: 0, paren: 0 };
+  while (i < content.length - 6) { // 'return' 6 字符
+    const ch = content[i];
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (ch === '\\') {
+        escaped = true;
+      } else if (ch === inString) {
+        inString = null;
+      }
+    } else {
+      if (ch === "'" || ch === '"' || ch === '`') {
+        inString = ch;
+      } else if (ch === '/') {
+        // 跳过单行注释：避免误把注释里的 'return' 当真
+        if (content[i + 1] === '/') {
+          while (i < content.length && content[i] !== '\n') i++;
+          continue;
+        }
+        // 跳过块注释
+        if (content[i + 1] === '*') {
+          i += 2;
+          while (i < content.length - 1 && !(content[i] === '*' && content[i + 1] === '/')) i++;
+          i += 1;
+          continue;
+        }
+      } else if (ch === '{') {
+        depth2.brace++;
+      } else if (ch === '}') {
+        depth2.brace--;
+        // 退出函数体：brace 回到 0（模块顶层），说明已经过本函数体，提前结束
+        if (depth2.brace === 0) break;
+      } else if (ch === '[') {
+        depth2.bracket++;
+      } else if (ch === ']') {
+        depth2.bracket--;
+      } else if (ch === '(') {
+        depth2.paren++;
+      } else if (ch === ')') {
+        depth2.paren--;
+      } else if (
+        depth2.brace === 1 &&  // 函数体顶层
+        depth2.bracket === 0 &&
+        depth2.paren === 0 &&
+        // 前一个字符不是字母/数字/下划线/$（避免把 'myreturn'/'xreturn' 误判为 return）
+        !/[A-Za-z_$0-9]/.test(content[i - 1] ?? ' ') &&
+        content.substr(i, 6) === 'return' &&
+        // 后一个字符是空白 / < / ( 之一
+        /[\s<(]/.test(content[i + 6] ?? '')
+      ) {
+        returnStart = i;
+        break;
+      }
+    }
+    i++;
+  }
+  if (returnStart === -1) return null;
+
+  // 4.5) Change 2: 扫描 Func.getOtherRef 中 push 的 ref，
+  //      与全 content 中已有的 useRef 声明交叉（adjustments 范围
+  //      [initEnd + 1, returnStart) 内的声明会被原样抽到 text，
+  //      跳过避免 "Cannot redeclare block-scoped variable"），
+  //      拼成 preRefBlock 字符串（注入到 myConfig 之前）
+  const pushedRefs = extractFuncGetOtherRefPushes(content);
+  const useRefDecls = collectUseRefDeclarations(content);
+  const preRefBlock = buildPreRefBlock(
+    pushedRefs,
+    useRefDecls,
+    initEnd + 1,
+    returnStart,
+  );
+
+  // 5) 抽取并 trim
+  let text = content.slice(initEnd + 1, returnStart);
+  // 去掉前导空白行
+  text = text.replace(/^\s*\n/, '');
+  // 去掉尾部空白
+  text = text.replace(/\s+$/, '');
+  if (!text) return null;
+
+  // 6) 剥除 myConfig.gridParams = { ... }; 块 —— 该块由 extractInitSearchModalBlock
+  //    单独处理（含 UnitUtil → cktsUtil 重写），这里包含会重复。
+  //    若剥除后为空，说明参照里只有 initSearchModal 这种 customization，返 null。
+  text = stripGridParamsBlock(text);
+  text = text.replace(/^\s*\n/, '').replace(/\s+$/, '');
+  if (!text) return null;
+
+  // 7) Change 1: myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath
+  //    替换后调整块里不再有 myUtil.menu 子模块引用，生成的 auto_configIndex.tsx
+  //    不需要 myUtil import；needsCktsUtilImport 会在下面 (8) 由 cktsUtil. 触发
+  if (text.indexOf('myUtil.menu.getMenuObjByPath') !== -1) {
+    text = rewriteGetMenuObjByPathCalls(text);
+  }
+
+  // 8) 检测按需注入的 import 标志（与 extractInitSearchModalBlock 同款 regex.test 模式）
+  //    - myUtil. → 顶部加 `import myUtil from '@/components/DDAssist/util';`
+  //    - cktsUtil. → 顶部加 `import cktsUtil from '@/pages/hts/cktsUtil';`
+  //    - useRef( → 把 `import React from 'react';` 合并为 `import React, {useRef} from 'react';`
+  //      （text 里出现 useRef( 或 preRefBlock 非空都触发；后者覆盖 Change 2 自动补的 useRef 行）
+  const needsMyUtilImport = /\bmyUtil\./.test(text);
+  const needsCktsUtilImport = /\bcktsUtil\./.test(text);
+  const needsUseRefImport = /\buseRef\s*\(/.test(text) || preRefBlock.length > 0;
+
+  return {
+    text,
+    needsMyUtilImport,
+    needsCktsUtilImport,
+    needsUseRefImport,
+    preRefBlock,
+  };
+}
+
+/**
+ * 从 myConfig 调整文本中剥除 `myConfig.gridParams = { ... };` 整段
+ * 使用 brace-depth 扫描定位匹配的 `}`，避免误删嵌套 `{}`
+ */
+function stripGridParamsBlock(text) {
+  const startRe = /myConfig\.gridParams\s*=\s*\{/;
+  const startMatch = startRe.exec(text);
+  if (!startMatch) return text;
+
+  const startIdx = startMatch.index;
+  // brace-depth 扫描找匹配 }
+  let depth = 1;
+  let i = startMatch.index + startMatch[0].length;
+  while (i < text.length && depth > 0) {
+    const ch = text[i];
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return text; // 不闭合，原样返回
+
+  // 跳过可选的 ; 和随后的空白
+  let endIdx = i + 1;
+  if (text[endIdx] === ';') endIdx++;
+  while (endIdx < text.length && /\s/.test(text[endIdx])) endIdx++;
+
+  return text.slice(0, startIdx) + text.slice(endIdx);
+}
+
 /**
  * 生成 index 页面（auto_configIndex.tsx）
+ *
+ * 模板分支：
+ *   - Branch A（标准模板）：initSearchModal 与 myConfigAdjustments 都缺。
+ *     行为与改造前完全一致（无 myConfig 包装）。
+ *   - Branch B（注入模板）：至少有一项 customization。
+ *     顶部按需加 import cktsUtil；myConfig 调整块（可选）+ gridParams 块（可选）
+ *     按参照文件中出现的顺序注入到 const myConfig = {...unitConfig}; 与 return <> 之间。
  *
  * @param {object} options
  * @param {string} options.configImportName - config 文件 basename（无扩展名），如 'auto_config'
  * @param {string} options.funImportName    - fun 文件 basename（无扩展名），如 'auto_configFun'
  * @param {string|null} [options.initSearchModal]
- *        - 来自参照文件（`--index` / 默认 index.tsx）的 `initSearchModal: [...]` 段（已重写 UnitUtil）
- *        - 命中：使用「注入模板」（在 myConfig.gridParams 中嵌入该段）
- *        - null：使用「标准模板」（与改造前完全一致）
+ *        - 来自参照文件的 `initSearchModal: [...]` 段（已重写 UnitUtil）
+ * @param {string|null} [options.myConfigAdjustments]
+ *        - 来自参照文件 `const myConfig = ...;` 与顶层 `return <...>` 之间的整段代码
  * @param {boolean} [options.needsCktsUtilImport]
- *        - true：在「注入模板」顶部加 `import cktsUtil from '@/pages/hts/cktsUtil';`
- *        - 由 extractInitSearchModalFromFile 检测
+ *        - true：注入模板顶部加 `import cktsUtil from '@/pages/hts/cktsUtil';`
+ *        - 由 extractIndexCustomizationsFromFile 检测
  *          （段含 cktsUtil.X 调用 或 原 UnitUtil.getLcswsxDm 调用时为 true）
+ * @param {boolean} [options.needsMyUtilImport]
+ *        - true：注入模板顶部加 `import myUtil from '@/components/DDAssist/util';`
+ *        - 由 extractMyConfigAdjustments 检测（myConfig 调整块含 myUtil. 时为 true）
+ * @param {boolean} [options.needsUseRefImport]
+ *        - true：把 `import React from 'react';` 合并为 `import React, {useRef} from 'react';`
+ *        - 由 extractMyConfigAdjustments 检测（myConfig 调整块含 useRef( 时为 true）
+ * @param {string} [options.preRefBlock]
+ *        - Change 2：Func.getOtherRef 内 push 的 ref 自动补的 useRef 声明块
+ *        - 注入到 `const myConfig = {...}` 之前（符合 React hooks 规则）
+ *        - 默认 ''
  */
-function generateIndexPage({ configImportName, funImportName, initSearchModal, needsCktsUtilImport }) {
-  if (initSearchModal) {
-    // 注入模板：参照文件含 initSearchModal 时使用
-    const cktsUtilImportLine = needsCktsUtilImport
-      ? "import cktsUtil from '@/pages/hts/cktsUtil';\n"
-      : '';
+function generateIndexPage({
+  configImportName,
+  funImportName,
+  initSearchModal,
+  myConfigAdjustments,
+  needsCktsUtilImport,
+  needsMyUtilImport,
+  needsUseRefImport,
+  preRefBlock = '',
+}) {
+  // Branch A：完全无 customization —— 标准模板
+  if (!initSearchModal && !myConfigAdjustments) {
     return `import React from 'react';
-${cktsUtilImportLine}import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './${configImportName}';
-import Func from './${funImportName}';
-
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
-  myConfig.gridParams = {
-    ${initSearchModal},
-  };
-
-  return <>
-    <DDBunit2 config={myConfig} func={Func} />
-  </>;
-};
-export default Unit;
-`;
-  }
-  // 标准模板：与改造前一致（无 initSearchModal 注入）
-  return `import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './${configImportName}';
 import Func from './${funImportName}';
@@ -1349,6 +1852,42 @@ import Func from './${funImportName}';
 const Unit: React.FC<unknown> = () => {
   return <>
     <DDBunit2 config={unitConfig} func={Func} />
+  </>;
+};
+export default Unit;
+`;
+  }
+
+  // Branch B：至少有一项 customization —— 注入模板
+  const cktsUtilImportLine = needsCktsUtilImport
+    ? "import cktsUtil from '@/pages/hts/cktsUtil';\n"
+    : '';
+  const myUtilImportLine = needsMyUtilImport
+    ? "import myUtil from '@/components/DDAssist/util';\n"
+    : '';
+  // useRef 合并到 React 行（项目主流风格，与 DDBunit2.tsx line 1 一致）
+  const useRefInReactImport = needsUseRefImport ? ', {useRef}' : '';
+  const myConfigBlock = myConfigAdjustments
+    ? `${myConfigAdjustments}\n`
+    : '';
+  const gridParamsBlock = initSearchModal
+    ? `  myConfig.gridParams = {
+    ${initSearchModal},
+  };
+`
+    : '';
+  // Change 2: preRefBlock 紧贴 `const myConfig` 之前（hook 必须在最前）
+  return `import React${useRefInReactImport} from 'react';
+${cktsUtilImportLine}${myUtilImportLine}import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import unitConfig from './${configImportName}';
+import Func from './${funImportName}';
+
+const Unit: React.FC<unknown> = () => {
+${preRefBlock}  // 改变默认配置项
+  const myConfig = { ...unitConfig };
+${myConfigBlock}${gridParamsBlock}
+  return <>
+    <DDBunit2 config={myConfig} func={Func} />
   </>;
 };
 export default Unit;
@@ -1545,30 +2084,54 @@ function main() {
       ? configImportName.slice(0, -'Config'.length) + 'Fun'
       : configImportName + 'Fun';
 
-    // 解析参照文件 → 抽取 initSearchModal
+    // 解析参照文件 → 抽取 customization（initSearchModal + myConfig 调整块）
     //   - 默认：<srcDir>/index.tsx（与源 auto_config.tsx 同目录）
     //   - --index <name>：<srcDir>/<name>.tsx
-    //   - 文件不存在 / 无 initSearchModal → silent fallback（initSearchModal = null）
+    //   - 文件不存在 / 无任何 customization → silent fallback
     let initSearchModal = null;
+    let myConfigAdjustments = null;
+    let preRefBlock = '';
     let needsCktsUtilImport = false;
+    let needsMyUtilImport = false;
+    let needsUseRefImport = false;
     if (args['no-index'] !== true) {
       const srcDir = path.dirname(args.src);
       const refBase = typeof args.index === 'string' && args.index.length > 0
         ? args.index
         : 'index';
       const refPath = path.join(srcDir, `${refBase}.tsx`);
-      const extracted = extractInitSearchModalFromFile(refPath);
-      if (extracted) {
-        initSearchModal = extracted.text;
-        needsCktsUtilImport = extracted.needsCktsUtilImport;
-        console.log(`[convert] 参照文件已抽取 initSearchModal: ${refPath}`);
+      const customizations = extractIndexCustomizationsFromFile(refPath);
+      if (customizations) {
+        if (customizations.initSearchModal) {
+          initSearchModal = customizations.initSearchModal.text;
+          needsCktsUtilImport = customizations.initSearchModal.needsCktsUtilImport;
+        }
+        if (customizations.myConfigAdjustments) {
+          myConfigAdjustments = customizations.myConfigAdjustments.text;
+          preRefBlock = customizations.myConfigAdjustments.preRefBlock || '';
+          needsMyUtilImport = customizations.myConfigAdjustments.needsMyUtilImport;
+          if (customizations.myConfigAdjustments.needsCktsUtilImport) {
+            needsCktsUtilImport = true;
+          }
+          needsUseRefImport = customizations.myConfigAdjustments.needsUseRefImport;
+        }
+        console.log(`[convert] 参照文件已抽取 customization: ${refPath}`);
       }
     }
 
     fs.mkdirSync(path.dirname(args.page.indexFile), { recursive: true });
     fs.writeFileSync(
       args.page.indexFile,
-      generateIndexPage({ configImportName, funImportName, initSearchModal, needsCktsUtilImport }),
+      generateIndexPage({
+        configImportName,
+        funImportName,
+        initSearchModal,
+        myConfigAdjustments,
+        needsCktsUtilImport,
+        needsMyUtilImport,
+        needsUseRefImport,
+        preRefBlock,
+      }),
       'utf-8',
     );
     console.log(`[convert] 已生成 index 页面: ${args.page.indexFile}`);
