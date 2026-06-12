@@ -271,16 +271,85 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 | 目录 | 场景 | 结果 |
 |---|---|---|
-| `MDT___ZXSB_SB_MDT_SYYK_GCB` | 调整块含 3 字段 | `form_api_save` → `api_form_edit`（剥前缀）；`form_api_save_upload` 保持；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
-| `MDT___ZXSB_SB_MDT_YFSJ_GCB` | 顶层 `unitConfig` 含 2 字段（无裸 save）| `form_api_save_upload` 保持；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
+| `MDT___ZXSB_SB_MDT_SYYK_GCB` | 调整块含 3 字段 | `form_api_save` → `api_form_edit`（剥前缀）；`form_api_save_upload` 剥前缀（r17 覆盖）；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
+| `MDT___ZXSB_SB_MDT_YFSJ_GCB` | 顶层 `unitConfig` 含 2 字段（无裸 save）| `form_api_save_upload` 剥前缀（r17 覆盖）；`form_api_delete` → `api_form_delete`（剥前缀）✓ |
 
 **测试**：`npm run test:convert-config` → **20 通过**（含新增 `form-api-save-delete-rename`）
 / 2 失败（预存在的 default-nodes-and-xhcp / toolbar-ckts-sum，与本次无关）
 
 **已知限制**（用户决策接受）：
-- 不处理 `form_api_save_upload` 变体（用户明确决策保持原样）
+- 不处理 `form_api_save_upload` 变体（**r17 已覆盖其前缀剥离**；key 保持不变 — 见 r17）
 - 不处理 value 不是 `${API_URL_BASE}/X` 字面量前缀的情况（裸路径、函数调用、模板内嵌表达式等）—— 不匹配 → 保持原样
 - 不重命名 `form_api_delete_upload`（即便存在）—— 词边界自动保护
+
+### r17: form_api_save_upload 转换规则（仅剥 ${API_URL_BASE} 前缀）
+
+**背景**：r16 实现时用户决策 `form_api_save_upload` 保持原样（key + value 都不动）。
+但在端到端验证中发现 `form_api_save_upload` 值里的 `${API_URL_BASE}` 前缀必须剥离
+（运行时 axios baseURL 已配 `${API_URL_BASE}`），而 key 需保持不变（与 form 组件字段名一致）。
+
+- 源：`<configVar>.form_api_save_upload = \`${API_URL_BASE}/X\`;`
+- 目标：`<configVar>.form_api_save_upload = \`/X\`;`
+
+**关键设计点**：
+- 与 r16 完全独立：r16 用 `\bform_api_save\b`（无 upload 词边界），r17 用
+  `\bform_api_save_upload\b`，两者正则互不干扰
+- 单一 transform 同时做 value 前缀剥离，key 保持不变
+- 复用两次（SPECIAL_FIELD_RULES + `extractMyConfigAdjustments` 内调用）
+
+**改动**：
+
+1. **新增 `transformFormApiSaveUpload(content, configVar)`**：
+   紧贴 `transformFormApiSaveDelete` 下方（[scripts/convert-ddbunit-config.js:1018-1046](scripts/convert-ddbunit-config.js#L1018-L1046)）。
+   - 单次 `.replace`，匹配 `form_api_save_upload` + `${API_URL_BASE}` 前缀
+   - regex 模板：
+     ```
+     (<configVar>\.)\bform_api_save_upload\b(\s*=\s*)`\${API_URL_BASE}(/[^`]*)`
+     ```
+   - 替换：保留 `<configVar>.form_api_save_upload` + 等号，值保留 `/...` 段
+
+2. **注册为 SPECIAL_FIELD_RULE 第 6 条**（[scripts/convert-ddbunit-config.js:558-562](scripts/convert-ddbunit-config.js#L558-L562)）
+   ```js
+   {
+     name: 'form_api_save_upload 剥 ${API_URL_BASE} 前缀 (r17)',
+     apply: transformFormApiSaveUpload,
+   }
+   ```
+   主流程 `applySpecialFieldRules` 循环自动调度
+
+3. **在 `extractMyConfigAdjustments` 内调用**（[scripts/convert-ddbunit-config.js:1809-1815](scripts/convert-ddbunit-config.js#L1809-L1815)）：
+   插入位置 = r16 之后、Change 1（`myUtil.menu` 重写）之前
+   ```js
+   {
+     const r17 = transformFormApiSaveUpload(text, 'myConfig');
+     if (r17.count > 0) {
+       text = r17.content;
+     }
+   }
+   ```
+   `configVar` 硬编码 `'myConfig'`（与 r16 同约定）
+
+4. **更新 fixture `form-api-save-delete-rename` 的期望输出**（2 个文件）：
+   - `form-api-save-delete-rename.expected.tsx` line 10 + 头注释
+   - `form-api-save-delete-rename.expected.index.tsx` line 10
+   - 仅改 value：`` `${API_URL_BASE}/...` `` → `` `/...` ``
+   - 头注释改为"r16 + r17 互不干扰"
+
+**端到端验证**：
+
+| 目录 | 场景 | 结果 |
+|---|---|---|
+| `MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configIndex.tsx` | myConfig 调整块 line 10 | `form_api_save_upload` value 剥前缀 ✓ |
+| `MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_config.tsx` | 顶层 unitConfig line 21 | `form_api_save_upload` value 剥前缀 ✓ |
+| `MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_config.tsx` | 顶层 unitConfig line 19 | `form_api_save_upload` value 剥前缀 ✓ |
+
+**测试**：`npm run test:convert-config` → **20 通过**（含 `form-api-save-delete-rename` 仍通过 —— fixture 已更新，r17 行为已被断言）
+/ 2 失败（预存在的 `default-nodes-and-xhcp` / `toolbar-ckts-sum`，与本次改动无关）
+
+**已知限制**（用户决策接受）：
+- 不处理 `form_api_save_upload_x` / `xform_api_save_upload` 变体（\b 词边界已保护；实际数据无此场景）
+- 不处理 value 不是 `${API_URL_BASE}/X` 字面量前缀的情况（裸路径、函数调用、模板内嵌表达式等）—— 不匹配 → 保持原样
+- 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r16 行为一致；实际数据无此场景）
 
 ## 待提交变更（2026-06-11）
 

@@ -1,5 +1,6 @@
 export default [
   { name: '慧退税', icon: 'CodeOutlined', path: '/hts', routes: [
+    { name: '外贸企业出口退税进货明细申报', path: '/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB/auto_config', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configIndex' },
     { name: '跨境销售服务及无形资产收讫营业款明细清单', path: '/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_config', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configIndex' },
     { name: '跨境销售服务及无形资产免抵退税申报明细', path: '/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_config', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configIndex' },
     { name: '出口业务收汇', path: '/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_config', component: './hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configIndex' },

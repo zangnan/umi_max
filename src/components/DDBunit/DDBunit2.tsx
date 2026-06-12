@@ -635,7 +635,8 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
       setFormItems,
       setMasker2,
       apiFormCheck,
-      apiFormEdit,
+      apiFormEdit: formType === 'add' ? apiFormEdit : 
+        `${apiPrefix}${config?.form_api_save_upload || (config?.api_form_edit || CONSTANTS.DEFAULT_API.FORM_EDIT)}`,
       reload,
       form_submit_type,
       leafConfig,

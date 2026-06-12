@@ -7,7 +7,7 @@ const Unit: React.FC<unknown> = () => {
   // 改变默认配置项
   const myConfig = { ...unitConfig };
   myConfig.api_form_edit = `/ref/save`;
-  myConfig.form_api_save_upload = `${API_URL_BASE}/ref/saveUpload`;
+  myConfig.form_api_save_upload = `/ref/saveUpload`;
   myConfig.api_form_delete = `/ref/delete`;
 
   myConfig.grid_columns.forEach((item: any) => {

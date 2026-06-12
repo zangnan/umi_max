@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './auto_config';
 import Func from './auto_configFun';
 
 const Unit: React.FC<unknown> = () => {
+  const jhmxRef: any = useRef(); // 生成进货明细
   // 改变默认配置项
   const myConfig = { ...unitConfig };
-  myConfig.form_api_save = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
-  myConfig.form_api_save_upload = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
-  myConfig.form_api_delete = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tsjh/deleteHwlwTsjh`; // api 表单删除
+  myConfig.api_form_edit = `/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
+  myConfig.form_api_save_upload = `/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
+  myConfig.api_form_delete = `/yw/bszx/mdt/hwlw/tsjh/deleteHwlwTsjh`; // api 表单删除
 
   // 配置项：自定义工具栏
   myConfig.costomer_toobar = [];

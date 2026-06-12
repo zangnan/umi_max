@@ -555,6 +555,12 @@ const SPECIAL_FIELD_RULES = [
     name: 'form_api_save/delete 重命名 + 剥 ${API_URL_BASE} 前缀 (r16)',
     apply: transformFormApiSaveDelete,
   },
+  {
+    // r17: 剥离 form_api_save_upload 值里的 ${API_URL_BASE} 前缀（key 不变）
+    //   \b 词边界精确匹配；与 r16 互不干扰
+    name: 'form_api_save_upload 剥 ${API_URL_BASE} 前缀 (r17)',
+    apply: transformFormApiSaveUpload,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -1012,6 +1018,38 @@ function transformFormApiSaveDelete(content, configVar) {
     return `${prefix}api_form_delete${eq}\`${path}\``;
   });
 
+  return { content: out, count };
+}
+
+// =================== r17: form_api_save_upload 剥前缀 ===================
+/**
+ * r17: 把
+ *   `<configVar>.form_api_save_upload = \`${API_URL_BASE}/X\`;`
+ *     → `<configVar>.form_api_save_upload = \`/X\`;` （key 不变）
+ *
+ *   - 仅剥离 value 里的 `${API_URL_BASE}` 前缀，key 保持 `form_api_save_upload`
+ *     （与 form 组件约定的字段名一致，不应重命名）
+ *   - \b 词边界精确匹配 `form_api_save_upload`（保护 `form_api_save_upload_x` 等变体）
+ *   - 只匹配有 `${API_URL_BASE}` 前缀的值（裸路径/函数调用等不匹配，保持原样）
+ *   - 复用两次：注册为 SPECIAL_FIELD_RULE（处理顶层 unitConfig）+
+ *     在 extractMyConfigAdjustments 内调用（处理 myConfig 调整块）
+ *   - 与 r16 互不干扰：r16 用 `\bform_api_save\b`（无 upload 词边界），
+ *     r17 用 `\bform_api_save_upload\b`，两者正则互不干扰
+ *
+ * @param {string} content
+ * @param {string} configVar  'unitConfig' / 'myConfig' / 其它
+ * @returns {{ content: string, count: number }}
+ */
+function transformFormApiSaveUpload(content, configVar) {
+  const re = new RegExp(
+    `(${escapeRegExp(configVar)}\\.)\\bform_api_save_upload\\b(\\s*=\\s*)\`\\$\\{API_URL_BASE\\}(/[^\\\`]*)\``,
+    'g',
+  );
+  let count = 0;
+  const out = content.replace(re, (_match, prefix, eq, path) => {
+    count++;
+    return `${prefix}form_api_save_upload${eq}\`${path}\``;
+  });
   return { content: out, count };
 }
 
@@ -1803,6 +1841,15 @@ function extractMyConfigAdjustments(content) {
     const r16 = transformFormApiSaveDelete(text, 'myConfig');
     if (r16.count > 0) {
       text = r16.content;
+    }
+  }
+
+  // 6.6) r17: 剥离 form_api_save_upload 值里的 ${API_URL_BASE} 前缀（key 不变）
+  //      与 SPECIAL_FIELD_RULES 注册同一函数
+  {
+    const r17 = transformFormApiSaveUpload(text, 'myConfig');
+    if (r17.count > 0) {
+      text = r17.content;
     }
   }
 

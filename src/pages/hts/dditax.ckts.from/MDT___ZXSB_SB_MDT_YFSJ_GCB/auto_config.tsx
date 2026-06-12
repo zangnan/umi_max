@@ -16,7 +16,7 @@ unitConfig.unit_constant = ''; // 配置常量
 unitConfig.export_key1 = 'SAAS_TSSB_MXCJ_YFSJ_DC'; // 采集导出key
 unitConfig.export_key2 = 'SAAS_SJGL_SWFKCX_MDT_KJYSXWMDTSSBMXB_DC'; // 统计导出key
 unitConfig.export_key3 = 'SAAS_TSSB_MDT_SBMXCK_KJYSXWMDTSSBMXB_DC'; // 申报结果查询导出key
-unitConfig.form_api_save_upload = `${API_URL_BASE}/yw/bszx/mdt/ysfw/yfsj/updateYsfwYfsjTssb`; // api 表单更新
+unitConfig.form_api_save_upload = `/yw/bszx/mdt/ysfw/yfsj/updateYsfwYfsjTssb`; // api 表单更新
 unitConfig.api_form_delete = `/yw/bszx/mdt/ysfw/yfsj/deleteYsfwYfsjTssb`; // api 表单删除
 
 // 配置列表列
