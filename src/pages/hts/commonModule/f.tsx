@@ -3,6 +3,7 @@ import { message, Modal, Form, Radio, Input } from 'antd';
 import React from 'react';
 import { glhcp, queryCjCsh, queryCjGlh, queryCjBh,checkMtsTssbGlh, checkJtgszbQydm, getUrlCode, checkSsqPcYsb, checkJtgszbSqrq, querySpdmXxCj, checkZmkjJyBhYsb, checkSsqYsbCj, checkZmkjJyXh, queryHlxx, queryShmxByCkbgdh } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
+import cktsUtil from '@/pages/hts/cktsUtil';
 import dayjs from "dayjs";
 import { history } from 'umi';
 // import { intl as intl2 } from '@/pages/common/myUtil';
@@ -13,123 +14,123 @@ const DditCktsFormCommonFunc: any = {
   unitRef: React.createRef(),
 };
 
-// // 新建表单初始化
-// DditCktsFormCommonFunc.initAddForm = (param: any) => {
-//   const { form, handleModalVisible, unit_key, unit_lcswsx_dm = '', unitRef, doSuccess, setMasker, tcbz } = param;
-//   if (setMasker) {
-//     setMasker(true);  // 按报关单生成明细：外贸、生产、证明开具
-//   } else {
-//     unitRef.current?.setMasker(true); // 通用页面
-//   }
-//   let apiParam: any = {
-//     lcswsxDm: unit_lcswsx_dm,
-//     tableKey: unit_key,
-//   };
-//   // 表单初始化1 除关联号外的其他字段
-//   queryCjCsh(apiParam).then((response) => {
-//     const { code, body } = response;
-//     if (code === '200') {
-//       let sbbh1 = body.sbbh1;
-//       if (tcbz === 'ZXSB_ZM_DLCK_GCB_ABGDSC') {
-//           sbbh1 = Number(sbbh1) + 1;
-//           sbbh1 = sbbh1 + '';
-//       }
-//       form.setFieldsValue({
-//         ssq: body.ssq,
-//         sbpc: body.sbpc,
-//         sbxh: body.sbxh,
-//         sbbh1: sbbh1,
-//         xh4: body.xh4,
-//         xh: body.xh,
-//         sqrq: body.sqrq ? moment(new Date(body.sqrq)) : null,
-//         tbrq1: body.tbrq1 ? moment(new Date(body.sqrq)) : null,
-//       });
-//       if (unit_key === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G' &&  myUtil.sys.enterpriseType() == 'WM') { // 出口货物已补税/未退税证明采集
-//         form.setFieldsValue({
-//           ywclfs: '补税', // 业务处理方式
-//           czlx: '1'
-//         });
-//       } else if(unit_key === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G' &&  myUtil.sys.enterpriseType() == 'SC') { // 出口货物已补税/未退税证明采集
-//         form.setFieldsValue({
-//           czlx: '1'
-//         });
-//       } else if(unit_key === 'MTS_ZXSB_SB_MTS_TSJH_G') { // 外贸企业出口退税进货明细申报表
-//         form.setFieldsValue({
-//           sz: 'V', // 税种
-//           cktmspzlxDm: '02', // 凭证种类
-//         });
-//       } else if (unit_key === 'MTS_ZXSB_SB_MTS_TSSB_G' || unit_key === 'MDT_ZXSB_SB_MDT_TSSB_G') { // 企业出口退税出口明细申报采集
-//         form.setFieldsValue({
-//           cktmsywlxdmjh: [],
-//         });
-//       } else if (unit_key === 'ZGBA_ZXSB_SB_MDT_XTHHZG_G') {
-//         form.setFieldsValue({
-//           tbrq1: moment(new Date(body.tbrq1))
-//         });
-//       } else if (unit_key === 'ZGBA_ZXSB_TX_CKTSYWTX_G') {
-//         form.setFieldsValue({
-//           tbrq1: moment(new Date(body.tbrq1))
-//         });
-//       } else if (unit_key === 'MTS_ZXSB_SB_MTS_TZSB_G') {
-//         form.setFieldsValue({
-//           wmqytzsblxDm: '1'
-//         });
-//       } else if (unit_key === 'ZMKJ_ZXSB_ZM_CKHWZNX_G') {
-//         form.setFieldsValue({
-//           czlx: '1'
-//         });
-//       }
-//       // 成功回调
-//       if (doSuccess) {
-//         doSuccess(response);
-//       }
-//       // 获取属期批次下最大申报编号+1
-//       // if (unit_key === 'ZMKJ_ZXSB_ZM_LLJG_G' || unit_key === 'ZMKJ_ZXSB_ZM_LLJGHX_G'
-//       //         || unit_key === 'ZMKJ_ZXSB_ZM_DLCK_G' || unit_key === 'ZMKJ_ZXSB_ZM_DLJK_G'
-//       //         || unit_key === 'ZMKJ_ZXSB_ZM_WTCK_G' || unit_key === 'ZMKJ_ZXSB_ZM_CKHWZNX_G'
-//       //         || unit_key === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G'
-//       // ){
-//       //   let data ={ssq:'',sbpc:'',tableKey:unit_key};
-//       //   data.ssq = body?.ssq || '',
-//       //   data.sbpc = body?.sbpc || '',
-//       //   queryCjBh(data).then((res: any)=>{
-//       //     const {code, body, desc} = res;
-//       //     if(code === '200') {
-//       //       form.setFieldsValue({sbbh1:body?.sbbh1})
-//       //     }else{
-//       //       message.error(desc)
-//       //     }
-//       //   })
-//       // }
-//       // 表单初始化2 关联号
-//       if (unit_key === 'MTS_ZXSB_SB_MTS_TSSB_G') { // 外贸企业出口退税出口明细申报采集
-//         return queryCjGlh({
-//           sbpc: body?.sbpc || '',
-//           ssq: body?.ssq || '',
-//         });
-//       }
-//     }
-//     return;
-//   }).then((response2) => {
-//     if (response2) {
-//       const { code, body } = response2;
-//       if (code === '200') {
-//         form.setFieldsValue(body);  // 设置关联号
-//       }
-//     }
-//   }).finally(() => {
-//     if (setMasker) {
-//       setMasker(false);  // 按报关单生成明细：外贸、生产、证明开具
-//     } else {
-//       unitRef.current?.setMasker(false); // 通用页面
-//     }
-//     if (handleModalVisible) {
-//       handleModalVisible(true); // 通用页面
-//     }
-//   });
-// };
+// 新建表单初始化
+DditCktsFormCommonFunc.initAddForm = (param: any) => {
+  const { form, handleModalVisible, unitKey, unit_lcswsx_dm = '', unitRef, doSuccess, setMasker, tcbz } = param;
+  if (setMasker) {
+    setMasker(true);  // 按报关单生成明细：外贸、生产、证明开具
+  } else {
+    unitRef.current?.setMasker(true); // 通用页面
+  }
+  let apiParam: any = {
+    lcswsxDm: unit_lcswsx_dm,
+    tableKey: unitKey,
+  };
+  // 表单初始化1 除关联号外的其他字段
+  queryCjCsh(apiParam).then((response) => {
+    const { code, body } = response;
+    if (code === '200') {
+      let sbbh1 = body.sbbh1;
+      if (tcbz === 'ZXSB_ZM_DLCK_GCB_ABGDSC') {
+          sbbh1 = Number(sbbh1) + 1;
+          sbbh1 = sbbh1 + '';
+      }
+      form.setFieldsValue({
+        ssq: body.ssq,
+        sbpc: body.sbpc,
+        sbxh: body.sbxh,
+        sbbh1: sbbh1,
+        xh4: body.xh4,
+        xh: body.xh,
+        sqrq: body.sqrq ? dayjs(new Date(body.sqrq)) : null,
+        tbrq1: body.tbrq1 ? dayjs(new Date(body.sqrq)) : null,
+      });
+      if (unitKey === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G' &&  cktsUtil.sys.enterpriseType() == 'WM') { // 出口货物已补税/未退税证明采集
+        form.setFieldsValue({
+          ywclfs: '补税', // 业务处理方式
+          czlx: '1'
+        });
+      } else if(unitKey === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G' &&  cktsUtil.sys.enterpriseType() == 'SC') { // 出口货物已补税/未退税证明采集
+        form.setFieldsValue({
+          czlx: '1'
+        });
+      } else if(unitKey === 'MTS_ZXSB_SB_MTS_TSJH_G') { // 外贸企业出口退税进货明细申报表
+        form.setFieldsValue({
+          sz: 'V', // 税种
+          cktmspzlxDm: '02', // 凭证种类
+        });
+      } else if (unitKey === 'MTS_ZXSB_SB_MTS_TSSB_G' || unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') { // 企业出口退税出口明细申报采集
+        form.setFieldsValue({
+          cktmsywlxdmjh: [],
+        });
+      } else if (unitKey === 'ZGBA_ZXSB_SB_MDT_XTHHZG_G') {
+        form.setFieldsValue({
+          tbrq1: dayjs(new Date(body.tbrq1))
+        });
+      } else if (unitKey === 'ZGBA_ZXSB_TX_CKTSYWTX_G') {
+        form.setFieldsValue({
+          tbrq1: dayjs(new Date(body.tbrq1))
+        });
+      } else if (unitKey === 'MTS_ZXSB_SB_MTS_TZSB_G') {
+        form.setFieldsValue({
+          wmqytzsblxDm: '1'
+        });
+      } else if (unitKey === 'ZMKJ_ZXSB_ZM_CKHWZNX_G') {
+        form.setFieldsValue({
+          czlx: '1'
+        });
+      }
+      // 成功回调
+      if (doSuccess) {
+        doSuccess(response);
+      }
+      // 获取属期批次下最大申报编号+1
+      // if (unitKey === 'ZMKJ_ZXSB_ZM_LLJG_G' || unitKey === 'ZMKJ_ZXSB_ZM_LLJGHX_G'
+      //         || unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G' || unitKey === 'ZMKJ_ZXSB_ZM_DLJK_G'
+      //         || unitKey === 'ZMKJ_ZXSB_ZM_WTCK_G' || unitKey === 'ZMKJ_ZXSB_ZM_CKHWZNX_G'
+      //         || unitKey === 'ZMKJ_ZXSB_ZM_TYYBSWTS_G'
+      // ){
+      //   let data ={ssq:'',sbpc:'',tableKey:unitKey};
+      //   data.ssq = body?.ssq || '',
+      //   data.sbpc = body?.sbpc || '',
+      //   queryCjBh(data).then((res: any)=>{
+      //     const {code, body, desc} = res;
+      //     if(code === '200') {
+      //       form.setFieldsValue({sbbh1:body?.sbbh1})
+      //     }else{
+      //       message.error(desc)
+      //     }
+      //   })
+      // }
+      // 表单初始化2 关联号
+      if (unitKey === 'MTS_ZXSB_SB_MTS_TSSB_G') { // 外贸企业出口退税出口明细申报采集
+        return queryCjGlh({
+          sbpc: body?.sbpc || '',
+          ssq: body?.ssq || '',
+        });
+      }
+    }
+    return;
+  }).then((response2) => {
+    if (response2) {
+      const { code, body } = response2;
+      if (code === '200') {
+        form.setFieldsValue(body);  // 设置关联号
+      }
+    }
+  }).finally(() => {
+    if (setMasker) {
+      setMasker(false);  // 按报关单生成明细：外贸、生产、证明开具
+    } else {
+      unitRef.current?.setMasker(false); // 通用页面
+    }
+    if (handleModalVisible) {
+      handleModalVisible(true); // 通用页面
+    }
+  });
+};
 
-// // 配置项：自定义工具栏 关联号重排
+// 配置项：自定义工具栏 关联号重排
 // DditCktsFormCommonFunc.glhcp = (param: any) => {
 //   // edit by yangzq 关联号重排增加按所属期、申报批次进行排序
 //   const { unitRef, unit_key, unit_lcswsx_dm = '' } = param;
@@ -653,14 +654,14 @@ const DditCktsFormCommonFunc: any = {
 //     let ckrq1 = form.getFieldsValue().ckrq1;
 //     if(tzhckspDm) {
 //       if(ckrq1) {
-//         ckrq1 = moment(ckrq1).format('YYYY-MM-DD');
+//         ckrq1 = dayjs(ckrq1).format('YYYY-MM-DD');
 //       } else  if (!ckrq1 && ssq) {
 //         ckrq1 = ssq.substr(0, 4) + '-' + ssq.substr(4, 6) + '-01';
 //       }
 //       const obj = {
 //         ssq,
 //         slType: "Y",
-//         ckrq1: moment(ckrq1).format('YYYY-MM-DD'),
+//         ckrq1: dayjs(ckrq1).format('YYYY-MM-DD'),
 //         ckspDm: tzhckspDm,
 //       }
 //       querySpdmXxCj(obj).then((res: any) => {
@@ -855,7 +856,7 @@ const DditCktsFormCommonFunc: any = {
 //       url,
 //       key: 'url_gy_hbhl',
 //       codeViewKey: '01',
-//       ckrq: ckshrq ? moment(ckshrq).format('YYYY-MM-DD') : ''
+//       ckrq: ckshrq ? dayjs(ckshrq).format('YYYY-MM-DD') : ''
 //     })
 //   },
 //   // 视同收汇原因代码
@@ -1439,7 +1440,7 @@ const DditCktsFormCommonFunc: any = {
 //       pageSize: 999999,
 //       searchModel: [
 //         { property: 'hbzmDm', value: '', op: 'al' },
-//         { property: 'ckrq', value: param.ckrq ? moment(param.ckrq).format('YYYY-MM-DD') : '', op: 'al' },
+//         { property: 'ckrq', value: param.ckrq ? dayjs(param.ckrq).format('YYYY-MM-DD') : '', op: 'al' },
 //         { property: 'ssq', value: form?.getFieldsValue().ssq, op: 'al' },
 //         { property: 'nyfzbz', value: param.nyfzbz ? param.nyfzbz : '', op: 'al' },
 //       ],

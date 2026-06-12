@@ -101,7 +101,7 @@ export const requestConfig: RequestConfig = {
       let authHeader: any = {
         accessClientId: ACCESS_CLIENT_ID,
       };
-      const accessToken = localStorage.getItem(CONSTANTS.LOGIN.ACCESS_TOKEN);
+      const accessToken = localStorage.getItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY);
       if (accessToken && config?.url?.indexOf('/hx/qx/token/oauth') === -1) {
         authHeader.accessToken = accessToken;
       }
@@ -136,7 +136,7 @@ export const requestConfig: RequestConfig = {
       }
       const accessToken = headers[CONSTANTS.LOGIN.HEADER_TOKEN_KEY];
       if (accessToken) {
-        localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY, accessToken);
       }
       return response;
     },

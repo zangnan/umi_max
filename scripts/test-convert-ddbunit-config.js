@@ -69,6 +69,11 @@ function getFixtures() {
       // 命中后 test runner 自动传 --index <fxName>.ref
       base = f.replace(/\.ref\.tsx$/, '');
       kind = 'indexRef';
+    } else if (f.endsWith('.funRef.tsx')) {
+      // fun 参照文件：与 .input.tsx 同目录，basename = <fxName>.funRef
+      // 命中后 test runner 自动传 --fun <fxName>.funRef
+      base = f.replace(/\.funRef\.tsx$/, '');
+      kind = 'funRef';
     } else {
       continue;
     }
@@ -151,6 +156,9 @@ for (const fx of getFixtures()) {
   }
   if (fx.indexRef) {
     args.push('--index', `${fx.name}.ref`);
+  }
+  if (fx.funRef) {
+    args.push('--fun', `${fx.name}.funRef`);
   }
   if (fx.expectedRoute) {
     // r9：让工具把路由写入临时 ckts 文件

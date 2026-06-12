@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
     if (res.code === '200') {
       message.success('登录成功！');
       if (res?.body?.token) {
-        localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN, res?.body?.token);
+        localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY, res?.body?.token);
       }
       await fetchUserInfo();
       history.push('/');

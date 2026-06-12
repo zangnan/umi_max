@@ -3639,7 +3639,7 @@ myUtil.indexedDB = {
 myUtil.authority = {
   // 清空用户信息
   clearUserInfo() {
-    window.localStorage.removeItem(CONSTANTS.LOGIN.ACCESS_TOKEN);
+    window.localStorage.removeItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY);
     myUtil.sessionStore.clear('userInfo');
     myUtil.sessionStore.clear('usermenu');
     myUtil.sessionStore.clear('menuArr');

@@ -56,7 +56,7 @@ export default () => {
       if (msg.code === '200') {
         message.success('登录成功！');
         if (msg?.body?.token) {
-          localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN, msg?.body?.token);
+          localStorage.setItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY, msg?.body?.token);
         }
         await fetchUserInfo();
         await nbglxtUtil.app.init();

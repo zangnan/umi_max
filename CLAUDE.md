@@ -405,7 +405,441 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 - 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r15/r16/r17 行为一致）
 - 不在 `extractMyConfigAdjustments` 内联（实际数据未发现 myConfig 调整块修改 form_items 只读字段的场景）
 
+### Part 1/2/3: f.tsx moment→dayjs 迁移 + `--fun` CLI 参数 + initAddForm 注入
+
+**背景**：三部分组合任务。
+- **Part 1**：[src/pages/hts/commonModule/f.tsx](src/pages/hts/commonModule/f.tsx) 已从 `code_sample` 移植但保留 4 处 moment 调用（全部在 `DditCktsFormCommonFunc.initAddForm` 内）。项目全局策略（CLAUDE.md 上文）已要求 dayjs 弃用 moment。
+- **Part 2**：`auto_configIndex.tsx` 已有完整的「参照文件 + 抽取 + 注入」链路（`--index` + `extractIndexCustomizationsFromFile` + `generateIndexPage` Branch B），但 `auto_configFun.tsx` 仍是静态 stub 模板。需求：参照 `--index` 模式新增 `--fun <name>` 参数，默认查找 `f.tsx` → `fun.tsx` 兜底。
+- **Part 3**：业务模块的 `f.tsx` 通常含 `Func.initAddForm = (param) => { DditCktsFormCommonFunc.initAddForm(param); }`。DDBunit2_CKTS 加载 `auto_configFun.tsx` 时若无 `initAddForm` 委托，运行时 `Func.initAddForm is not a function`。需求：从参照文件 fun 抽取 `initAddForm` 注入到生成文件。
+
+**Part 1 - f.tsx 迁移**：
+
+- 4 处 active 替换（line 44, 45, 67, 71）：`moment(...)` → `dayjs(...)`（全部在 `initAddForm` 内）
+- 4 处已注释的 `moment(...)` 同步替换（line 656, 663, 858, 1442）
+- Import 段无改动（line 6 dayjs 已导入，line 9 moment 已注释）
+- API 兼容：4 处 active 全部为 `moment(new Date(x))` → `dayjs(new Date(x))`，antd 5+ Form 接受两者
+- 零回归：现有 7 个 `DditCktsFormCommonFunc.initAddForm` 消费方调用行为不变
+
+**Part 2 - `--fun` CLI 参数**（[scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js)）：
+
+1. `main()` 新增 `--fun` 处理块（`--index` 块之后，fun page 生成之前）：
+   - 默认 basename = `'f'`
+   - 查找顺序：`<srcDir>/f.tsx` → `<srcDir>/fun.tsx`（用户决策：f 优先）
+   - 显式传 `--fun <name>` 时仅查 `<name>.tsx`
+   - 找到即停，找不到 / 无 initAddForm → silent fallback 到 static stub
+2. `parseArgs()` 无需改动（已支持任意 `--key value` 对）
+3. `--no-fun` 已存在，无需改
+4. `generateFunPage()` 签名从 `generateFunPage()` 扩展为 `generateFunPage({ initAddForm } = {})`
+5. 与 `--index` 互不干扰（独立查找路径）
+
+**Part 3 - `initAddForm` 抽取/注入**：
+
+1. **新增 `extractInitAddFormFromFile(content)`**（[scripts/convert-ddbunit-config.js:1486-1526](scripts/convert-ddbunit-config.js#L1486-L1526)）
+   - regex 找 `Func.initAddForm\s*=\s*` 起点
+   - 跳过等号后的箭头函数签名，定位到第一个 `{`
+   - bracket-depth 扫描 `{}` 配对
+   - 返回整段文本（含尾随 `;`），或 `null`
+   - 与 `extractInitSearchModalBlock` 同款手法
+
+2. **`generateFunPage({ initAddForm })` 模板扩展**：
+   ```tsx
+   import { message, Tooltip, Badge, Space, Segmented } from 'antd';
+   import React from 'react';
+   import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';  // 仅当 initAddForm 含 DditCktsFormCommonFunc 时添加
+   
+   const Func: any = {
+     refUnit: React.createRef(),
+   };
+   
+   <extracted initAddForm text from ref>  // 原样保留
+   
+   export default Func;
+   ```
+   - `initAddForm` 为 `null`/`undefined` → 保持现有 static stub
+   - `DditCktsFormCommonFunc` import 仅在抽取文本含该字符串时添加（避免无谓 import）
+
+3. **测试基础设施**（[scripts/test-convert-ddbunit-config.js](scripts/test-convert-ddbunit-config.js)）：
+   - `getFixtures()` 新增 `.funRef.tsx` kind → `fx.funRef`
+   - CLI args 构造新增：`if (fx.funRef) args.push('--fun', \`${fx.name}.funRef\`);`
+   - 测试断言已自动支持 `.expected.fun.tsx`（现有逻辑无需改）
+
+4. **新增 fixture** `fun-injection.{input,expected,funRef,expected.fun}.tsx`（4 个文件）
+
+**端到端验证**：
+
+| 目录 | 场景 | 结果 |
+|---|---|---|
+| `MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx` | fun 参照文件 f.tsx 含 initAddForm 委托 | 生成文件含 `DditCktsFormCommonFunc` import + `Func.initAddForm` 委托 ✓ |
+| `MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx` | 同上 | ✓ |
+| `MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configFun.tsx` | 同上 | ✓ |
+| `MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx` | 同上 | ✓ |
+| `MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx` | 同上 | ✓ |
+| `MDT_TSZL___ZXSB_SB_HGSPTZ_GCB/auto_configFun.tsx` | 同上 | ✓ |
+
+**测试**：`npm run test:convert-config` → 现有 21 通过 + `fun-injection` 新增通过 = **22 通过** / 2 失败（预存在，与本次无关）
+
+**已知限制**（用户决策接受）：
+- **不抽取 `initAddForm` 之外的其它 `Func.*` 方法**（initEditForm / validator / eventOnBlur 等）—— 与用户原话「将 initAddForm 移入」严格一致
+- **`f.tsx` 优先级 `fun.tsx`**：code_sample 60+ 文件全部用 `f.tsx`，优先命中
+- **bracket-depth 跳过字符串字面量内的 `{}`**：与 r15 等同款手法
+- **不在 `--index` 和 `--fun` 之间强制校验**：允许独立查找
+- **不重写 `initAddForm` 函数体**：原样保留（仅**搬运**而非**改写**）
+- **`DditCktsFormCommonFunc` import 路径硬编码为 `@/pages/hts/commonModule/f`**：与 code_sample 一致
+
+### 新规则：fun 生成时 htsApi import 路径重写
+
+**背景**：上一轮实现的 fun 生成链路（`--fun` + `extractInitAddFormFromFile` + `generateFunPage`）未处理业务侧最常用的 `import ... from '@/services/hts/api'` —— 而该路径在 `src/` 树中实际不存在（参照文件用的是 `code_sample/src/services/hts/api` 的老路径）。[src/pages/hts/services/htsApi.ts](src/pages/hts/services/htsApi.ts) 已存在并 re-export 全部同名服务（`apiFpzs` / `apiBadz` / `apiJljg` / `apiSjbb` / `apiTb` / `apiShgl`），是 drop-in 替代。
+
+**目标**：当 fun 参照文件（`f.tsx` / `fun.tsx`）含 `import ... from '@/services/hts/api'` 时，将路径改写为 `@/pages/hts/services/htsApi` 并置于生成 fun 文件**顶部**（在 antd / react 之前）。
+
+**关键设计点**：
+- `[\s\S]*?` 非贪婪匹配 `{ ... }` 块 —— 多行形式下不越界
+- `g` 标志 —— ref 中 N 个 import → 输出 N 个 htsApi import（用户决策：**多行拆成多个**，不合并名字）
+- 单/双引号 + 尾随分号容错
+- 名字列表归一化（split + trim + filter）—— 容错 `import {a, b,}` 尾随逗号
+- **输出单行**：即使 ref 是多行 import 块，输出也折叠成单行（TypeScript 允许；输出文件更整洁）
+- silent fallback：ref 无 htsApi 导入 → `funHtsApiImports = []` → 模板不变，零回归
+- htsApi 位置：项目内 service 在 antd / react 之前；与 `DditCktsFormCommonFunc` 同属项目内 import，逻辑顺序为 service → common → 第三方
+
+**改动**：
+
+1. **新增 `rewriteHtsApiImports(content)` 辅助函数**（[scripts/convert-ddbunit-config.js:1531-1559](scripts/convert-ddbunit-config.js#L1531-L1559)）
+   - 多行正则 `import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?` 匹配每个 import 块
+   - 对每个匹配：split + trim + filter 名字列表，输出单行 `import { a, b, c } from '@/pages/hts/services/htsApi';`
+   - 返回 `string[]`（每个 ref import 一行）
+
+2. **`generateFunPage` 签名扩展**（[scripts/convert-ddbunit-config.js:2118-2155](scripts/convert-ddbunit-config.js#L2118-L2155)）
+   - 接受新参数 `htsApiImports`（默认 `[]`）
+   - htsApi 注入位置：`${htsApiLines}` 置于 antd / react 之前（即绝对顶部）
+   - 空数组时不插入空行
+
+3. **`main()` --fun 块**（[scripts/convert-ddbunit-config.js:2378-2410](scripts/convert-ddbunit-config.js#L2378-L2410)）
+   - 在 `funContent` 已读后立即调用 `rewriteHtsApiImports(funContent)`
+   - 抽取成功 log：`[convert] 参照文件已抽取 htsApi 导入: N 处 (<refPath>)`
+   - 改写 `generateFunPage` 调用，传入 `htsApiImports: funHtsApiImports`
+
+4. **fixture 更新**：
+   - [scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) 加 1 行 `import { querySjByHth, queryHlxx } from '@/services/hts/api';`
+   - [scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 顶部（line 1）加 1 行重写后的 htsApi import（antd / react / Ddit 在其后）
+   - 用户决策：**更新现有 fixture**（与 initAddForm 决策一致）
+
+**端到端验证**：
+
+| 目录 | ref htsApi 导入数 | 生成 fun 文件 line 1 |
+|---|---|---|
+| [MDT___ZXSB_SB_MDT_SYYK_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx) | 1（单行）| `import { querySjByHth, queryHlxx } from '@/pages/hts/services/htsApi';` ✓ |
+| [MDT___ZXSB_SB_MDT_TSSB_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx) | 1（多行 → 单行）| 9 个名字合并为单行 ✓ |
+| [MDT___ZXSB_SB_MDT_TSJH_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configFun.tsx) | 1（单行）| 单行 htsApi import ✓ |
+| [MDT___ZXSB_SB_MDT_YFSJ_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx) | 2（多导入）| 2 个 htsApi import 各占一行 ✓ |
+| [MDT_TSZL___ZXSB_SB_CKSH_GCB](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | 1 | ✓ |
+| [MDT_TSZL___ZXSB_SB_HGSPTZ_GCB](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_HGSPTZ_GCB/auto_configFun.tsx) | 1 | ✓ |
+| [MDT___ZXSB_SB_MDT_STZC_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/auto_configFun.tsx)（regression：ref 无 htsApi）| 0 | 无 htsApi import（silent fallback）✓ |
+
+**测试**：`npm run test:convert-config` → **22 通过**（含 `fun-injection` 仍通过 —— fixture 已更新）/ 2 失败（预存在，与本次无关）
+
+**已知限制**（用户决策接受）：
+- **多行 import 折叠为单行**：ref 中 9-10 行的 import 块，输出折叠为单行（TypeScript 允许；输出文件更整洁）
+- **多导入不合并**：ref 中 N 个独立 import → 输出 N 个 htsApi import（严格保留 ref 结构）
+- **ref 无 htsApi 时 silent fallback**：零回归
+- **不处理 `@/services/hts/api` 以外的旧路径**（如 `@/pages/common/myUtil`）—— 本规则仅针对 htsApi 路径
+- **不处理 `import type { ... }`**（d.ts 类型导入）—— 当前 codebase 无此场景
+- **不处理 `import * as xxx`**（namespace 导入）—— 当前 codebase 无此场景
+
+### 新规则：fun 生成时 top imports 完全镜像 ref（6 路径重写规则）
+
+**背景**：上一轮（htsApi 单规则重写）只处理了 `@/services/hts/api` → `@/pages/hts/services/htsApi` 一条规则；本轮将 fun 生成时**顶部 imports 完全镜像 ref 文件**（参照 code_sample 的 `f.tsx`），并应用 6 条规则。
+
+**6 条规则**：
+
+| # | 规则 | 实现 |
+|---|---|---|
+| 1 | `import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';` | **不变**（已是新路径）|
+| 2 | `import { ... } from '@/services/hts/api';` | 重写路径为 `@/pages/hts/services/htsApi`（多行折叠为单行）|
+| 3 | `import moment from 'moment';` | 重写为 `import dayjs from 'dayjs';` |
+| 4 | `import myUtil from '@/pages/common/myUtil';` | 重写路径为 `@/components/DDAssist/util'` |
+| 5 | `import DDAlert from '@/components/DDAlert';` | 重写路径为 `@/pages/hts/commonModule/DDAlert'`（10 个 ref 文件命中）|
+| 6 | 其它 imports | 原样保留 |
+
+**关键设计点**：
+- **删硬编码**：`generateFunPage` 模板内不再含 `antd` / `React` / `DditCktsFormCommonFunc` imports（ref 提供）
+- **删条件注入**：基于 `initAddForm` 内容检测的 DditCktsFormCommonFunc 条件注入逻辑（被规则 1 取代）
+- **`extractRefImports` 多行处理**：检测首行末尾是否有 `;` / `'` / `"`；若没有则继续吞入后续行直到遇到分号。TSSB 等多行 import 正确捕获
+- **顺序与 ref 一致**：ref 文件 imports 段顺序即输出顺序
+- **silent fallback**：ref 无 imports → `refImports = []` → 无 importsBlock（实际 ref 都有 imports）
+
+**改动**：
+
+1. **新增 `extractRefImports(content)`**（[scripts/convert-ddbunit-config.js:1561-1610](scripts/convert-ddbunit-config.js#L1561-L1610)）
+   - 逐行扫描 + 累积；首个非 import 行终止
+   - 跳过空行 / `//` / `/* */` 注释；跳过 `import type`
+   - **多行 import 吞入**：首行无 `;`/`'`/`"` 则继续吞入后续行直到遇分号
+
+2. **新增 `applyImportRewrites(importLines)`**（[scripts/convert-ddbunit-config.js:1612-1667](scripts/convert-ddbunit-config.js#L1612-L1667)）
+   - 规则 3: moment → dayjs（精确匹配）
+   - 规则 4: myUtil 路径（保留 default 名字）
+   - 规则 5: DDAlert 路径（保留 default 名字）
+   - 规则 2: htsApi 路径（多行折叠为单行）
+   - 规则 1/6: DditCktsFormCommonFunc（已是新路径）/ 其它 —— 原样保留
+
+3. **重写 `generateFunPage`**（[scripts/convert-ddbunit-config.js:2128-2151](scripts/convert-ddbunit-config.js#L2128-L2151)）
+   - 签名 `generateFunPage({ initAddForm, refImports = [] } = {})`
+   - 删硬编码 `antd` / `React` / `DditCktsFormCommonFunc` 注入
+   - 删 `hasDditImport` 条件检测
+
+4. **main() --fun 块**（[scripts/convert-ddbunit-config.js:2411-2453](scripts/convert-ddbunit-config.js#L2411-L2453)）
+   - 新增 `funRefImports = applyImportRewrites(extractRefImports(funContent))`
+   - 改写 `generateFunPage` 调用，传入 `refImports: funRefImports`
+   - 保留 `funHtsApiImports` 变量用于 log 输出
+
+5. **fixture 更新**（综合测试 6 规则）：
+   - [scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) 加 `myUtil` + `moment` + `DDAlert` 3 行
+   - [scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 完全镜像 ref（6 规则重写后）
+   - 删原硬编码 `antd` 注入
+   - 用户决策：复用现有 fixture（不新增专用 fixture）
+
+**端到端验证**：
+
+| 目录 | ref imports 数 | 关键变化 |
+|---|---|---|
+| [MDT___ZXSB_SB_MDT_SYYK_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx) | 6 | myUtil 路径重写 + moment→dayjs + htsApi 路径重写 |
+| [MDT___ZXSB_SB_MDT_TSSB_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx) | 11 | 多行 antd + 多行 htsApi 折叠为单行 + DDAlert 路径重写 + myUtil + moment |
+| [MDT___ZXSB_SB_MDT_TSJH_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configFun.tsx) | 7 | myUtil + moment + htsApi |
+| [MDT___ZXSB_SB_MDT_YFSJ_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx) | 9 | 2 个 htsApi import + myUtil + moment + DDAlert + getStaticTableCode（未重写）|
+| [MDT_TSZL___ZXSB_SB_CKSH_GCB](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | 6 | myUtil（无 moment / DDAlert / htsApi 多导入）|
+| [MDT_TSZL___ZXSB_SB_HGSPTZ_GCB](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_HGSPTZ_GCB/auto_configFun.tsx) | 6 | myUtil + moment + htsApi（无 DDAlert）|
+| [MDT___ZXSB_SB_MDT_STZC_GCB](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/auto_configFun.tsx)（regression）| 3 | 无 htsApi / moment / DDAlert；仅 React + myUtil + DditCktsFormCommonFunc |
+
+**测试**：`npm run test:convert-config` → **22 通过**（含 `fun-injection` 仍通过 —— fixture 已更新）/ 2 失败（预存在，与本次无关）
+
+**已知限制**（用户决策接受）：
+- **多行 htsApi import 折叠为单行**；其它多行 imports（如 antd）保留多行结构
+- **`import moment from 'moment';` 严格匹配**：`import {moment} from 'moment';` 等变体不改写
+- **`myUtil` 保留原 default 名字**：仅改路径
+- **`DDAlert` 保留原 default 名字**：仅改路径
+- **ref 无 imports 时无 fallback**：极端 case；实际 ref 都有 imports
+- **ref 缺 React 时 body 编译失败**：body 用 `React.createRef()`，依赖 ref 提供；实际所有 ref 都有
+- **DditCktsFormCommonFunc 不再条件注入**：若 ref 缺该 import 而 initAddForm 引用，body 编译失败；实际 ref 都有
+- **注释 imports 不抽**：`// import xxx` 不算 imports 段
+- **不重写其它旧路径**（`@/pages/common/staticTableCode` / `@/pages/common/cjpzUtil` 等）—— 本规则仅针对 4 路径
+
+### 补充规则：fun 生成 4 条新规则（.less 排除 + 3 路径重写）
+
+**背景**：上一轮（6 规则）已实现 fun 顶部 imports 完全镜像 ref。本轮按用户最新指示，新增 4 条规则：
+
+| # | 规则 | 实现 |
+|---|---|---|
+| **排除** | `import X from 'X.less';` | **不引入**（`extractRefImports` 过滤）|
+| **7** | `import <name> from '@/pages/common/staticTableCode';` | 重写路径为 `@/components/DDAssist/staticTableCode` |
+| **8** | `import { intl as intl2 } from '@/pages/common/myUtil';` | 重写路径为 `@/components/DDAssist/util`（命名导入，保留别名）|
+| **9** | `import <name> from '@/pages/common/field/baseValidator';` | 重写路径为 `@/components/DDAssist/field/baseValidator` |
+
+**目标文件存在性**（全部已确认）：
+- [src/components/DDAssist/staticTableCode.tsx](src/components/DDAssist/staticTableCode.tsx) ✓
+- [src/components/DDAssist/util/index.tsx:4594](src/components/DDAssist/util/index.tsx#L4594) 导出 `intl` ✓
+- [src/components/DDAssist/field/baseValidator.tsx](src/components/DDAssist/field/baseValidator.tsx) ✓
+
+**关键设计点**：
+- **.less 排除**：`extractRefImports` 在多行 import 吞入**前**加 `\.less['"]\s*;?$` 检查，跳过 .less 行
+- **规则 4 / 8 互斥**：规则 4 匹配 `import <name> from '@/pages/common/myUtil';`（默认导入），规则 8 匹配 `import { ... } from '@/pages/common/myUtil';`（命名导入）—— 正则互不重叠
+- **`intl as intl2` 别名保留**：规则 8 输出 `import { intl as intl2 } from '@/components/DDAssist/util';`（`{ }` 内完整保留）
+- **`getStaticTableCode` / `baseValidator` 默认名字保留**：仅改路径
+
+**改动**：
+
+1. **`extractRefImports` 加 .less 排除**（[scripts/convert-ddbunit-config.js:1607](scripts/convert-ddbunit-config.js#L1607)）：1 行 `\.less['"]\s*;?$` 正则
+2. **`applyImportRewrites` 加规则 7/8/9**（[scripts/convert-ddbunit-config.js:1683-1708](scripts/convert-ddbunit-config.js#L1683-L1708)）：约 25 行
+3. **docstring 更新**：6 → 9 规则计数
+4. **fixture 更新**（综合测试 9 + 1 排除规则）：
+   - [scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) 加 5 行新 imports（2 .less + intl + getStaticTableCode + baseValidator）
+   - [scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 完全镜像 ref（10 - 2 .less = 9 imports）
+
+**端到端验证**：
+
+| 目录 | 之前 imports 数 | 变化 |
+|---|---|---|
+| SYYK | 6 | 无相关新增 → 无变化 |
+| **TSSB** | 11 | **-2 .less 排除**（importStyle + tableStyle）✓ |
+| TSJH | 7 | 无相关新增 → 无变化 |
+| **YFSJ** | 9 | +规则 7（getStaticTableCode 路径重写）✓ |
+| CKSH | 6 | 无相关新增 → 无变化 |
+| HGSPTZ | 6 | 无相关新增 → 无变化 |
+| STZC（regression）| 3 | 无相关新增 → 无变化 |
+
+**测试**：`npm run test:convert-config` → **22 通过**（fun-injection 仍通过）/ 2 失败（预存在，与本次无关）
+
+**已知限制**（用户决策接受）：
+- **不处理复合形式** `import myUtil, { intl as intl2 } from ...` —— codebase 无此场景
+- **不处理 `.css` / `.scss` 等其它样式文件**（用户仅要求 `.less`）—— 若未来需要可扩展
+- **规则 7/8/9 路径仅匹配指定老路径** —— 其它老路径不被改写
+- **.less 排除仅过滤顶级 .less import**（`import X from 'X.less';`）—— 嵌套在其它 import 内的 .less 不影响
+- **保持前 9 规则行为不变**：本轮只新增 4 规则（DditCktsFormCommonFunc / htsApi / moment / myUtil / DDAlert / 其它 / staticTableCode / intl / baseValidator）保留
+
+### 补充规则：fun 生成 — `useRouteMatch` → `useRouteData`（umi 4.x 弃用适配）
+
+**背景**：上一轮（9 + 1 排除规则）已实现 fun 顶部 imports 完全镜像 ref。本轮按用户最新指示，新增规则 10：
+
+| # | 规则 | 实现 |
+|---|---|---|
+| **10** | `import { ..., useRouteMatch, ... } from 'umi';` | 重命名 `useRouteMatch` → `useRouteData`（保留其它命名导入、保留引号、保留多行结构）|
+
+**目标确认**（由 Plan agent 验证）：
+- **`useRouteData` 是 umi 4.x 的正确导出**：`node_modules\@umijs\renderer-react\dist\index.d.ts` 仅导出 `useRouteData()`（`(): IRouteContextType`），**不再导出 `useRouteMatch`**
+- 当前 codebase 5 处 `useRouteMatch` from `'umi'`：
+  - 3 个已生成 fun 文件：[src/pages/hts/saasMdt/tuiShuiJiHua/{month,season,year}DataFun.tsx:10](src/pages/hts/saasMdt/tuiShuiJiHua/monthDataFun.tsx#L10) 等
+  - 2 个 ref index.tsx：[code_sample/.../ZMKJ_SC___ZXSB_ZM_TYYBSWTS_GCB/index.tsx:10](code_sample/src/pages/hts/dditax.ckts.from/ZMKJ_SC___ZXSB_ZM_TYYBSWTS_GCB/index.tsx#L10) 和 [code_sample/.../ZMKJ_WM___ZXSB_ZM_TYYBSWTS_GCB/index.tsx:10](code_sample/src/pages/hts/dditax.ckts.from/ZMKJ_WM___ZXSB_ZM_TYYBSWTS_GCB/index.tsx#L10)
+  - 1 个 ref func.tsx：[code_sample/.../saasMdt/tuiShuiJiHua/func.tsx:10](code_sample/src/pages/hts/saasMdt/tuiShuiJiHua/func.tsx#L10)
+
+**6 个目标 dditax.ckts.from f.tsx 全部不含 `useRouteMatch`**（无新增应用；规则作为未来场景兜底）
+
+**关键设计点**：
+- **`line`（非 trimmed）作为工作串**：多行 import 完整 round-trip
+- **`[\s\S]*?` 非贪婪**：最短匹配 `{...}` 块（多行 OK）
+- **`(['"])umi\2` 回溯引用**：保证单/双引号配对 + 路径精确为 `'umi'` / `"umi"`
+- **`\buseRouteMatch\b` 词边界**：避免误改变体名（如 `useRouteMatchFoo`）
+- **正则不冲突**：规则 10 key 在 `'umi'`，与前 9 规则（`'@/pages/common/...'` / `'@/services/hts/api'` / `'@/components/DDAlert'` / `'moment'`）无重叠
+- **幂等性**：已用 `useRouteData` 的 import 不匹配 `\buseRouteMatch\b`，输出不变
+
+**改动**：
+
+1. **规则 10 实现**（[scripts/convert-ddbunit-config.js:1720-1735](scripts/convert-ddbunit-config.js#L1720-L1735)）：`applyImportRewrites` fall-through 前插入（约 15 行）
+2. **docstring 更新**（[scripts/convert-ddbunit-config.js:1629-1653](scripts/convert-ddbunit-config.js#L1629-L1653)）：规则计数 9 → 10
+3. **fixture 更新**：
+   - [scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) 加 1 行 `import { history, useRouteMatch } from 'umi';`
+   - [scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 加 1 行 `import { history, useRouteData } from 'umi';`
+
+**端到端验证**：
+
+| 目录 | 之前 imports 数 | 变化 |
+|---|---|---|
+| 6 个 dditax.ckts.from f.tsx | （与上一轮一致）| 0（ref 无 useRouteMatch → 无新增应用）|
+| STZC（regression）| 3 | 0 |
+
+**测试**：`npm run test:convert-config` → **22 通过**（fun-injection 仍通过 —— fixture 已更新）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **规则 10 仅重命名 import 标识符**，不动调用点（`routeMatch.params` 等）—— 语义差异（umi 4.x `useRouteData()` 返回 `{ route: IRoute }` 而非 RR v5 `{ params, isExact, path, url }`）由后续手动 / 单独工具修复
+- **`saasMdt/tuiShuiJiHua/{month,season,year}DataFun.tsx` 3 个已生成的 fun 文件**未在本次重生成范围 —— 用户聚焦 dditax.ckts.from；如需端到端重生成可后续追加
+- **多行 import 内嵌的 `useRouteMatch`**：`extractRefImports` 已将多行 import 缓冲为单字符串传入 `applyImportRewrites`；规则 10 用 `line`（非 `trimmed`）作为工作串以保留 newline 字符
+- **不重写 `useRouteMatch` 的其它变体**（如 `useRouteMatchWithParams`）—— 严格 `\buseRouteMatch\b` 词边界
+- **保持前 9 规则 + 1 排除行为不变**
+
+### 修复：ref `config.X` → 生成 `myConfig.X`（index.tsx 调整块导入别名改写）
+
+**背景**：[src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_STZC_GCB\auto_configIndex.tsx:11-12](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/auto_configIndex.tsx#L11) 当前为：
+```tsx
+config.toolbar_default.tssb_download = true;
+config.toolbar_default.ckts_download = false;
+```
+应为：
+```tsx
+myConfig.toolbar_default.tssb_download = true;
+myConfig.toolbar_default.ckts_download = false;
+```
+
+**根因**：[code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_STZC_GCB\index.tsx:14-15](code_sample/src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/index.tsx#L14) 的 ref 源文件用了 `config.X`（与 ref 内的 `import config from './auto_config'` 同名），但函数体的调整块本应使用局部 `const myConfig = { ...config }` 克隆。`scripts/convert-ddbunit-config.js` 的 `extractMyConfigAdjustments`（行 1985+）**逐字拷贝** ref 调整块到生成文件，**无任何 `config.` → `myConfig.` 改写**。
+
+**数据扫描**（[code_sample\src\pages\hts\dditax.ckts.from\](code_sample/src/pages/hts/dditax.ckts.from/)）：
+- 1 个 ref index.tsx 含错误 `config.`（仅 STZC_GCB）
+- 47 个 ref index.tsx 正确使用 `myConfig.`
+- 0 个含 `cfg.` / `conf.` 等其它错误别名
+- 仅 1 个生成文件 [src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_STZC_GCB\auto_configIndex.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/auto_configIndex.tsx) 受影响（line 11-12）
+
+**用户决策**：
+- **不修改示例文件**（保持 ref 原状）—— 仅在 convert 工具生成时改写
+- **动态检测导入别名**（从 ref 的 `import X from './auto_config';` 自动读出 X）—— 适配未来其它别名场景
+- **新增专用 fixture** `ref-uses-config-not-myconfig.{input,ref,expected,expected.index}.tsx` 锁定本场景
+
+**关键设计点**：
+- **动态检测**：扫描 ref 全文首个 `import X from './auto_config';`（`m` 标志匹配任意行）→ 提取 `X`
+- **跳过 `myConfig`**：若 ref 已经用 `myConfig` 作别名，silent return（其它 ref 的 no-op）
+- **line-leading anchor** `^(\s+)\b<alias>\b\.`：保证只匹配函数体内的属性访问（`  config.X`）；不命中 `config={...}` JSX prop（已被切片丢弃）；不命中 `import config from '...'` 顶层声明
+- **正向词边界 `\b<alias>\b`**：避免误改 `configX` / `myConfig` 之类的部分匹配
+- **全局 / 多行标志 `gm`**：调整块内所有匹配行均改写
+- **位置选择**：在切片 + trim 之后、stripGridParamsBlock 之前；保证 r16/r17 regex 看到的 `myConfig.X` 已是正确形式
+
+**改动**：
+
+1. **新增 `rewriteImportAliasToMyConfig(text, content)` 辅助函数**（[scripts/convert-ddbunit-config.js:1949-1986](scripts/convert-ddbunit-config.js#L1949-L1986)）：约 30 行
+2. **集成调用**（[scripts/convert-ddbunit-config.js:2188-2189](scripts/convert-ddbunit-config.js#L2188-L2189)）：`extractMyConfigAdjustments` 内插入 1 行调用
+3. **docstring 更新**（[scripts/convert-ddbunit-config.js:2003-2005](scripts/convert-ddbunit-config.js#L2003-L2005)）："已知限制" → "已知行为"
+4. **新 fixture**（[scripts\__fixtures__\ref-uses-config-not-myconfig.*](scripts/__fixtures__/)）：4 个新文件
+
+**端到端验证**：
+
+| 目录 | 变化 |
+|---|---|
+| [MDT___ZXSB_SB_MDT_STZC_GCB/auto_configIndex.tsx:11-12](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB/auto_configIndex.tsx#L11) | `config.toolbar_default.*` → `myConfig.toolbar_default.*` ✓ |
+| 其它 47 个 dditax.ckts.from ref index.tsx | 0 变化（ref 已正确使用 `myConfig`，规则 silent no-op）✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（22 + ref-uses-config-not-myconfig）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **不动 ref 源文件**（用户决策）—— 仅在 convert 工具生成时改写
+- **不动 JSX prop**（如 `config={myConfig}`）—— line-leading anchor 保证不命中；且 JSX prop 在 return 语句后**已不被切片**
+- **不动 `import config from '...'`** —— 行首 `import` 不匹配 `^(\s+)\b<alias>\b\.` 模式
+- **不动顶层 `const config = ...`** —— `^(\s+)` 要求至少 1 个前导空白
+- **不处理函数参数 `config`**（如 `function foo(config: any) { config.X = ... }`）—— DDBunit2/CKTS 上下文无此模式
+- **不处理函数体内局部 `const config = ...` shadow** —— codebase 无此模式
+- **依赖 `^(\s+)` 缩进匹配** —— 实际 ref 缩进均为 2 空格
+
+### 补充规则：fun 生成 — `cjpzUtil` → `cktsUtil`（带去重）
+
+**背景**：用户最新指示新增 1 条规则 —— 若 ref 含 `import cjpzUtil from '@/pages/common/cjpzUtil';`，改写为 `import cktsUtil from '@/pages/hts/cktsUtil';`，但**若 `cktsUtil` 已存在则不重复引入**（删除 cjpzUtil 那一行）。
+
+| # | 规则 | 实现 |
+|---|---|---|
+| **11** | `import <name> from '@/pages/common/cjpzUtil';` | 改写为 `import cktsUtil from '@/pages/hts/cktsUtil';`（带去重）|
+
+**目标确认**（由 Plan agent 验证）：
+- **`@/pages/hts/cktsUtil` 是新路径的 default export**：[src/pages/hts/cktsUtil.tsx:499](src/pages/hts/cktsUtil.tsx#L499) `export default cktsUtil;`
+- **`cjpzUtil` 老文件**仅存在于 `code_sample/src/pages/common/cjpzUtil.tsx`（`src/` 树无此文件 → 不重写则运行时 unresolvable）
+
+**数据扫描**（[code_sample\src\pages\hts\dditax.ckts.from\](code_sample/src/pages/hts/dditax.ckts.from/)）：
+- **3 个 ref f.tsx** 含 `import cjpzUtil from '@/pages/common/cjpzUtil';`：
+  - [code_sample/.../DBTS_TSZL___ZXSB_SB_CKSH_GCB/f.tsx:8](code_sample/src/pages/hts/dditax.ckts.from/DBTS_TSZL___ZXSB_SB_CKSH_GCB/f.tsx#L8)
+  - [code_sample/.../MTS_TSZL___ZXSB_SB_CKSH_GCB/f.tsx:8](code_sample/src/pages/hts/dditax.ckts.from/MTS_TSZL___ZXSB_SB_CKSH_GCB/f.tsx#L8)
+  - [code_sample/.../MDT_TSZL___ZXSB_SB_CKSH_GCB/f.tsx:10](code_sample/src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/f.tsx#L10)
+- **0 个 ref f.tsx** 同时含 `cjpzUtil` + `cktsUtil`（去重分支防御性即可，实际场景不触发）
+
+**关键设计点**：
+- **预扫描 + 闭包变量**：`hasCktsUtilImport` 在 `.map` 之前确定；`return null` 信号删除本行；`.filter(null)` 在外层过滤
+- **去重判断覆盖三种形式**：
+  - `import cktsUtil from '...';`（默认导入）
+  - `import { cktsUtil } from '...';`（命名导入）
+  - `import { cktsUtil as xxx } from '...';`（带 as 别名）
+- **`\bcktsUtil\b` 词边界**：避免误改 `cktsUtilFoo` / `myCktsUtil` 之类部分匹配
+- **default 名字硬编码为 `cktsUtil`**（与规则 4/5/7/9 保留原 default 名字的策略不同 —— 用户原话"cjpzUtil 变为 cktsUtil"要求 default 名字也改为 cktsUtil）
+- **仅处理默认导入形式**（与用户示例严格一致）；命名导入 `import { cjpzUtil } from ...` 不被改写（codebase 0 个 ref 用此形式）
+- **正则不冲突**：规则 11 key 在 `@/pages/common/cjpzUtil`，与前 10 规则无重叠
+
+**改动**：
+
+1. **规则 11 实现**（[scripts/convert-ddbunit-config.js:1655-1756](scripts/convert-ddbunit-config.js#L1655-L1756)）：`applyImportRewrites` 加预扫描 + 规则 11 + `.filter(null)`（约 30 行）
+2. **docstring 更新**（[scripts/convert-ddbunit-config.js:1629-1653](scripts/convert-ddbunit-config.js#L1629-L1653)）：规则计数 10 → 11
+3. **新 fixture**（[scripts\__fixtures__\fun-injection.*](scripts/__fixtures__/fun-injection.funRef.tsx)）：加 1 行 `import cjpzUtil from '@/pages/common/cjpzUtil';`（ref）+ `import cktsUtil from '@/pages/hts/cktsUtil';`（expected）
+
+**端到端验证**：
+
+| 目录 | 变化 |
+|---|---|
+| [MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | cjpzUtil → cktsUtil 路径改写 ✓ |
+| [DBTS_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/DBTS_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | 同上 ✓ |
+| [MTS_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MTS_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | 同上 ✓ |
+| 其它 5 个 dditax.ckts.from 模块 | 0 变化（ref 无 cjpzUtil）✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（22 + fun-injection 综合测试）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **仅处理默认导入形式**：`import <name> from ...;` —— 与用户示例严格一致；命名导入 `import { cjpzUtil } from ...` 不被改写（codebase 0 个 ref 用此形式）
+- **不处理其它老路径**（如 `@/pages/common/util/cjpzUtil` 等）—— 实际 codebase 0 个
+- **去重检查限定于 ref 全文**（不检查生成文件后续步骤可能添加的 `cktsUtil` 导入）—— 但生成流程中只有 `applyImportRewrites` 处理 imports；其上游 `extractRefImports` 不增 `cktsUtil`，所以检查 ref 全文已足够
+- **仅基于 ref 自身的 `cktsUtil` 导入去重** —— 不检查跨模块共享
+- **default 名字硬编码为 `cktsUtil`**（不保留原 `cjpzUtil` 名字）—— 与用户原话"cjpzUtil 变为 cktsUtil"严格一致
+- **保持前 10 规则 + 1 排除行为不变**
+
 ## 待提交变更（2026-06-11）
+
+### myUtil.menu.getMenuObjByPath 重写 + Func.getOtherRef ref 自动补 useRef
 
 ### myUtil.menu.getMenuObjByPath 重写 + Func.getOtherRef ref 自动补 useRef
 

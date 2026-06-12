@@ -1483,6 +1483,289 @@ function extractInitSearchModalBlock(content) {
   return { text, needsCktsUtilImport };
 }
 
+/**
+ * 从参照文件 f.tsx / fun.tsx 内容中抽取
+ *   `Func.initAddForm = (param) => { ... };`
+ * 整段文本（仅此一个方法，不抽取其它 Func.* 方法）。
+ *
+ *   - regex 找 `Func.initAddForm\s*=\s*` 起点
+ *   - 跳过等号后的箭头函数签名，定位到第一个 `{`
+ *   - bracket-depth 扫描 {} 配对
+ *   - 返回整段文本（含尾随 `;`），或 null
+ *
+ * @param {string} content
+ * @returns {string|null}
+ */
+function extractInitAddFormFromFile(content) {
+  const startRe = /Func\.initAddForm\s*=\s*/;
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return null;
+
+  let i = startMatch.index + startMatch[0].length;
+  // 跳过箭头函数签名 (param) => 或 (param: any) =>，定位到第一个 {
+  while (i < content.length && content[i] !== '{') {
+    if (content[i] === ';' || content[i] === '\n') return null;
+    i++;
+  }
+  if (i >= content.length) return null;
+
+  // bracket-depth 扫描花括号 {} 配对
+  let depth = 1;
+  i++;
+  while (i < content.length && depth > 0) {
+    const ch = content[i];
+    if (ch === '{') depth++;
+    else if (ch === '}') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return null;
+
+  // 返回整段: Func.initAddForm = (param: any) => { ... };
+  // 包含尾随分号（如果原文有）
+  let endIdx = i + 1; // past }
+  if (content[endIdx] === ';') endIdx++;
+  return content.slice(startMatch.index, endIdx);
+}
+
+/**
+ * 重写参照文件中 '@/services/hts/api' 路径为 '@/pages/hts/services/htsApi'。
+ *
+ *   - 支持单行 + 多行 import 形式
+ *   - 支持多个独立 import（每个独立重写，不合并名字；用户决策）
+ *   - 不匹配 import 块则返回空数组
+ *   - 与 extractInitSearchModalBlock 的 UnitUtil→cktsUtil 重写同款手法
+ *   - 名字列表归一化：split + trim + filter（去空），容错 `import {a, b,}` 尾随逗号
+ *   - 输出单行：即使 ref 是多行 import 块，输出也折叠成单行（TypeScript 允许；输出文件更整洁）
+ *
+ * @param {string} content  参照文件全文
+ * @returns {string[]}  重写后的 import 字符串数组（每个 import 一行）
+ */
+function rewriteHtsApiImports(content) {
+  const re = /import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?/g;
+  const out = [];
+  let m;
+  while ((m = re.exec(content)) !== null) {
+    const names = m[1]
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+    if (names.length === 0) continue;
+    out.push(
+      `import { ${names.join(', ')} } from '@/pages/hts/services/htsApi';`,
+    );
+  }
+  return out;
+}
+
+/**
+ * 从参照文件顶部抽取所有 import 语句（保留多行结构）。
+ *
+ *   - 扫描从文件起始到首个非 import 行（含空行 / 注释 / 代码）
+ *   - 跳过纯注释行（`//` / `/* ... *\/`）—— 防御性
+ *   - 保留多行 import（如 `import {\n  a,\n  b,\n} from 'X';`）—— 整段作为单字符串加入数组
+ *   - 跳过 `import type` —— 防御性（codebase 无此场景）
+ *   - 与 r15 codeTable 等同款「作用域限定」手法
+ *
+ * @param {string} content  参照文件全文
+ * @returns {string[]}  import 行数组（按文件出现顺序）
+ */
+function extractRefImports(content) {
+  const lines = content.split('\n');
+  const imports = [];
+  let inBlockComment = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    // 跳过空行
+    if (trimmed === '') {
+      if (imports.length > 0) break; // 进入 imports 段后的空行 → 终止
+      continue;
+    }
+    // 块注释状态跟踪
+    if (inBlockComment) {
+      if (trimmed.includes('*/')) inBlockComment = false;
+      continue;
+    }
+    if (trimmed.startsWith('/*')) {
+      if (!trimmed.includes('*/') || trimmed.indexOf('*/') < trimmed.indexOf('/*')) {
+        inBlockComment = true;
+      }
+      continue;
+    }
+    // 单行注释
+    if (trimmed.startsWith('//')) continue;
+    // 首个非 import 行 → 终止
+    if (!trimmed.startsWith('import ')) break;
+    // 跳过 type-only 导入（防御性）
+    if (/^import\s+type\s+/.test(trimmed)) continue;
+    // 跳过 .less 样式文件导入（结构性过滤；几乎都是单行 import；多行 import 内通常不含 .less）
+    if (/\.less['"]\s*;?$/.test(trimmed)) continue;
+    // 处理多行 import：从首行开始，吞入后续行直到遇到分号
+    const buffer = [line];
+    if (!trimmed.endsWith(';') && !trimmed.endsWith("'") && !trimmed.endsWith('"')) {
+      // 还没结束 —— 继续吞入后续行
+      let joined = trimmed;
+      let j = i + 1;
+      while (j < lines.length) {
+        const nextLine = lines[j];
+        const nextTrimmed = nextLine.trim();
+        buffer.push(nextLine);
+        joined += ' ' + nextTrimmed;
+        // 含分号 → 结束
+        if (nextTrimmed.endsWith(';') || /;\s*$/.test(nextTrimmed)) {
+          j++;
+          break;
+        }
+        j++;
+      }
+      i = j - 1; // 跳过已吞入的行
+    }
+    imports.push(buffer.join('\n'));
+  }
+  return imports;
+}
+
+/**
+ * 对一组 import 行应用 11 条路径重写规则。
+ *
+ *   - 规则 1: import ... from '@/pages/hts/commonModule/f'; —— 不变
+ *   - 规则 2: import { ... } from '@/services/hts/api'; → '@/pages/hts/services/htsApi'
+ *              （多行折叠为单行；与 rewriteHtsApiImports 同款手法）
+ *   - 规则 3: import moment from 'moment'; → import dayjs from 'dayjs';
+ *   - 规则 4: import <name> from '@/pages/common/myUtil'; → import <name> from '@/components/DDAssist/util';
+ *              （默认导入；与规则 8 命名导入互斥）
+ *   - 规则 5: import <name> from '@/components/DDAlert'; → import <name> from '@/pages/hts/commonModule/DDAlert';
+ *   - 规则 6: 其它 import —— 原样保留
+ *   - 规则 7: import <name> from '@/pages/common/staticTableCode'; → import <name> from '@/components/DDAssist/staticTableCode';
+ *   - 规则 8: import { ... } from '@/pages/common/myUtil'; → import { ... } from '@/components/DDAssist/util';
+ *              （命名导入；与规则 4 默认导入互斥）
+ *   - 规则 9: import <name> from '@/pages/common/field/baseValidator'; → import <name> from '@/components/DDAssist/field/baseValidator';
+ *   - 规则 10: import { ..., useRouteMatch, ... } from 'umi'; → import { ..., useRouteData, ... } from 'umi';
+ *              （umi 4.x 已移除 useRouteMatch 导出；保留其它命名导入 / 引号 / 多行结构）
+ *   - 规则 11: import <name> from '@/pages/common/cjpzUtil';
+ *              → import <name> from '@/pages/hts/cktsUtil';
+ *              （带去重：若 ref 已含 cktsUtil 任意导入形式 → 直接删除本行，不重复引入）
+ *
+ * @param {string[]} importLines  来自 extractRefImports 的行数组
+ * @returns {string[]}  重写后的行数组（顺序与输入一致；返回 null 信号删除）
+ */
+function applyImportRewrites(importLines) {
+  // 预扫描：ref 全文是否已含 cktsUtil 导入（任意形式：默认/命名/带 as）
+  //   用于规则 11 去重决策：若已含 cktsUtil，则 cjpzUtil 行直接删除（不重复引入）
+  const hasCktsUtilImport = importLines.some((line) => {
+    const t = line.trim();
+    return (
+      /^import\s+cktsUtil\s+from\s*['"][^'"]+['"]\s*;?$/.test(t) ||
+      /^import\s*\{[^}]*\bcktsUtil\b[^}]*\}\s*from\s*['"][^'"]+['"]\s*;?$/.test(t)
+    );
+  });
+
+  return importLines
+    .map((line) => {
+      const trimmed = line.trim();
+
+      // 规则 3: moment → dayjs（精确匹配 "import moment from 'moment';" 形式）
+      if (/^import\s+moment\s+from\s+['"]moment['"]\s*;?$/.test(trimmed)) {
+        return `import dayjs from 'dayjs';`;
+      }
+
+      // 规则 4: myUtil 默认导入路径（保留原 default 名字；只改路径）
+      const myUtilMatch = trimmed.match(
+        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
+      );
+      if (myUtilMatch) {
+        return `import ${myUtilMatch[1]} from '@/components/DDAssist/util';`;
+      }
+
+      // 规则 5: DDAlert 路径（保留原 default 名字；只改路径）
+      const ddAlertMatch = trimmed.match(
+        /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?$/,
+      );
+      if (ddAlertMatch) {
+        return `import ${ddAlertMatch[1]} from '@/pages/hts/commonModule/DDAlert';`;
+      }
+
+      // 规则 7: getStaticTableCode 路径（保留原 default 名字；只改路径）
+      const staticTableCodeMatch = trimmed.match(
+        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/staticTableCode['"]\s*;?$/,
+      );
+      if (staticTableCodeMatch) {
+        return `import ${staticTableCodeMatch[1]} from '@/components/DDAssist/staticTableCode';`;
+      }
+
+      // 规则 8: myUtil 命名导入路径（保留 { } 内完整名字列表；仅改路径）
+      //   与规则 4 互斥：规则 4 匹配默认导入，规则 8 匹配命名导入
+      const intlMyUtilNamedMatch = trimmed.match(
+        /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/pages\/common\/myUtil['"]\s*;?$/,
+      );
+      if (intlMyUtilNamedMatch) {
+        return `import { ${intlMyUtilNamedMatch[1].trim()} } from '@/components/DDAssist/util';`;
+      }
+
+      // 规则 2: htsApi 路径（多行折叠为单行）
+      const htsApiMatch = trimmed.match(
+        /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?$/,
+      );
+      if (htsApiMatch) {
+        const names = htsApiMatch[1]
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+        if (names.length > 0) {
+          return `import { ${names.join(', ')} } from '@/pages/hts/services/htsApi';`;
+        }
+      }
+
+      // 规则 9: baseValidator 路径（保留原 default 名字；只改路径）
+      const baseValidatorMatch = trimmed.match(
+        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?$/,
+      );
+      if (baseValidatorMatch) {
+        return `import ${baseValidatorMatch[1]} from '@/components/DDAssist/field/baseValidator';`;
+      }
+
+      // 规则 11: cjpzUtil → cktsUtil（带去重）
+      //   - 匹配 `import <name> from '@/pages/common/cjpzUtil';` 默认导入形式
+      //   - 若 hasCktsUtilImport 为 true → 返回 null（信号：删除本行）
+      //   - 否则改写为 `import cktsUtil from '@/pages/hts/cktsUtil';`（default 名字硬编码为 cktsUtil，
+      //     与其它规则 4/5/7/9 保留原 default 名字的策略不同 —— 用户原话
+      //     "cjpzUtil 变为 cktsUtil" 要求 default 名字也改为 cktsUtil）
+      const cjpzUtilMatch = trimmed.match(
+        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?$/,
+      );
+      if (cjpzUtilMatch) {
+        if (hasCktsUtilImport) {
+          return null; // 删除本行（已有 cktsUtil，避免重复）
+        }
+        return `import cktsUtil from '@/pages/hts/cktsUtil';`;
+      }
+
+      // 规则 10: useRouteMatch → useRouteData（umi 4.x 弃用适配）
+      //   - 匹配任意 `import { ... } from 'umi'` / `"umi"` 命名导入
+      //   - 保留单/双引号（regex backreference \2）
+      //   - 保留其它命名导入（如 history）和多行结构（extractRefImports 缓冲后整段传入）
+      //   - \buseRouteMatch\b 词边界：避免误改 useRouteMatchFoo / fooUseRouteMatch
+      //   - 保留 `line`（非 trimmed）作为工作串 → 多行 import 完整 round-trip
+      //   - 使用 `line.match` 而非 `trimmed.match` 以保留 newline 字符
+      const umiNamedMatch = line.match(
+        /^import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?\s*$/,
+      );
+      if (umiNamedMatch) {
+        const inner = umiNamedMatch[1];
+        const quote = umiNamedMatch[2];
+        if (/\buseRouteMatch\b/.test(inner)) {
+          const renamed = inner.replace(/\buseRouteMatch\b/g, 'useRouteData');
+          return `import {${renamed}} from ${quote}umi${quote};`;
+        }
+      }
+
+      // 规则 1 / 规则 6: DditCktsFormCommonFunc（已是新路径） / 其它 —— 原样保留
+      return line;
+    })
+    .filter((line) => line !== null);
+}
+
 // ============================================================================
 // Change 1: myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath 重写
 // ============================================================================
@@ -1695,6 +1978,41 @@ function buildPreRefBlock(pushes, declarations, adjStart, adjEnd) {
 }
 
 /**
+ * 将 ref 文件调整块内的导入别名（`import X from './auto_config';` 的 X）改写为 `myConfig`。
+ *
+ * 背景：ref 函数体内偶有直接 mutate 导入模块（`config.X`）而未使用局部克隆
+ *   `const myConfig = { ...config }`（STZC_GCB 案例）。本函数在切片提取后改写
+ *   这些行，避免生成文件保留错误 `config.` 引用。
+ *
+ * 设计要点：
+ *   - 动态检测导入别名：扫描 ref 全文第一个 `import <name> from './auto_config';`
+ *   - 仅改写行首空白 + 别名 + `.` 的形式（line-leading anchor + \b 词边界）
+ *   - 不动 JSX prop（如 `config={myConfig}` —— 不在切片内）
+ *   - 不动 `import config from '...'` 顶层声明（line-leading anchor 保证不命中）
+ *   - 找不到导入别名 → silent no-op（不影响其它 ref）
+ *   - 已知兼容：`config` / `unitConfig` / `autoConfig` / 其它任意合法标识符
+ *
+ * @param {string} text  调整块文本（已从 ref 切片）
+ * @param {string} content  ref 全文（用于查找导入别名）
+ * @returns {string}  改写后的调整块文本
+ */
+function rewriteImportAliasToMyConfig(text, content) {
+  // 1. 动态检测导入别名
+  const importAliasMatch = content.match(
+    /^import\s+(\w+)\s+from\s+['"]\.\/auto_config['"]\s*;?/m,
+  );
+  if (!importAliasMatch) return text;
+  const alias = importAliasMatch[1];
+  if (alias === 'myConfig') return text; // 已是正确名字，无需改写
+
+  // 2. 行首空白 + 别名 + `.` → 行首空白 + myConfig + `.`
+  //    line-leading anchor 避免命中 JSX prop / 字符串字面量 / 顶层 import
+  //    \b 词边界避免误改 aliasXxx
+  const re = new RegExp(`^(\\s+)\\b${alias}\\b\\.`, 'gm');
+  return text.replace(re, '$1myConfig.');
+}
+
+/**
  * 从参照文件内容中抽取 myConfig 调整块：即 `const myConfig = ...;` 之后、
  * 同一 brace depth（函数体顶层）的 `return <` 关键字之前的整段代码
  *
@@ -1704,9 +2022,8 @@ function buildPreRefBlock(pushes, declarations, adjStart, adjEnd) {
  *   - myConfig.X = Y / myConfig.X[Y] = Z 直接赋值
  *   - if/else 块里对 myConfig 的多种 mutation
  *
- * 用户决策：**原样保留**（不做 `config` → `myConfig` 重写），依赖参照文件
- * 使用 `myConfig.X` 写法。若某参照使用 `config.X`（直接 mutate 导入模块），
- * 用户需手动调整参照。
+ * 已知行为：ref 函数体内若直接 mutate 导入模块（如 `config.X` 而非局部克隆 `myConfig.X`），
+ *   工具会自动改写为 `myConfig.X`（参见 `rewriteImportAliasToMyConfig`）。
  *
  * 算法：
  *   1. 正则 /const myConfig = / 找初始化起点
@@ -1892,6 +2209,10 @@ function extractMyConfigAdjustments(content) {
   text = text.replace(/\s+$/, '');
   if (!text) return null;
 
+  // 5.5) 改写 ref 函数体内残留的导入别名引用（如 `config.X` → `myConfig.X`）
+  //      ref 偶有直接 mutate 导入模块而非局部克隆的 STZC_GCB 案例
+  text = rewriteImportAliasToMyConfig(text, content);
+
   // 6) 剥除 myConfig.gridParams = { ... }; 块 —— 该块由 extractInitSearchModalBlock
   //    单独处理（含 UnitUtil → cktsUtil 重写），这里包含会重复。
   //    若剥除后为空，说明参照里只有 initSearchModal 这种 customization，返 null。
@@ -2066,13 +2387,26 @@ export default Unit;
 `;
 }
 
-function generateFunPage() {
-  return `import { message, Tooltip, Badge, Space, Segmented } from 'antd';
-import React from 'react';
+function generateFunPage({ initAddForm, refImports = [] } = {}) {
+  // refImports 已应用 6 条规则；直接输出在顶部
+  // 模板内不再硬编码 antd / React / DditCktsFormCommonFunc imports（ref 提供）
+  const importsBlock = refImports.length > 0
+    ? refImports.join('\n') + '\n\n'
+    : '';
 
-const Func: any = {
+  if (!initAddForm) {
+    return `${importsBlock}const Func: any = {
   refUnit: React.createRef(),
 };
+
+export default Func;
+`;
+  }
+  return `${importsBlock}const Func: any = {
+  refUnit: React.createRef(),
+};
+
+${initAddForm}
 
 export default Func;
 `;
@@ -2308,8 +2642,53 @@ function main() {
     );
     console.log(`[convert] 已生成 index 页面: ${args.page.indexFile}`);
 
-    if (args.fun !== false) {
-      fs.writeFileSync(args.page.funFile, generateFunPage(), 'utf-8');
+    // --fun 处理：从参照文件 fun.tsx / f.tsx 抽取 initAddForm + 镜像全部 imports（应用 6 条路径重写规则）
+    //   - 默认 basename = 'f'（与 code_sample 一致）
+    //   - 查找顺序：f.tsx 优先 → fun.tsx 兜底
+    //   - 显式传 --fun <name> 时仅查 <name>.tsx
+    //   - 找到即停，找不到 / 无 initAddForm / 无 imports → silent fallback
+    let funInitAddForm = null;
+    let funHtsApiImports = [];  // 保留用于 log
+    let funRefImports = [];
+    if (args.fun !== false && args['no-fun'] !== true) {
+      const srcDir = path.dirname(args.src);
+      const funRefBase = typeof args.fun === 'string' && args.fun.length > 0
+        ? args.fun
+        : 'f';
+      const candidates =
+        funRefBase === 'f' || funRefBase === 'fun'
+          ? [`f.tsx`, `fun.tsx`]
+          : [`${funRefBase}.tsx`];
+      for (const candidate of candidates) {
+        const funRefPath = path.join(srcDir, candidate);
+        if (fs.existsSync(funRefPath)) {
+          const funContent = fs.readFileSync(funRefPath, 'utf-8');
+          funInitAddForm = extractInitAddFormFromFile(funContent);
+          if (funInitAddForm) {
+            console.log(`[convert] 参照文件已抽取 initAddForm: ${funRefPath}`);
+          }
+          funHtsApiImports = rewriteHtsApiImports(funContent);
+          if (funHtsApiImports.length > 0) {
+            console.log(
+              `[convert] 参照文件已抽取 htsApi 导入: ${funHtsApiImports.length} 处 (${funRefPath})`,
+            );
+          }
+          // 新增：抽 ref 全部 imports + 应用 6 规则（传给 generateFunPage 作为顶部 imports）
+          funRefImports = applyImportRewrites(extractRefImports(funContent));
+          console.log(
+            `[convert] 参照文件已抽取 import: ${funRefImports.length} 处 (${funRefPath})`,
+          );
+          break;
+        }
+      }
+    }
+
+    if (args.fun !== false && args['no-fun'] !== true) {
+      fs.writeFileSync(
+        args.page.funFile,
+        generateFunPage({ initAddForm: funInitAddForm, refImports: funRefImports }),
+        'utf-8',
+      );
       console.log(`[convert] 已生成 fun 页面: ${args.page.funFile}`);
     }
   }
