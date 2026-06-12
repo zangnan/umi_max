@@ -561,6 +561,13 @@ const SPECIAL_FIELD_RULES = [
     name: 'form_api_save_upload 剥 ${API_URL_BASE} 前缀 (r17)',
     apply: transformFormApiSaveUpload,
   },
+  {
+    // r18: form_items 块内 readOnly: true → disabled: true
+    //   运行时等价（assemble_config_util.tsx FORM_ITEM_READONLY 分支已兼容两者）
+    //   与 r14（TextArea）/ r15（codeTable）作用域相同，互补不冲突
+    name: 'form_items readOnly → disabled (r18)',
+    apply: transformReadOnlyToDisabled,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -1051,6 +1058,63 @@ function transformFormApiSaveUpload(content, configVar) {
     return `${prefix}form_api_save_upload${eq}\`${path}\``;
   });
   return { content: out, count };
+}
+
+// =================== r18: form_items readOnly → disabled ===================
+/**
+ * r18: 在 form_items 块内，把
+ *   `readOnly: true`
+ *     → `disabled: true`
+ *
+ *   - 仅作用于 <configVar>.form_items = [ ... ] 块
+ *     （readOnly 实际数据中只在该块出现；限定块范围最安全）
+ *   - 精确匹配 `readOnly: true`（\b 词边界保护 readOnly: false / readOnly: <expr> 不误改）
+ *   - 运行时等价：assemble_config_util.tsx 的 FORM_ITEM_READONLY 分支
+ *     已将 disabled: true 与 readOnly: true 视为等价
+ *   - 幂等：disabled: true 不再匹配原正则
+ *   - 与 r14（TextArea）/ r15（codeTable）作用域相同（form_items），
+ *     操作字段不同，互不冲突
+ *
+ * @param {string} content
+ * @param {string} configVar  'unitConfig' / 'myConfig' / 其它
+ * @returns {{ content: string, count: number }}
+ */
+function transformReadOnlyToDisabled(content, configVar) {
+  // 定位 <configVar>.form_items = [ 起点
+  const startRe = new RegExp(
+    `${escapeRegExp(configVar)}\\.form_items\\s*=\\s*\\[`,
+  );
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return { content, count: 0 };
+
+  const startIdx = startMatch.index + startMatch[0].length; // past [
+  // bracket-depth 扫描到匹配的 ]
+  let depth = 1;
+  let i = startIdx;
+  while (i < content.length && depth > 0) {
+    const ch = content[i];
+    if (ch === '[') depth++;
+    else if (ch === ']') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return { content, count: 0 };
+  const endIdx = i; // points to ]
+
+  // 在 [startIdx, endIdx) 范围内替换 readOnly: true → disabled: true
+  const block = content.slice(startIdx, endIdx);
+  const matches = block.match(/\breadOnly\s*:\s*true\b/g);
+  const count = matches ? matches.length : 0;
+  if (count === 0) return { content, count: 0 };
+  const replaced = block.replace(
+    /\breadOnly\s*:\s*true\b/g,
+    'disabled: true',
+  );
+
+  return {
+    content: content.slice(0, startIdx) + replaced + content.slice(endIdx),
+    count,
+  };
 }
 
 // =================== render 函数形式转换 ===================

@@ -1,18 +1,8 @@
 import { request } from 'umi';
-import { queryList, saveOrUpdate, queryForm } from '@/services/hts/api';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message } from 'antd';
-
-// [表单通用业务] 小计
-export async function xj(param: any) {
-  return request(`${API_URL_HTS}/hx/ty/commonextbtn/xj`, { method: 'POST', data: param });
-}
-
-// [表单通用业务] 序号重排
-export async function xhcp(param: any) {
-  return request(`${API_URL_HTS}/hx/ty/commonextbtn/xhcp`, { method: 'POST', data: param });
-}
+import { xj } from '@/pages/hts/services/htsApi';
 
 const cktsUtil: any = {};
 
@@ -174,10 +164,10 @@ cktsUtil.api = {
         '/hx/ty/crud/queryForm',
       );
     } else if (url.indexOf('/dict/automatic/exp/bs/saveOrUpdate') > -1) {
-      // config.url = url.replace(
-      //   '/dict/automatic/exp/bs/saveOrUpdate',
-      //   '/hx/ty/crud/queryForm',
-      // );
+      config.url = url.replace(
+        '/dict/automatic/exp/bs/saveOrUpdate',
+        '/hx/ty/crud/saveOrUpdate',
+      );
     }
 
     // 2. ftype 注入（HTS 任意请求都加，包括 OAuth 端点本身）

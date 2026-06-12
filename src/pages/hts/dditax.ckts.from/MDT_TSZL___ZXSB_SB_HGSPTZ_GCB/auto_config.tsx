@@ -60,7 +60,7 @@ unitConfig.filter_items = [
 
 // 表单项
 unitConfig.form_items = [
-	{ label: '主键', name: 'uuid', type: 'Hidden', readOnly: true},
+	{ label: '主键', name: 'uuid', type: 'Hidden', disabled: true},
 	{ label: '基本信息', name: 'jbxx', type: 'GroupTitle' },
 	{ label: '所属期', name: 'ssq', type: 'Input', rules: [{ type: 'base_date', format: 'YYYYMM' }, { type: 'base_required' }, { type: 'base_string', range: [0, 6]}, { func: 'ssq02' }, { func: 'ssq01' }]},
 	{ label: '序号', name: 'sbxh', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_type_number' }, { func: 'sbxh02' }], eventOnBlur: 'sbxh' },
@@ -73,7 +73,7 @@ unitConfig.form_items = [
 	{ label: '调整前（报关单上列明的）商品名称', name: 'sbhgspmc', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 75]}]},
 	{ label: '调整前（报关单上列明的）退税率', name: 'tsl', type: 'InputNumber', format: '0,0.00000', rules: [{ type: 'base_number', length: 5, decimal: 2}, { func: 'setZero' }]},
 	{ label: '调整后商品编码', name: 'tzhckspDm', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 12]}, { func: 'tzhckspDm01' }], eventOnBlur: 'tzhckspDm' },
-	{ label: '调整后商品名称', name: 'tzhhgspmc', type: 'Input', readOnly: true, rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 500]}]},
+	{ label: '调整后商品名称', name: 'tzhhgspmc', type: 'Input', disabled: true, rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 500]}]},
 	{ label: '调整后退税率', name: 'tzhtsl', type: 'InputNumber', format: '0,0.00000', rules: [{ type: 'base_required' }, { type: 'base_number', length: 5, decimal: 2}, { type: 'base_number', range: '+-' }, { type: 'base_number', range: '+0' }, { func: 'ggslqzfw01' }]},
 	{ label: '其他信息', name: 'qtxx', type: 'GroupTitle' },
 	{ label: '备注', name: 'bz', type: 'TextArea', rules: [{ type: 'base_string', range: [0, 200]}], autoSize: { minRows: 3, maxRows: 3 }, layout: CONSTANTS.DEFAULT_FORM_LAYOUT_100P_ROW},

@@ -79,7 +79,7 @@ unitConfig.form_items = [
 	{ label: '本期收款凭证号', name: 'skpzh', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 22]}]},
 	{ label: '收款凭证美元总金额', name: 'skpzzjemy', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_required' }, { type: 'base_number', length: 14, decimal: 2}, { type: 'base_number', range: '+-' }, { func: 'skpzzjemy01' }]},
 	{ label: '原币代码', name: 'hbzmDm', type: 'AutoComplete', showType: '3', 'allowClear': true, codeTable: 'url_gy_hbhl:01', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 3]}], eventOnBlur: 'hbhlDm', eventOnFocus: 'hbhlDm' },
-	{ label: '原币币别', name: 'biname', type: 'Input', readOnly: true},
+	{ label: '原币币别', name: 'biname', type: 'Input', disabled: true},
 	{ label: '原币收款额', name: 'cjzj', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_required' }, { type: 'base_number', length: 14, decimal: 2}, { type: 'base_number', range: '+-' }], eventOnBlur: 'cjzj' },
 	{ label: '原币汇率', name: 'ybhl', type: 'InputNumber', format: '0,0.00000', rules: [{ type: 'base_required' }, { type: 'base_number', range: '+-' }], eventOnBlur: 'ybhl' },
 	{ label: '本期收款人民币额', name: 'skjermb', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_required' }, { type: 'base_number', range: '+-' }, { type: 'base_number', length: 14, decimal: 2}], eventOnBlur: 'skjermb' },
@@ -88,10 +88,10 @@ unitConfig.form_items = [
 	{ label: '本期收款银行名称', name: 'skyhmc', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 60]}]},
 	{ label: '本期付款单位名称', name: 'fkdwmc', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 80]}]},
 	{ label: '付款单位所在国家（地区）代码', name: 'gjhdqszDm', type: 'Select', showType: '3', 'showSearch': true, 'allowClear': true, codeTable: 'code_dm_gy_gjhdq:01', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 3]}], eventOnChange: 'gjhdqDm' },
-	{ label: '付款单位所在国家（地区）名称', name: 'gbname', type: 'Input', readOnly: true},
+	{ label: '付款单位所在国家（地区）名称', name: 'gbname', type: 'Input', disabled: true},
 	{ label: '本期付款银行名称', name: 'fkyhmc', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 60]}]},
-	{ label: '累计已收营业款（折美元）', name: 'ljysyykmy', type: 'Hidden', readOnly: true, format: '0,0.00' },
-	{ label: '累计已收营业款（折人民币）', name: 'ljysyykrmb', type: 'Hidden', readOnly: true, format: '0,0.00' },
+	{ label: '累计已收营业款（折美元）', name: 'ljysyykmy', type: 'Hidden', disabled: true, format: '0,0.00' },
+	{ label: '累计已收营业款（折人民币）', name: 'ljysyykrmb', type: 'Hidden', disabled: true, format: '0,0.00' },
 ];
 
 // 配置项：工具栏

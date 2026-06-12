@@ -40,7 +40,7 @@
 - 共归一化 **5** 处 `format: 'yyyy-...'` → `format: 'YYYY-...'`（小写 yyyy = ISO week year，跨年周附近会偏差 1 年；项目统一使用大写 YYYY = 日历年）
 
 ### 特殊字段处理（r11）
-- 共应用 **10** 处特殊字段规则（如 `grid_columns` 里 `title: '业务类型代码'` 自动补 `ellipsis: true`）
+- 共应用 **19** 处特殊字段规则（如 `grid_columns` 里 `title: '业务类型代码'` 自动补 `ellipsis: true`）
 
 ## 保留未改动的部分
 

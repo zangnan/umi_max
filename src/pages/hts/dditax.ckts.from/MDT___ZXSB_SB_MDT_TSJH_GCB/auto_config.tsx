@@ -68,7 +68,7 @@ unitConfig.filter_items = [
 
 // 表单项
 unitConfig.form_items = [
-  {label: '基本信息', name: 'jbxx', type: 'GroupTitle', readOnly: true},
+  {label: '基本信息', name: 'jbxx', type: 'GroupTitle', disabled: true},
   {label: 'ID', name: 'uuid', type: 'Hidden'},
   {label: '所属期', name: 'ssq', type: 'Input', rules: [{type: 'base_date', format: 'YYYYMM'}, {type: 'base_required'}, {type: 'base_string', range: [0, 6]}], eventOnBlur: 'ssq'},
   {label: '序号', name: 'sbxh', type: 'Input', eventOnBlur: 'sbxh'},
@@ -81,7 +81,7 @@ unitConfig.form_items = [
     rules: [{type: 'base_required'}, {type: 'base_type_number_english'}, {type: 'base_string', range: [0, 17]}, {func: 'glh01'}, {func: 'glh02'}],
     eventOnChange: 'glh'
   },
-  {label: '发票信息', name: 'fpxx', type: 'GroupTitle', readOnly: true},
+  {label: '发票信息', name: 'fpxx', type: 'GroupTitle', disabled: true},
   {
     label: '税种',
     name: 'sz',
@@ -130,12 +130,12 @@ unitConfig.form_items = [
     label: '出口商品代码',
     name: 'ckspDm',
     type: 'Input',
-    readOnly: true,
+    disabled: true,
     rules: [{type: 'base_required'}, {type: 'base_type_number'}, {type: 'base_string', range: [0, 12]}],
     eventOnBlur: 'ckspDm'
   },
   {label: '商品名称', name: 'sbhgspmc', type: 'Input', rules: [{type: 'base_required'}, {type: 'base_string', range: [0, 254]}]},
-  {label: '计量单位', name: 'hgjldwmc', type: 'Input', readOnly: true, rules: [{type: 'base_string', range: [0, 75]}]},
+  {label: '计量单位', name: 'hgjldwmc', type: 'Input', disabled: true, rules: [{type: 'base_string', range: [0, 75]}]},
   {
     label: '数量',
     name: 'sl',

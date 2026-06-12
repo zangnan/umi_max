@@ -351,6 +351,60 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 - 不处理 value 不是 `${API_URL_BASE}/X` 字面量前缀的情况（裸路径、函数调用、模板内嵌表达式等）—— 不匹配 → 保持原样
 - 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r16 行为一致；实际数据无此场景）
 
+### r18: form_items readOnly → disabled 转换规则
+
+**背景**：新协议下 [src/components/DDBunit/assemble_config_util.tsx:783-786](src/components/DDBunit/assemble_config_util.tsx#L783-L786) 的
+`FORM_ITEM_READONLY` 分支已统一处理 `disabled: true` / `readOnly: true` 两种写法（运行时等价）。
+为统一新协议风格（form 组件其它只读控件都用 `disabled`），旧写法 `readOnly: true` 应被规范化。
+
+- 源：`<configVar>.form_items = [ { ..., readOnly: true, ... } ]`
+- 目标：`<configVar>.form_items = [ { ..., disabled: true, ... } ]`
+
+**关键设计点**：
+- 仅作用于 `<configVar>.form_items = [ ... ]` 块（`readOnly` 实际数据中只在该块出现）
+- 精确匹配 `readOnly: true`（`\b...\b` 保护 `readOnly: false` / `readOnly: <expr>` 不误改）
+- 运行时等价（`assemble_config_util.tsx` 的 `FORM_ITEM_READONLY` 分支已兼容两者）
+- 幂等：`disabled: true` 不再匹配原正则
+- 与 r14（TextArea）/ r15（codeTable）作用域相同（form_items），操作字段互补不冲突
+- 仅在 `SPECIAL_FIELD_RULES` 注册（不在 `extractMyConfigAdjustments` 内联 —— 实际数据未发现 myConfig 调整块修改 form_items 只读字段）
+
+**改动**：
+
+1. **新增 `transformReadOnlyToDisabled(content, configVar)`**：
+   紧贴 `transformFormApiSaveUpload` 下方（[scripts/convert-ddbunit-config.js:1056-1108](scripts/convert-ddbunit-config.js#L1056-L1108)）。
+   - 定位 `<configVar>.form_items = [` → bracket-depth 找匹配 `]`
+   - 在块内 `.replace(/\breadOnly\s*:\s*true\b/g, 'disabled: true')`
+   - 返回 `{ content, count }`
+
+2. **注册为 SPECIAL_FIELD_RULE 第 7 条**（[scripts/convert-ddbunit-config.js:564-569](scripts/convert-ddbunit-config.js#L564-L569)）
+   ```js
+   {
+     name: 'form_items readOnly → disabled (r18)',
+     apply: transformReadOnlyToDisabled,
+   }
+   ```
+
+3. **新增专用 fixture** `form-item-readonly.{input,expected}.tsx`（3 个 `readOnly: true` 测试用例：末尾 key / 中间 key / 含 rules）
+   - 测试 runner 自动发现，无需改 test runner
+
+**端到端验证**：
+
+| 目录 | 场景 | 期望结果 |
+|---|---|---|
+| `MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_config.tsx` | 顶层 unitConfig form_items（9 处）| 全部 `readOnly: true` → `disabled: true` ✓ |
+| `MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.tsx` | 顶层 unitConfig form_items（10 处）| 全部改写 ✓ |
+| `MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_config.tsx` | 顶层 unitConfig form_items（3 处）| 全部改写 ✓ |
+
+**测试**：`npm run test:convert-config` → 现有 20 通过 + `form-item-readonly` 新增通过
+= **21 通过** / 2 失败（预存在的 `default-nodes-and-xhcp` / `toolbar-ckts-sum`，与本次改动无关）
+
+**已知限制**（用户决策接受）：
+- 不处理 `readOnly: false`（codebase 无此 case；精确 `\btrue\b` 匹配保护）
+- 不处理 `readOnly: <expression>`（同上；保护）
+- 不处理 `readonly` / `ReadOnly` 等大小写变体（JS 区分大小写，codebase 无此 case）
+- 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r15/r16/r17 行为一致）
+- 不在 `extractMyConfigAdjustments` 内联（实际数据未发现 myConfig 调整块修改 form_items 只读字段的场景）
+
 ## 待提交变更（2026-06-11）
 
 ### myUtil.menu.getMenuObjByPath 重写 + Func.getOtherRef ref 自动补 useRef

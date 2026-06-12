@@ -6,7 +6,7 @@ import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { xhcp } from '@/pages/hts/cktsUtil';
+import { xhcp } from '@/pages/hts/services/htsApi';
 
 export type OrderProps = {
   onRef?: any;
