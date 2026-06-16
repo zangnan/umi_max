@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from 'dayjs';
 import { intl as intl2 } from '../util';
 import myUtil from '../util';
 import { itemType } from '../../DDForm/data.d';
@@ -138,8 +138,8 @@ baseValidator.yyyyMM = () => {
 baseValidator.yyyyMMdd = () => {
   const validator = (_rule: any, value2: any) => {
     let value = value2;
-    if (value2 && value2._isAMomentObject) {
-      value = moment(value2).format('YYYY-MM-DD');
+    if (value2 && dayjs.isDayjs(value2)) {
+      value = dayjs(value2).format('YYYY-MM-DD');
     }
     if (!value) {
       return Promise.resolve();

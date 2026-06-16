@@ -71,11 +71,11 @@ unitConfig.filter_items = [
 unitConfig.form_items = [
 	{ label: '申报ID', name: 'uuid', type: 'Hidden' },
 	{ label: '基本信息', name: 'jbxx', type: 'GroupTitle' },
-	{ label: '所属期', name: 'ssq', type: 'Input', rules: [{ type: 'base_date', format: 'YYYYMM' }, { type: 'base_required' }, { type: 'base_string', range: [0, 6]}, { func: 'ssq02' }]},
+	{ label: '所属期', name: 'ssq', type: 'Input', rules: [{ type: 'base_date', format: 'yyyyMM' }, { type: 'base_required' }, { type: 'base_string', range: [0, 6]}, { func: 'ssq02' }]},
 	{ label: '序号', name: 'sbxh', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_type_number' }, { func: 'sbxh02' }], eventOnBlur: 'sbxh' },
 	{ label: '收款信息 ', name: 'skxx', type: 'GroupTitle' },
 	{ label: '合同号', name: 'hth', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 30]}], eventOnBlur: 'hth' },
-	{ label: '本期收款时间', name: 'skrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_required' }, { type: 'base_date', format: 'YYYYMMdd' }], eventOnChange: 'skrq' },
+	{ label: '本期收款时间', name: 'skrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_required' }, { type: 'base_date', format: 'yyyyMMdd' }], eventOnChange: 'skrq' },
 	{ label: '本期收款凭证号', name: 'skpzh', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 22]}]},
 	{ label: '收款凭证美元总金额', name: 'skpzzjemy', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_required' }, { type: 'base_number', length: 14, decimal: 2}, { type: 'base_number', range: '+-' }, { func: 'skpzzjemy01' }]},
 	{ label: '原币代码', name: 'hbzmDm', type: 'AutoComplete', showType: '3', 'allowClear': true, codeTable: 'url_gy_hbhl:01', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 3]}], eventOnBlur: 'hbhlDm', eventOnFocus: 'hbhlDm' },

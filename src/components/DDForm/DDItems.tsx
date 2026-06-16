@@ -690,25 +690,39 @@ const DDItems: React.FC<ItemsProps> = ({
           }
         }
         const showType: any = myItems[i].showType;
+        // antd 6 不再支持 <AutoComplete.Option> 子节点，改用 options prop
+        // 防御性读取：兼容多种上游码表形态（普通 {value,name,label}、url_* 服务的 {hbzmDm,hbzlMc,...} 等）
+        const acOptions = (list as any[]).map((item: any) => {
+          const codeVal = item.value ?? item.code ?? item.hbzmDm ?? '';
+          const nameVal = item.name ?? item.label ?? item.text ?? item.hbzlMc ?? '';
+          if (showType === '2') {
+            // 下拉展示码值，回显码值
+            return { value: codeVal, label: codeVal };
+          } else if (showType === '3' || showType === '4') {
+            // showType === '3' 下拉展示码值+名称，回显码值+名称
+            // showType === '4' 下拉展示码值+名称，回显码值+名称 AutoComplete无法显示tag所以与showType === '3'同逻辑
+            return { value: codeVal, label: `[${codeVal}]     ${nameVal}` };
+          } else {
+            // 下拉展示名称，回显名称
+            return { value: codeVal, label: nameVal };
+          }
+        });
         itemLabel = <Form.Item {...formItemCommonProps}>
-          <AutoComplete {...inputProps} onOpenChange={onDropdownVisibleChange} filterOption={(input, option: any) => {
-              return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 ||
-                option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }}>
-            {list.map((item: any) => {
-              if (showType === '2') {
-                // 下拉展示码值，回显码值
-                return <AutoComplete.Option key={item.value} value={item.value}>{item.value}</AutoComplete.Option>
-              } else if (showType === '3' || showType === '4') {
-                // showType === '3' 下拉展示码值+名称，回显码值+名称
-                // showType === '4' 下拉展示码值+名称，回显码值+名称 AutoComplete无法显示tag所以与showType === '3'同逻辑
-                return <AutoComplete.Option key={item.value} value={item.value}>{`[${item.value}]     ${item.name}`}</AutoComplete.Option>
-              } else {
-                // 下拉展示名称，回显名称
-                return <AutoComplete.Option key={item.value} value={item.value}>{item.name}</AutoComplete.Option>
-              }
-            })}
-          </AutoComplete>
+          <AutoComplete
+            {...inputProps}
+            onOpenChange={onDropdownVisibleChange}
+            options={acOptions}
+            // antd 6: filterOption 移入 showSearch 对象；顶层 filterOption 已 @deprecated
+            // option 形状为 { value, label }（option.children 是 OptGroup 的子选项，不是 dropdown label）
+            showSearch={{
+              filterOption: (input, option: any) => {
+                const label = String(option?.label ?? '').toLowerCase();
+                const value = String(option?.value ?? '').toLowerCase();
+                const needle = input.toLowerCase();
+                return label.indexOf(needle) >= 0 || value.indexOf(needle) >= 0;
+              },
+            }}
+          />
         </Form.Item>;
         // Cascader
       } else if (type === itemType.Cascader) {

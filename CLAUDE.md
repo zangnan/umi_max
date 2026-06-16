@@ -405,6 +405,44 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 - 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r15/r16/r17 行为一致）
 - 不在 `extractMyConfigAdjustments` 内联（实际数据未发现 myConfig 调整块修改 form_items 只读字段的场景）
 
+### r19: form_items base_date 规则 format YYYY/YY → yyyy/yy 归一化
+
+**背景**：运行时 [src/components/DDForm/formUtil.tsx:84-93](src/components/DDForm/formUtil.tsx#L84) 的 `base_date`
+派发是 case-sensitive 严格匹配（`itemRule.format === 'yyyyMMdd'` 等），必须小写才能命中
+`baseValidator.yyyyMMdd()` / `baseValidator.yyyyMM()` / `baseValidator.yyyy()`。源文件残留的
+`format: 'YYYYMM'` / `'YYYY-MM-DD'` 等大写形式会让校验完全不生效。
+
+r8 增强（`normalizeDateFormats`）会把所有 `format: 'yyyy...'` 转 `YYYY...`。r19 在 r8 之后跑，
+**反向**作用于 `<configVar>.form_items` 块内 `type: 'base_date'` 规则的 `format` 字段，把
+`YYYY/YY` 转回小写（仅 base_date 规则；grid_columns 的 `render.format` 仍保持 r8 的大写结果）。
+
+**端到端验证**（`MDT___ZXSB_SB_MDT_SYYK_GCB`）：
+- 输入 line 74/78 `format: 'YYYYMM' / 'YYYYMMdd'`（code_sample 大写）
+- 输出（[auto_config.tsx:74,78](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_config.tsx#L74)）
+  `format: 'yyyyMM' / 'yyyyMMdd'` ✓（小写，能命中 yyyyMMdd / yyyyMM 派发）
+- 输出 line 25/47 `render.format: 'YYYY-MM-DD'` ✓（grid_columns 内不动，保持 r8 大写结果）
+
+**关键设计点**：
+- 与 r18（readOnly → disabled）同样模板：bracket-depth 定位 `<configVar>.form_items = [...]` 块边界
+- 块内 regex `\{\s*type\s*:\s*['"]base_date['"][^{}]*?format\s*:\s*['"]([^'"]+)['"]` 单条规则单条 format
+- 替换顺序 `YYYY → yyyy` 再 `YY → yy`（小写 yyyy 不含大写 YY，顺序无关 / 幂等）
+- 仅作用于 `auto_config.tsx`（`auto_configFun.tsx` / `auto_configIndex.tsx` 不含 form_items，不受影响）
+
+**改动**：
+1. **新增 `transformBaseDateFormatNormalize(content, configVar)`**（[scripts/convert-ddbunit-config.js:1118-1190](scripts/convert-ddbunit-config.js#L1118-L1190)）
+2. **注册为 SPECIAL_FIELD_RULE 第 8 条**（r19，[scripts/convert-ddbunit-config.js:571-579](scripts/convert-ddbunit-config.js#L571-L579)）
+3. **新 fixture** [scripts/__fixtures__/base-date-format-normalize.{input,expected}.tsx](scripts/__fixtures__/)：7 个测试用例（YYYYMM / YYYYMMdd / YYYY / 已小写幂等 / 非 base_date 不动 / format='MM' 不动 / 双引号）
+
+**测试**：`npm run test:convert-config` → 24 通过（22 + base-date-format-normalize + cktsUtil-rewrite
+受特殊字段规则间接影响）/ 2 失败（预存在的 `default-nodes-and-xhcp` / `toolbar-ckts-sum`，与本次无关）
+
+**已知限制**（用户决策接受）：
+- **不处理 DD → dd**：因此 `'YYYY-MM-DD'` 只变 `'yyyy-MM-DD'`（DD 仍大写），运行时仍不匹配
+  `=== 'yyyy-MM-dd'` 派发分支。若需完整兼容须另外处理或把 formUtil.tsx:86 派发改大小写不敏感
+- 不处理嵌套在 `// 注释` / `/* */` / `"字符串字面量"` 里的匹配（与 r15/r16/r17/r18 行为一致）
+- 不在 `extractMyConfigAdjustments` 内联（实际数据未发现 myConfig 调整块出现 base_date 规则的场景）
+- 仅作用于 `<configVar>.form_items = [...]` 块（不动 grid_columns / filter_items 等其它块的 base_date）
+
 ### Part 1/2/3: f.tsx moment→dayjs 迁移 + `--fun` CLI 参数 + initAddForm 注入
 
 **背景**：三部分组合任务。
@@ -836,6 +874,162 @@ myConfig.toolbar_default.ckts_download = false;
 - **仅基于 ref 自身的 `cktsUtil` 导入去重** —— 不检查跨模块共享
 - **default 名字硬编码为 `cktsUtil`**（不保留原 `cjpzUtil` 名字）—— 与用户原话"cjpzUtil 变为 cktsUtil"严格一致
 - **保持前 10 规则 + 1 排除行为不变**
+
+### 新规则：fun 生成 — 移植 5 个 Func 方法 + antd 4/umi 3 → antd 6/umi 4 适配
+
+**背景**：用户最新指示 fun 生成时移植 5 个 Func 方法（initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange）到生成文件，并做 antd 4/umi 3 → antd 6/umi 4 适配。
+
+**5 个方法 + 形式**：
+
+| # | 方法 | ref 形式 | 示例位置 |
+|---|---|---|---|
+| 1 | `Func.initEditForm` | 箭头函数 `(param) => { ... }` | SYYK f.tsx:22 |
+| 2 | `Func.validator` | 对象字面量 `{ key1: fn1, ... }` | SYYK f.tsx:40 |
+| 3 | `Func.eventOnBlur` | 对象字面量 `{ key1: fn1, ... }` | SYYK f.tsx:59 |
+| 4 | `Func.eventOnFocus` | 对象字面量 `{ key1: fn1, ... }` | SYYK f.tsx:169 |
+| 5 | `Func.eventOnChange` | 对象字面量 `{ key1: fn1, ... }` | SYYK f.tsx:176 |
+
+**数据扫描**（[code_sample\src\pages\hts\dditax.ckts.from\](code_sample/src/pages/hts/dditax.ckts.from/)）：
+- **54 个 ref f.tsx** 含 5 个方法中至少 1 个
+
+**antd 4 → antd 6 / umi 3 → umi 4 迁移关注**（基于 ref 抽样）：
+- **`moment(...)` → `dayjs(...)`**：ref 中常出现在 `eventOnChange` 等时间格式化场景 —— **已实现**
+- `Form.create` 装饰器：antd 4 → antd 5+ `Form.useForm()` —— ref 0 处使用
+- `Modal.info` / `Modal.confirm` 等静态调用：antd 5+ 改 `App.useApp()` —— ref 0 处使用
+- `Input.Search` / `TextArea` / `Button.Group` 等 deprecated API：ref 0 处使用
+- `useRouteMatch` → `useRouteData`（umi 3 → umi 4）—— **现有规则 10 已处理**
+- `connect` / `withRouter` / `useModel`（umi 3 hooks）：ref 0 处使用
+
+**关键设计点**：
+- **新 `extractFuncMethod(content, methodName)` 辅助函数**（[scripts/convert-ddbunit-config.js:1531-1595](scripts/convert-ddbunit-config.js#L1531-L1595)）：双形式支持
+  - 箭头函数形式：`Func.X = (param) => { ... };`（如 initEditForm / initAddForm）
+  - 对象字面量形式：`Func.X = { key1: fn1, ... };`（如 validator / 4 个 event*）
+  - bracket-depth 扫描花括号 {} 配对（与 initAddForm 提取器同款）
+  - 失败返回 null（silent fallback）
+- **新 `migrateAntdUmiImports(methodCode)` 辅助函数**（[scripts/convert-ddbunit-config.js:1597-1610](scripts/convert-ddbunit-config.js#L1597-L1610)）：antd 4 → antd 6 迁移
+  - 当前实现：`moment\(` → `dayjs\(`（基于 ref 抽样分析，5 个方法中**唯一**有 antd 4 / umi 3 特定 API 的就是 `moment`）
+  - 预留扩展点：若未来发现 antd 5+ 其它 API 模式需迁移，在此处加规则
+- **`generateFunPage` 签名扩展**：加 `extraMethods` 参数（约 25 行模板调整）
+  - 拼接顺序：initAddForm 先于 5 个方法（与 ref 中典型声明顺序一致）
+  - filter(Boolean) 跳过未抽取的方法（silent fallback）
+  - 末尾 `\n\n` 与 `export default Func;` 分隔
+- **main() --fun 块**（[scripts/convert-ddbunit-config.js:2428-2440](scripts/convert-ddbunit-config.js#L2428-L2440)）：
+  - `funExtraMethods` 对象存 5 个方法代码
+  - 统一抽取 + 迁移：每方法 1 行 `extractFuncMethod` + 1 行 `migrateAntdUmiImports`
+  - log 格式与现有 initAddForm 一致：`参照文件已抽取 <methodName>: <refPath>`
+
+**改动**：
+
+1. **新 `extractFuncMethod` 辅助函数**（约 65 行）—— [scripts/convert-ddbunit-config.js:1531-1595](scripts/convert-ddbunit-config.js#L1531-L1595)
+2. **新 `migrateAntdUmiImports` 辅助函数**（约 13 行）—— [scripts/convert-ddbunit-config.js:1597-1610](scripts/convert-ddbunit-config.js#L1597-L1610)
+3. **`generateFunPage` 模板扩展**（约 30 行）—— [scripts/convert-ddbunit-config.js:2128-2165](scripts/convert-ddbunit-config.js#L2128-L2165)
+4. **main() --fun 块**（约 10 行）—— [scripts/convert-ddbunit-config.js:2411-2453](scripts/convert-ddbunit-config.js#L2411-L2453)
+5. **fixture 更新**（综合测试 5 方法移植 + moment→dayjs 改写）：
+   - [scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) 加 5 个 Func 方法体
+   - [scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 期望 5 个方法 + moment→dayjs 改写
+
+**端到端验证**：
+
+| 目录 | 5 方法抽取 | 变化 |
+|---|---|---|
+| [MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB/auto_configFun.tsx) | 5/5 | 顶部 +5 方法块 ✓ |
+| [MDT_TSZL___ZXSB_SB_HGSPTZ_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_HGSPTZ_GCB/auto_configFun.tsx) | 4/5（无 initEditForm）| 同上 ✓ |
+| [MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx) | 5/5 | +moment→dayjs 迁移 ✓ |
+| [MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB/auto_configFun.tsx) | 4/5（无 initEditForm）| 同上 ✓ |
+| [MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx) | 5/5 | +moment→dayjs 迁移 ✓ |
+| [MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx) | 5/5 | +moment→dayjs 迁移 ✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（fun-injection 综合 12 规则 + 1 排除 + 1 修复 + 5 Func 方法移植）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **bracket-depth 跳过字符串字面量 / 注释内的 `{}`**（与 initAddForm 提取器同款简化）—— ref 中 5 个方法函数体内嵌字符串罕见
+- **当前 `migrateAntdUmiImports` 仅迁移 `moment` → `dayjs`**：基于 ref 抽样分析，5 个方法中**唯一**有 antd 4 / umi 3 特定 API 的就是 `moment`；其它 antd 4 / umi 3 模式（`Form.create` / `Modal.method` / `connect` / `withRouter`）在 ref 中 0 处使用 —— **预留扩展点**以备未来
+- **保持前 10 规则 + 1 排除 + 1 修复行为不变**
+- **保持现有 initAddForm 提取行为不变**（规则 0）
+- **保持 generateFunPage 现有 stub 模板行为不变**（无 initAddForm 无 extraMethods 时仍输出最小 stub）
+
+### 新规则：fun 生成 — initEditForm 变量改名 + 6 方法顶部注释
+
+**背景**：用户最新指示 fun 生成时做两项调整：
+
+1. **initEditForm 变量改名**（仅 initEditForm 方法内）：
+   - `unit_key` → `unitKey`（snake_case → camelCase，遵循 commonModule/f.tsx 风格）
+   - `myFormItems` → `formItems`（去除 "my" 前缀）
+   - `setMyFormItems` → `setFormItems`（去除 "my" 前缀）
+   - "后续使用的地方也需要同步调整" —— 工具做全方法体内 rename（regex `\b` 词边界）
+
+2. **6 个 Func 方法顶部添加注释**（按 methodName 查表）：
+   - `Func.initAddForm` → `// 新建表单初始化`
+   - `Func.initEditForm` → `// 编辑表单初始化`
+   - `Func.validator` → `// 表单校验`
+   - `Func.eventOnBlur` → `// 表单事件：OnBlur`
+   - `Func.eventOnFocus` → `// 表单事件：OnFocus`
+   - `Func.eventOnChange` → `// 表单事件：OnChange`
+
+**关键设计点**：
+
+- **新 `FUNC_METHOD_COMMENTS` 映射常量**（[scripts/convert-ddbunit-config.js:1611-1620](scripts/convert-ddbunit-config.js#L1611-L1620)）：6 个方法名 → 注释文本
+- **新 `prependFuncMethodComment(methodCode, methodName)` 辅助函数**（[scripts/convert-ddbunit-config.js:1622-1634](scripts/convert-ddbunit-config.js#L1622-L1634)）：查表 + 前置注释
+- **新 `migrateFuncMethodVariables(methodCode, methodName)` 辅助函数**（[scripts/convert-ddbunit-config.js:1636-1657](scripts/convert-ddbunit-config.js#L1636-L1657)）：仅 initEditForm 做 3 个变量 rename
+  - `\b` 词边界避免误改 `unitKeyXxx` / `formItemsXxx` 等变体
+  - 顺序无关（`setMyFormItems` 与 `myFormItems` 词边界互不重叠）
+- **`postProcessFuncMethod` 编排三个变换**（[scripts/convert-ddbunit-config.js:1659-1672](scripts/convert-ddbunit-config.js#L1659-L1672)）：antd 迁移 + 变量改名 + 注释添加
+- **main() --fun 块**：对 initAddForm 和 5 个抽取方法都应用 `postProcessFuncMethod`
+
+**端到端验证**：
+
+| 目录 | 变化 |
+|---|---|
+| [MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx) | initEditForm: `unit_key/myFormItems/setMyFormItems` → `unitKey/formItems/setFormItems` ✓ + 6 方法顶部注释 ✓ |
+| 其它 5 个 dditax.ckts.from 模块 | 部分含 initEditForm 变量改名（按 ref 实际内容）+ 6 方法注释（按 ref 实际方法存在性）✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（fun-injection 升级综合 12 规则 + 1 排除 + 1 修复 + 5 方法移植 + 2 新变换）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **变量改名仅作用于 initEditForm 方法**（其它方法无此约定差异）—— 若未来 ref 其它方法也出现 `unit_key` / `myFormItems` / `setMyFormItems`，需扩展 `migrateFuncMethodVariables` 规则范围
+- **注释查表固定 6 方法** —— 若未来新方法需注释，加 `FUNC_METHOD_COMMENTS` 字典项即可
+- **保持前 12 规则 + 1 排除 + 1 修复行为不变**
+
+### 新规则：fun 生成 — `getCodeValByKey` 3 参 → 2 参合并
+
+**背景**：用户最新指示 fun 生成时把 `myUtil.code.getCodeValByKey(arg1, 'arg2', 'arg3')` 三参形式合并为 `myUtil.code.getCodeValByKey(arg1, 'arg2:arg3')` 两参形式（`code + viewKey` 用 `:` 合并）。原 3 参 API 已废弃；新 API 期望单一 `code:viewKey` 字符串。
+
+**目标确认**（由 Plan agent 验证）：
+- 当前 codebase 至少 5+ 处 `myUtil.code.getCodeValByKey(..., '...', '...')` 三参调用：SYYK / YFSJ / TSSB 等多个 ref f.tsx
+- SYYK fun 文件当前 line 206 `myUtil.code.getCodeValByKey(gjhdqszDm, 'code_dm_gy_gjhdq', '01')` —— 应改写为 `'code_dm_gy_gjhdq:01'`
+
+**关键设计点**：
+- **新 `migrateGetCodeValByKey(methodCode)` 辅助函数**（[scripts/convert-ddbunit-config.js:1689-1706](scripts/convert-ddbunit-config.js#L1689-L1706)）
+- **正则 `myUtil\.code\.getCodeValByKey\(\s*([^,]+?)\s*,\s*(['"])([^'"]+)\2\s*,\s*(['"])([^'"]+)\4\s*\)`**：
+  - 严格 3 参匹配（2 个逗号 + 2 个反引号对）
+  - 反向引用 `\2` / `\4` 保证引号配对（避免 `'a", "b'` 等混合引号误匹配）
+  - arg1 非贪婪 `+?` —— 遇到第一个逗号停止（实际 codebase arg1 均为简单标识符 / 字段访问）
+  - 引号类型（单/双）保留 —— 输出用 2nd 参同款引号
+- **全局标志 `g`**：一次性处理多个调用
+- **作用于所有方法**（不限于 initEditForm）—— 在 `postProcessFuncMethod` 中作为通用变换
+
+**改动**：
+
+1. **新 `migrateGetCodeValByKey` 辅助函数**（约 18 行）—— [scripts/convert-ddbunit-config.js:1689-1706](scripts/convert-ddbunit-config.js#L1689-L1706)
+2. **`postProcessFuncMethod` 编排链加第 4 步**（[scripts/convert-ddbunit-config.js:1675-1683](scripts/convert-ddbunit-config.js#L1675-L1683)）：antd 迁移 + getCodeValByKey 合并 + 变量改名 + 注释添加
+3. **fixture 更新**：[scripts/__fixtures__/fun-injection.funRef.tsx](scripts/__fixtures__/fun-injection.funRef.tsx) eventOnBlur 加 3 参 `getCodeValByKey` 调用；[scripts/__fixtures__/fun-injection.expected.fun.tsx](scripts/__fixtures__/fun-injection.expected.fun.tsx) 期望 2 参合并形式
+
+**端到端验证**：
+
+| 目录 | 变化 |
+|---|---|
+| [MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB/auto_configFun.tsx) | 2 处 `getCodeValByKey` 合并 ✓ |
+| [MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/auto_configFun.tsx) | 2 处合并 ✓ |
+| [MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx](src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configFun.tsx) | 1 处合并 ✓ |
+| 其它 3 个 dditax.ckts.from 模块 | 0 变化（ref 无 getCodeValByKey 调用）✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（fun-injection 升级综合 13 规则）/ 2 失败（预存在）
+
+**已知限制**（用户决策接受）：
+- **仅匹配 3 参 → 2 参合并** —— 不处理 1 参 / 2 参 / 4+ 参变体（ref 中 0 处此类变体）
+- **arg1 简单表达式假设**（`[^,]+?` 非贪婪）—— 若 arg1 含逗号（罕见；典型为 `foo('a', 'b')` 形式）会误匹配；codebase 实测无此场景
+- **混合引号（`"a', 'b"`）不匹配** —— 由反向引用 \2 / \4 保证
+- **保持前 12 规则 + 1 排除 + 1 修复 + 5 方法移植 + 2 变量改名 / 注释行为不变**
 
 ## 待提交变更（2026-06-11）
 

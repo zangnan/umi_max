@@ -278,8 +278,8 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //   otherRef[modelIndex].current!.showModal(param);
 // };
 
-// // 表单事件：OnBlur
-// DditCktsFormCommonFunc.eventOnBlur = {
+// 表单事件：OnBlur
+DditCktsFormCommonFunc.eventOnBlur = {
 //   // 申报批次
 //   sbpc: (param: any) => {
 //     const { event, form, otherParam } = param;
@@ -316,20 +316,20 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     }
 
 //   },
-//   // 申报序号
-//   sbxh: (param: any) => {
-//     const { event, form, item } = param;
-//     const inputValue = event.target.value;
-//     if(inputValue && Number(inputValue) === 0) {
-//       form.setFieldsValue({
-//         [item.name]: '00000001',  // 自动补零
-//       });
-//     } else {
-//       form.setFieldsValue({
-//         [item.name]: myUtil.text.leadingZeroize(inputValue, 8),  // 自动补零
-//       });
-//     }
-//   },
+  // 申报序号
+  sbxh: (param: any) => {
+    const { event, form, item } = param;
+    const inputValue = event.target.value;
+    if(inputValue && Number(inputValue) === 0) {
+      form.setFieldsValue({
+        [item.name]: '00000001',  // 自动补零
+      });
+    } else {
+      form.setFieldsValue({
+        [item.name]: myUtil.text.leadingZeroize(inputValue, 8),  // 自动补零
+      });
+    }
+  },
 //   // 出口货物销售额
 //   cjzj: (param: any) => {
 //     const { form, otherParam } = param;
@@ -431,147 +431,148 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //       }
 //     }
 //   },
-//   // 成交币制
-//   hbhlDm: (param: any, glName:any) => {
-//     const { form, event, value, item, otherParam, unit_key } = param;
-//     const unitKey = unit_key || otherParam?.unit_key;
-//     const inputValue = event?.target?.value || value;
-//     // 根据币种带出名称
-//     const option = myUtil.code.getCode('url_gy_hbhl', '01');
-//     let arrId: any = '';
-//     let newVal: any = '';
-// 		let rmbhlVals: any = '';
-// 		let myhlVals: any = '';
-//     const tempRows = option.filter((row: any) => {
-//       return (row.hbzmDm === inputValue);
-//     });
-//     if (tempRows && tempRows.length < 1) {
-//       if(inputValue){
-//         message.info('不存在该选项');
-//       }
-//       if(glName && glName.length > 0) {
-//         glName.forEach((element:any) => {
-//           form.resetFields([[element]]);
-//         });
-//       }
-//       form.resetFields([[item.name]]);
-//       return;
-//     }
-//     arrId = tempRows[0].hbzmDm;
-//     newVal = tempRows[0].hbmc;
-//     rmbhlVals = tempRows[0].rmbhl;
-//     myhlVals = tempRows[0].myhl;
-//     // unit_Key有值时为编辑表单初始化加载，rmbhl与myhl取表单内的值
-//     if (unit_key) {
-//       rmbhlVals = form?.getFieldValue('rmbhl');
-//       myhlVals = form?.getFieldValue('myhl');
-//       if (unitKey === 'TSZL_ZXSB_SB_CKSH_G') {
-//         if (item.name === 'cjhbzmDm') {
-//           rmbhlVals = form?.getFieldValue('cjhbhl');
-//         } else if (item.name === 'ckshhbzmDm') {
-//           rmbhlVals = form?.getFieldValue('ckshhbhl');
-//         }
-//       } else if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G') {
-//         myhlVals = form?.getFieldValue('myhl');
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') {
-//         rmbhlVals = form?.getFieldValue('cjhbhl');
-//         myhlVals = form?.getFieldValue('myhl');
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_HKYS_QS_G') {
-//         rmbhlVals = form?.getFieldValue('cjhbhl');
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_KYHJ_G') {
-//         rmbhlVals = form?.getFieldValue('cjhbhl');
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_SYYK_G') {
-//         rmbhlVals = form?.getFieldValue('ybhl');
-//         myhlVals = form?.getFieldValue('myhl');
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_YFSJ_G') {
-//         if (item.name === 'srybzmDm') {
-//           rmbhlVals = form?.getFieldValue('srybhl');
-//           myhlVals = form?.getFieldValue('srmyhl');
-//         } else if (item.name === 'skybzmDm') {
-//           rmbhlVals = form?.getFieldValue('cjhbhl');
-//           myhlVals = form?.getFieldValue('myhl');
-//         }
-//       } else if (unitKey === 'MDT_ZXSB_SB_MDT_GJYS_G') {
-//         rmbhlVals = form?.getFieldValue('ybhl');
-//         myhlVals = form?.getFieldValue('myhl');
-//       }
-//     }
-//     if (unitKey === 'TSZL_ZXSB_SB_CKSH_G') {
-//       if (item.name === 'cjhbzmDm') {
-//         form.setFieldsValue({
-//           cjhbzmmc: newVal,
-//           cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//         });
-//       } else if (item.name === 'ckshhbzmDm') {
-//         form.setFieldsValue({
-//           ckshhbzmmc: newVal,
-//           ckshhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//         });
-//       }
-//     } else if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G') {
-//       form.setFieldsValue({
-//         hbzmDm: arrId,
-//         cjbz: newVal,
-//         myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//       });
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') {
-//       form.setFieldsValue({
-//         ckshhbzmDm: arrId,
-//         biname: newVal,
-//         cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//         myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//       });
-//       DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'ckxxjs-rmb');
-//       DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'ckxxjs-my');
-//       DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'tsxxjs');
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_HKYS_QS_G') {
-//       form.setFieldsValue({
-//         qsbzmc: newVal,
-//         cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//       });
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_KYHJ_G') {
-//       form.setFieldsValue({
-//         ybbiname: newVal,
-//         cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//       });
-//       const ljDate = form.getFieldValue('kjrq') ? myUtil.grid.formatDate(form.getFieldValue('kjrq'), 'YYYY-MM-DD') : '';
-//       DditCktsFormCommonFunc.util.getmyhlByLjDate(ljDate, param);
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_SYYK_G') {
-//       form.setFieldsValue({
-//         biname: newVal,
-//         ybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//         myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//       });
-//       DditCktsFormCommonFunc.util.setMdtSyykgtjs(param)
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_YFSJ_G') {
-//       if (item.name === 'srybzmDm') {
-//         form.setFieldsValue({
-//           srbiname: newVal,
-//           srybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//           srmyhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//         });
-// 				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sr');
-// 				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sr-rmb');
-//       } else if (item.name === 'skybzmDm') {
-//         form.setFieldsValue({
-//           skbiname: newVal,
-//           cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//           myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//         });
-// 				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sk');
-// 				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sk-rmb');
-//       }
-//     } else if (unitKey === 'MDT_ZXSB_SB_MDT_GJYS_G') {
-//       // 通过原币汇率，美元汇率，反算人民币营业额、应税服务营业额（美元）
-//       form.setFieldsValue({
-//         ybbiname: newVal,
-//         ybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
-//         myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
-//       });
-//       // 业务逻辑参考老代码
-//       DditCktsFormCommonFunc.util.setYsfwyye(param);
-//     }
-//   },
+  // 成交币制
+  hbhlDm: (param: any, glName:any) => {
+    const { form, event, value, item, otherParam } = param;
+    const unitKey = param?.unitKey || otherParam?.unitKey;
+    const inputValue = event?.target?.value || value;
+    // 根据币种带出名称
+    // const option = myUtil.code.getCode('url_gy_hbhl', '01');
+    const option = myUtil.code.getCode('url_gy_hbhl:01');
+    let arrId: any = '';
+    let newVal: any = '';
+		let rmbhlVals: any = '';
+		let myhlVals: any = '';
+    const tempRows = option.filter((row: any) => {
+      return (row.hbzmDm === inputValue);
+    });
+    if (tempRows && tempRows.length < 1) {
+      if(inputValue){
+        message.info('不存在该选项');
+      }
+      if(glName && glName.length > 0) {
+        glName.forEach((element:any) => {
+          form.resetFields([[element]]);
+        });
+      }
+      form.resetFields([[item.name]]);
+      return;
+    }
+    arrId = tempRows[0].hbzmDm;
+    newVal = tempRows[0].hbmc;
+    rmbhlVals = tempRows[0].rmbhl;
+    myhlVals = tempRows[0].myhl;
+    // unit_Key有值时为编辑表单初始化加载，rmbhl与myhl取表单内的值
+    if (unitKey) {
+      rmbhlVals = form?.getFieldValue('rmbhl');
+      myhlVals = form?.getFieldValue('myhl');
+      if (unitKey === 'TSZL_ZXSB_SB_CKSH_G') {
+        if (item.name === 'cjhbzmDm') {
+          rmbhlVals = form?.getFieldValue('cjhbhl');
+        } else if (item.name === 'ckshhbzmDm') {
+          rmbhlVals = form?.getFieldValue('ckshhbhl');
+        }
+      } else if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G') {
+        myhlVals = form?.getFieldValue('myhl');
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') {
+        rmbhlVals = form?.getFieldValue('cjhbhl');
+        myhlVals = form?.getFieldValue('myhl');
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_HKYS_QS_G') {
+        rmbhlVals = form?.getFieldValue('cjhbhl');
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_KYHJ_G') {
+        rmbhlVals = form?.getFieldValue('cjhbhl');
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_SYYK_G') {
+        rmbhlVals = form?.getFieldValue('ybhl');
+        myhlVals = form?.getFieldValue('myhl');
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_YFSJ_G') {
+        if (item.name === 'srybzmDm') {
+          rmbhlVals = form?.getFieldValue('srybhl');
+          myhlVals = form?.getFieldValue('srmyhl');
+        } else if (item.name === 'skybzmDm') {
+          rmbhlVals = form?.getFieldValue('cjhbhl');
+          myhlVals = form?.getFieldValue('myhl');
+        }
+      } else if (unitKey === 'MDT_ZXSB_SB_MDT_GJYS_G') {
+        rmbhlVals = form?.getFieldValue('ybhl');
+        myhlVals = form?.getFieldValue('myhl');
+      }
+    }
+    if (unitKey === 'TSZL_ZXSB_SB_CKSH_G') {
+      if (item.name === 'cjhbzmDm') {
+        form.setFieldsValue({
+          cjhbzmmc: newVal,
+          cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+        });
+      } else if (item.name === 'ckshhbzmDm') {
+        form.setFieldsValue({
+          ckshhbzmmc: newVal,
+          ckshhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+        });
+      }
+    } else if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G') {
+      form.setFieldsValue({
+        hbzmDm: arrId,
+        cjbz: newVal,
+        myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+      });
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') {
+      form.setFieldsValue({
+        ckshhbzmDm: arrId,
+        biname: newVal,
+        cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+        myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+      });
+      DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'ckxxjs-rmb');
+      DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'ckxxjs-my');
+      DditCktsFormCommonFunc.util.setMdtTssbgtjs(param, 'tsxxjs');
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_HKYS_QS_G') {
+      form.setFieldsValue({
+        qsbzmc: newVal,
+        cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+      });
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_KYHJ_G') {
+      form.setFieldsValue({
+        ybbiname: newVal,
+        cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+      });
+      const ljDate = form.getFieldValue('kjrq') ? myUtil.grid.formatDate(form.getFieldValue('kjrq'), 'YYYY-MM-DD') : '';
+      DditCktsFormCommonFunc.util.getmyhlByLjDate(ljDate, param);
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_SYYK_G') {
+      form.setFieldsValue({
+        biname: newVal,
+        ybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+        myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+      });
+      DditCktsFormCommonFunc.util.setMdtSyykgtjs(param)
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_YFSJ_G') {
+      if (item.name === 'srybzmDm') {
+        form.setFieldsValue({
+          srbiname: newVal,
+          srybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+          srmyhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+        });
+				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sr');
+				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sr-rmb');
+      } else if (item.name === 'skybzmDm') {
+        form.setFieldsValue({
+          skbiname: newVal,
+          cjhbhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+          myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+        });
+				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sk');
+				DditCktsFormCommonFunc.util.setMdtYfsjgtjs(param, 'sk-rmb');
+      }
+    } else if (unitKey === 'MDT_ZXSB_SB_MDT_GJYS_G') {
+      // 通过原币汇率，美元汇率，反算人民币营业额、应税服务营业额（美元）
+      form.setFieldsValue({
+        ybbiname: newVal,
+        ybhl: myUtil.text.getNumVal(myUtil.text.formatNum(rmbhlVals, '0,0.00000')),
+        myhl: myUtil.text.getNumVal(myUtil.text.formatNum(myhlVals, '0,0.00000')),
+      });
+      // 业务逻辑参考老代码
+      DditCktsFormCommonFunc.util.setYsfwyye(param);
+    }
+  },
 //   bgdCksh: async (param: any, btzd: any) => {
 //     const { form, event, dbtzd, ywKey } = param;
 //     const obj: any = {
@@ -596,7 +597,7 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //       }
 //     });
 //   },
-// };
+};
 
 // // 表单事件：OnChange
 // DditCktsFormCommonFunc.eventOnChange = {
@@ -889,7 +890,7 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 // DditCktsFormCommonFunc.eventOnFocus = {
 // };
 
-// DditCktsFormCommonFunc.validator = {
+DditCktsFormCommonFunc.validator = {
 //   // 所属期
 //   ssq01: (form?: any) => {
 //     const ssq = form?.getFieldValue('ssq');
@@ -921,34 +922,37 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     };
 //     return { validator };
 //   },
-//   // 所属期
-//   ssq02: (form?: any) => {
-//     const unitKey = form?.otherParam?.unit_key;
-//     // 该申报所属期已申报，请确认后填报
-//     const validator = async (_rule: any, value: any) => {
-//       if (history.location.pathname.indexOf('SBMXCX') == -1 && (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G' || unitKey ===  'QTYW_ZXSB_QT_QYNBFKTXJS_G' || unitKey === 'ZBYW_ZXSB_SB_GJ_SBMX_G'
-//         || unitKey === 'QTYW_ZXSB_QT_QYGLLBFPPD_G' || unitKey === 'QTYW_ZXSB_QT_SCXQYSCNLQK_G' || unitKey === 'ZGBA_ZXSB_BA_BMDLCKBA_G'
-//         || unitKey === 'JLJG_ZXSB_SB_JLJG_MDTHX_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_HGSJTZ_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_JHFPL_G')
-//         && history.location.pathname.indexOf('/27/2705') == -1 && history.location.pathname.indexOf('/26/2605') == -1 && history.location.pathname.indexOf('/25/2505') == -1
-//       ) {
-//         await checkSsqYsbCj({
-//           ssq: value,
-//           tableKey: unitKey
-//         }).then((response) => {
-//           if (response.code === '900') {
-//             return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_ssq_01' })));
-//           }
-//           return Promise.resolve();
-//         }).catch((err) => {
-//           return Promise.reject(err);
-//         });
-//         return Promise.resolve();
-//       } else {
-//         return Promise.resolve();
-//       }
-//     };
-//     return { validator };
-//   },
+  // 所属期
+  ssq02: (form?: any) => {
+    debugger;
+    const unitKey = form?.otherParam?.unit_key;
+    // 该申报所属期已申报，请确认后填报
+    const validator = async (_rule: any, value: any) => {
+    debugger;
+      if (history.location.pathname.indexOf('SBMXCX') == -1 && (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G' || unitKey ===  'QTYW_ZXSB_QT_QYNBFKTXJS_G' || unitKey === 'ZBYW_ZXSB_SB_GJ_SBMX_G'
+        || unitKey === 'QTYW_ZXSB_QT_QYGLLBFPPD_G' || unitKey === 'QTYW_ZXSB_QT_SCXQYSCNLQK_G' || unitKey === 'ZGBA_ZXSB_BA_BMDLCKBA_G'
+        || unitKey === 'JLJG_ZXSB_SB_JLJG_MDTHX_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_HGSJTZ_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_JHFPL_G')
+        && history.location.pathname.indexOf('/27/2705') == -1 && history.location.pathname.indexOf('/26/2605') == -1 && history.location.pathname.indexOf('/25/2505') == -1
+      ) {
+        await checkSsqYsbCj({
+          ssq: value,
+          tableKey: unitKey
+        }).then((response) => {
+    debugger;
+          if (response.code === '900') {
+            return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_ssq_01' })));
+          }
+          return Promise.resolve();
+        }).catch((err) => {
+          return Promise.reject(err);
+        });
+        return Promise.resolve();
+      } else {
+        return Promise.resolve();
+      }
+    };
+    return { validator };
+  },
 //   // 申请日期
 //   tbrq02: (form?: any) => {
 //     const unitKey = form?.otherParam?.unit_key;
@@ -1015,17 +1019,17 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     };
 //     return { validator };
 //   },
-//   // 申报序号
-//   sbxh02: (form?: any) => {
-//     const validator =  (_rule: any, value: any) => {
-//       // 申报批次需要是一个正数
-//       if (value && myUtil.text.getNumVal(value) <= 0) {
-//         return Promise.reject(new Error('该项只能录入正数'));
-//       }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
+  // 申报序号
+  sbxh02: (form?: any) => {
+    const validator =  (_rule: any, value: any) => {
+      // 申报批次需要是一个正数
+      if (value && myUtil.text.getNumVal(value) <= 0) {
+        return Promise.reject(new Error('该项只能录入正数'));
+      }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
 //   // 企业海关代码
 //   cyhgqydm02: (form?: any) => {
 //     const validator = async (_rule: any, value: any) => {
@@ -1332,10 +1336,10 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     };
 //     return { validator };
 //   },
-// };
+};
 
-// // 计算
-// DditCktsFormCommonFunc.util = {
+// 计算
+DditCktsFormCommonFunc.util = {
 //   /**
 //    * @author jiangyg
 //    * @method setAmt
@@ -1376,81 +1380,81 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     }
 //     return c;
 //   },
-//   /**
-//    * @method setRmbAmt
-//    * @desc 计算：人民币离岸价，赋值表单
-//    * 人民币离岸价= 美元离岸价 X 美元汇率
-//    * @param obj { mylaj 美元离岸价, myhl 美元汇率 }
-//    * @returns rmbAmt 人民币离岸价
-//    */
-//   setRmbAmt: (obj: any) => {
-//     let mylaj: any = myUtil.text.getNumVal(obj.mylaj);
-//     let myhl: any = myUtil.text.getNumVal(obj.myhl);
-//     let rmblaj: any = '';
-//     if (!mylaj || !myhl) {
-//       rmblaj = '';
-//     } else {
-//       rmblaj = mylaj * myhl / 100;
-//       if (rmblaj > 99999999999999.99 || rmblaj < -99999999999999.99) {
-//         rmblaj = '';
-//       }
-//     }
-//     return rmblaj;
-//   },
-//   /**
-//    * @method setUsAmt
-//    * @desc 计算：美元离岸价，赋值表单
-//    * 美元离岸价 = 人民币离岸价 / 美元汇率 / 100
-//    * 人民币离岸价来源需要注意
-//    * 当人民币离岸价失去焦点时计算美元离岸价，不用原币汇率 * 原币离岸价的值计算人民币离岸价 wangsy add 20180321
-//    * @param paras { rmbAmt 人民币离岸价, myhl 美元汇率, formId 目标表单, isRmbAmtBlur 是否来自人民币离岸价失去焦点事件 }
-//    *
-//    * param01
-//    * param02
-//    * param03
-//    */
-//   setUsAmt: (params: any, form: any) => {
-//     let rmbAmt = myUtil.text.getNumVal(params.rmbAmt);
-//     let myhl = myUtil.text.getNumVal(params.myhl);
-//     let usdAmt;
-//     if (!rmbAmt || !myhl || myhl == 0) {
-//       usdAmt = '';
-//     } else {
-//       rmbAmt = rmbAmt; // update by shil 20200826
-//       myhl = myhl; // update by shil 20200826
-//       usdAmt = myhl == 0.0000 ? 0.00 : myUtil.text.getNumVal((rmbAmt * 100000 / myhl * 100 / 100000)); // update by shil 20200826
-//       if (usdAmt > 999999999999.99 || usdAmt < -999999999999.99) {
-//         message.warning('美元离岸价数据溢出，数据丢失，请确认后填报！');
-//         usdAmt = '';
-//       }
-//     }
-//     form.setFieldsValue({ usdAmt: myUtil.text.getNumVal(myUtil.text.formatNum(usdAmt, '0,0.00')) });
-//     return myUtil.text.getNumVal(myUtil.text.formatNum(usdAmt, '0,0.00'));
-//   },
-// 	/**
-// 	 * @method loadCodeDmHbhlAutoComplete
-// 	 * @param param { form 表单实例, url 码表的url, key 码表, codeViewKey 码表key }
-// 	 * @description 重置码表
-// 	 */
-// 	loadCodeDmHbhlAutoComplete: async (param: any) => {
-//     const { form, url, key, codeViewKey } = param;
-//     // 查询参数
-//     const params = {
-//       page: 1,
-//       pageSize: 999999,
-//       searchModel: [
-//         { property: 'hbzmDm', value: '', op: 'al' },
-//         { property: 'ckrq', value: param.ckrq ? dayjs(param.ckrq).format('YYYY-MM-DD') : '', op: 'al' },
-//         { property: 'ssq', value: form?.getFieldsValue().ssq, op: 'al' },
-//         { property: 'nyfzbz', value: param.nyfzbz ? param.nyfzbz : '', op: 'al' },
-//       ],
-//     };
-//     const result = await getUrlCode(url, params);
-//     const { code, body } = result;
-//     if (code === '200') {
-//       myUtil.code.saveCodeToLocalTable(key, body.rows, codeViewKey);
-//     }
-// 	},
+  /**
+   * @method setRmbAmt
+   * @desc 计算：人民币离岸价，赋值表单
+   * 人民币离岸价= 美元离岸价 X 美元汇率
+   * @param obj { mylaj 美元离岸价, myhl 美元汇率 }
+   * @returns rmbAmt 人民币离岸价
+   */
+  setRmbAmt: (obj: any) => {
+    let mylaj: any = myUtil.text.getNumVal(obj.mylaj);
+    let myhl: any = myUtil.text.getNumVal(obj.myhl);
+    let rmblaj: any = '';
+    if (!mylaj || !myhl) {
+      rmblaj = '';
+    } else {
+      rmblaj = mylaj * myhl / 100;
+      if (rmblaj > 99999999999999.99 || rmblaj < -99999999999999.99) {
+        rmblaj = '';
+      }
+    }
+    return rmblaj;
+  },
+  /**
+   * @method setUsAmt
+   * @desc 计算：美元离岸价，赋值表单
+   * 美元离岸价 = 人民币离岸价 / 美元汇率 / 100
+   * 人民币离岸价来源需要注意
+   * 当人民币离岸价失去焦点时计算美元离岸价，不用原币汇率 * 原币离岸价的值计算人民币离岸价 wangsy add 20180321
+   * @param paras { rmbAmt 人民币离岸价, myhl 美元汇率, formId 目标表单, isRmbAmtBlur 是否来自人民币离岸价失去焦点事件 }
+   *
+   * param01
+   * param02
+   * param03
+   */
+  setUsAmt: (params: any, form: any) => {
+    let rmbAmt = myUtil.text.getNumVal(params.rmbAmt);
+    let myhl = myUtil.text.getNumVal(params.myhl);
+    let usdAmt;
+    if (!rmbAmt || !myhl || myhl == 0) {
+      usdAmt = '';
+    } else {
+      rmbAmt = rmbAmt; // update by shil 20200826
+      myhl = myhl; // update by shil 20200826
+      usdAmt = myhl == 0.0000 ? 0.00 : myUtil.text.getNumVal((rmbAmt * 100000 / myhl * 100 / 100000)); // update by shil 20200826
+      if (usdAmt > 999999999999.99 || usdAmt < -999999999999.99) {
+        message.warning('美元离岸价数据溢出，数据丢失，请确认后填报！');
+        usdAmt = '';
+      }
+    }
+    form.setFieldsValue({ usdAmt: myUtil.text.getNumVal(myUtil.text.formatNum(usdAmt, '0,0.00')) });
+    return myUtil.text.getNumVal(myUtil.text.formatNum(usdAmt, '0,0.00'));
+  },
+	/**
+	 * @method loadCodeDmHbhlAutoComplete
+	 * @param param { form 表单实例, url 码表的url, key 码表, codeViewKey 码表key }
+	 * @description 重置码表
+	 */
+	loadCodeDmHbhlAutoComplete: async (param: any) => {
+    const { form, url, key, codeViewKey } = param;
+    // 查询参数
+    const params = {
+      page: 1,
+      pageSize: 999999,
+      searchModel: [
+        { property: 'hbzmDm', value: '', op: 'al' },
+        { property: 'ckrq', value: param.ckrq ? dayjs(param.ckrq).format('YYYY-MM-DD') : '', op: 'al' },
+        { property: 'ssq', value: form?.getFieldsValue().ssq, op: 'al' },
+        { property: 'nyfzbz', value: param.nyfzbz ? param.nyfzbz : '', op: 'al' },
+      ],
+    };
+    const result = await getUrlCode(url, params);
+    const { code, body } = result;
+    if (code === '200') {
+      myUtil.code.saveCodeToLocalTable(`${key}:${codeViewKey}`, body.rows);
+    }
+	},
 //   /**
 //    * @method getMultiplyResult
 //    * @desc 计算：计算乘法结果
@@ -1783,54 +1787,55 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //         break;
 //     }
 //   },
-//   /**
-//    * @author liwc
-//    * @method setMdtSyykgtjs
-//    * @desc 计算：免抵退 收营业款 计算
-//    * @param paras
-//    */
-//   setMdtSyykgtjs: function(param: any, type: any) {
-//     const { form } = param;
-//     let skjermb: any;
-//     switch (type) {
-//       case 'sk':
-//         let cjzj = myUtil.text.getNumVal(form?.getFieldValue('cjzj'));
-//         let ybhl = myUtil.text.getNumVal(form?.getFieldValue('ybhl'));
-//         // 人民币收款额 = 原币收款额 * 原币汇率 / 100
-//         if (cjzj && ybhl) {
-//           // 如果原币收款额和原币汇率有值
-//           skjermb = DditCktsFormCommonFunc.util.setRmbAmt({
-//             mylaj: cjzj, // 原币收款额
-//             myhl: ybhl // 原币汇率
-//           });
-//         }
-//         if (!skjermb) {
-//           // 如果重算不了人民币收款额，则尝试取页面当前录入的值，进行下一步计算
-//           skjermb = myUtil.text.getNumVal(form?.getFieldValue('skjermb'));
-//         }
-//         if (skjermb === 0 || skjermb) {
-//           form.setFieldsValue({ skjermb: myUtil.text.getNumVal(myUtil.text.formatNum(skjermb, '0.00')) });
-//         }
-//         break;
-//       case 'sk-rmb':
-//         // 人民币收款金额
-//         skjermb = myUtil.text.getNumVal(form?.getFieldValue('skjermb'));
-//         // 美元收款金额 = 美元汇率 * 人民币收款额 / 100
-//         let myhl = myUtil.text.getNumVal(form?.getFieldValue('myhl'));
-//         let skjemy;
-//         if (myhl) {
-//           skjemy = DditCktsFormCommonFunc.util.setUsAmt({
-//             rmbAmt: skjermb, // 人民币收款额
-//             myhl: myhl // 美元汇率
-//           }, form);
-//         }
-//         if (skjemy === 0 || skjemy) {
-//           form.setFieldsValue({ skjemy: myUtil.text.getNumVal(myUtil.text.formatNum(skjemy, '0.00')) });
-//         }
-//         break;
-//     }
-//     // 美元累计款 & 人民币累计款 赋值 (老系统内无对应代码)
-//   },
+  /**
+   * @author liwc
+   * @method setMdtSyykgtjs
+   * @desc 计算：免抵退 收营业款 计算
+   * @param paras
+   */
+  setMdtSyykgtjs: function(param: any, type: any) {
+    debugger;
+    const { form } = param;
+    let skjermb: any;
+    switch (type) {
+      case 'sk':
+        let cjzj = myUtil.text.getNumVal(form?.getFieldValue('cjzj'));
+        let ybhl = myUtil.text.getNumVal(form?.getFieldValue('ybhl'));
+        // 人民币收款额 = 原币收款额 * 原币汇率 / 100
+        if (cjzj && ybhl) {
+          // 如果原币收款额和原币汇率有值
+          skjermb = DditCktsFormCommonFunc.util.setRmbAmt({
+            mylaj: cjzj, // 原币收款额
+            myhl: ybhl // 原币汇率
+          });
+        }
+        if (!skjermb) {
+          // 如果重算不了人民币收款额，则尝试取页面当前录入的值，进行下一步计算
+          skjermb = myUtil.text.getNumVal(form?.getFieldValue('skjermb'));
+        }
+        if (skjermb === 0 || skjermb) {
+          form.setFieldsValue({ skjermb: myUtil.text.getNumVal(myUtil.text.formatNum(skjermb, '0.00')) });
+        }
+        break;
+      case 'sk-rmb':
+        // 人民币收款金额
+        skjermb = myUtil.text.getNumVal(form?.getFieldValue('skjermb'));
+        // 美元收款金额 = 美元汇率 * 人民币收款额 / 100
+        let myhl = myUtil.text.getNumVal(form?.getFieldValue('myhl'));
+        let skjemy;
+        if (myhl) {
+          skjemy = DditCktsFormCommonFunc.util.setUsAmt({
+            rmbAmt: skjermb, // 人民币收款额
+            myhl: myhl // 美元汇率
+          }, form);
+        }
+        if (skjemy === 0 || skjemy) {
+          form.setFieldsValue({ skjemy: myUtil.text.getNumVal(myUtil.text.formatNum(skjemy, '0.00')) });
+        }
+        break;
+    }
+    // 美元累计款 & 人民币累计款 赋值 (老系统内无对应代码)
+  },
 //   /**
 //    * @method setYsfwyye
 //    * @desc 通过原币汇率，美元汇率，反算人民币营业额、应税服务营业额（美元）
@@ -1946,7 +1951,7 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 //     const sum = (param1 * m + param2 * m).toFixed(Math.max(r1, r2)) / m;
 //     return sum;
 //   }
-// };
+};
 
 
 export default DditCktsFormCommonFunc;

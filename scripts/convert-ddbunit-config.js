@@ -568,6 +568,15 @@ const SPECIAL_FIELD_RULES = [
     name: 'form_items readOnly → disabled (r18)',
     apply: transformReadOnlyToDisabled,
   },
+  {
+    // r19: form_items 块内 base_date 规则的 format 字段 YYYY/YY → yyyy/yy
+    //   r8（normalizeDateFormats）反向作用：r8 把所有 format 转大写 YYYY，
+    //   r19 仅在 form_items.rules[].format 且 type === 'base_date' 时转回小写
+    //   原因：运行时 formUtil.tsx:86-93 派发是 case-sensitive 小写匹配
+    //   注意：r19 不处理 DD → dd（用户决策接受已知限制）
+    name: 'form_items base_date format YYYY/YY → yyyy/yy (r19)',
+    apply: transformBaseDateFormatNormalize,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -1117,6 +1126,84 @@ function transformReadOnlyToDisabled(content, configVar) {
   };
 }
 
+// =================== base_date format 归一化（r19）====================
+/**
+ * r19：form_items 块内 base_date 规则的 format 归一化（YYYY/YY → yyyy/yy）
+ *
+ * 背景：CLAUDE.md 要求项目统一使用 dayjs，运行时 formUtil.tsx:86-93 的 base_date
+ *       校验派发是 case-sensitive 严格匹配（`format === 'yyyyMMdd'` 等），必须小写才能命中
+ *       baseValidator.yyyyMMdd() / baseValidator.yyyyMM() / baseValidator.yyyy()。
+ *       源文件里残留 `format: 'YYYY-MM-DD'` / `'YYYYMM'` 等大写形式会导致校验完全不生效。
+ *       r8 增强（normalizeDateFormats）会把所有 `format: 'yyyy...'` → `YYYY...`，
+ *       本规则与之相反：在 form_items 块的 base_date 规则里把 `YYYY/YY` 转回小写。
+ *
+ * 作用域：
+ *   - 仅作用于 `<configVar>.form_items = [ ... ]` 块（不波及 grid_columns 等）
+ *   - 仅作用于 `type: 'base_date'` 的规则（不影响其他 rule 类型）
+ *
+ * 容错：
+ *   - 单/双引号
+ *   - format 与 : 之间的空格
+ *
+ * 已知限制（用户决策接受）：
+ *   - 仅处理 YYYY/YY → yyyy/yy，不处理 DD → dd
+ *   - 因此 `'YYYY-MM-DD'` 会变成 `'yyyy-MM-DD'`（DD 仍大写），运行时仍无法匹配
+ *     `=== 'yyyy-MM-dd'` 的派发分支 —— 若需要完整兼容需另外处理或改 formUtil.tsx 派发
+ *     为大小写不敏感
+ *   - 不处理嵌套在 // 注释 / 块注释 / "字符串字面量" 里的匹配（与 r15/r16/r17/r18 一致）
+ *
+ * @param {string} content
+ * @param {string} configVar  'unitConfig' / 'myConfig' / 其它
+ * @returns {{ content: string, count: number }}
+ */
+function transformBaseDateFormatNormalize(content, configVar) {
+  // 定位 <configVar>.form_items = [ 起点
+  const startRe = new RegExp(
+    `${escapeRegExp(configVar)}\\.form_items\\s*=\\s*\\[`,
+  );
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return { content, count: 0 };
+
+  const startIdx = startMatch.index + startMatch[0].length; // past [
+  // bracket-depth 扫描到匹配的 ]
+  let depth = 1;
+  let i = startIdx;
+  while (i < content.length && depth > 0) {
+    const ch = content[i];
+    if (ch === '[') depth++;
+    else if (ch === ']') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return { content, count: 0 };
+  const endIdx = i; // points to ]
+
+  // 在 [startIdx, endIdx) 范围内替换 base_date 规则里的 format
+  // 匹配 { ... type: 'base_date' ... format: 'XXX' } 形式
+  // [^{}]*? —— base_date 规则内不含嵌套对象（只有 type + format 字段），安全
+  const block = content.slice(startIdx, endIdx);
+  let count = 0;
+  const replaced = block.replace(
+    /(\{\s*type\s*:\s*['"]base_date['"][^{}]*?format\s*:\s*['"])([^'"]+)(['"])/g,
+    (match, prefix, formatValue, suffix) => {
+      // 先 YYYY → yyyy（大写4位），再 YY → yy（大写2位）；顺序无关
+      // （小写 yyyy/yy 不含大写 YY，不会被二次替换）
+      const newFormat = formatValue
+        .replace(/YYYY/g, 'yyyy')
+        .replace(/YY/g, 'yy');
+      if (newFormat !== formatValue) count++;
+      return prefix + newFormat + suffix;
+    },
+  );
+
+  if (count === 0) return { content, count: 0 };
+
+  return {
+    content: content.slice(0, startIdx) + replaced + content.slice(endIdx),
+    count,
+  };
+}
+
 // =================== render 函数形式转换 ===================
 /**
  * r7 增强：把旧版 myUtil.text.formatNum 形式的 render 转换为标准 { type, format } 对象
@@ -1526,6 +1613,171 @@ function extractInitAddFormFromFile(content) {
   let endIdx = i + 1; // past }
   if (content[endIdx] === ';') endIdx++;
   return content.slice(startMatch.index, endIdx);
+}
+
+/**
+ * 从参照文件中抽取 `Func.<methodName> = ...;` 整段文本。
+ *
+ * 支持两种形式：
+ *   1. 箭头函数：`Func.<name> = (param: any) => { ... };`（如 initAddForm / initEditForm）
+ *   2. 对象字面量：`Func.<name> = { key1: fn1, key2: fn2, ... };`（如 validator / eventOnBlur / eventOnFocus / eventOnChange）
+ *
+ * 算法：
+ *   1. 正则定位 `Func.<methodName> = ` 起点
+ *   2. 跳过空白；若下一字符是 `(` 则跳过箭头函数签名 `(...) =>`，定位到 `=>` 后的 `{`
+ *   3. bracket-depth 扫描花括号 {} 配对
+ *   4. 返回整段（含尾随 `;`）
+ *   5. 找不到 / 花括号不配对 → 返回 null
+ *
+ * @param {string} content  参照文件全文
+ * @param {string} methodName  要抽取的方法名（不带 `Func.` 前缀）
+ * @returns {string|null}  整段文本（含 `Func.<name> = ...;`），或 null
+ */
+function extractFuncMethod(content, methodName) {
+  const startRe = new RegExp(`Func\\.${methodName}\\s*=\\s*`);
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return null;
+
+  let i = startMatch.index + startMatch[0].length;
+
+  // 跳过空白
+  while (i < content.length && /\s/.test(content[i])) i++;
+
+  // 情况 1: 箭头函数签名 (param: any) =>
+  if (content[i] === '(') {
+    let depth = 1;
+    i++;
+    while (i < content.length && depth > 0) {
+      if (content[i] === '(') depth++;
+      else if (content[i] === ')') depth--;
+      i++;
+    }
+    // 跳过 `=>` 和后续空白
+    while (i < content.length && /\s/.test(content[i])) i++;
+    if (content[i] === '=') i++;
+    if (content[i] === '>') i++;
+    while (i < content.length && /\s/.test(content[i])) i++;
+  }
+
+  // 情况 2（对象字面量）or 情况 1 跳过箭头签名后：下一字符必是 {
+  if (content[i] !== '{') return null;
+
+  // bracket-depth 扫描花括号 {} 配对
+  let depth = 1;
+  i++;
+  while (i < content.length && depth > 0) {
+    if (content[i] === '{') depth++;
+    else if (content[i] === '}') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return null;
+
+  // 返回整段: Func.<name> = (param: any) => { ... }; 或 Func.<name> = { ... };
+  // 包含尾随分号（如果原文有）
+  let endIdx = i + 1; // past }
+  if (content[endIdx] === ';') endIdx++;
+  return content.slice(startMatch.index, endIdx);
+}
+
+/**
+ * 对一段 Func 方法代码做 antd 4 → antd 6 / umi 3 → umi 4 迁移改写。
+ *
+ *   - moment(...) → dayjs(...)：与 CLAUDE.md 全局 dayjs 策略一致
+ *   - (预留扩展点：Modal.method 静态调用 → App.useApp() 等)
+ *
+ * @param {string} methodCode  抽出的方法代码
+ * @returns {string}  改写后的方法代码
+ */
+function migrateAntdUmiImports(methodCode) {
+  let out = methodCode;
+  // moment → dayjs
+  out = out.replace(/\bmoment\(/g, 'dayjs(');
+  return out;
+}
+
+/**
+ * 6 个 Func 方法的注释映射（用户指定）。
+ * 在 `prependFuncMethodComment` 中作为 lookup table 使用。
+ */
+const FUNC_METHOD_COMMENTS = {
+  initAddForm: '// 新建表单初始化',
+  initEditForm: '// 编辑表单初始化',
+  validator: '// 表单校验',
+  eventOnBlur: '// 表单事件：OnBlur',
+  eventOnFocus: '// 表单事件：OnFocus',
+  eventOnChange: '// 表单事件：OnChange',
+};
+
+/**
+ * 在方法代码顶部添加注释（按 methodName 查 FUNC_METHOD_COMMENTS）。
+ *
+ *   - 注释前置于方法代码首行之前
+ *   - 若 methodName 不在映射中（如未来新方法） → silent no-op
+ *   - 注释在原方法代码前；原方法代码若有顶部注释则保留（不替换）
+ */
+function prependFuncMethodComment(methodCode, methodName) {
+  const comment = FUNC_METHOD_COMMENTS[methodName];
+  if (!comment) return methodCode;
+  return `${comment}\n${methodCode}`;
+}
+
+/**
+ * 对 initEditForm 方法做命名约定改写。
+ *
+ *   - unit_key → unitKey（snake_case → camelCase，遵循 commonModule/f.tsx 风格）
+ *   - myFormItems → formItems（"myX" 前缀去除）
+ *   - setMyFormItems → setFormItems（同上）
+ *   - 仅作用于 initEditForm 方法（其它方法无此约定差异）
+ *   - \b 词边界避免误改 unitKeyXxx / formItemsXxx 等变体
+ *   - 顺序无关（setMyFormItems 与 myFormItems 词边界互不重叠）
+ */
+function migrateFuncMethodVariables(methodCode, methodName) {
+  if (methodName !== 'initEditForm') return methodCode;
+  let out = methodCode;
+  out = out.replace(/\bunit_key\b/g, 'unitKey');
+  out = out.replace(/\bmyFormItems\b/g, 'formItems');
+  out = out.replace(/\bsetMyFormItems\b/g, 'setFormItems');
+  return out;
+}
+
+/**
+ * 对一段 Func 方法代码做完整后处理：
+ *   1. antd 4 → antd 6 / umi 3 → umi 4 迁移（moment → dayjs）
+ *   2. 方法特定变量改写（如 initEditForm 的命名约定）
+ *   3. 顶部注释添加（按 FUNC_METHOD_COMMENTS 查表）
+ *   4. getCodeValByKey 3 参 → 2 参合并（code + viewKey → "code:viewKey"）
+ *
+ * 四个变换顺序无关（互不重叠）；未来若发现 antd 5+ 其它 API 模式
+ * 需迁移，在 `migrateAntdUmiImports` 内加规则即可。
+ */
+function postProcessFuncMethod(methodCode, methodName) {
+  let out = methodCode;
+  out = migrateAntdUmiImports(out);
+  out = migrateGetCodeValByKey(out);
+  out = migrateFuncMethodVariables(out, methodName);
+  out = prependFuncMethodComment(out, methodName);
+  return out;
+}
+
+/**
+ * 将 `myUtil.code.getCodeValByKey(arg1, 'arg2', 'arg3')` 三参形式
+ * 合并为 `myUtil.code.getCodeValByKey(arg1, 'arg2:arg3')` 两参形式。
+ *
+ *   - 仅匹配恰好 3 个参数的调用（regex 含 2 个逗号分隔）
+ *   - 2nd / 3rd 参必须是**配对引号**的字符串字面量（regex 反向引用 \2 / \4 保证）
+ *   - arg1 保留为任意 JS 表达式（非贪婪匹配，遇到逗号停止）
+ *   - 引号类型（单/双）保留；输出引号与 2nd 参一致
+ *   - 全局标志 g 一次性处理多个调用
+ *
+ * @param {string} methodCode  方法代码
+ * @returns {string}  改写后的方法代码
+ */
+function migrateGetCodeValByKey(methodCode) {
+  const re = /myUtil\.code\.getCodeValByKey\(\s*([^,]+?)\s*,\s*(['"])([^'"]+)\2\s*,\s*(['"])([^'"]+)\4\s*\)/g;
+  return methodCode.replace(re, (match, arg1, quote2, arg2, _quote3, arg3) => {
+    return `myUtil.code.getCodeValByKey(${arg1}, ${quote2}${arg2}:${arg3}${quote2})`;
+  });
 }
 
 /**
@@ -2387,14 +2639,28 @@ export default Unit;
 `;
 }
 
-function generateFunPage({ initAddForm, refImports = [] } = {}) {
+function generateFunPage({ initAddForm, refImports = [], extraMethods = {} } = {}) {
   // refImports 已应用 6 条规则；直接输出在顶部
   // 模板内不再硬编码 antd / React / DditCktsFormCommonFunc imports（ref 提供）
   const importsBlock = refImports.length > 0
     ? refImports.join('\n') + '\n\n'
     : '';
 
-  if (!initAddForm) {
+  // 新增：5 个方法块（initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange）
+  //   固定顺序拼接；filter(Boolean) 跳过未抽取的方法（silent fallback）
+  //   末尾加 `\n\n` 便于与后续 `export default` 分隔
+  const extraMethodsBlock = [
+    extraMethods.initEditForm,
+    extraMethods.validator,
+    extraMethods.eventOnBlur,
+    extraMethods.eventOnFocus,
+    extraMethods.eventOnChange,
+  ]
+    .filter(Boolean)
+    .map((s) => s + '\n\n')
+    .join('');
+
+  if (!initAddForm && !extraMethodsBlock) {
     return `${importsBlock}const Func: any = {
   refUnit: React.createRef(),
 };
@@ -2402,13 +2668,14 @@ function generateFunPage({ initAddForm, refImports = [] } = {}) {
 export default Func;
 `;
   }
+
+  const initAddFormBlock = initAddForm ? `${initAddForm}\n\n` : '';
+  // 顺序：initAddForm 先于 5 个方法（与 ref 中典型声明顺序一致）
   return `${importsBlock}const Func: any = {
   refUnit: React.createRef(),
 };
 
-${initAddForm}
-
-export default Func;
+${initAddFormBlock}${extraMethodsBlock}export default Func;
 `;
 }
 
@@ -2650,6 +2917,7 @@ function main() {
     let funInitAddForm = null;
     let funHtsApiImports = [];  // 保留用于 log
     let funRefImports = [];
+    const funExtraMethods = {};  // 5 个方法：initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange
     if (args.fun !== false && args['no-fun'] !== true) {
       const srcDir = path.dirname(args.src);
       const funRefBase = typeof args.fun === 'string' && args.fun.length > 0
@@ -2665,7 +2933,17 @@ function main() {
           const funContent = fs.readFileSync(funRefPath, 'utf-8');
           funInitAddForm = extractInitAddFormFromFile(funContent);
           if (funInitAddForm) {
+            funInitAddForm = postProcessFuncMethod(funInitAddForm, 'initAddForm');
             console.log(`[convert] 参照文件已抽取 initAddForm: ${funRefPath}`);
+          }
+          // 新增：抽取并迁移 5 个 Func 方法（initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange）
+          const methodNames = ['initEditForm', 'validator', 'eventOnBlur', 'eventOnFocus', 'eventOnChange'];
+          for (const methodName of methodNames) {
+            const methodCode = extractFuncMethod(funContent, methodName);
+            if (methodCode) {
+              funExtraMethods[methodName] = postProcessFuncMethod(methodCode, methodName);
+              console.log(`[convert] 参照文件已抽取 ${methodName}: ${funRefPath}`);
+            }
           }
           funHtsApiImports = rewriteHtsApiImports(funContent);
           if (funHtsApiImports.length > 0) {
@@ -2686,7 +2964,11 @@ function main() {
     if (args.fun !== false && args['no-fun'] !== true) {
       fs.writeFileSync(
         args.page.funFile,
-        generateFunPage({ initAddForm: funInitAddForm, refImports: funRefImports }),
+        generateFunPage({
+          initAddForm: funInitAddForm,
+          refImports: funRefImports,
+          extraMethods: funExtraMethods,
+        }),
         'utf-8',
       );
       console.log(`[convert] 已生成 fun 页面: ${args.page.funFile}`);

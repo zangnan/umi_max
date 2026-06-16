@@ -38,14 +38,14 @@ const CONFIG_KEY = DDIT_TOOL_CONSTANTS.CONFIG_KEY;
 dayjs.extend(quarterOfYear);
 
 // ==================== 全局类型声明 ====================
-declare global {
-  interface Window {
-    getUrlCode?: (
-      url: string,
-      params: Record<string, any>,
-    ) => Promise<{ code: string; body: { rows: any[] } }>;
-  }
-}
+// declare global {
+//   interface Window {
+//     getUrlCode?: (
+//       url: string,
+//       params: Record<string, any>,
+//     ) => Promise<{ code: string; body: { rows: any[] } }>;
+//   }
+// }
 
 // ==================== 类型定义 ====================
 interface StorageOperations {
@@ -2500,9 +2500,9 @@ myUtil.code = {
     }
 
     return codeList.map((item: { code: string; name: string }) => ({
-      value: item.code,
-      name: item.name,
-      label: item.name,
+      value: item.code || item.hbzmDm,
+      name: item.name || item.hbmc,
+      label: item.name || item.hbmc,
     }));
   },
 
@@ -2517,6 +2517,14 @@ myUtil.code = {
       { url: string; params: Record<string, any> }
     > = {
       url_gy_hbhl: {
+        url: '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx',
+        params: {
+          page: 1,
+          pageSize: 999999,
+          searchModel: [{ property: 'hbzmDm', value: '', op: 'al' }],
+        },
+      },
+      'url_gy_hbhl:01': {
         url: '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx',
         params: {
           page: 1,
@@ -2578,8 +2586,10 @@ myUtil.code = {
       // URL 类型码表
       if (key.startsWith('url')) {
         const { url, params } = this.getUrlCodeParams(key);
-        if (url && window.getUrlCode) {
-          const response = await window.getUrlCode(url, params);
+        // if (url && window.getUrlCode) {
+        if (url) {
+          // const response = await this.getUrlCode(url, params);
+          const response = await getUrlCode(url, params);
           const { code, body } = response;
           if (code === '200' && body.rows?.length > 0) {
             this.saveCodeToLocalTable(key, body.rows);
