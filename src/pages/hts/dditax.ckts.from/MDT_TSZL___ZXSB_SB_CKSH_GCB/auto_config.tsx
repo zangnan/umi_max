@@ -94,7 +94,7 @@ unitConfig.filter_items = [
 unitConfig.form_items = [
 	{ label: 'ID', name: 'uuid', type: 'Hidden' },
 	{ label: '基本信息', name: 'jbxx', type: 'GroupTitle' },
-	{ label: '所属期', name: 'ssq', type: 'Input', rules: [{ type: 'base_date', format: 'YYYYMM' }, { type: 'base_required' }, { type: 'base_string', range: [0, 6]}, { func: 'ssq02' }, { func: 'ssq01' }]},
+	{ label: '所属期', name: 'ssq', type: 'Input', rules: [{ type: 'base_date', format: 'yyyyMM' }, { type: 'base_required' }, { type: 'base_string', range: [0, 6]}, { func: 'ssq02' }, { func: 'ssq01' }]},
 	{ label: '序号', name: 'sbxh', type: 'Input', rules: [{ type: 'base_required' }, { type: 'base_type_number' }, { func: 'sbxh02' }], eventOnBlur: 'sbxh' },
 	{ label: '出口信息', name: 'ckxx', type: 'GroupTitle' },
 	{ label: '出口货物报关单号', name: 'ckbgdh', type: 'Input', rules: [{ type: 'base_string', range: [0, 21]}, { type: 'base_type_number_english' }, { func: 'ckbgdh03' }], eventOnBlur: 'ckbgdh'}, //, eventOnChange: 'ckbgdh'
@@ -106,7 +106,7 @@ unitConfig.form_items = [
 	{ label: '出口销售币种汇率', name: 'cjhbhl', type: 'InputNumber', format: '0,0.00000', rules: [{ type: 'base_required' }, { type: 'base_number', length: 10, decimal: 5}, { type: 'base_number', range: '+' }], eventOnBlur: 'cjhbhl' },
 	{ label: '出口销售人民币金额', name: 'ckxsermb', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_required' }, { type: 'base_number', length: 14, decimal: 2}, { type: 'base_number', range: '+' }]},
 	{ label: '收汇信息', name: 'shxx', type: 'GroupTitle' },
-	{ label: '收汇日期', name: 'ckshrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_date', format: 'YYYYMMdd' }], eventOnChange: 'ckshrq' },
+	{ label: '收汇日期', name: 'ckshrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_date', format: 'yyyyMMdd' }], eventOnChange: 'ckshrq' },
 	{ label: '收汇凭证号', name: 'pzhm2', type: 'Input', rules: [{ type: 'base_string', range: [0, 40]}]},
 	{ label: '出口收汇币种代码', name: 'ckshhbzmDm', type: 'AutoComplete', showType: '3', 'allowClear': true, codeTable: 'url_gy_hbhl:01', eventOnBlur: 'hbhlDm', eventOnFocus: 'hbhlDm' },
 	{ label: '出口收汇币种名称', name: 'ckshhbzmmc', type: 'Input', disabled: true},
@@ -121,7 +121,7 @@ unitConfig.form_items = [
 	{ label: '视同收汇原因说明', name: 'stshqkyyjtsm', type: 'Input', disabled: true},
 	{ label: '视同收汇举证材料种类代码', name: 'stshqkjzclzl', type: 'Select', showType: '4', 'showSearch': true, 'mode': 'multiple', eventOnChange: 'stshqkjzclzl', 'allowClear': true, codeTable: 'code_cs_ckts_stshqkjzclzl:01'},
 	{ label: '视同收汇人民币金额', name: 'stshqkzrmbje', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_number', length: 14, decimal: 2}]},
-	{ label: '合同约定全部收汇最终日期', name: 'stshqkhtydqbshzzrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_date', format: 'YYYYMMdd' }]},
+	{ label: '合同约定全部收汇最终日期', name: 'stshqkhtydqbshzzrq', type: 'DatePicker', 'allowClear': true, format: 'YYYY-MM-DD', rules: [{ type: 'base_date', format: 'yyyyMMdd' }]},
 	{ label: '出口合同号', name: 'stshqkckhth', type: 'Input', rules: [{ type: 'base_string', range: [0, 60]}]},
 	{ label: '其他信息', name: 'qtxx', type: 'GroupTitle' },
 	{ label: '备注', name: 'bz', type: 'TextArea', rules: [{ type: 'base_string', range: [0, 200]}, { func: 'bz02' }], autoSize: { minRows: 3, maxRows: 3 }, layout: CONSTANTS.DEFAULT_FORM_LAYOUT_100P_ROW},

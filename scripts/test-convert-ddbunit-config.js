@@ -149,10 +149,15 @@ for (const fx of getFixtures()) {
   // r9：若 fixture 有 expectedRoute，不传 --no-route，让工具写入临时 ckts 文件
   // 扩展：fixture 有 expectedIndex / expectedFun 时不传 --no-page，让工具生成 index/fun
   // 扩展：fixture 有 indexRef（<fxName>.ref.tsx）时自动传 --index <fxName>.ref
+  // 扩展：fixture 有 funRef（<fxName>.funRef.tsx）时自动传 --fun <fxName>.funRef
+  // r20+：fixture 没有 funRef 时不跑 fun 生成（避免 ref 缺失时报错）
   const wantsIndexOrFun = !!(fx.expectedIndex || fx.expectedFun);
+  const wantsFun = !!fx.funRef;
   const args = ['--src', fx.input, '--out', outPath, '--no-readme'];
   if (!wantsIndexOrFun) {
     args.push('--no-page', '--no-fun');
+  } else if (!wantsFun) {
+    args.push('--no-fun');
   }
   if (fx.indexRef) {
     args.push('--index', `${fx.name}.ref`);

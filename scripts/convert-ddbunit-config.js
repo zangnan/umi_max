@@ -1781,6 +1781,48 @@ function migrateGetCodeValByKey(methodCode) {
 }
 
 /**
+ * 将 `myUtil.code.getCode(arg1, 'arg2')` 两参形式合并为
+ *   `myUtil.code.getCode('arg1:arg2')` 一参形式。
+ *
+ *   - 仅匹配恰好 2 个参数的调用（regex 含 1 个逗号分隔）
+ *   - 强制两参都是字符串字面量（regex 反向引用 \1 / \3 保证）
+ *   - 1 参合法调用不被匹配（如 `myUtil.code.getCode('code_dm_def_project')`）
+ *   - 单/双引号保留（输出引号与第 1 参一致）
+ *   - 全局标志 g 一次性处理多个调用
+ *
+ * @param {string} methodCode  方法代码
+ * @returns {string}  改写后的方法代码
+ */
+function migrateGetCode(methodCode) {
+  const re = /myUtil\.code\.getCode\(\s*(['"])([^'"]+)\1\s*,\s*(['"])([^'"]+)\3\s*\)/g;
+  return methodCode.replace(re, (match, q1, codeKey, _q3, viewKey) => {
+    return `myUtil.code.getCode(${q1}${codeKey}:${viewKey}${q1})`;
+  });
+}
+
+/**
+ * 将 `myUtil.code.getCodeFromServerT1(arg1, 'arg2')` 两参形式合并为
+ *   `myUtil.code.getCodeFromServerT1('arg1:arg2')` 一参形式。
+ *
+ *   - 仅匹配恰好 2 个参数的调用（regex 含 1 个逗号分隔）
+ *   - 强制两参都是字符串字面量（regex 反向引用 \1 / \3 保证）
+ *   - 1 参合法调用不被匹配
+ *   - 单/双引号保留（输出引号与第 1 参一致）
+ *   - 全局标志 g 一次性处理多个调用
+ *
+ * 与 `migrateGetCode` 同款手法（仅函数名不同）。
+ *
+ * @param {string} methodCode  方法代码
+ * @returns {string}  改写后的方法代码
+ */
+function migrateGetCodeFromServerT1(methodCode) {
+  const re = /myUtil\.code\.getCodeFromServerT1\(\s*(['"])([^'"]+)\1\s*,\s*(['"])([^'"]+)\3\s*\)/g;
+  return methodCode.replace(re, (match, q1, codeKey, _q3, viewKey) => {
+    return `myUtil.code.getCodeFromServerT1(${q1}${codeKey}:${viewKey}${q1})`;
+  });
+}
+
+/**
  * 重写参照文件中 '@/services/hts/api' 路径为 '@/pages/hts/services/htsApi'。
  *
  *   - 支持单行 + 多行 import 形式
@@ -2016,6 +2058,111 @@ function applyImportRewrites(importLines) {
       return line;
     })
     .filter((line) => line !== null);
+}
+
+/**
+ * 对 ref 全文直接应用 11 条 imports 路径改写规则（r20+ 方案）。
+ * 与 `applyImportRewrites(importLines)` 的差别：
+ *   - 本函数直接对整文件文本做 regex，不再需要先抽 imports 段
+ *   - 适用于"完全复制 ref + 调整"链路（fun 文件新生成方案）
+ *   - 不再支持：跳过注释行 / import type / 多行 import 缓冲 / 抽取终止条件
+ *   - 单/多行 import 由 `[\s\S]*?` 非贪婪 + 行尾 `;` 自然处理
+ *
+ * 11 条规则与 `applyImportRewrites` 严格保持一致（见 docstring 注释）。
+ *
+ * @param {string} content  ref 文件全文
+ * @returns {string} 改写后的全文
+ */
+function applyImportRewritesToContent(content) {
+  let text = content;
+
+  // 规则 3: moment → dayjs（精确匹配 default 形式）
+  text = text.replace(
+    /^import\s+moment\s+from\s+['"]moment['"]\s*;?[ \t]*$/gm,
+    "import dayjs from 'dayjs';",
+  );
+
+  // 规则 4: myUtil 默认导入路径（保留原 default 名字；只改路径）
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/components/DDAssist/util';",
+  );
+
+  // 规则 5: DDAlert 路径（保留原 default 名字；只改路径）
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/commonModule/DDAlert';",
+  );
+
+  // 规则 7 + 规则 12: staticTableCode 路径（合并：老路径 + DDAssist 路径都改写为 commonModule 路径）
+  //   - 规则 7: `@/pages/common/staticTableCode` → `@/pages/hts/commonModule/staticTableCode`
+  //   - 规则 12: `@/components/DDAssist/staticTableCode` → `@/pages/hts/commonModule/staticTableCode`
+  //   - 保留原 default 名字（实际都叫 `getStaticTableCode`）
+  //   - 用户决策：fun 文件走项目内的 `staticTableCode` (src/pages/hts/commonModule/staticTableCode)，
+  //     而非走 DDAssist 通用工具
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"](?:@\/pages\/common\/staticTableCode|@\/components\/DDAssist\/staticTableCode)['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/commonModule/staticTableCode';",
+  );
+
+  // 规则 8: myUtil 命名导入路径（保留 { } 内完整名字列表；仅改路径）
+  text = text.replace(
+    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    (_m, names) => `import { ${names.trim()} } from '@/components/DDAssist/util';`,
+  );
+
+  // 规则 2: htsApi 路径（多行折叠为单行）
+  text = text.replace(
+    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?[ \t]*$/gm,
+    (m, names) => {
+      const list = names
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      return list.length > 0
+        ? `import { ${list.join(', ')} } from '@/pages/hts/services/htsApi';`
+        : m;
+    },
+  );
+
+  // 规则 9: baseValidator 路径（保留原 default 名字；只改路径）
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/components/DDAssist/field/baseValidator';",
+  );
+
+  // 规则 11: cjpzUtil → cktsUtil（带去重）
+  //   - 预扫描：若 ref 已含 cktsUtil 任意导入形式 → 删除 cjpzUtil 行（不重复引入）
+  //   - 否则改写为 `import cktsUtil from '@/pages/hts/cktsUtil';`（default 名字硬编码）
+  const hasCktsUtilImport =
+    /\bimport\s+cktsUtil\s+from\s*['"][^'"]+['"]\s*;?/.test(text) ||
+    /\bimport\s*\{[^}]*\bcktsUtil\b[^}]*\}\s*from\s*['"][^'"]+['"]\s*;?/.test(text);
+  if (hasCktsUtilImport) {
+    text = text.replace(
+      /^[ \t]*import\s+\w+\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?\s*\r?\n?/gm,
+      '',
+    );
+  } else {
+    text = text.replace(
+      /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?[ \t]*$/gm,
+      "import cktsUtil from '@/pages/hts/cktsUtil';",
+    );
+  }
+
+  // 规则 10: useRouteMatch → useRouteData（umi 4.x 弃用适配）
+  text = text.replace(
+    /^import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?[ \t]*$/gm,
+    (m, inner, quote) => {
+      if (/\buseRouteMatch\b/.test(inner)) {
+        const renamed = inner.replace(/\buseRouteMatch\b/g, 'useRouteData');
+        return `import {${renamed}} from ${quote}umi${quote};`;
+      }
+      return m;
+    },
+  );
+
+  // 规则 1 / 规则 6: DditCktsFormCommonFunc（已是新路径） / 其它 —— 原样保留
+  return text;
 }
 
 // ============================================================================
@@ -2909,15 +3056,13 @@ function main() {
     );
     console.log(`[convert] 已生成 index 页面: ${args.page.indexFile}`);
 
-    // --fun 处理：从参照文件 fun.tsx / f.tsx 抽取 initAddForm + 镜像全部 imports（应用 6 条路径重写规则）
+    // --fun 处理：完全复制 ref + 调整（用户决策 r20+）
+    //   - 整体策略：先读 ref 全文，然后做局部调整
+    //   - 调整: 11 条 imports 改写 + .less 整行删除 + 4 条方法体后处理
     //   - 默认 basename = 'f'（与 code_sample 一致）
     //   - 查找顺序：f.tsx 优先 → fun.tsx 兜底
     //   - 显式传 --fun <name> 时仅查 <name>.tsx
-    //   - 找到即停，找不到 / 无 initAddForm / 无 imports → silent fallback
-    let funInitAddForm = null;
-    let funHtsApiImports = [];  // 保留用于 log
-    let funRefImports = [];
-    const funExtraMethods = {};  // 5 个方法：initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange
+    //   - 找不到 ref → 报错退出（删除原 silent fallback）
     if (args.fun !== false && args['no-fun'] !== true) {
       const srcDir = path.dirname(args.src);
       const funRefBase = typeof args.fun === 'string' && args.fun.length > 0
@@ -2927,51 +3072,57 @@ function main() {
         funRefBase === 'f' || funRefBase === 'fun'
           ? [`f.tsx`, `fun.tsx`]
           : [`${funRefBase}.tsx`];
+      let funRefPath = null;
       for (const candidate of candidates) {
-        const funRefPath = path.join(srcDir, candidate);
-        if (fs.existsSync(funRefPath)) {
-          const funContent = fs.readFileSync(funRefPath, 'utf-8');
-          funInitAddForm = extractInitAddFormFromFile(funContent);
-          if (funInitAddForm) {
-            funInitAddForm = postProcessFuncMethod(funInitAddForm, 'initAddForm');
-            console.log(`[convert] 参照文件已抽取 initAddForm: ${funRefPath}`);
-          }
-          // 新增：抽取并迁移 5 个 Func 方法（initEditForm / validator / eventOnBlur / eventOnFocus / eventOnChange）
-          const methodNames = ['initEditForm', 'validator', 'eventOnBlur', 'eventOnFocus', 'eventOnChange'];
-          for (const methodName of methodNames) {
-            const methodCode = extractFuncMethod(funContent, methodName);
-            if (methodCode) {
-              funExtraMethods[methodName] = postProcessFuncMethod(methodCode, methodName);
-              console.log(`[convert] 参照文件已抽取 ${methodName}: ${funRefPath}`);
-            }
-          }
-          funHtsApiImports = rewriteHtsApiImports(funContent);
-          if (funHtsApiImports.length > 0) {
-            console.log(
-              `[convert] 参照文件已抽取 htsApi 导入: ${funHtsApiImports.length} 处 (${funRefPath})`,
-            );
-          }
-          // 新增：抽 ref 全部 imports + 应用 6 规则（传给 generateFunPage 作为顶部 imports）
-          funRefImports = applyImportRewrites(extractRefImports(funContent));
-          console.log(
-            `[convert] 参照文件已抽取 import: ${funRefImports.length} 处 (${funRefPath})`,
-          );
+        const p = path.join(srcDir, candidate);
+        if (fs.existsSync(p)) {
+          funRefPath = p;
           break;
         }
       }
-    }
+      if (!funRefPath) {
+        console.error(
+          `[convert] 错误: 未找到 fun 参照文件 (尝试: ${candidates.map((c) => path.join(srcDir, c)).join(', ')})`,
+        );
+        process.exit(1);
+      }
 
-    if (args.fun !== false && args['no-fun'] !== true) {
-      fs.writeFileSync(
-        args.page.funFile,
-        generateFunPage({
-          initAddForm: funInitAddForm,
-          refImports: funRefImports,
-          extraMethods: funExtraMethods,
-        }),
-        'utf-8',
+      // Step 1: 读 ref 全文（完全复制）
+      const funContent = fs.readFileSync(funRefPath, 'utf-8');
+
+      // Step 2: 调整（在复制基础上做局部改写）
+      let funOutput = funContent;
+
+      // 2.1 .less 整行删除（排除规则）
+      //   匹配 `import <name> from '<path>.less';` 整行（含换行）
+      //   `\S+` 限定 default 名字（非贪婪到空白）；`[^'"]*\.less` 限定路径内含 .less
+      funOutput = funOutput.replace(
+        /^[ \t]*import\s+\S+\s+from\s+['"][^'"]*\.less['"]\s*;?[ \t]*\r?\n?/gm,
+        '',
       );
-      console.log(`[convert] 已生成 fun 页面: ${args.page.funFile}`);
+
+      // 2.2 11 条 imports 路径改写（对整文件）
+      funOutput = applyImportRewritesToContent(funOutput);
+
+      // 2.3 4 条方法体后处理（用户决策）
+      // 3.1 moment → dayjs（全局 regex）
+      funOutput = funOutput.replace(/\bmoment\(/g, 'dayjs(');
+      // 3.2 getCodeValByKey 3 参 → 2 参合并（全局 regex）
+      funOutput = migrateGetCodeValByKey(funOutput);
+      // 3.3 myUtil.code.getCode 2 参 → 1 参合并（新增；用户决策）
+      funOutput = migrateGetCode(funOutput);
+      // 3.5 myUtil.code.getCodeFromServerT1 2 参 → 1 参合并（新增；用户决策）
+      funOutput = migrateGetCodeFromServerT1(funOutput);
+      // 3.4 initEditForm 变量改名（先定位块，整体替换）
+      const initEditFormBlock = extractFuncMethod(funOutput, 'initEditForm');
+      if (initEditFormBlock) {
+        const rewritten = migrateFuncMethodVariables(initEditFormBlock, 'initEditForm');
+        funOutput = funOutput.replace(initEditFormBlock, rewritten);
+      }
+
+      // Step 3: 写文件
+      fs.writeFileSync(args.page.funFile, funOutput, 'utf-8');
+      console.log(`[convert] 已生成 fun 页面: ${args.page.funFile} (参照: ${funRefPath})`);
     }
   }
 

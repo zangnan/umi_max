@@ -5,7 +5,7 @@ import myUtil from '@/components/DDAssist/util';
 import dayjs from 'dayjs';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import getStaticTableCode from '@/components/DDAssist/staticTableCode';
+import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { history, useRouteData } from 'umi';
 import cktsUtil from '@/pages/hts/cktsUtil';
@@ -14,12 +14,11 @@ const Func: any = {
   refUnit: React.createRef(),
 };
 
-// 新建表单初始化
 Func.initAddForm = (param: any) => {
   DditCktsFormCommonFunc.initAddForm(param);
 };
 
-// 编辑表单初始化
+// 规则测试: 箭头函数形式（initEditForm）+ 变量改名（unit_key/myFormItems/setMyFormItems）
 Func.initEditForm = (param: any) => {
   const { form, formItems, setFormItems, handleModalVisible, unitKey } = param;
   const params: any = {
@@ -31,12 +30,12 @@ Func.initEditForm = (param: any) => {
   params.unitKey = unitKey;
 };
 
-// 表单校验
+// 规则测试: 对象字面量形式（validator）
 Func.validator = {
   ssq02: (form: any) => DditCktsFormCommonFunc.validator.ssq02(form),
 };
 
-// 表单事件：OnBlur
+// 规则测试: 对象字面量形式（eventOnBlur）+ getCodeValByKey 3→2 参合并
 Func.eventOnBlur = {
   hth: (param: any) => {
     const { form } = param;
@@ -58,14 +57,14 @@ Func.eventOnBlur = {
   },
 };
 
-// 表单事件：OnFocus
+// 规则测试: 对象字面量形式（eventOnFocus）
 Func.eventOnFocus = {
   hbhlDm: (param: any) => {
     Func.eventOnChange.skrq(param);
   },
 };
 
-// 表单事件：OnChange
+// 规则测试: 对象字面量形式（eventOnChange）
 Func.eventOnChange = {
   // 测试 antd 4 → antd 6 迁移: moment → dayjs
   skrq: (param: any) => {

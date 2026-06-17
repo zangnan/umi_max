@@ -89,6 +89,7 @@ export default defineConfig({
   initialState: {},
   request: {},
   layout: {},
+  locale: {},
   favicons: [process.env.NODE_ENV === 'production' ? `/${proBase}/icons/favicon.png` : '/icons/favicon.png'],
   history: { type: process.env.NODE_ENV === 'production' ? 'hash': 'browser' },
   // favicons: ['/icons/favicon.png'],

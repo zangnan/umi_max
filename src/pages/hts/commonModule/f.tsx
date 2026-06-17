@@ -17,6 +17,7 @@ const DditCktsFormCommonFunc: any = {
 // 新建表单初始化
 DditCktsFormCommonFunc.initAddForm = (param: any) => {
   const { form, handleModalVisible, unitKey, unit_lcswsx_dm = '', unitRef, doSuccess, setMasker, tcbz } = param;
+  // debugger
   if (setMasker) {
     setMasker(true);  // 按报关单生成明细：外贸、生产、证明开具
   } else {
@@ -28,6 +29,7 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
   };
   // 表单初始化1 除关联号外的其他字段
   queryCjCsh(apiParam).then((response) => {
+  // debugger
     const { code, body } = response;
     if (code === '200') {
       let sbbh1 = body.sbbh1;
@@ -924,11 +926,11 @@ DditCktsFormCommonFunc.validator = {
 //   },
   // 所属期
   ssq02: (form?: any) => {
-    debugger;
+    // debugger;
     const unitKey = form?.otherParam?.unit_key;
     // 该申报所属期已申报，请确认后填报
     const validator = async (_rule: any, value: any) => {
-    debugger;
+    // debugger;
       if (history.location.pathname.indexOf('SBMXCX') == -1 && (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G' || unitKey ===  'QTYW_ZXSB_QT_QYNBFKTXJS_G' || unitKey === 'ZBYW_ZXSB_SB_GJ_SBMX_G'
         || unitKey === 'QTYW_ZXSB_QT_QYGLLBFPPD_G' || unitKey === 'QTYW_ZXSB_QT_SCXQYSCNLQK_G' || unitKey === 'ZGBA_ZXSB_BA_BMDLCKBA_G'
         || unitKey === 'JLJG_ZXSB_SB_JLJG_MDTHX_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_HGSJTZ_G' || unitKey === 'JLJG_ZXSB_SB_JLJG_JHFPL_G')
@@ -938,7 +940,7 @@ DditCktsFormCommonFunc.validator = {
           ssq: value,
           tableKey: unitKey
         }).then((response) => {
-    debugger;
+    // debugger;
           if (response.code === '900') {
             return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_ssq_01' })));
           }
@@ -1084,51 +1086,51 @@ DditCktsFormCommonFunc.validator = {
 //     };
 //     return { validator };
 //   },
-//   // 国内启运方式
-//   gnqyfsDm01: (form?: any) => {
-//     const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
-//     // 业务类型为QYGTS时国内启运方式不能为空，请确认后填报！
-//     const validator = (_rule: any, value: any) => {
-//       if (cktmsywlxdmjh && cktmsywlxdmjh.indexOf('QYGTS') > -1) {
-//         if (!value) {
-//           return Promise.reject(new Error('业务类型为QYGTS时国内启运方式不能为空，请确认后填报！'));
-//         }
-//         return Promise.resolve();
-//       }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
-//   // 海关总署认证企业类型
-//   hgzsrzqylxDm01: (form?: any) => {
-//     const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
-//     // 业务类型为QYGTS时海关总署认证企业类型不能为空，请确认后填报！
-//     const validator = (_rule: any, value: any) => {
-//       if (cktmsywlxdmjh && cktmsywlxdmjh.indexOf('QYGTS') > -1) {
-//         if (!value) {
-//           return Promise.reject(new Error('业务类型为QYGTS时海关总署认证企业类型不能为空，请确认后填报！'));
-//         }
-//         return Promise.resolve();
-//       }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
-//   // 红字冲减原因代码
-//   hzcjyyDm01: (form?: any) => {
-//     const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
-//     // 当业务类型包括“HZCJ”业务类型时，不得为空
-//     const validator = (_rule: any, value: any) => {
-//       if (cktmsywlxdmjh && cktmsywlxdmjh.includes('HZCJ')) {
-//         if (!value) {
-//           return Promise.reject(new Error('业务类型为HZCJ时红字冲减原因不能为空，请确认后填报！'));
-//         }
-//         return Promise.resolve();
-//       }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
+  // 国内启运方式
+  gnqyfsDm01: (form?: any) => {
+    const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
+    // 业务类型为QYGTS时国内启运方式不能为空，请确认后填报！
+    const validator = (_rule: any, value: any) => {
+      if (cktmsywlxdmjh && cktmsywlxdmjh.indexOf('QYGTS') > -1) {
+        if (!value) {
+          return Promise.reject(new Error('业务类型为QYGTS时国内启运方式不能为空，请确认后填报！'));
+        }
+        return Promise.resolve();
+      }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
+  // 海关总署认证企业类型
+  hgzsrzqylxDm01: (form?: any) => {
+    const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
+    // 业务类型为QYGTS时海关总署认证企业类型不能为空，请确认后填报！
+    const validator = (_rule: any, value: any) => {
+      if (cktmsywlxdmjh && cktmsywlxdmjh.indexOf('QYGTS') > -1) {
+        if (!value) {
+          return Promise.reject(new Error('业务类型为QYGTS时海关总署认证企业类型不能为空，请确认后填报！'));
+        }
+        return Promise.resolve();
+      }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
+  // 红字冲减原因代码
+  hzcjyyDm01: (form?: any) => {
+    const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
+    // 当业务类型包括“HZCJ”业务类型时，不得为空
+    const validator = (_rule: any, value: any) => {
+      if (cktmsywlxdmjh && cktmsywlxdmjh.includes('HZCJ')) {
+        if (!value) {
+          return Promise.reject(new Error('业务类型为HZCJ时红字冲减原因不能为空，请确认后填报！'));
+        }
+        return Promise.resolve();
+      }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
 //   // 调整后商品代码
 //   tzhckspDm01: (form?: any) => {
 //     // 调整前和调整后代码不能一致
@@ -1183,21 +1185,21 @@ DditCktsFormCommonFunc.validator = {
 //     };
 //     return { validator };
 //   },
-//   // 税种
-//   sz01: (form?: any) => {
-//     // 请求后端验证所属期是否已申报
-//     const validator =  (_rule: any, value: any) => {
-//       if (value) {
-//         const strExp = /^[C|V]$/;
-//         if (!strExp.test(value)) {
-//           return Promise.reject(new Error('税种只能录入C或者V，请确认后填报！'));
-//         }
-//         return Promise.resolve();
-//       }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
+  // 税种
+  sz01: (form?: any) => {
+    // 请求后端验证所属期是否已申报
+    const validator =  (_rule: any, value: any) => {
+      if (value) {
+        const strExp = /^[C|V]$/;
+        if (!strExp.test(value)) {
+          return Promise.reject(new Error('税种只能录入C或者V，请确认后填报！'));
+        }
+        return Promise.resolve();
+      }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
 //   // 进货凭证号
 //   jhpzh03: (form?: any) => {
 //     const unitKey = form?.otherParam?.unit_key;
@@ -1303,39 +1305,39 @@ DditCktsFormCommonFunc.validator = {
 //     };
 //     return { validator };
 //   },
-//   // 值为空赋0
-//   setZero: (form: any) => {
-//     const validator = (_rule: any, value: any) => {
-//       // const { field } = _rule;
-//       // if (!value) {
-//       //   form.setFieldsValue({ [field]: 0 });
-//       // }
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
-//   // 备注
-//   bz02: (form?: any) => {
-//     const validator = async (_rule: any, value: any) => {
-// 			// 出口货物收汇申报表
-// 			// 1. 存在非进口商付汇原因/非进口国家（地区）付汇原因，备注不能为空
-//       const fjksfhyy  = form?.getFieldValue('fjksfhyy');
-//       const fjkgjdqfhyy  = form?.getFieldValue('fjkgjdqfhyy');
-//       const bz  = form?.getFieldValue('bz');
-//       const yzsz = [];
-// 			if (fjksfhyy?.trim()) {
-// 				yzsz.push('非进口商付汇原因');
-// 			}
-// 			if (fjkgjdqfhyy?.trim()) {
-// 				yzsz.push('非进口国家（地区）付汇原因');
-//       }
-// 			if (yzsz.length > 0 && !bz) {
-//         return Promise.reject(new Error(`存在${yzsz.join('/')}时备注不能为空，请确认后填报！`));
-// 			}
-//       return Promise.resolve();
-//     };
-//     return { validator };
-//   },
+  // 值为空赋0
+  setZero: (form: any) => {
+    const validator = (_rule: any, value: any) => {
+      // const { field } = _rule;
+      // if (!value) {
+      //   form.setFieldsValue({ [field]: 0 });
+      // }
+      return Promise.resolve();
+    };
+    return { validator };
+  },
+  // 备注
+  bz02: (form?: any) => {
+    const validator = async (_rule: any, value: any) => {
+			// 出口货物收汇申报表
+			// 1. 存在非进口商付汇原因/非进口国家（地区）付汇原因，备注不能为空
+      const fjksfhyy  = form?.getFieldValue('fjksfhyy');
+      const fjkgjdqfhyy  = form?.getFieldValue('fjkgjdqfhyy');
+      const bz  = form?.getFieldValue('bz');
+      const yzsz = [];
+			if (fjksfhyy?.trim()) {
+				yzsz.push('非进口商付汇原因');
+			}
+			if (fjkgjdqfhyy?.trim()) {
+				yzsz.push('非进口国家（地区）付汇原因');
+      }
+			if (yzsz.length > 0 && !bz) {
+        return Promise.reject(new Error(`存在${yzsz.join('/')}时备注不能为空，请确认后填报！`));
+			}
+      return Promise.resolve();
+    };
+    return { validator };
+  },
 };
 
 // 计算
@@ -1507,41 +1509,41 @@ DditCktsFormCommonFunc.util = {
 //     }
 //     return kdkSe;
 //   },
-//   /**
-//    * @method setPurchaseTax
-//    * @desc 计算：购货税额（计算：税额）
-//    * 购货税额 = 购货征税率 * 购货金额 / 100
-//    * @param paras {ghje 购货金额, ghzssl 购货征税税率}
-//    */
-//   setPurchaseTax: function(paras: any) {
-//     let ghje = myUtil.text.getNumVal(paras.ghje);
-//     let ghzssl = myUtil.text.getNumVal(paras.ghzssl);
-//     let ghzsse = 0;
-//     if (!ghje || !ghzssl) {
-//       ghzsse = 0;
-//     } else {
-//       ghzsse = DditCktsFormCommonFunc.util.accMul(ghje, ghzssl) / 100;
-//       if (ghzsse > 999999999999.99 || ghzsse < -999999999999.99) {
-//         message.info('税额数据溢出，数据丢失，请确认后填报！')
-//         ghzsse = 0;
-//       }
-//     }
-//     return ghzsse;
-//   },
-//   accMul: function(arg1: any, arg2: any) {
-//     let m = 0;
-//     let s1 = arg1.toString();
-//     let s2 = arg2.toString();
-//     try {
-//       m += s1.split('.')[1].length;
-//     // eslint-disable-next-line no-empty
-//     } catch (e) {}
-//     try {
-//       m += s2.split('.')[1].length;
-//     // eslint-disable-next-line no-empty
-//     } catch (e) {}
-//     return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m);
-//   },
+  /**
+   * @method setPurchaseTax
+   * @desc 计算：购货税额（计算：税额）
+   * 购货税额 = 购货征税率 * 购货金额 / 100
+   * @param paras {ghje 购货金额, ghzssl 购货征税税率}
+   */
+  setPurchaseTax: function(paras: any) {
+    let ghje = myUtil.text.getNumVal(paras.ghje);
+    let ghzssl = myUtil.text.getNumVal(paras.ghzssl);
+    let ghzsse = 0;
+    if (!ghje || !ghzssl) {
+      ghzsse = 0;
+    } else {
+      ghzsse = DditCktsFormCommonFunc.util.accMul(ghje, ghzssl) / 100;
+      if (ghzsse > 999999999999.99 || ghzsse < -999999999999.99) {
+        message.info('税额数据溢出，数据丢失，请确认后填报！')
+        ghzsse = 0;
+      }
+    }
+    return ghzsse;
+  },
+  accMul: function(arg1: any, arg2: any) {
+    let m = 0;
+    let s1 = arg1.toString();
+    let s2 = arg2.toString();
+    try {
+      m += s1.split('.')[1].length;
+    // eslint-disable-next-line no-empty
+    } catch (e) {}
+    try {
+      m += s2.split('.')[1].length;
+    // eslint-disable-next-line no-empty
+    } catch (e) {}
+    return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m);
+  },
 //   /**
 //    * @method getSubtractResult
 //    * @desc 计算：计算差值结果
@@ -1664,129 +1666,129 @@ DditCktsFormCommonFunc.util = {
 //         break;
 //     }
 //   },
-//   /**
-//    * @author liwc
-//    * @method setMdtYfsjgtjs
-//    * @desc 计算：免抵退 研发设计服务 计算
-//    * @param paras
-//    */
-//   setMdtYfsjgtjs: function(param: any, type: any) {
-//     const { form } = param;
-//     // sr 收入额计算， sk 收款额计算， js 计税额计算
-//     let bqqrysfwyysrrmbje: any;
-//     let ysfwyyermb: any;
-//     switch (type) {
-//       case 'sr':
-//         // 收入原币金额
-//         let srybje = myUtil.text.getNumVal(form?.getFieldValue('srybje'));
-//         let srybhl = myUtil.text.getNumVal(form?.getFieldValue('srybhl'));
-//         // 人民币收入额 = 收入原币金额 * 收入原币汇率 / 100
-//         if (srybje && srybhl) {
-//           // 如果收入原币金额和收入原币汇率有值
-//           bqqrysfwyysrrmbje = DditCktsFormCommonFunc.util.setRmbAmt({
-//             mylaj: srybje, // 收入原币金额
-//             myhl: srybhl // 收入原币汇率
-//           });
-//         }
-//         if (!bqqrysfwyysrrmbje) {
-//           // 如果重算不了人民币收入额，则尝试取页面当前录入的值，进行下一步计算
-//           bqqrysfwyysrrmbje = myUtil.text.getNumVal(form?.getFieldValue('bqqrysfwyysrrmbje'));
-//         }
-//         if (bqqrysfwyysrrmbje === 0 || bqqrysfwyysrrmbje) {
-//           // 人民币收入额 收入额赋值
-//           form.setFieldsValue({ bqqrysfwyysrrmbje: myUtil.text.getNumVal(myUtil.text.formatNum(bqqrysfwyysrrmbje, '0.00')) });
-//         }
-//         break;
-//       case 'sr-rmb':
-//         // 人民币收入额
-//         bqqrysfwyysrrmbje = myUtil.text.getNumVal(form?.getFieldValue('bqqrysfwyysrrmbje'));
-//         // 美元收入金额 = 收入美元汇率 * 人民币收入额 / 100
-//         let srmyhl = myUtil.text.getNumVal(form?.getFieldValue('srmyhl'));
-//         let srjemy;
-//         if (srmyhl) {
-//           srjemy = DditCktsFormCommonFunc.util.setUsAmt({
-//             rmbAmt: bqqrysfwyysrrmbje, // 人民币收入额
-//             myhl: srmyhl // 收入美元汇率
-//           }, form);
-//         }
-//         if (srjemy === 0 || srjemy) {
-//           form.setFieldsValue({ skjemy: myUtil.text.getNumVal(myUtil.text.formatNum(srjemy, '0.00')) });
-//         }
-//         break;
-//       case 'sk':
-//         // 收款原币金额
-//         let skybje = myUtil.text.getNumVal(form?.getFieldValue('skybje'));
-//         let cjhbhl = myUtil.text.getNumVal(form?.getFieldValue('cjhbhl'));
-//         // 人民币收款额 = 收款原币金额 * 收款原币汇率 / 100
-//         if (skybje && cjhbhl) {
-//           // 如果收款原币金额和收款原币汇率有值
-//           ysfwyyermb = DditCktsFormCommonFunc.util.setRmbAmt({
-//             mylaj: skybje, // 收款原币金额
-//             myhl: cjhbhl // 收款原币汇率
-//           });
-//         }
-//         if (!ysfwyyermb) {
-//           // 如果重算不了人民币收款额，则尝试取页面当前录入的值，进行下一步计算
-//           ysfwyyermb = myUtil.text.getNumVal(form?.getFieldValue('ysfwyyermb'));
-//         }
-//         if (ysfwyyermb === 0 || ysfwyyermb) {
-//           // 人民币收款额 收款额赋值
-//           form.setFieldsValue({ ysfwyyermb: myUtil.text.getNumVal(myUtil.text.formatNum(ysfwyyermb, '0.00')) });
-//         }
-//         break;
-//       case 'sk-rmb':
-//         // 人民币收款额
-//         ysfwyyermb = myUtil.text.getNumVal(form?.getFieldValue('ysfwyyermb'));
-//         // 跨境应税行为营业额免抵退税计税金额
-//         form.setFieldsValue({ ysfwyyemdtsjsje: myUtil.text.getNumVal(myUtil.text.formatNum(ysfwyyermb, '0.00')) });
-//         // 美元收款金额 = 收款美元汇率 * 人民币收款额 / 100
-//         let myhl = myUtil.text.getNumVal(form?.getFieldValue('myhl'));
-//         let bqskjemy;
-//         if (myhl) {
-//           bqskjemy = DditCktsFormCommonFunc.util.setUsAmt({
-//             rmbAmt: ysfwyyermb, // 人民币收款额
-//             myhl: myhl // 收款美元汇率
-//           }, form);
-//         }
-//         if (bqskjemy === 0 || bqskjemy) {
-//           form.setFieldsValue({ bqskjemy: myUtil.text.getNumVal(myUtil.text.formatNum(bqskjemy, '0.00')) });
-//         }
-//         // 税额计算
-//         // 计税金额
-//         let ysfwyyemdtsjsje = form?.getFieldValue('ysfwyyemdtsjsje');
-//         if (!ysfwyyemdtsjsje) {
-//           return;
-//         }
-//         let zssl = form?.getFieldValue('zssl');
-//         let se; // 税额
-//         if (zssl) {
-//           se = DditCktsFormCommonFunc.util.setPurchaseTax({
-//             ghje: ysfwyyemdtsjsje, // 计税金额
-//             ghzssl: zssl // 征税税率
-//           });
-//         }
-//         let tsl = form?.getFieldValue('tsl');
-//         if (tsl) {
-//           let ytse1 = DditCktsFormCommonFunc.util.setPurchaseTax({
-//             ghje: ysfwyyemdtsjsje, // 计税金额
-//             ghzssl: tsl // 退税率
-//           });
-//           // 征退税差额 = 税额 - 应退税额
-//           let ztsce = se - ytse1;
-//           if (ztsce < 0) {
-//             ztsce = 0;
-//           }
-//           if (ztsce === 0 || ztsce) {
-//             form.setFieldsValue({ ztsce: myUtil.text.getNumVal(myUtil.text.formatNum(ztsce, '0.00')) });
-//           }
-//           // 应退税额
-//           if (ytse1 === 0 || ytse1) {
-//             form.setFieldsValue({ ytse1: myUtil.text.getNumVal(myUtil.text.formatNum(ytse1, '0.00')) });
-//           }
-//         }
-//         break;
-//     }
-//   },
+  /**
+   * @author liwc
+   * @method setMdtYfsjgtjs
+   * @desc 计算：免抵退 研发设计服务 计算
+   * @param paras
+   */
+  setMdtYfsjgtjs: function(param: any, type: any) {
+    const { form } = param;
+    // sr 收入额计算， sk 收款额计算， js 计税额计算
+    let bqqrysfwyysrrmbje: any;
+    let ysfwyyermb: any;
+    switch (type) {
+      case 'sr':
+        // 收入原币金额
+        let srybje = myUtil.text.getNumVal(form?.getFieldValue('srybje'));
+        let srybhl = myUtil.text.getNumVal(form?.getFieldValue('srybhl'));
+        // 人民币收入额 = 收入原币金额 * 收入原币汇率 / 100
+        if (srybje && srybhl) {
+          // 如果收入原币金额和收入原币汇率有值
+          bqqrysfwyysrrmbje = DditCktsFormCommonFunc.util.setRmbAmt({
+            mylaj: srybje, // 收入原币金额
+            myhl: srybhl // 收入原币汇率
+          });
+        }
+        if (!bqqrysfwyysrrmbje) {
+          // 如果重算不了人民币收入额，则尝试取页面当前录入的值，进行下一步计算
+          bqqrysfwyysrrmbje = myUtil.text.getNumVal(form?.getFieldValue('bqqrysfwyysrrmbje'));
+        }
+        if (bqqrysfwyysrrmbje === 0 || bqqrysfwyysrrmbje) {
+          // 人民币收入额 收入额赋值
+          form.setFieldsValue({ bqqrysfwyysrrmbje: myUtil.text.getNumVal(myUtil.text.formatNum(bqqrysfwyysrrmbje, '0.00')) });
+        }
+        break;
+      case 'sr-rmb':
+        // 人民币收入额
+        bqqrysfwyysrrmbje = myUtil.text.getNumVal(form?.getFieldValue('bqqrysfwyysrrmbje'));
+        // 美元收入金额 = 收入美元汇率 * 人民币收入额 / 100
+        let srmyhl = myUtil.text.getNumVal(form?.getFieldValue('srmyhl'));
+        let srjemy;
+        if (srmyhl) {
+          srjemy = DditCktsFormCommonFunc.util.setUsAmt({
+            rmbAmt: bqqrysfwyysrrmbje, // 人民币收入额
+            myhl: srmyhl // 收入美元汇率
+          }, form);
+        }
+        if (srjemy === 0 || srjemy) {
+          form.setFieldsValue({ skjemy: myUtil.text.getNumVal(myUtil.text.formatNum(srjemy, '0.00')) });
+        }
+        break;
+      case 'sk':
+        // 收款原币金额
+        let skybje = myUtil.text.getNumVal(form?.getFieldValue('skybje'));
+        let cjhbhl = myUtil.text.getNumVal(form?.getFieldValue('cjhbhl'));
+        // 人民币收款额 = 收款原币金额 * 收款原币汇率 / 100
+        if (skybje && cjhbhl) {
+          // 如果收款原币金额和收款原币汇率有值
+          ysfwyyermb = DditCktsFormCommonFunc.util.setRmbAmt({
+            mylaj: skybje, // 收款原币金额
+            myhl: cjhbhl // 收款原币汇率
+          });
+        }
+        if (!ysfwyyermb) {
+          // 如果重算不了人民币收款额，则尝试取页面当前录入的值，进行下一步计算
+          ysfwyyermb = myUtil.text.getNumVal(form?.getFieldValue('ysfwyyermb'));
+        }
+        if (ysfwyyermb === 0 || ysfwyyermb) {
+          // 人民币收款额 收款额赋值
+          form.setFieldsValue({ ysfwyyermb: myUtil.text.getNumVal(myUtil.text.formatNum(ysfwyyermb, '0.00')) });
+        }
+        break;
+      case 'sk-rmb':
+        // 人民币收款额
+        ysfwyyermb = myUtil.text.getNumVal(form?.getFieldValue('ysfwyyermb'));
+        // 跨境应税行为营业额免抵退税计税金额
+        form.setFieldsValue({ ysfwyyemdtsjsje: myUtil.text.getNumVal(myUtil.text.formatNum(ysfwyyermb, '0.00')) });
+        // 美元收款金额 = 收款美元汇率 * 人民币收款额 / 100
+        let myhl = myUtil.text.getNumVal(form?.getFieldValue('myhl'));
+        let bqskjemy;
+        if (myhl) {
+          bqskjemy = DditCktsFormCommonFunc.util.setUsAmt({
+            rmbAmt: ysfwyyermb, // 人民币收款额
+            myhl: myhl // 收款美元汇率
+          }, form);
+        }
+        if (bqskjemy === 0 || bqskjemy) {
+          form.setFieldsValue({ bqskjemy: myUtil.text.getNumVal(myUtil.text.formatNum(bqskjemy, '0.00')) });
+        }
+        // 税额计算
+        // 计税金额
+        let ysfwyyemdtsjsje = form?.getFieldValue('ysfwyyemdtsjsje');
+        if (!ysfwyyemdtsjsje) {
+          return;
+        }
+        let zssl = form?.getFieldValue('zssl');
+        let se; // 税额
+        if (zssl) {
+          se = DditCktsFormCommonFunc.util.setPurchaseTax({
+            ghje: ysfwyyemdtsjsje, // 计税金额
+            ghzssl: zssl // 征税税率
+          });
+        }
+        let tsl = form?.getFieldValue('tsl');
+        if (tsl) {
+          let ytse1 = DditCktsFormCommonFunc.util.setPurchaseTax({
+            ghje: ysfwyyemdtsjsje, // 计税金额
+            ghzssl: tsl // 退税率
+          });
+          // 征退税差额 = 税额 - 应退税额
+          let ztsce = se - ytse1;
+          if (ztsce < 0) {
+            ztsce = 0;
+          }
+          if (ztsce === 0 || ztsce) {
+            form.setFieldsValue({ ztsce: myUtil.text.getNumVal(myUtil.text.formatNum(ztsce, '0.00')) });
+          }
+          // 应退税额
+          if (ytse1 === 0 || ytse1) {
+            form.setFieldsValue({ ytse1: myUtil.text.getNumVal(myUtil.text.formatNum(ytse1, '0.00')) });
+          }
+        }
+        break;
+    }
+  },
   /**
    * @author liwc
    * @method setMdtSyykgtjs
@@ -1794,7 +1796,7 @@ DditCktsFormCommonFunc.util = {
    * @param paras
    */
   setMdtSyykgtjs: function(param: any, type: any) {
-    debugger;
+    // debugger;
     const { form } = param;
     let skjermb: any;
     switch (type) {

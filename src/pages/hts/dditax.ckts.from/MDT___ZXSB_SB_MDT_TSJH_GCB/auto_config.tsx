@@ -70,7 +70,7 @@ unitConfig.filter_items = [
 unitConfig.form_items = [
   {label: '基本信息', name: 'jbxx', type: 'GroupTitle', disabled: true},
   {label: 'ID', name: 'uuid', type: 'Hidden'},
-  {label: '所属期', name: 'ssq', type: 'Input', rules: [{type: 'base_date', format: 'YYYYMM'}, {type: 'base_required'}, {type: 'base_string', range: [0, 6]}], eventOnBlur: 'ssq'},
+  {label: '所属期', name: 'ssq', type: 'Input', rules: [{type: 'base_date', format: 'yyyyMM'}, {type: 'base_required'}, {type: 'base_string', range: [0, 6]}], eventOnBlur: 'ssq'},
   {label: '序号', name: 'sbxh', type: 'Input', eventOnBlur: 'sbxh'},
   {
     label: '关联号',
@@ -117,7 +117,7 @@ unitConfig.form_items = [
     type: 'DatePicker',
     'allowClear': true,
     format: 'YYYY-MM-DD',
-    rules: [{type: 'base_required'}, {type: 'base_date', format: 'YYYYMMdd'}],
+    rules: [{type: 'base_required'}, {type: 'base_date', format: 'yyyyMMdd'}],
     eventOnChange: 'kprq'
   },
   {

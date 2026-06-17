@@ -209,10 +209,11 @@ class Alert extends Component {
         wrapClassName={`${isTableContent? 'standard-modal-1': '' }`} 
         footer={this.getFooter()}
         closable = {closable}
-        destroyOnClose={true}
+        destroyOnHidden={true}
         onCancel={() => this.close()}
         className={`${isTableContent? '': 'dd_modal_wrap' } ${masker ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        // maskClosable={false}
+        mask={{ closable: false }}
         keyboard={opts.keyboard}
       >
         <Spin tip="Loading..." spinning={masker} delay={100}>

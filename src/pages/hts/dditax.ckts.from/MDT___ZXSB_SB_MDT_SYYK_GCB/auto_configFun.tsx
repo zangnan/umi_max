@@ -1,3 +1,7 @@
+/**
+ * title: 跨境应税行为收讫营业款明细清单
+ * author: wx
+ */
 import React from 'react';
 import myUtil from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
@@ -6,7 +10,7 @@ import { message } from 'antd';
 import dayjs from 'dayjs';
 
 const Func: any = {
-  refUnit: React.createRef(),
+  unitRef: React.createRef(),
 };
 
 // 新建表单初始化
@@ -51,7 +55,6 @@ Func.validator = {
     return { validator };
   },
 }
-
 // 表单事件：OnBlur
 Func.eventOnBlur = {
   // 申报序号
@@ -162,16 +165,13 @@ Func.eventOnBlur = {
     DditCktsFormCommonFunc.eventOnBlur.hbhlDm(param);
   },
 }
-
 // 表单事件：OnFocus
 Func.eventOnFocus = {
   // 清算币种
   hbhlDm: (param: any) => {
-    debugger;
     Func.eventOnChange.skrq(param);
   },
 }
-
 // 表单事件：OnChange
 Func.eventOnChange = {
   // 本期收取营业款收款时间
@@ -179,7 +179,6 @@ Func.eventOnChange = {
     const { form } = param;
     const url = '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx';
     const skrq = form?.getFieldValue('skrq');
-    debugger;
     DditCktsFormCommonFunc.util.loadCodeDmHbhlAutoComplete({
       form,
       url,
@@ -195,6 +194,44 @@ Func.eventOnChange = {
     const gbname = myUtil.code.getCodeValByKey(gjhdqszDm, 'code_dm_gy_gjhdq:01')
     form.setFieldsValue({ gbname: gbname });
   },
+}
+
+/**
+ * @author liwc
+ * @method setVal
+ * @desc 带出表单其他项（针对getCodeDmGyHbhl01反写）
+ * @param {String} formId 表单ID
+ * @param {Object} data 表单数据
+ */
+ const getCodeDmGyHbhl01 = (data: any) => {
+  if (data && data.hbzmDm) {
+    const params = {
+      // searchModel: {
+      //   hbzmDm: data.hbzmDm,
+      //   ssq: data.ssq,
+      //   ckrq: data.ckrq1,
+      //   hlny: data.hlny
+      // }
+      searchModel: [
+        { property: "hbzmDm", value: data.hbzmDm, op: "al" },
+        { property: "ssq", value: data.ssq, op: "al" },
+        { property: "ckrq", value: data.ckrq1, op: "al" },
+        { property: "hlny", value: data.hlny, op: "al" },
+      ],
+    };
+    let result;
+    queryHlxx(params).then((res) => {
+      const { body, code, msg } = res;
+      if (code == '200' && body.rows && body.rows.length > 0) {
+        result = res.body.rows[0];
+      } else {
+        message.info(res.msg);
+      }
+    })
+    return result;
+  } else {
+    return null;
+  }
 }
 
 export default Func;
