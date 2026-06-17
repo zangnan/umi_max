@@ -167,8 +167,10 @@ function deriveDefaultReadmePath(outPath) {
 
 /**
  * 从输出 config 路径派生 index/fun 页面路径
- * 规则：basename 去掉 'Config' 后缀，加 Index / Fun 后缀，再加 .tsx
- * 例：src/.../monthDataConfig.tsx -> src/.../monthDataIndex.tsx + monthDataFun.tsx
+ * 规则：
+ *   - index 文件：basename 去掉 'Config' 后缀，加 Index 后缀，再加 .tsx
+ *   - fun 文件：固定命名为 'f.tsx'（与 ref 参照文件命名一致；dditax.ckts.from 下每个目录唯一）
+ *   例：src/.../monthDataConfig.tsx -> src/.../monthDataIndex.tsx + <dir>/f.tsx
  * outPath 为空时返回 null
  */
 function derivePagePaths(outPath) {
@@ -180,7 +182,7 @@ function derivePagePaths(outPath) {
   const stripped = base.endsWith('Config') ? base.slice(0, -'Config'.length) : base;
   return {
     indexFile: path.join(dir, `${stripped}Index${ext}`),
-    funFile: path.join(dir, `${stripped}Fun${ext}`),
+    funFile: path.join(dir, `f${ext}`),
   };
 }
 
@@ -1497,28 +1499,6 @@ function generateReadme({ srcFile, outFile, configVar, actions, rules }) {
  *          - 字段缺失 = 参照里没有这类 customization
  *          - 或 null（不命中 / 文件缺失）
  */
-function extractIndexCustomizationsFromFile(refPath) {
-  if (!refPath || !fs.existsSync(refPath)) return null;
-  let content;
-  try {
-    content = fs.readFileSync(refPath, 'utf-8');
-  } catch (_err) {
-    return null;
-  }
-
-  // 1) 抽取 initSearchModal: [...] 段
-  const initSearchModal = extractInitSearchModalBlock(content);
-
-  // 2) 抽取 myConfig 调整块（const myConfig = ...; 与 return <>; 之间）
-  const myConfigAdjustments = extractMyConfigAdjustments(content);
-
-  if (!initSearchModal && !myConfigAdjustments) return null;
-  const result = {};
-  if (initSearchModal) result.initSearchModal = initSearchModal;
-  if (myConfigAdjustments) result.myConfigAdjustments = myConfigAdjustments;
-  return result;
-}
-
 /**
  * 从参照文件内容中抽取 `initSearchModal: [...]` 段的原始文本
  *   - 含 `UnitUtil.getLcswsxDm(...)` → 自动重写为 `cktsUtil.getLcswsxDm(myConfig.unit_constant)`
@@ -2724,66 +2704,212 @@ function stripGridParamsBlock(text) {
  *        - 注入到 `const myConfig = {...}` 之前（符合 React hooks 规则）
  *        - 默认 ''
  */
-function generateIndexPage({
-  configImportName,
-  funImportName,
-  initSearchModal,
-  myConfigAdjustments,
-  needsCktsUtilImport,
-  needsMyUtilImport,
-  needsUseRefImport,
-  preRefBlock = '',
-}) {
-  // Branch A：完全无 customization —— 标准模板
-  if (!initSearchModal && !myConfigAdjustments) {
-    return `import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './${configImportName}';
-import Func from './${funImportName}';
+// ============================================================================
+// Change: index 路径「完全复制 ref + 调整」模式（与 fun 路径一致）
+//   - 不再从 ref 抽 initSearchModal / myConfig 调整块
+//   - ref 全文直接作为初稿
+//   - 在复制基础上做局部调整
+//   - ref 缺失 → hard error（与 fun 路径 L3083-3088 一致）
+// ============================================================================
 
-const Unit: React.FC<unknown> = () => {
-  return <>
-    <DDBunit2 config={unitConfig} func={Func} />
-  </>;
-};
-export default Unit;
-`;
+/**
+ * index 路径专属 import 改写：把 DDBunit2 老路径归一为 ckts 项目内版本。
+ * 规则 A.12：`import DDBunit2 from '@/components/DDBunit/DDBunit2';`
+ *   → `import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';`
+ * silent fallback：ref 不含 DDBunit2 import / 已是新路径 → 原样保留
+ *
+ * @param {string} content  ref 文件全文
+ * @returns {string}  改写后文本
+ */
+function normalizeDDBunit2Import(content) {
+  return content.replace(
+    /^import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
+    "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
+  );
+}
+
+/**
+ * index 路径专属 import 改写：A.13 + A.14
+ *   - 规则 A.13：`import UnitUtil from '@/components/DDBunit/unit_util';`
+ *     → `import cktsUtil from '@/pages/hts/cktsUtil';`
+ *     （default 名字从 UnitUtil 改写为 cktsUtil，路径改写为 ckts 项目内版本）
+ *   - 规则 A.14：`import { ... } from '@/services/hts/apiTb';`
+ *     → `import { ... } from '@/pages/hts/services/htsApi';`
+ *     （apiTb 合并到 htsApi；多行折叠为单行）
+ *
+ * silent fallback：ref 不含目标 import / 已是新路径 → 原样保留
+ *
+ * @param {string} content  ref 文件全文
+ * @returns {string}  改写后文本
+ */
+function applyIndexImportRewrites(content) {
+  let text = content;
+  // 规则 A.13: UnitUtil → cktsUtil
+  text = text.replace(
+    /^import\s+UnitUtil\s+from\s+['"]@\/components\/DDBunit\/unit_util['"]\s*;?[ \t]*$/gm,
+    "import cktsUtil from '@/pages/hts/cktsUtil';",
+  );
+  // 规则 A.14: apiTb → htsApi
+  text = text.replace(
+    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/apiTb['"]\s*;?[ \t]*$/gm,
+    (m, names) => {
+      const list = names
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      return list.length > 0
+        ? `import { ${list.join(', ')} } from '@/pages/hts/services/htsApi';`
+        : m;
+    },
+  );
+  // 规则 A.15: import <name> from './func' → import <name> from './f'
+  //   适配 saasMdt 路径（fun 文件从 func.tsx 重命名为 f.tsx）
+  //   保留 default 名字（无论 func / Func）
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]\.\/func['"]\s*;?[ \t]*$/gm,
+    "import $1 from './f';",
+  );
+  return text;
+}
+
+/**
+ * index 路径专属规则 F.8：return 语句里除 DDBunit2 外其它组件注释化
+ *   - 找到 return <>...</> 段
+ *   - 解析 JSX 组件引用（大写开头的标签），排除 DDBunit2
+ *   - 在 DDBunit2 行之后插入 marker 注释 {开 斜线 星 暂时仅仅保留DDBunit2 星 斜线}
+ *   - 把其它组件行用 JSX 注释包起来
+ *   - 找到对应 import 行，加 // 前缀注释
+ *
+ * silent fallback：ref 无 return 段 / return 段里只有 DDBunit2 → 原样保留
+ *
+ * @param {string} content  ref 文件全文
+ * @returns {string}  改写后文本
+ */
+function commentOutNonDDBunit2Components(content) {
+  // 1) 找 return <>...</> 段
+  //   - capture group 1: `return <>\n` 整段 open（保留原始缩进）
+  //   - capture group 2: 中间内容（不含前后换行）
+  //   - capture group 3: `\n  </>` 整段 close（保留原始缩进）
+  const returnRe = /(\breturn\s*<>\s*\n)([\s\S]*?)(\n\s*<\/[\s\S]*?>)/;
+  const m = returnRe.exec(content);
+  if (!m) return content;
+  const returnBody = m[2];
+
+  // 2) 解析 return 段里的 JSX 组件名（首字母大写），排除 DDBunit2
+  const componentNames = new Set();
+  for (const line of returnBody.split('\n')) {
+    const cm = line.match(/<([A-Z][A-Za-z0-9_]*)/);
+    if (cm && cm[1] !== 'DDBunit2') {
+      componentNames.add(cm[1]);
+    }
   }
+  if (componentNames.size === 0) return content;
 
-  // Branch B：至少有一项 customization —— 注入模板
-  const cktsUtilImportLine = needsCktsUtilImport
-    ? "import cktsUtil from '@/pages/hts/cktsUtil';\n"
-    : '';
-  const myUtilImportLine = needsMyUtilImport
-    ? "import myUtil from '@/components/DDAssist/util';\n"
-    : '';
-  // useRef 合并到 React 行（项目主流风格，与 DDBunit2.tsx line 1 一致）
-  const useRefInReactImport = needsUseRefImport ? ', {useRef}' : '';
-  const myConfigBlock = myConfigAdjustments
-    ? `${myConfigAdjustments}\n`
-    : '';
-  const gridParamsBlock = initSearchModal
-    ? `  myConfig.gridParams = {
-    ${initSearchModal},
-  };
-`
-    : '';
-  // Change 2: preRefBlock 紧贴 `const myConfig` 之前（hook 必须在最前）
-  return `import React${useRefInReactImport} from 'react';
-${cktsUtilImportLine}${myUtilImportLine}import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './${configImportName}';
-import Func from './${funImportName}';
+  // 3) 重写 return 段中间内容：在 DDBunit2 行后插入 marker，注释其它组件
+  const lines = returnBody.split('\n');
+  const newLines = [];
+  let markerInserted = false;
+  for (const line of lines) {
+    const cm = line.match(/<([A-Z][A-Za-z0-9_]*)/);
+    if (cm && cm[1] !== 'DDBunit2') {
+      // 注释化：保留前导缩进；包成 JSX 注释
+      const commented = line.replace(
+        /(\s*)(<\/?[A-Z][A-Za-z0-9_]*[^>]*?\/?>)\s*$/,
+        '$1{/* $2 */}',
+      );
+      newLines.push(commented);
+    } else {
+      newLines.push(line);
+      if (!markerInserted && /<DDBunit2/.test(line)) {
+        newLines.push('    {/* 暂时仅仅保留DDBunit2 */}');
+        markerInserted = true;
+      }
+    }
+  }
+  const newReturnBody = newLines.join('\n');
 
-const Unit: React.FC<unknown> = () => {
-${preRefBlock}  // 改变默认配置项
-  const myConfig = { ...unitConfig };
-${myConfigBlock}${gridParamsBlock}
-  return <>
-    <DDBunit2 config={myConfig} func={Func} />
-  </>;
-};
-export default Unit;
-`;
+  // 4) 用 replace callback 重建 return 段（保留 m[1] open + m[3] close 的原始缩进）
+  let newText = content.replace(returnRe, (full, open, _body, close) =>
+    open + newReturnBody + close,
+  );
+
+  // 5) 注释对应 import 行
+  for (const compName of componentNames) {
+    const importRe = new RegExp(
+      `^import\\s+${compName}\\s+from\\s+['"][^'"]+['"]\\s*;?[ \\t]*$`,
+      'gm',
+    );
+    newText = newText.replace(importRe, (match) => `// ${match.trim()}`);
+  }
+  return newText;
+}
+
+/**
+ * index 路径内联调整（应用规则 F.3-F.7）。
+ *   - F.3: UnitUtil.getLcswsxDm → cktsUtil.getLcswsxDm（regex）
+ *   - F.4: myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath（括号配对）
+ *   - F.5: config.X → myConfig.X（动态 alias 探测）
+ *   - F.6: r16 内联（form_api_save/delete 重命名 + 剥前缀）
+ *   - F.7: r17 内联（form_api_save_upload 剥前缀）
+ *
+ * 注：新方案下不再 stripGridParamsBlock（F.2 删除）—— ref 全文复制时 gridParams 块
+ *     是 ref 自身逻辑的一部分，必须保留。旧方案 strip 是为了避免与抽出的
+ *     initSearchModal 段重复，新方案不抽出 initSearchModal 段。
+ *
+ * @param {string} content  ref 文件全文
+ * @returns {string}  改写后文本
+ */
+function applyIndexAdjustments(content) {
+  let text = content;
+  // F.3 UnitUtil.getLcswsxDm → cktsUtil.getLcswsxDm
+  text = text.replace(
+    /UnitUtil\.getLcswsxDm\(\s*[A-Za-z_$][\w$]*\s*\.\s*unit_constant\s*\)/g,
+    'cktsUtil.getLcswsxDm(myConfig.unit_constant)',
+  );
+  // F.4 myUtil.menu.getMenuObjByPath → cktsUtil.menu.getMenuObjByPath
+  text = rewriteGetMenuObjByPathCalls(text);
+  // F.5 ref 函数体里残留的 config.X → myConfig.X
+  text = rewriteImportAliasToMyConfig(text, content);
+  // F.6 r16 内联（仅作用于 myConfig.* 块，configVar='myConfig'）
+  const r16 = transformFormApiSaveDelete(text, 'myConfig');
+  if (r16.count > 0) text = r16.content;
+  // F.7 r17 内联
+  const r17 = transformFormApiSaveUpload(text, 'myConfig');
+  if (r17.count > 0) text = r17.content;
+  return text;
+}
+
+/**
+ * index 文件生成（新方案：完全复制 ref + 调整）。
+ *   - Step 1: 读 ref 全文
+ *   - Step 2: 顶部 imports 改写（fun 路径 11 条 + DDBunit2 归一 A.12）
+ *   - Step 3: 内联调整（applyIndexAdjustments F.2-F.7）
+ *   - Step 4: 写文件
+ *
+ * 行为与 fun 路径新方案一致（[scripts/convert-ddbunit-config.js:3066-3126](scripts/convert-ddbunit-config.js#L3066-L3126)）。
+ *
+ * @param {string} refPath  ref index.tsx 绝对路径
+ * @param {string} configImportName  config 文件 basename（无 .tsx）
+ * @param {string} funImportName  fun 文件 basename（无 .tsx）
+ * @returns {string}  生成文件全文
+ */
+function generateIndexFileFromRef(refPath, configImportName, funImportName) {
+  // Step 1: 读 ref 全文
+  const refContent = fs.readFileSync(refPath, 'utf-8');
+  let output = refContent;
+
+  // Step 2: 顶部 imports 改写
+  output = applyImportRewritesToContent(output);
+  output = normalizeDDBunit2Import(output);
+  output = applyIndexImportRewrites(output); // A.13 UnitUtil + A.14 apiTb
+
+  // Step 3: 内联调整（F.3-F.7）
+  output = applyIndexAdjustments(output);
+
+  // Step 3.5: F.8 return 段非 DDBunit2 组件注释化 + 对应 import 注释
+  output = commentOutNonDDBunit2Components(output);
+
+  return output;
 }
 
 function generateFunPage({ initAddForm, refImports = [], extraMethods = {} } = {}) {
@@ -3004,57 +3130,27 @@ function main() {
       ? configImportName.slice(0, -'Config'.length) + 'Fun'
       : configImportName + 'Fun';
 
-    // 解析参照文件 → 抽取 customization（initSearchModal + myConfig 调整块）
+    // index 路径处理：完全复制 ref + 调整（与 fun 路径一致）
     //   - 默认：<srcDir>/index.tsx（与源 auto_config.tsx 同目录）
     //   - --index <name>：<srcDir>/<name>.tsx
-    //   - 文件不存在 / 无任何 customization → silent fallback
-    let initSearchModal = null;
-    let myConfigAdjustments = null;
-    let preRefBlock = '';
-    let needsCktsUtilImport = false;
-    let needsMyUtilImport = false;
-    let needsUseRefImport = false;
+    //   - 找不到 ref → hard error（删除原 silent fallback，与 fun 路径 L3083-3088 一致）
     if (args['no-index'] !== true) {
       const srcDir = path.dirname(args.src);
       const refBase = typeof args.index === 'string' && args.index.length > 0
         ? args.index
         : 'index';
       const refPath = path.join(srcDir, `${refBase}.tsx`);
-      const customizations = extractIndexCustomizationsFromFile(refPath);
-      if (customizations) {
-        if (customizations.initSearchModal) {
-          initSearchModal = customizations.initSearchModal.text;
-          needsCktsUtilImport = customizations.initSearchModal.needsCktsUtilImport;
-        }
-        if (customizations.myConfigAdjustments) {
-          myConfigAdjustments = customizations.myConfigAdjustments.text;
-          preRefBlock = customizations.myConfigAdjustments.preRefBlock || '';
-          needsMyUtilImport = customizations.myConfigAdjustments.needsMyUtilImport;
-          if (customizations.myConfigAdjustments.needsCktsUtilImport) {
-            needsCktsUtilImport = true;
-          }
-          needsUseRefImport = customizations.myConfigAdjustments.needsUseRefImport;
-        }
-        console.log(`[convert] 参照文件已抽取 customization: ${refPath}`);
+      if (!fs.existsSync(refPath)) {
+        console.error(
+          `[convert] 错误: 未找到 index 参照文件 (尝试: ${refPath})`,
+        );
+        process.exit(1);
       }
+      const indexContent = generateIndexFileFromRef(refPath, configImportName, funImportName);
+      fs.mkdirSync(path.dirname(args.page.indexFile), { recursive: true });
+      fs.writeFileSync(args.page.indexFile, indexContent, 'utf-8');
+      console.log(`[convert] 已生成 index 页面: ${args.page.indexFile} (参照: ${refPath})`);
     }
-
-    fs.mkdirSync(path.dirname(args.page.indexFile), { recursive: true });
-    fs.writeFileSync(
-      args.page.indexFile,
-      generateIndexPage({
-        configImportName,
-        funImportName,
-        initSearchModal,
-        myConfigAdjustments,
-        needsCktsUtilImport,
-        needsMyUtilImport,
-        needsUseRefImport,
-        preRefBlock,
-      }),
-      'utf-8',
-    );
-    console.log(`[convert] 已生成 index 页面: ${args.page.indexFile}`);
 
     // --fun 处理：完全复制 ref + 调整（用户决策 r20+）
     //   - 整体策略：先读 ref 全文，然后做局部调整

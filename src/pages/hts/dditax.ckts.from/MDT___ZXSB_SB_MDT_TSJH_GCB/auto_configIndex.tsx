@@ -1,12 +1,15 @@
 import React, {useRef} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f';
+// import Jhmx from '@/pages/hts/commonModule/jhmx/jhmx';
 
-const Unit: React.FC<unknown> = () => {
+const index: React.FC<unknown> = () => {
+
   const jhmxRef: any = useRef(); // 生成进货明细
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+
+  const myConfig = {...config};
+
   myConfig.api_form_edit = `/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
   myConfig.form_api_save_upload = `/yw/bszx/mdt/hwlw/tsjh/updateHwlwTsjh`; // api 表单更新
   myConfig.api_form_delete = `/yw/bszx/mdt/hwlw/tsjh/deleteHwlwTsjh`; // api 表单删除
@@ -49,7 +52,9 @@ const Unit: React.FC<unknown> = () => {
   };
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
-  </>;
+    <DDBunit2 config={myConfig} func={Func}/>
+    {/* 暂时仅仅保留DDBunit2 */}
+    {/* <Jhmx onRef={jhmxRef}/> */}
+  </>
 };
-export default Unit;
+export default index;

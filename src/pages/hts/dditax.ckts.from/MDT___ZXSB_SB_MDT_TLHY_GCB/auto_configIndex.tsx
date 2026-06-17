@@ -1,11 +1,16 @@
+/**
+ * title: 跨境应税行为免退税申报明细
+ * author: wx
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f'
+import { history } from 'umi';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+const index: React.FC<unknown> = () => {
+
+  const myConfig = { ...config };
   myConfig.form_items[14] =	{ label: '备注', name: 'bz', type: 'TextArea', autoSize: { minRows: 2, maxRows: 2}, layout: { label: { xs: 8, sm: 8, md: 8, lg: 5, xl: 3, xxl: 3}, formItem: { xs: 16, sm: 16, md: 16, lg: 19, xl: 21, xxl: 21 } }, rules: [{ type: 'base_string', range: [0, 200]}]};
   
   // 如果为数据管理查询页面CXTJ_
@@ -23,9 +28,9 @@ const Unit: React.FC<unknown> = () => {
       ckts_order: false, // 是否显示序号重排(默认规则：选择排序)按钮，默认关闭
     };
   }
-
+  
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-  </>;
+  </>
 };
-export default Unit;
+export default index;

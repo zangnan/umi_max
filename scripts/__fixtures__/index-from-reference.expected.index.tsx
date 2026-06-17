@@ -1,10 +1,12 @@
+/**
+ * 参照文件模板 - 模拟源 auto_config.tsx 同目录的 index.tsx
+ * 含 initSearchModal 段（literal value），工具会把它原样注入到生成的 auto_configIndex.tsx
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './index-from-reference.actual';
-import Func from './index-from-reference.actualFun';
+import unitConfig from './index-from-reference';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
+const Index: React.FC<unknown> = () => {
   const myConfig = { ...unitConfig };
   myConfig.gridParams = {
     initSearchModal: [
@@ -13,7 +15,7 @@ const Unit: React.FC<unknown> = () => {
   };
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
+    <DDBunit2 config={myConfig} />
   </>;
 };
-export default Unit;
+export default Index;

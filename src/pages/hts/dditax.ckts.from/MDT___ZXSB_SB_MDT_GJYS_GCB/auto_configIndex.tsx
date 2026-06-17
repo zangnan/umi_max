@@ -1,11 +1,16 @@
+/**
+ * title: 跨境应税行为免退税申报明细
+ * author: wx
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f';
+import { history } from 'umi';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+const index: React.FC<unknown> = () => {
+
+  const myConfig = { ...config };
   // 转换Input为InputNumber
   myConfig.form_items[9] = { label: '本次运输次数', name: 'bcyscs', type: 'InputNumber', rules: [{ type: 'base_number', length: 10, decimal: 0}]};
   myConfig.form_items[10] = { label: '自运舱单份数', name: 'zycdfs', type: 'InputNumber', rules: [{ type: 'base_number', length: 10, decimal: 0}]};
@@ -46,8 +51,9 @@ const Unit: React.FC<unknown> = () => {
     };
   }
 
+
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-  </>;
+  </>
 };
-export default Unit;
+export default index;

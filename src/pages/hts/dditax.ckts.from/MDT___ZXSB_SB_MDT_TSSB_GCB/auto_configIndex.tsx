@@ -1,16 +1,37 @@
-import React, {useRef} from 'react';
+/**
+ * title: 生产企业出口货物劳务免抵退税申报明细表
+ * author: wx
+ */
+import React, {useEffect, useRef} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f';
+// import BgdscMx from '@/pages/hts/commonModule/scmx/scmx';
+// import Hwcj from '@/pages/hts/commonModule/hwcj/hwcj';
+// import Tszbcs from '@/pages/hts/commonModule/tszbcs/tszbcs_sc';
+import { delTzsx } from '@/pages/hts/services/htsApi';
+// import ErrorMsg from './errormsg';
+// import Hwccj from './hwccjModal';
 
-const Unit: React.FC<unknown> = () => {
+const index: React.FC<unknown> = () => {
+
   const scmxRef: any = useRef();    // 生成明细
   const hwcjRef: any = useRef();    // 货物冲减
   const tszbcsRef: any = useRef(); // 退税指标测算
-  const ErrorMsgRef: any = useRef();
   const hwccjRef: any = useRef();    // 海外仓冲减
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+  // 导入错误信息页面
+  const ErrorMsgRef: any = useRef();
+
+  useEffect(() => {
+    // 台账筛选
+    delTzsx({cdDm: '25030101'}).then(() => {
+    });
+    delTzsx({cdDm: '020999'}).then(() => {
+    });
+  }, []);
+
+  const myConfig = {...config};
+
   myConfig.api_form_edit = `/yw/bszx/mdt/hwlw/tssb/updateHwlwTssb`; // api 表单更新
   myConfig.form_api_save_upload = `/yw/bszx/mdt/hwlw/tssb/updateHwlwTssb`; // api 表单更新
   myConfig.api_form_delete = `/yw/bszx/mdt/hwlw/tssb/deleteHwlwTssb`; // api 表单删除
@@ -99,11 +120,17 @@ const Unit: React.FC<unknown> = () => {
   myConfig.gridParams = {
     initSearchModal: [
       { property: 'cdDm', value: "25030101", op: 'zdy' },
-    ],
-  };
+    ]
+  }
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
-  </>;
+    <DDBunit2 config={myConfig} func={Func}/>
+    {/* 暂时仅仅保留DDBunit2 */}
+    {/* <BgdscMx onRef={scmxRef}/> */}
+    {/* <Hwcj onRef={hwcjRef}/> */}
+    {/* <Tszbcs onRef={tszbcsRef}/> */}
+    {/* <ErrorMsg onRef={ErrorMsgRef}/> */}
+    {/* <Hwccj onRef={hwccjRef}/> */}
+  </>
 };
-export default Unit;
+export default index;

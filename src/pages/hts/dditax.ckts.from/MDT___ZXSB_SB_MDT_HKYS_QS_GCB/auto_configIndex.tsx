@@ -1,11 +1,16 @@
+/**
+ * title: 航空运输收入清算账单
+ * author: wx
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f';
+import { history } from 'umi';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+const index: React.FC<unknown> = () => {
+
+  const myConfig = { ...config };
   myConfig.form_items[17].rules = [{ type: 'base_string', range: [0, 200]}];
 
   const dataIndex = ['qszdbh', 'kpphhdhm'];
@@ -36,8 +41,9 @@ const Unit: React.FC<unknown> = () => {
     };
   }
 
+
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-  </>;
+  </>
 };
-export default Unit;
+export default index;

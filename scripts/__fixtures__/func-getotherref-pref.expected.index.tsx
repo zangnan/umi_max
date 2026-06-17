@@ -1,15 +1,19 @@
-import React, {useRef} from 'react';
+/**
+ * 参照文件模板 - 模拟源 auto_config.tsx 同目录的 index.tsx
+ * 含 5 个 useRef 在 myConfig 之前（带紧邻 // 注释） + Func.getOtherRef 引用这 5 个
+ * 预期：工具应在生成的 myConfig 之前注入 5 个 useRef 定义
+ */
+import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './func-getotherref-pref.actual';
-import Func from './func-getotherref-pref.actualFun';
+import unitConfig from './func-getotherref-pref';
 
-const Unit: React.FC<unknown> = () => {
+const Index: React.FC<unknown> = () => {
   const scmxRef: any = useRef();    // 生成明细
   const hwcjRef: any = useRef();    // 货物冲减
   const tszbcsRef: any = useRef(); // 退税指标测算
   const hwccjRef: any = useRef();    // 海外仓冲减
   const ErrorMsgRef: any = useRef(); // 导入错误信息页面
-  // 改变默认配置项
+
   const myConfig = { ...unitConfig };
   myConfig.grid_columns.forEach((item: any) => {
     item.ellipsis = true;
@@ -26,7 +30,7 @@ const Unit: React.FC<unknown> = () => {
   };
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
+    <DDBunit2 config={myConfig} />
   </>;
 };
-export default Unit;
+export default Index;

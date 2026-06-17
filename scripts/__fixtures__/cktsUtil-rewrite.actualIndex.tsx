@@ -1,11 +1,14 @@
+/**
+ * 参照文件模板 - 模拟源 auto_config.tsx 同目录的 index.tsx
+ * 含 cktsUtil.getLcswsxDm(myConfig.unit_constant) 调用 —— 工具会重写为
+ *   cktsUtil.getLcswsxDm(myConfig.unit_constant) 并在生成文件顶部加 import cktsUtil
+ */
 import React from 'react';
-import cktsUtil from '@/pages/hts/cktsUtil';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './cktsUtil-rewrite.actual';
-import Func from './cktsUtil-rewrite.actualFun';
+import unitConfig from './cktsUtil-rewrite';
+import cktsUtil from '@/pages/hts/cktsUtil';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
+const Index: React.FC<unknown> = () => {
   const myConfig = { ...unitConfig };
   myConfig.gridParams = {
     initSearchModal: [
@@ -14,7 +17,7 @@ const Unit: React.FC<unknown> = () => {
   };
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
+    <DDBunit2 config={myConfig} />
   </>;
 };
-export default Unit;
+export default Index;

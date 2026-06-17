@@ -1,12 +1,28 @@
-import React, {useRef} from 'react';
-import cktsUtil from '@/pages/hts/cktsUtil';
+/**
+ * title: 出口货物收汇情况表
+ * author: wx
+ */
+import React , { useRef } from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f'
+import cktsUtil from '@/pages/hts/cktsUtil';
+// import ModalMbxz from './modal_mdtsh_mbxz';
+// import DDImport from '@/components/DDImport';
+// import ModalShtq from './modal_mdtsh_shtq';
+import { cloneDeep } from 'lodash';
+import myUtil from '@/components/DDAssist/util';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+const index: React.FC<unknown> = () => {
+
+  // const myConfig = { ...config };
+  const myConfig = cloneDeep(config);
+
+  myConfig.gridParams = {
+    initSearchModal: [
+      { property: 'lcswsxDm', value: cktsUtil.getLcswsxDm(myConfig.unit_constant), op: 'al' },
+    ],
+  }
   // 补充悬浮
   const dataIndex = ['stshqkckhth', 'stshqkjzclzl', 'fhr', 'pzhm2'];
   myConfig.grid_columns.forEach((item: any) => {
@@ -55,14 +71,13 @@ const Unit: React.FC<unknown> = () => {
     otherRef.push(shtqRef);
     return otherRef;
   };
-  myConfig.gridParams = {
-    initSearchModal: [
-      { property: 'lcswsxDm', value: cktsUtil.getLcswsxDm(myConfig.unit_constant), op: 'al' },
-    ],
-  };
 
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-  </>;
+    {/* 暂时仅仅保留DDBunit2 */}
+    {/* <ModalMbxz onRef={mbxzRef} /> */}
+    {/* <DDImport onRef={refDDImport} /> */}
+    {/* <ModalShtq onRef={shtqRef} /> */}
+  </>
 };
-export default Unit;
+export default index;

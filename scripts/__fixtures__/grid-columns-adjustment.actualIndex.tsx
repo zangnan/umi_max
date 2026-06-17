@@ -1,10 +1,13 @@
+/**
+ * 参照文件模板 - 模拟源 auto_config.tsx 同目录的 index.tsx
+ * 含 myConfig.grid_columns / grid_columns_tj forEach（ellipsis + width 调整）
+ * + initSearchModal（literal value）—— 模拟 TSSB_GCB 模式
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './grid-columns-adjustment.actual';
-import Func from './grid-columns-adjustment.actualFun';
+import unitConfig from './grid-columns-adjustment';
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
+const Index: React.FC<unknown> = () => {
   const myConfig = { ...unitConfig };
   // 补充悬浮
   const dataIndex = ['cktmsywlxdmjh'];
@@ -28,10 +31,10 @@ const Unit: React.FC<unknown> = () => {
     initSearchModal: [
       { property: 'cdDm', value: '25030101', op: 'zdy' },
     ],
-  };
+  }
 
   return <>
-    <DDBunit2 config={myConfig} func={Func} />
+    <DDBunit2 config={myConfig} />
   </>;
 };
-export default Unit;
+export default Index;

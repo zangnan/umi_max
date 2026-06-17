@@ -1,11 +1,14 @@
+/**
+ * title: 跨境应税行为收讫营业款明细清单
+ * author: wx
+ */
 import React from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import unitConfig from './auto_config';
-import Func from './auto_configFun';
+import config from './auto_config';
+import Func from './f'
+const index: React.FC<unknown> = () => {
 
-const Unit: React.FC<unknown> = () => {
-  // 改变默认配置项
-  const myConfig = { ...unitConfig };
+  const myConfig = { ...config };
   myConfig.api_form_edit = `/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
   myConfig.form_api_save_upload = `/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
 
@@ -29,9 +32,8 @@ const Unit: React.FC<unknown> = () => {
       item.ellipsis = true;
     }
   })
-
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-  </>;
+  </>
 };
-export default Unit;
+export default index;
