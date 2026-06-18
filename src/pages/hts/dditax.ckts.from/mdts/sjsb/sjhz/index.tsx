@@ -5,13 +5,6 @@
 import React, { useState, useEffect } from 'react';
 import './sjhzStyle.less';
 import { Spin, Button, message, Space, Input, Form, Select, Modal, InputNumber } from 'antd';
-// import { querySjhzSsqList, querySjhzcxData, deleteHzsjcxData, saveHzsjcxData, querySchzbCscs, mdtJcSjhfx, mdtSchzb } from '@/services/hts/api';
-// import ProCard from '@ant-design/pro-card';
-// import myUtil from '@/pages/common/myUtil';
-// import DDAlert from '@/components/DDAlert';
-// import pro from '@/pages/common/proConfig';
-// import DDBaseGrid from '@/components/DDBaseGrid';
-// import { useIntl } from 'umi';
 import { querySjhzSsqList, querySjhzcxData, deleteHzsjcxData, saveHzsjcxData, querySchzbCscs, mdtJcSjhfx, mdtSchzb } from '@/pages/hts/services/htsApi';
 import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
@@ -724,7 +717,6 @@ const Index: React.FC<unknown> = () => {
         title="数据检查异常疑点列表"
         destroyOnClose={true}
         visible={modalVisible}
-        // width={pro.c_modal_width_x4}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
         footer={

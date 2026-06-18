@@ -1283,9 +1283,12 @@ const DEFAULT_NAME_MAPPING = {
  * @param {string} [pathTemplate] - path 模板（含 {basename} 占位），仅当 outPath 不可派生时回退
  * @param {string} [outPath] - 工具派生后的输出 config 路径，用于 r9 反向推 path/component
  * @param {string} [nameOverride] - r10：从源文件抽取的显示名（JSDoc title / grid_title / module_key）
+ * @param {string} [indexFile] - r21：实际写入的 index 文件路径，用于推 component 路径
+ *   - 传了则用其 basename 代替 `${basename}Index`（支持 ref='index' → 'index.tsx' 时 component='./.../index'）
+ *   - 不传则走默认 `${basename}Index` 派生
  * @returns {{name, path, component}}
  */
-function buildRouteEntry({ configImportName, nameMapping, pathTemplate, outPath, nameOverride }) {
+function buildRouteEntry({ configImportName, nameMapping, pathTemplate, outPath, nameOverride, indexFile, parentPath }) {
   // 派生 basename：去掉 'Config' 后缀
   const basename = configImportName.endsWith('Config')
     ? configImportName.slice(0, -'Config'.length)
@@ -1301,18 +1304,61 @@ function buildRouteEntry({ configImportName, nameMapping, pathTemplate, outPath,
 
   // r9: 优先从 outPath 派生 path/component（主路径）
   const derived = deriveRouteFromOutPath(outPath, basename);
-  let path;
+  let routePath;
   let component;
-  if (derived) {
-    path = derived.path;
-    component = derived.component;
+
+  if (parentPath) {
+    // r22: --path 前缀 + outPath 父目录 basename + indexFile basename
+    //   末两级 = "<outPath 父目录>/<indexFile>"（不是 outPath 文件 basename）
+    //   例: --path /hts/saasMdt/mxcj/1 + outPath=.../MDT___ZXSB_SB_MDT_SYYK_GCB/auto_config.tsx
+    //       + indexFile=.../MDT___ZXSB_SB_MDT_SYYK_GCB/index.tsx
+    //       → path=/hts/saasMdt/mxcj/1/MDT___ZXSB_SB_MDT_SYYK_GCB/index
+    const parentDirBasename = path.basename(path.dirname(outPath));
+    const indexBase = indexFile
+      ? path.basename(indexFile, path.extname(indexFile))
+      : basename;
+    routePath = `${parentPath}/${parentDirBasename}/${indexBase}`;
+    // component 继续 r9 + r21 派生（不跟随 --path）
+    if (derived) {
+      if (indexFile) {
+        const indexBaseForComp = path.basename(indexFile, path.extname(indexFile));
+        const dir = path.dirname(indexFile);
+        const normalized = dir.replace(/\\/g, '/').replace(/^\/+/, '');
+        const marker = 'src/pages/';
+        const idx = normalized.indexOf(marker);
+        const stripped = idx >= 0 ? normalized.slice(idx + marker.length) : normalized;
+        const trimmed = stripped.replace(/\/+$/, '');
+        component = trimmed ? `./${trimmed}/${indexBaseForComp}` : `./${indexBaseForComp}`;
+      } else {
+        component = derived.component;
+      }
+    } else {
+      component = `./hts/saasMdt/tuiShuiJiHua/${basename}Index`;
+    }
+  } else if (derived) {
+    routePath = derived.path;
+    if (indexFile) {
+      // r21: 用 indexFile 的 basename 覆盖 component 路径
+      // 例：indexFile = 'src/pages/.../dditax.ckts.from/.../index.tsx'
+      //   → component = './<剥离父目录>/index'
+      const indexBase = path.basename(indexFile, path.extname(indexFile));
+      const dir = path.dirname(indexFile);
+      const normalized = dir.replace(/\\/g, '/').replace(/^\/+/, '');
+      const marker = 'src/pages/';
+      const idx = normalized.indexOf(marker);
+      const stripped = idx >= 0 ? normalized.slice(idx + marker.length) : normalized;
+      const trimmed = stripped.replace(/\/+$/, '');
+      component = trimmed ? `./${trimmed}/${indexBase}` : `./${indexBase}`;
+    } else {
+      component = derived.component;
+    }
   } else {
     // 回退：用户模板 > 默认模板（保留向后兼容；理论上 main 必传 outPath）
-    path = (pathTemplate || '/hts/saasMdt/tuiShuiJiHua/{basename}').replace('{basename}', basename);
+    routePath = (pathTemplate || '/hts/saasMdt/tuiShuiJiHua/{basename}').replace('{basename}', basename);
     component = `./hts/saasMdt/tuiShuiJiHua/${basename}Index`;
   }
 
-  return { name, path, component };
+  return { name, path: routePath, component };
 }
 
 /**
@@ -1320,30 +1366,88 @@ function buildRouteEntry({ configImportName, nameMapping, pathTemplate, outPath,
  * 幂等：按 path 查重，已存在则跳过
  * @returns {{added: boolean, content: string, error?: string}}
  */
-function addRouteToCktsFile({ cktsFile, newEntry }) {
+function addRouteToCktsFile({ cktsFile, newEntry, parentPath }) {
   const content = fs.readFileSync(cktsFile, 'utf-8');
 
-  // 幂等性检查：若 newEntry.path 已存在，跳过
-  if (content.includes(`path: '${newEntry.path}'`)) {
+  // 幂等性检查：若 newEntry.path 已存在，检查 component 是否一致
+  //   - r21 调整：若 component 不一致则更新（ref='index' 时 indexFile 改名为 index.tsx，routes 路径同步）
+  //   - 若 component 一致则跳过
+  const pathMarker = `path: '${newEntry.path}'`;
+  if (content.includes(pathMarker)) {
+    // 找已存在条目，提取它的 component 字段
+    const existingRe = new RegExp(
+      `\\{[^{}]*${pathMarker.replace(/'/g, "\\'")}[^{}]*component:\\s*'([^']+)'[^{}]*\\}`,
+    );
+    const existingMatch = existingRe.exec(content);
+    if (existingMatch && existingMatch[1] === newEntry.component) {
+      return { added: false, content };
+    }
+    // component 不一致 → 替换为新条目
+    if (existingMatch) {
+      const newLine = `{ name: '${newEntry.name}', path: '${newEntry.path}', component: '${newEntry.component}' }`;
+      const newContent = content.replace(existingRe, newLine);
+      fs.writeFileSync(cktsFile, newContent, 'utf-8');
+      return { added: true, updated: true, content: newContent };
+    }
+    // 兜底：找到 path 但 regex 没匹配到完整条目（罕见），跳过
     return { added: false, content };
   }
 
-  // 找到第一个 `routes: [` 起始位置
-  const routesArrayRe = /(routes:\s*\[)/;
-  const m = content.match(routesArrayRe);
-  if (!m) {
-    return { added: false, content, error: '未找到 routes: [ 数组' };
+  // r22: 找 parentPath 指定父节点的 routes: [（按 path 字面量匹配）
+  //   - 父节点 regex: \{ ... path: '<parentPath>' ... routes: \[
+  //   - 父节点不存在 → hard error
+  //   - 无 parentPath → 兼容原行为：第一个 routes: [
+  let insertPos;
+  if (parentPath) {
+    const parentRe = new RegExp(
+      `\\{[^{}]*path:\\s*'${parentPath.replace(/'/g, "\\'")}'[^{}]*routes:\\s*\\[`,
+    );
+    const parentMatch = content.match(parentRe);
+    if (!parentMatch) {
+      throw new Error(
+        `未找到 parentPath 指定的父节点: ${parentPath} (在 ${cktsFile} 中)`,
+      );
+    }
+    insertPos = parentMatch.index + parentMatch[0].length; // 紧跟 [ 之后
+  } else {
+    const routesArrayRe = /(routes:\s*\[)/;
+    const m = content.match(routesArrayRe);
+    if (!m) {
+      return { added: false, content, error: '未找到 routes: [ 数组' };
+    }
+    insertPos = m.index + m[0].length; // 紧跟 [ 之后
   }
-  const insertPos = m.index + m[0].length; // 紧跟 [ 之后
 
-  // 构造新条目字符串（4 空格缩进 + 单引号 + 逗号结尾，与 routes.ckts.ts 现有格式对齐）
-  const indent = '    ';
+  // 检测插入位置所在父节点 routes 数组的子项缩进
+  //   取 pos 所在行的行首缩进 + 2 空格（routes.ckts.ts 中父子级差 2 空格）
+  //   - 慧退税 routes → 子项 4 空格（行首 2 + 2）
+  //   - mxcj/1 routes → 子项 10 空格（行首 8 + 2）
+  //   自动适应任意嵌套深度
+  const indent = detectIndentBefore(content, insertPos);
   const newLine = `\n${indent}{ name: '${newEntry.name}', path: '${newEntry.path}', component: '${newEntry.component}' },`;
 
   // 插入并写回
   const newContent = content.slice(0, insertPos) + newLine + content.slice(insertPos);
   fs.writeFileSync(cktsFile, newContent, 'utf-8');
   return { added: true, content: newContent };
+}
+
+/**
+ * r22 新增：检测 pos 所在行的行首缩进
+ *   - 从 pos 向前找最近换行符
+ *   - 取该行行首到 pos 之间的前导空白
+ *   - 插入新条目时缩进 = 父节点 routes 缩进 + 2 空格（与 routes.ckts.ts 风格一致）
+ * @param {string} content - 完整文件内容
+ * @param {number} pos - 插入位置（紧跟 [ 之后）
+ * @returns {string} 缩进字符串
+ */
+function detectIndentBefore(content, pos) {
+  let lineStart = pos;
+  while (lineStart > 0 && content[lineStart - 1] !== '\n') lineStart--;
+  const linePrefix = content.slice(lineStart, pos);
+  const m = linePrefix.match(/^([ \t]*)/);
+  const baseIndent = m ? m[1] : '';
+  return baseIndent + '  '; // 子项缩进 = 父节点缩进 + 2 空格
 }
 
 // =================== README 生成 ===================
@@ -2953,13 +3057,14 @@ ${initAddFormBlock}${extraMethodsBlock}export default Func;
 }
 
 // =================== 主流程 ===================
-function main() {
-  const args = parseArgs();
-  if (!args.src) {
-    console.error('Usage: node scripts/convert-ddbunit-config.js --src <input> [--out <output>] [--readme <path>] [--config-var <name>] [--rules <rules.json>]');
-    process.exit(1);
-  }
-
+/**
+ * 单文件转换主流程（被 main() 和 copy-from-code-sample.js 共用）
+ *
+ * 输入: args 对象（含 src / out / readme / page / route / index / fun / config-var / rules 等）
+ * 副作用: 写出 config / README / index / fun 文件,追加 routes.ckts.ts
+ * 错误: throw new Error(...) 替代 process.exit(1),让批处理工具可 try/catch
+ */
+function processOne(args) {
   // 自动派生 --out：若未传且 src 以 code_sample/ 开头
   if (!args.out) {
     const derived = deriveDefaultOutPath(args.src);
@@ -2967,8 +3072,7 @@ function main() {
       args.out = derived;
       console.log(`[convert] 自动派生目标路径: ${derived}`);
     } else {
-      console.error('未传 --out，且无法从 --src 派生（不以 code_sample/ 开头），请显式传 --out');
-      process.exit(1);
+      throw new Error('未传 --out，且无法从 --src 派生（不以 code_sample/ 开头），请显式传 --out');
     }
   }
 
@@ -3020,8 +3124,7 @@ function main() {
   // 检测 config 变量名
   const configVar = args['config-var'] || detectConfigVar(srcContent);
   if (!configVar) {
-    console.error('无法自动检测 config 变量名，请用 --config-var 指定');
-    process.exit(1);
+    throw new Error('无法自动检测 config 变量名，请用 --config-var 指定');
   }
   console.log(`[convert] config 变量名: ${configVar}`);
 
@@ -3134,6 +3237,8 @@ function main() {
     //   - 默认：<srcDir>/index.tsx（与源 auto_config.tsx 同目录）
     //   - --index <name>：<srcDir>/<name>.tsx
     //   - 找不到 ref → hard error（删除原 silent fallback，与 fun 路径 L3083-3088 一致）
+    //   - 新规则（用户决策 r21）：refBase === 'index' 时，输出文件名为 'index.tsx'（不是 <stripped>Index.tsx）
+    //     routes.ckts.ts 里的 component 路径同步指向 'index'
     if (args['no-index'] !== true) {
       const srcDir = path.dirname(args.src);
       const refBase = typeof args.index === 'string' && args.index.length > 0
@@ -3141,15 +3246,19 @@ function main() {
         : 'index';
       const refPath = path.join(srcDir, `${refBase}.tsx`);
       if (!fs.existsSync(refPath)) {
-        console.error(
-          `[convert] 错误: 未找到 index 参照文件 (尝试: ${refPath})`,
-        );
-        process.exit(1);
+        throw new Error(`未找到 index 参照文件 (尝试: ${refPath})`);
       }
       const indexContent = generateIndexFileFromRef(refPath, configImportName, funImportName);
-      fs.mkdirSync(path.dirname(args.page.indexFile), { recursive: true });
-      fs.writeFileSync(args.page.indexFile, indexContent, 'utf-8');
-      console.log(`[convert] 已生成 index 页面: ${args.page.indexFile} (参照: ${refPath})`);
+      // 决定实际 indexFile 路径：refBase === 'index' → <outDir>/index.tsx；否则用默认派生
+      //   注：用 args.out 的 dirname 作为输出目录(项目 src/...)，不能用 args.src(可能含 code_sample/ 前缀)
+      const outDir = path.dirname(args.out);
+      const actualIndexFile = refBase === 'index'
+        ? path.join(outDir, `index${path.extname(args.out)}`)
+        : args.page.indexFile;
+      fs.mkdirSync(path.dirname(actualIndexFile), { recursive: true });
+      fs.writeFileSync(actualIndexFile, indexContent, 'utf-8');
+      args.indexFile = actualIndexFile; // 传给 buildRouteEntry
+      console.log(`[convert] 已生成 index 页面: ${actualIndexFile} (参照: ${refPath})`);
     }
 
     // --fun 处理：完全复制 ref + 调整（用户决策 r20+）
@@ -3177,10 +3286,9 @@ function main() {
         }
       }
       if (!funRefPath) {
-        console.error(
-          `[convert] 错误: 未找到 fun 参照文件 (尝试: ${candidates.map((c) => path.join(srcDir, c)).join(', ')})`,
+        throw new Error(
+          `未找到 fun 参照文件 (尝试: ${candidates.map((c) => path.join(srcDir, c)).join(', ')})`,
         );
-        process.exit(1);
       }
 
       // Step 1: 读 ref 全文（完全复制）
@@ -3236,15 +3344,20 @@ function main() {
         pathTemplate: routeConfig.pathTemplate,
         outPath: args.out, // r9: 让 path/component 从输出路径反向派生
         nameOverride, // r10: 从源文件抽取的显示名
+        indexFile: args.indexFile, // r21: 实际写入的 index 路径，ref='index' 时为 srcDir/index.tsx
+        parentPath: args.path, // r22: --path 参数（路径前缀 + 父节点定位）
       });
       const cktsFile = path.resolve(
         __dirname,
         '..',
         routeConfig.cktsFile || 'config/routes/routes.ckts.ts',
       );
-      const result = addRouteToCktsFile({ cktsFile, newEntry });
+      const result = addRouteToCktsFile({ cktsFile, newEntry, parentPath: args.path });
       if (result.added) {
-        console.log(`[convert] 已追加路由: name=${newEntry.name}, path=${newEntry.path}`);
+        const parentNote = args.path ? ` (parent: ${args.path})` : '';
+        console.log(`[convert] 已追加路由: name=${newEntry.name}, path=${newEntry.path}${parentNote}`);
+      } else if (result.updated) {
+        console.log(`[convert] 已更新 component: name=${newEntry.name}, path=${newEntry.path}`);
       } else {
         console.log(`[convert] 路由已存在，跳过: name=${newEntry.name}`);
       }
@@ -3264,4 +3377,20 @@ function main() {
   console.log(`[convert] 摘要: ${summary.join(', ')}`);
 }
 
-main();
+function main() {
+  const args = parseArgs();
+  if (!args.src) {
+    console.error('Usage: node scripts/convert-ddbunit-config.js --src <input> [--out <output>] [--readme <path>] [--config-var <name>] [--rules <rules.json>]');
+    process.exit(1);
+  }
+  try {
+    processOne(args);
+  } catch (e) {
+    console.error(`[convert] 错误: ${e.message}`);
+    process.exit(1);
+  }
+}
+
+if (require.main === module) main();
+
+module.exports = { processOne, detectConfigVar };
