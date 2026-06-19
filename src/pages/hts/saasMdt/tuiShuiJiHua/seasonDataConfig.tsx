@@ -12,6 +12,8 @@ seasonConfig.grid_click_checked = '1';                                 // 是否
 seasonConfig.grid_row_key = 'uuid';                               // 列表主键，默认uuid
 seasonConfig.module_key = 'CX_SAAS_MDT_TUISHUIJIHUA_SEASON'; // 业务单元key，对应后端接口
 // seasonConfig.export_key = 'TUISHUIJIHUA_MONTHDATA_QUERY_DC'; // 业务单元key，对应后端接口
+seasonConfig.export_large = true; // tssb_download 配合此导出使用，同步大数据量导出
+seasonConfig.module_type = 'QZ_type';
 seasonConfig.layout_type = 'tz';                                // 页面类型，默认default 可选 default modal tabs tz台账
 
 // 配置列表列
@@ -29,6 +31,18 @@ seasonConfig.grid_columns = [
 ];
 
 //外贸
+seasonConfig.wm_grid_columns = [
+  { title: '年度', dataIndex: 'nd', width: 100, align: 'center',fixed: 'left' },
+  { title: '季度', dataIndex: 'jd', width: 100, align: 'center',fixed: 'left' },
+  { title: '计划退税额（元）', dataIndex: 'jhtse', width: 120, align: 'right', sum: true,render: { type: 'number', format: '0,0.00' }},
+  { title: '已使用计划退税额（元）', dataIndex: 'sjtse', width: 150, align: 'right', sum: true,render: { type: 'number', format: '0,0.00' }},
+  { title: '计划余额（元）', dataIndex: 'jhtseye', width: 120, align: 'right', sum: true,render: { type: 'number', format: '0,0.00' }},
+  { title: '备注', dataIndex: 'bz', width: 150, ellipsis: true, align: 'left' },
+  { title: '录入人', dataIndex: 'lrr', width: 120, align: 'left' },
+  { title: '录入时间', dataIndex: 'lrrq', width: 150, align: 'center', render: { type: 'date', format: 'YYYY-MM-DD HH:mm:ss' }},
+  { title: '修改人', dataIndex: 'xgr', width: 120, align: 'left' },
+  { title: '修改时间', dataIndex: 'xgrq', width: 150, align: 'center', render: { type: 'date', format: 'YYYY-MM-DD HH:mm:ss' }},
+];
 
 // 配置项：筛选_快捷筛选 列表上方，标题和区域 第二层筛选
 seasonConfig.filter_items = [

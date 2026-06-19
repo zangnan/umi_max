@@ -2,9 +2,8 @@ export default [
   { name: '慧退税', icon: 'CodeOutlined', path: '/hts', routes: [
     { name: '免抵退税', path: '/hts/saasMdt', routes: [
       { name: '退税计划', path: '/hts/saasMdt/tuiShuiJiHua', routes: [
-        { name: '退税计划-年度', path: '/hts/saasMdt/tuiShuiJiHua/tuiShuiJiHua/yearDataIndex', component: './hts/saasMdt/tuiShuiJiHua/yearDataIndex' },
-        { name: '退税计划-季度', path: '/hts/saasMdt/tuiShuiJiHua/tuiShuiJiHua/seasonDataIndex', component: './hts/saasMdt/tuiShuiJiHua/seasonDataIndex' },
-        { name: '退税计划-月度', path: '/hts/saasMdt/tuiShuiJiHua/tuiShuiJiHua/monthDataIndex', component: './hts/saasMdt/tuiShuiJiHua/monthDataIndex' },
+        { name: '退税计划登记', path: '/hts/saasMdt/tuiShuiJiHua/1', component: './hts/saasMdt/tuiShuiJiHua' },
+        { name: '退税计划登记日志', path: '/hts/saasMdt/tuiShuiJiHua/2', component: './hts/saasMdt/tuiShuiJiHua/rz' },
       ]},
       { name: '明细采集', path: '/hts/saasMdt/mxcj', routes: [
         { name: '生产企业出口货物及修理修配服务免抵退税申报明细表', path: '/hts/saasMdt/mxcj/1', routes: [
@@ -26,9 +25,9 @@ export default [
           { name: '跨境销售服务及无形资产免抵退税申报明细', path: '/hts/saasMdt/mxcj/3/MDT___ZXSB_SB_MDT_YFSJ_GCB/index', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB/index' },
         ] },
       ]},
-      { name: '确认汇总表', path: '/hts/saasMdt/tuiShuiJiHua/1', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
-      { name: '退税申报', path: '/hts/saasMdt/tuiShuiJiHua/2', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
-      { name: '申报结果查询', path: '/hts/saasMdt/tuiShuiJiHua/3', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
+      { name: '确认汇总表', path: '/hts/saasMdt/sjsb/sjhz/1', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
+      { name: '退税申报', path: '/hts/saasMdt/sjsb/sjhz/2', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
+      { name: '申报结果查询', path: '/hts/saasMdt/sjsb/sjhz/3', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz' },
     ] },
   ]},
 ];

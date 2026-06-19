@@ -7,9 +7,9 @@ import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import config from './auto_config';
 import Func from './f'
 import cktsUtil from '@/pages/hts/cktsUtil';
-// import ModalMbxz from './modal_mdtsh_mbxz';
-// import DDImport from '@/components/DDImport';
-// import ModalShtq from './modal_mdtsh_shtq';
+import ModalMbxz from './modal_mdtsh_mbxz';
+import DDImport from '@/components/DDImport';
+import ModalShtq from './modal_mdtsh_shtq';
 import { cloneDeep } from 'lodash';
 import myUtil from '@/components/DDAssist/util';
 
@@ -74,10 +74,9 @@ const index: React.FC<unknown> = () => {
 
   return <>
     <DDBunit2 config={myConfig} func={Func} />
-    {/* 暂时仅仅保留DDBunit2 */}
-    {/* <ModalMbxz onRef={mbxzRef} /> */}
-    {/* <DDImport onRef={refDDImport} /> */}
-    {/* <ModalShtq onRef={shtqRef} /> */}
+    <ModalMbxz onRef={mbxzRef} />
+    <DDImport onRef={refDDImport} />
+    <ModalShtq onRef={shtqRef} />
   </>
 };
 export default index;

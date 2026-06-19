@@ -1,0 +1,15 @@
+优化scripts\copy-from-code-sample.js流程，期望目标是可以涵盖scripts\convert-ddbunit-config.js的所有流程，流程如下：
+1、基于给定的文件夹或文件全量复制，这个和目前的规则保持一致，复制时不需要改名文件夹和文件的名称。
+2、遍历文件夹（如果给定的是文件，则只针对这个文件进行处理），对每一个文件进行类型判断，文件类型分为：
+   a.基础单元配置文件，文件名通常是auto_config.tsx、config.tsx，或文件名包含config关键字。且文件中含有下列的一个或多个属性设置：xxx.grid_columns、xxx.filter_items、xxx.form_items、xxx.toolbar_default、xxx.grid_handle_columns_default。
+   b.基础单元入口文件，文件名通常是index.tsx，，或文件名包含index关键字。且文件中含有对DDBunit2组件的引用。
+   c.基础单元方法文件，文件名通常是f.tsx、fun.tsx、func.tsx，或文件名包含fun关键字。且文件中含有下列的一个或多个属性设置：xxx.validator、xxx.eventOnChange、xxx.eventOnFocus、xxx.eventOnBlur、xxx.initAddForm、xxx.initEditForm、xxx.formBeforeSubmit。
+   d.其他ts或tsx文件。
+   f.排除上述的其他文件。
+3、如果判断是“a.基础单元配置文件”，则按照scripts\convert-ddbunit-config.js生成auto_config.js的流程对当前文件进行处理。
+4、如果判断是“b.基础单元入口文件”，则按照scripts\convert-ddbunit-config.js生成index.js的流程对当前文件进行处理。
+5、如果判断是“c.基础单元方法文件”，则按照scripts\convert-ddbunit-config.js生成f.js的流程对当前文件进行处理。
+6、如果判断是“d.其他ts或tsx文件”，则按照scripts\copy-from-code-sample.js生成文件流程对当前文件进行处理。
+7、如果判断是“f.排除上述的其他文件”，则按照scripts\copy-from-code-sample.js生成文件流程对当前文件进行处理。
+8、利用文件夹“code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_SYYK_GCB”进行测试，期望结果是，对比“src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_SYYK_GCB_target”文件夹，“a.基础单元配置文件、“b.基础单元入口文件”、“c.基础单元方法文件”与
+auto_config.tsx、index.tsx、f.tsx完全一致

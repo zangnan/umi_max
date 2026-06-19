@@ -6,12 +6,12 @@ import React, {useEffect, useRef} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import config from './auto_config';
 import Func from './f';
-// import BgdscMx from '@/pages/hts/commonModule/scmx/scmx';
-// import Hwcj from '@/pages/hts/commonModule/hwcj/hwcj';
-// import Tszbcs from '@/pages/hts/commonModule/tszbcs/tszbcs_sc';
+import BgdscMx from '@/pages/hts/commonModule/scmx/scmx';
+import Hwcj from '@/pages/hts/commonModule/hwcj/hwcj';
+import Tszbcs from '@/pages/hts/commonModule/tszbcs/tszbcs_sc';
 import { delTzsx } from '@/pages/hts/services/htsApi';
-// import ErrorMsg from './errormsg';
-// import Hwccj from './hwccjModal';
+import ErrorMsg from './errormsg';
+import Hwccj from './hwccjModal';
 
 const index: React.FC<unknown> = () => {
 
@@ -125,12 +125,11 @@ const index: React.FC<unknown> = () => {
 
   return <>
     <DDBunit2 config={myConfig} func={Func}/>
-    {/* 暂时仅仅保留DDBunit2 */}
-    {/* <BgdscMx onRef={scmxRef}/> */}
-    {/* <Hwcj onRef={hwcjRef}/> */}
-    {/* <Tszbcs onRef={tszbcsRef}/> */}
-    {/* <ErrorMsg onRef={ErrorMsgRef}/> */}
-    {/* <Hwccj onRef={hwccjRef}/> */}
+    <BgdscMx onRef={scmxRef}/>
+    <Hwcj onRef={hwcjRef}/>
+    <Tszbcs onRef={tszbcsRef}/>
+    <ErrorMsg onRef={ErrorMsgRef}/>
+    <Hwccj onRef={hwccjRef}/>
   </>
 };
 export default index;

@@ -14,12 +14,7 @@
   "toolbarRenames": {
     "tssb_download": "download"
   },
-  "removes": [
-    "wm_grid_columns",
-    "export_key",
-    "export_large",
-    "module_type"
-  ],
+  "removes": [],
   "preserveKeys": {
     "layout_type": "tz"
   },

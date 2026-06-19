@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './yearDataConfig';
-import func from './f';
+import func from './func';
 import myUtil from '@/components/DDAssist/util';
 import { cloneDeep } from 'lodash';
 

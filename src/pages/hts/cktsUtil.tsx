@@ -25,7 +25,7 @@ cktsUtil.api = {
     const url: string = config?.url;
     if (typeof url !== 'string') return false;
     return (
-      url.indexOf('http://192.168.0.134:4111/cktsgl/v1') > -1
+      url.indexOf(API_URL_HTS) > -1
       && url.indexOf('/dict/automatic/exp/bs/') > -1
     );
   },
@@ -37,7 +37,7 @@ cktsUtil.api = {
   shouldInjectAccessToken(config: any): boolean {
     const url: string = config?.url;
     if (typeof url !== 'string') return false;
-    return url.indexOf('http://192.168.0.134:4111/cktsgl/v1') > -1;
+    return url.indexOf(API_URL_HTS) > -1;
   },
 
   /**
@@ -112,7 +112,7 @@ cktsUtil.api = {
     if (typeof url !== 'string') return header;
 
     // HTS 任意请求都加 ftype: 'fa'（包括 OAuth 端点本身）
-    if (url.indexOf('http://192.168.0.134:4111/cktsgl/v1') > -1) {
+    if (url.indexOf(API_URL_HTS) > -1) {
       header.ftype = 'fa';
     }
 
@@ -148,7 +148,7 @@ cktsUtil.api = {
    */
   handleHtsRequest(config: any, authHeader: any): any {
     const url = config?.url;
-    if (typeof url !== 'string' || url.indexOf('http://192.168.0.134:4111/cktsgl/v1') === -1) {
+    if (typeof url !== 'string' || url.indexOf(API_URL_HTS) === -1) {
       return config;  // 非 HTS 请求：完全不动
     }
 
@@ -261,8 +261,9 @@ cktsUtil.api = {
    */
   async loginOauth(username: string): Promise<boolean> {
     try {
-      const OAUTH_BASE = 'http://192.168.0.134:4111/cktsgl/v1/hx/qx/token/oauth';
-      const baseParams = { clientId: '1', d1zh: 'dGVzdF9zYw==', d1mm: 'MTIzNDU2' };
+      const OAUTH_BASE = `${API_URL_HTS}/hx/qx/token/oauth`;
+      // const baseParams = { clientId: '1', d1zh: 'dGVzdF9zYw==', d1mm: 'MTIzNDU2' };
+      const baseParams = { clientId: '1', d1zh: 'dGVzdF9rcA==', d1mm: 'MTIzNDU2' };
       const baseHeaders = { 'Content-Type': 'application/json' };
 
       // 第一步：获取企业列表 qxQysSaas，取第一个 sbqyuuid
@@ -288,6 +289,15 @@ cktsUtil.api = {
         localStorage.setItem('accessTokenUsernameCkts', username);
         localStorage.setItem('accessTokenCkts', tokenRes.body.ACCESS_TOKEN);
         window.localStorage.removeItem('jcfs');
+
+        // 第三步：getLoginUserInfo
+        const LoginUserInfo: any = await request(`${API_URL_HTS}/hx/qx/token/getLoginUserInfo`, {
+          method: 'POST',
+          headers: baseHeaders,
+          data: {},
+        });
+        myUtil.sessionStore.setItem('userInfo', LoginUserInfo?.body || {});
+        
         return true;
       }
       return false;

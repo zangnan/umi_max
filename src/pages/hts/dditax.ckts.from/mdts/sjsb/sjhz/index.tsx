@@ -596,7 +596,7 @@ const Index: React.FC<unknown> = () => {
                 </tr>
                 <tr>
                   <td className="label">免抵退税额合计</td>
-                  <td colSpan={2} className="label text-center">15（如10-13+14 &gt; 0则为10-13+14,否则为0）</td>
+                  <td colSpan={2} className="label text-center">15（如10-13+14&gt;0则为10-13+14,否则为0）</td>
                   <td className="Input-wrap">
                     <Form.Item className="form-item" name="mdtsehj">
                       <InputNumber {...inputProps} max={999999999999.99} disabled />
@@ -633,7 +633,7 @@ const Index: React.FC<unknown> = () => {
                 </tr>
                 <tr>
                   <td className="label">应退税额</td>
-                  <td colSpan={2} className="label text-center">18（如15 &gt; 17则为17，否则为15）</td>
+                  <td colSpan={2} className="label text-center">18（如15&gt;17则为17，否则为15）</td>
                   <td className="Input-wrap">
                     <Form.Item className="form-item" name="ytse1">
                       <InputNumber {...inputProps} max={999999999999.99} disabled />
@@ -715,7 +715,7 @@ const Index: React.FC<unknown> = () => {
       </ProCard>
       <Modal
         title="数据检查异常疑点列表"
-        destroyOnClose={true}
+        destroyOnHidden={true}
         visible={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
@@ -726,7 +726,7 @@ const Index: React.FC<unknown> = () => {
           </>
         }
         onCancel={() => setModalVisible(false)}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
         <DDBaseGrid
           userDataSource={ycydList}

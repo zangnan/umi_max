@@ -9,7 +9,9 @@ import {Button, Form, message, Tooltip, Upload} from 'antd';
 import myUtil from '@/components/DDAssist/util';
 import dayjs from 'dayjs';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import importStyle from './importStyle.less';
 import {ClockCircleOutlined, InboxOutlined} from "@ant-design/icons";
+import tableStyle from './style.less';
 import {history} from "@@/core/history";
 const { Dragger } = Upload;
 

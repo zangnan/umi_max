@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import config from './auto_config';
 import Func from './f';
-// import Jhmx from '@/pages/hts/commonModule/jhmx/jhmx';
+import Jhmx from '@/pages/hts/commonModule/jhmx/jhmx';
 
 const index: React.FC<unknown> = () => {
 
@@ -53,8 +53,7 @@ const index: React.FC<unknown> = () => {
 
   return <>
     <DDBunit2 config={myConfig} func={Func}/>
-    {/* 暂时仅仅保留DDBunit2 */}
-    {/* <Jhmx onRef={jhmxRef}/> */}
+    <Jhmx onRef={jhmxRef}/>
   </>
 };
 export default index;
