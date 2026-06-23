@@ -58,7 +58,7 @@ const TableList: React.FC<SbsjcxProps> = ({
   const refHistory: any = useRef();
   const refShsjxz: any = useRef();
   const refShjdcx: any = useRef();
-  // const [myConfig, setMyConfig] = useState<any>(null);
+  
   const intl = useIntl();
 
 
@@ -375,7 +375,7 @@ Func.shfkdr = (param: any) => {
   };
 
   // useEffect
-  // useEffect(() => {
+  
     const config: any = { ...unitConfig };
     const key = getMyYwKey();
 
@@ -410,8 +410,8 @@ Func.shfkdr = (param: any) => {
     }
 
     config.handle_columns = getHandleColumns();
-    // setMyConfig(config);
-  // }, []);
+    
+  
   return (
     <>
       <DDBunit2 config={config} func={Func} />

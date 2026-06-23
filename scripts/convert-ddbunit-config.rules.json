@@ -65,5 +65,32 @@
       }
     ],
     "less": []
-  }
+  },
+  "special": [
+    {
+      "fileName": "code_sample/src/pages/hts/ckts/sbsjcx/sbsjcx.tsx",
+      "replace": [
+        {
+          "old": "useEffect(() => {",
+          "new": ""
+        },
+        {
+          "old": "}, []);",
+          "new": ""
+        },
+        {
+          "old": "<DDBunit2 config={myConfig} func={Func} />",
+          "new": "<DDBunit2 config={config} func={Func} />"
+        },
+        {
+          "old": "const [myConfig, setMyConfig] = useState<any>(null);",
+          "new": ""
+        },
+        {
+          "old": "setMyConfig(config);",
+          "new": ""
+        }
+      ]
+    }
+  ]
 }

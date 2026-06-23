@@ -1285,6 +1285,20 @@ function loadReplaceRules() {
   return _replaceRulesCache;
 }
 
+let _specialRulesCache = null;
+
+function loadSpecialRules() {
+  if (_specialRulesCache) return _specialRulesCache;
+  try {
+    const rulesPath = path.join(__dirname, 'convert-ddbunit-config.rules.json');
+    const rules = JSON.parse(fs.readFileSync(rulesPath, 'utf-8'));
+    _specialRulesCache = Array.isArray(rules.special) ? rules.special : [];
+  } catch {
+    _specialRulesCache = [];
+  }
+  return _specialRulesCache;
+}
+
 // 替换后自动补 import 映射：replaces 规则把代码中某个符号改成另一个后，
 // 若新内容用到映射中的符号但缺少对应 import，则在文件顶部补齐。
 // 触发条件：replace 规则的 `new` 引入了 `old` 中没有的符号（即该符号是被替换规则"新引入"的）。
@@ -1331,7 +1345,25 @@ function transformCodeTableArraysGlobal(content) {
   return { content: out, count };
 }
 
-function applyContentReplaces(content, fileExt) {
+// rules.special 专用：按 fileName 查找并应用该文件特有的替换规则。
+// 触发条件：传入的 srcFile 与 rules.special[*].fileName 精确匹配（路径分隔符归一为 /）。
+// 适用场景：某个具体文件需要做特殊文本替换（不适用于通用规则）。
+function applySpecialReplacements(content, srcFile) {
+  if (!srcFile) return content;
+  const normalizedSrc = srcFile.replace(/\\/g, '/');
+  const specialRules = loadSpecialRules();
+  const entry = specialRules.find((s) => s && s.fileName === normalizedSrc);
+  if (!entry || !Array.isArray(entry.replace) || entry.replace.length === 0) return content;
+
+  let text = content;
+  for (const { old: oldStr, new: newStr } of entry.replace) {
+    if (typeof oldStr !== 'string' || oldStr.length === 0) continue;
+    text = text.split(oldStr).join(newStr);
+  }
+  return text;
+}
+
+function applyContentReplaces(content, fileExt, srcFile) {
   const rules = loadReplaceRules();
   const replaces = rules[fileExt] || [];
 
@@ -1364,6 +1396,12 @@ function applyContentReplaces(content, fileExt) {
     if (ctResult.count > 0) {
       text = ctResult.content;
     }
+  }
+
+  // 第五遍：特殊文件替换（按 fileName 匹配）
+  // 放在最后：在所有通用转换之后执行，特殊规则可"覆盖"之前的任何输出
+  if (srcFile) {
+    text = applySpecialReplacements(text, srcFile);
   }
 
   return text;
@@ -2176,7 +2214,7 @@ function processTypeA(srcFile, dstFile, args) {
   outContent = outContent.replace(/\bcostomer_toobar\b/g, 'customer_toolbar');
 
   // 10. rules.replace.ts (ts/tsx 文本替换，作为最终步骤)
-  outContent = applyContentReplaces(outContent, 'ts');
+  outContent = applyContentReplaces(outContent, 'ts', srcFile);
 
   // 写出 config 文件
   fs.mkdirSync(path.dirname(dstFile), { recursive: true });
@@ -2205,7 +2243,7 @@ function processTypeA(srcFile, dstFile, args) {
     if (fs.existsSync(refIndex)) {
       try {
         const indexContent = generateIndexFileFromRef(refIndex, path.basename(dstFile, path.extname(dstFile)), '');
-        const indexContentFinal = applyContentReplaces(indexContent, 'ts');
+        const indexContentFinal = applyContentReplaces(indexContent, 'ts', refIndex);
         const outDir = path.dirname(dstFile);
         const indexFile = path.join(outDir, 'index.tsx');
         fs.writeFileSync(indexFile, indexContentFinal, 'utf-8');
@@ -2246,7 +2284,7 @@ function processTypeA(srcFile, dstFile, args) {
           funOutput = funOutput.replace(initEditFormBlock, rewritten);
         }
 
-        funOutput = applyContentReplaces(funOutput, 'ts');
+        funOutput = applyContentReplaces(funOutput, 'ts', refFun);
 
         const outDir = path.dirname(dstFile);
         const funFile = path.join(outDir, 'f.tsx');
@@ -2285,7 +2323,7 @@ function processTypeB(srcFile, dstFile, args) {
   content = commentOutNonDDBunit2Components(content);
 
   // Step 4: rules.replace.ts (ts/tsx 文本替换)
-  content = applyContentReplaces(content, 'ts');
+  content = applyContentReplaces(content, 'ts', srcFile);
 
   fs.writeFileSync(dstFile, content, 'utf-8');
   console.log(`  [type-b] 已生成 index.tsx`);
@@ -2323,7 +2361,7 @@ function processTypeC(srcFile, dstFile, args) {
 
   // Step 4: 生成 fun 文件
   const funOutput = generateFunPage({ initAddForm, extraMethods });
-  const funOutputFinal = applyContentReplaces(funOutput, 'ts');
+  const funOutputFinal = applyContentReplaces(funOutput, 'ts', srcFile);
   fs.writeFileSync(dstFile, funOutputFinal, 'utf-8');
   console.log(`  [type-c] 已生成 f.tsx`);
 }
@@ -2333,7 +2371,7 @@ function processTypeC(srcFile, dstFile, args) {
  *                       含有 "@font_color" 的行也注释掉（保留缩进），
  *                       并删除 "@import '~antd/lib/style/themes/default.less';"
  */
-function processTypeE(dstFile) {
+function processTypeE(srcFile, dstFile) {
   const content = fs.readFileSync(dstFile, 'utf-8');
   const lines = content.split(/\r?\n/);
   let modified = false;
@@ -2360,7 +2398,7 @@ function processTypeE(dstFile) {
     });
   let finalText = newLines.join('\n');
   // rules.replace.less (less 文本替换，作为最终步骤)
-  const replacedText = applyContentReplaces(finalText, 'less');
+  const replacedText = applyContentReplaces(finalText, 'less', srcFile);
   if (replacedText !== finalText) {
     finalText = replacedText;
     modified = true;
@@ -2393,7 +2431,7 @@ function applyCopyRewritesToFile(srcFile, dstFile) {
   }
 
   // rules.replace.ts (ts/tsx 文本替换，作为最终步骤)
-  const replacedContent = applyContentReplaces(content, 'ts');
+  const replacedContent = applyContentReplaces(content, 'ts', srcFile);
   if (replacedContent !== content) {
     content = replacedContent;
     modified = true;
@@ -2454,7 +2492,7 @@ async function main() {
           processTypeC(args.src, out, args);
           break;
         case 'e':
-          processTypeE(out);
+          processTypeE(args.src, out);
           break;
         case 'd':
         case 'f':
@@ -2528,7 +2566,7 @@ async function main() {
           processTypeC(srcFile, dstFile, args);
           break;
         case 'e':
-          processTypeE(dstFile);
+          processTypeE(srcFile, dstFile);
           break;
         case 'd':
         case 'f':
