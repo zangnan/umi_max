@@ -1,3 +1,4 @@
+import getStaticTableCodeHts from '@/pages/hts/commonModule/staticTableCode';
 // 获取指定码表
 const getStaticTableCode = (codeStoreKey: any) => {
   let returnData: any;
@@ -110,6 +111,9 @@ const getStaticTableCode = (codeStoreKey: any) => {
       body: code
     };
     return returnData;
+  }
+  if (codeStoreKey.indexOf(':') > -1) {
+    return getStaticTableCodeHts(codeStoreKey.split(':')[0], codeStoreKey.split(':')[1]);
   }
   return null;
 }

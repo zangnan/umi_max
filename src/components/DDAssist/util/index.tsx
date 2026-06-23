@@ -2610,7 +2610,11 @@ myUtil.code = {
       }
     }
 
-    return result || [];
+    const { code, body } = result;
+    if (code === '200') {
+      this.saveCodeToLocalTable(key, body);
+    }
+    return body || [];
   },
 
   /**

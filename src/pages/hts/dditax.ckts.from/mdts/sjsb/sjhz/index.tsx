@@ -266,7 +266,7 @@ const Index: React.FC<unknown> = () => {
   const changeZzs = (value: any) => {
     ytse1Change(value);
   };
-  // 应退税额18(如15>17则为17,否则为15)
+  // 应退税额18(如15&gt;017则为17,否则为15)
   const ytse1Change = (value: any) => {
     const mdtsehj = formData.getFieldValue('mdtsehj');
     const zzsnssbbqmldse = value;
@@ -633,7 +633,7 @@ const Index: React.FC<unknown> = () => {
                 </tr>
                 <tr>
                   <td className="label">应退税额</td>
-                  <td colSpan={2} className="label text-center">18（如15&gt;17则为17，否则为15）</td>
+                  <td colSpan={2} className="label text-center">18（如15&gt;017则为17，否则为15）</td>
                   <td className="Input-wrap">
                     <Form.Item className="form-item" name="ytse1">
                       <InputNumber {...inputProps} max={999999999999.99} disabled />

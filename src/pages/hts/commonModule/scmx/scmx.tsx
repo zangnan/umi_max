@@ -1,6 +1,7 @@
 /**
  * 按报关单生成明细：外贸、生产、证明开具
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import formUtil from '@/components/DDForm/formUtil';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Modal, Button, Form, message, Spin, Space, Radio } from 'antd';
@@ -93,7 +94,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     // 证明 unit_key: ZMKJ_ZXSB_ZM_DLCK_G  生成代理出口明细
     // 边贸代理 unit_key: ZGBA_ZXSB_BA_BMDLCKBA_G
     form.validateFields().then((formValues: any) => {
-      const qylx = myUtil.sys.enterpriseType();
+      const qylx = cktsUtil.sys.enterpriseType();
       if (selectRows.length === 0) {
         message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
         return;
@@ -115,14 +116,14 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
       // 提交接口地址
       let url = '';
       if (unit_key === 'ZMKJ_ZXSB_ZM_DLCK_G') {
-        url = `${API_URL_BASE}/yw/bszx/zmkj/dlck/zmkjBgdToDlck`;
+        url = `/yw/bszx/zmkj/dlck/zmkjBgdToDlck`;
         mtsBgdToTssbParam.gdscgz = gdscbz;
       } else if (unit_key === 'MDT_ZXSB_SB_MDT_TSSB_G') {
-        url = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tssb/mdtBgdToTssb`;
+        url = `/yw/bszx/mdt/hwlw/tssb/mdtBgdToTssb`;
       } else if (unit_key === 'MTS_ZXSB_SB_MTS_TSSB_G') {
-        url = `${API_URL_BASE}/yw/bszx/wbsj/bgd/mtsBgdToTssb`;
+        url = `/yw/bszx/wbsj/bgd/mtsBgdToTssb`;
       } else if (unit_key === 'ZGBA_ZXSB_BA_BMDLCKBA_G') {
-        url = `${API_URL_BASE}/yw/bszx/zgba/bmdlck/zgbaBgdToBmdlck`;
+        url = `/yw/bszx/zgba/bmdlck/zgbaBgdToBmdlck`;
       }
       // 校验报关单中的出口合同号是否存在空值
       if (unit_key === 'MDT_ZXSB_SB_MDT_TSSB_G' || unit_key === 'MTS_ZXSB_SB_MTS_TSSB_G') {
@@ -173,7 +174,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   const getMyConfig = (type: any, param:any, isuuids: any) => {
     const unit_key = param?.unit_key;
     let configTmp: any = {
-      grid_api_grid_query: `${API_URL_BASE}/yw/bszx/wbsj/bgd/queryBgd21Page`,
+      grid_api_grid_query: `/yw/bszx/wbsj/bgd/queryBgd21Page`,
       grid_selection_type: 'checkbox',
       show_toolbar: false,
       layout_type: 'modal',
@@ -188,24 +189,24 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         { title: '商品名称', dataIndex: 'ckspmc', width: 120, ellipsis: true, },
         { title: '海关商品名称', dataIndex: 'hgspmc', width: 120, ellipsis: true, },
         { title: '出口合同号', dataIndex: 'ckhth', width: 120, ellipsis: true, },
-        { title: '监管方式', dataIndex: 'jgfsDm', width: 100, codeTable: ['code_dm_ckts_hgjgfs', '01'] },
+        { title: '监管方式', dataIndex: 'jgfsDm', width: 100, codeTable: 'code_dm_ckts_hgjgfs:01' },
         { title: '成交方式', dataIndex: 'hgcjfsmc', width: 80, },
         { title: '成交单位', dataIndex: 'sbjldwmc', width: 80, ellipsis: true },
         { title: '成交数量', dataIndex: 'cjsl1', width: 140, align: 'right', render: { type: 'number', format: '0,0.00000' } },
         { title: '成交币制', dataIndex: 'cjhghbzmDm', width: 70, },
         { title: '成交金额', dataIndex: 'cjzj', width: 140, align: 'right', render: { type: 'number', format: '0,0.00' } },
         { title: '美元离岸价', dataIndex: 'mylaj', width: 100, align: 'right', render: { type: 'number', format: '0,0.00' } },
-        { title: '法定单位', dataIndex: 'dyjldwDm', width: 80, ellipsis: true, codeTable: ['code_dm_ckts_hgjldw', '01'], },
+        { title: '法定单位', dataIndex: 'dyjldwDm', width: 80, ellipsis: true, codeTable: 'code_dm_ckts_hgjldw:01', },
         { title: '法定单位数量', dataIndex: 'cksl', width: 140, align: 'right', render: { type: 'number', format: '0,0.00000' } },
-        { title: '第二单位', dataIndex: 'dejldwDm', width: 80, ellipsis: true, codeTable: ['code_dm_ckts_hgjldw', '01'], },
+        { title: '第二单位', dataIndex: 'dejldwDm', width: 80, ellipsis: true, codeTable: 'code_dm_ckts_hgjldw:01', },
         { title: '第二单位数量', dataIndex: 'decksl', width: 140, align: 'right', render: { type: 'number', format: '0,0.00000' } },
       ],
       filter_items: [
-        { name: 'czbz1', type: 'Select', label: '关单信息', showSearch: true, codeTable: ['code_static_bgd_gdxx_dm', '01'] },
+        { name: 'czbz1', type: 'Select', label: '关单信息', showSearch: true, codeTable: 'code_static_bgd_gdxx_dm:01' },
         { name: 'ckbgdh', type: 'Input', label: '报关单号' },
         { name: 'ckhth', type: 'Input', label: '出口合同号' },
         { name: 'ckrq1', type: "DatePicker", range: true, label: '出口日期' },
-        { name: 'jgfsDm', type: 'Select', label: '监管方式', showType: '3',showSearch: true, codeTable: ['code_dm_ckts_hgjgfs', '01'] },
+        { name: 'jgfsDm', type: 'Select', label: '监管方式', showType: '3',showSearch: true, codeTable: 'code_dm_ckts_hgjgfs:01' },
       ],
       gridParams: {
         initSearchModal: [
@@ -238,7 +239,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         configTmp.gridParams.initSearchModal.push({ property: 'uuids', value: param.selectionRowKeys, op: 'al' });
       }
       configTmp.filter_items = [
-        { name: 'czbz1', type: 'Select', label: '关单信息', showSearch: true, codeTable: ['code_static_bgd_gdxx_dm', '01'] },
+        { name: 'czbz1', type: 'Select', label: '关单信息', showSearch: true, codeTable: 'code_static_bgd_gdxx_dm:01' },
         { name: 'ckbgdh', type: 'Input', label: '报关单号' },
         { name: 'ckhth', type: 'Input', label: '出口合同号' },
         { name: 'ckrq1', type: "DatePicker", range: true, label: '出口日期' },
@@ -640,7 +641,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     // 委托方信息：委托方纳税人识别号（统一社会信用代码）、受托方名称、委托（代理）协议合同号
     if (unit_key === 'ZMKJ_ZXSB_ZM_DLCK_G') {
       myFormItems.push({ name: 'groupTitle2', type: itemType.GroupTitle, label: '委托方信息' });
-      myFormItems.push({ label: '委托方纳税人识别号（统一社会信用代码）', type: itemType.AutoComplete, showType: '2', 'allowClear': true, name: 'wtfnsrsbh', codeTable: ['url_gy_qywtf', '01'], eventOnBlur: 'wtfnsrsbh', eventOnChange: 'formatWtfnsrsbh', layout: formLayout[unit_key]?.wtfnsrsbh, rules: [
+      myFormItems.push({ label: '委托方纳税人识别号（统一社会信用代码）', type: itemType.AutoComplete, showType: '2', 'allowClear': true, name: 'wtfnsrsbh', codeTable: 'url_gy_qywtf:01', eventOnBlur: 'wtfnsrsbh', eventOnChange: 'formatWtfnsrsbh', layout: formLayout[unit_key]?.wtfnsrsbh, rules: [
         { type: 'base_required' },
         { type: 'base_type_number_english' },
         { type: 'base_string', range: [15, 20] },

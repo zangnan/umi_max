@@ -18,6 +18,10 @@ monthConfig.grid_columns = [
   { title: '金额', dataIndex: 'jhtse' },
 ];
 
+monthConfig.wm_grid_columns = [
+  { title: 'WM', dataIndex: 'wm' },
+];
+
 monthConfig.filter_items = [
   { name: 'sbny', label: '申报年月', type: 'Input' },
 ];

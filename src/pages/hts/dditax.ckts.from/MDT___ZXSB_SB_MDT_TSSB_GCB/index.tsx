@@ -46,7 +46,7 @@ const index: React.FC<unknown> = () => {
   myConfig.toolbar_default.tssb_download = true;
   myConfig.export_large = true; // tssb_download 配合此导出使用，同步大数据量导出
 
-  myConfig.batch_update_url = `${API_URL_BASE}/yw/bszx/mdt/hwlw/tssb/mdtPlgxSbmxsj`;
+  myConfig.batch_update_url = `/yw/bszx/mdt/hwlw/tssb/mdtPlgxSbmxsj`;
 
   // 配置项：自定义工具栏
   myConfig.costomer_toobar = [
@@ -110,7 +110,7 @@ const index: React.FC<unknown> = () => {
     {dataIndex: 'myhl', label: '美元汇率', type: "InputNumber", rules: [{type: 'base_number', length: 10, decimal: 5}], precision: 5},
     {dataIndex: 'ckfph', label: '出口发票号', type: "Input", rules: [{type: 'base_string', range: [0, 30]}]},
     {dataIndex: 'ckrq', label: '出口日期', type: "Date"},
-    {dataIndex: 'cktmsywlxdmjh', label: '业务类型代码', type: "tableSelect", codeTable: ['code_dm_ckts_cktmsywlx', '09']},
+    {dataIndex: 'cktmsywlxdmjh', label: '业务类型代码', type: "tableSelect", codeTable: 'code_dm_ckts_cktmsywlx:09'},
     {dataIndex: 'jljgszch', label: '进料加工手（账）册号', type: "Input", rules: [{type: 'base_string', range: [0, 20]}]},
     {dataIndex: 'bz', label: '备注', type: "Input", rules: [{type: 'base_string', range: [0, 200]}]},
     {dataIndex: 'tzhjhfpl', label: '更新计划分配率', type: "Input"},

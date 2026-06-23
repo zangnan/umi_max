@@ -21,19 +21,19 @@ const index: React.FC<unknown> = () => {
     if (item.dataIndex === 'bytsbz') {
       item.filter = {
         type: 'Select',
-        codeTable: ['code_static_yes_no', '01'],
+        codeTable: 'code_static_yes_no:01',
       }
     }
     if (item.dataIndex === 'byblbz') {
       item.filter = {
         type: 'Select',
-        codeTable: ['code_static_yes_no', '01'],
+        codeTable: 'code_static_yes_no:01',
       }
     }
     if (item.dataIndex === 'zbblbz') {
       item.filter = {
         type: 'Select',
-        codeTable: ['code_static_yes_no', '01'],
+        codeTable: 'code_static_yes_no:01',
       }
     }
   })

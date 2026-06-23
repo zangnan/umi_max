@@ -139,7 +139,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   // 出口报关单信息配置
   const getMyConfig = (type: any) => {
     let configTmp: any = {
-      grid_api_grid_query: `${API_URL_BASE}/yw/bszx/wbsj/dzdzfp/queryPdFpPage`,
+      grid_api_grid_query: `/yw/bszx/wbsj/dzdzfp/queryPdFpPage`,
       grid_selection_type: 'checkbox',
       show_toolbar: false,
       grid_scroll_y: '450px',

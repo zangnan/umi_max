@@ -32,5 +32,38 @@
     },
     "pathTemplate": "/hts/saasMdt/tuiShuiJiHua/{basename}",
     "_pathTemplateNote": "r9 起 path/component 默认从 outPath 反向派生；pathTemplate 仅在 outPath 不可派生时作为回退使用。保留此字段仅为向后兼容历史 fixture 和脚本。"
+  },
+  "replace": {
+    "ts": [
+      {
+        "old": "如10-13+14>0则为10-13+14",
+        "new": "如10-13+14&gt;0则为10-13+14"
+      },
+      {
+        "old": "如15>17则为17",
+        "new": "如15&gt;017则为17"
+      },
+      {
+        "old": "routeMatch.path",
+        "new": "routeMatch.route.path"
+      },
+      {
+        "old": "myUtil.sys.enterpriseType()",
+        "new": "cktsUtil.sys.enterpriseType()"
+      },
+      {
+        "old": "baseValidator.email()",
+        "new": "{type: 'email'}"
+      },
+      {
+        "old": ".grid_api_grid_query",
+        "new": ".api_grid_query"
+      },
+      {
+        "old": "${API_URL_BASE}",
+        "new": ""
+      }
+    ],
+    "less": []
   }
 }

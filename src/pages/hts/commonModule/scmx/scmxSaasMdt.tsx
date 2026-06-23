@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { Button, Form, Input, message, Modal, Select, Spin, Tag } from "antd";
 import { useImperativeHandle, useState } from "react";
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -44,7 +45,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         setQygts(false);
 
         //  初始化码表
-        let codekey = myUtil.sys.enterpriseType().toUpperCase() === "WM" ? "06" : "09"
+        let codekey = cktsUtil.sys.enterpriseType().toUpperCase() === "WM" ? "06" : "09"
         Promise.all([myUtil.code.getCodeFromServerT1('code_dm_ckts_cktmsywlx', codekey),
         myUtil.code.getCodeFromServerT1('code_dm_ckts_gnqyfs', "01"),
         myUtil.code.getCodeFromServerT1('code_dm_ckts_hgzsrzqylx', "01"),]).then(() => {

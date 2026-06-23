@@ -1,0 +1,176 @@
+// 新系统迁移时注释
+// @import "~@/assets/css/config.less";
+
+.dd_ydcl_wrap {
+  .ant-pro-card-split-horizontal {
+    border-bottom: 1px solid #f07800;
+  }
+
+  .dd_ydcl_top_wrap {
+    .ant-pro-card-body {
+      padding-bottom: 16px !important;
+    }
+  }
+
+  .dd_ydcl_bottom_wrap {
+    position: relative;
+    padding: 0px 0px 0px 350px;
+    background-color: hsl(0, 0%, 97%);
+    height: calc(100vh - 240px);
+    overflow-y: hidden;
+
+    .lay_wrap_left {
+      background-color: #f7f7f7;
+      padding: 0 20px;
+      min-width: 290px;
+      overflow-x: hidden;
+      border-right: 1px solid #f07800;
+
+      .ant-checkbox-group {
+        display: block;
+      }
+
+      .ant-list {
+        min-width: 290px;
+        overflow-x: hidden;
+
+        .ant-list-item {
+          padding: 0;
+
+          .ant-checkbox-group {
+            width: 100%;
+          }
+
+          &:hover,
+          &.selected {
+            .ant-pro-card {
+              background-color: #E6F0FA;
+            }
+
+            border-bottom: 1px solid rgba(8, 84, 160, 100);
+          }
+        }
+      }
+
+      .left_toolbar {
+        line-height: 40px;
+        text-align: right;
+      }
+
+      .left_card_header {
+        background-color: #ededed;
+        padding: 0 12px;
+        line-height: 40px;
+        // color: @font_color01;
+        position: relative;
+
+        .lch_title {
+          margin: 0 0 0 10px;
+        }
+
+        .lch_btn {
+          position: absolute;
+          right: 20px;
+          top: 0;
+          cursor: pointer;
+        }
+      }
+
+      .ant-pro-card {
+        cursor: pointer;
+        -webkit-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+
+        .ant-pro-card-header {
+          position: relative;
+
+          .ant-pro-card-title {
+            font-size: 15px;
+            width: 100%;
+
+            .dcl_title {
+              margin-left: 10px;
+            }
+
+            .dcl_title_sq {
+              font-size: 13px;
+              margin-left: 5px;
+
+              .dcl_title_sq_je {
+                line-height: 24px;
+                float: right;
+                color: #9e9e9e;
+                font-weight: normal;
+              }
+            }
+          }
+        }
+
+        .ant-pro-card-body {
+          padding: 5px 20px 10px 38px !important;
+          border-bottom: 1px solid #cccccc;
+
+          .dd_card_list {
+            position: relative;
+
+            .dcl_item {
+              color: #6A6D70;
+              line-height: 24px;
+              font-size: 13px;
+            }
+
+            .dcl_item_typography {
+              color: #6A6D70;
+              width: 80%;
+            }
+            div.ant-typography, .ant-typography p{
+              margin-bottom: 0;
+            }
+            .dcl_item_ckxq {
+              float: right;
+              margin-top: -22px;
+            }
+
+            .dcl_item_abs {
+              position: absolute;
+              bottom: -0;
+              right: 0;
+              color: #333639;
+              font-size: 16px;
+            }
+          }
+        }
+      }
+    }
+
+    .lay_wrap_right {
+      padding: 0 20px 0 20px;
+    }
+  }
+}
+
+// 卡片
+.ydcl_card_wrap {
+  border-bottom: 1px solid #f07800;
+
+  .ant-pro-card-body {
+    padding: 20px 20px 0 20px !important;
+  }
+
+  .ydcl_form {
+    margin-top: -20px;
+  }
+
+}
+
+.ydcl_red_text {
+  color: #f50a0a
+}
+
+.ydcl_green_text {
+  color: #048a21
+}
+
+.ydcl_bold_text {
+  font-weight: bold;
+}

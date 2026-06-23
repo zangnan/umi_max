@@ -1267,6 +1267,108 @@ function applyImportRewrites(importLines) {
     .filter((line) => line !== null);
 }
 
+// =================== rules.replace 内容替换 ===================
+let _replaceRulesCache = null;
+
+function loadReplaceRules() {
+  if (_replaceRulesCache) return _replaceRulesCache;
+  try {
+    const rulesPath = path.join(__dirname, 'convert-ddbunit-config.rules.json');
+    const rules = JSON.parse(fs.readFileSync(rulesPath, 'utf-8'));
+    _replaceRulesCache = {
+      ts: Array.isArray(rules.replace?.ts) ? rules.replace.ts : [],
+      less: Array.isArray(rules.replace?.less) ? rules.replace.less : [],
+    };
+  } catch {
+    _replaceRulesCache = { ts: [], less: [] };
+  }
+  return _replaceRulesCache;
+}
+
+// 替换后自动补 import 映射：replaces 规则把代码中某个符号改成另一个后，
+// 若新内容用到映射中的符号但缺少对应 import，则在文件顶部补齐。
+// 触发条件：replace 规则的 `new` 引入了 `old` 中没有的符号（即该符号是被替换规则"新引入"的）。
+// 仅作用于 ts/tsx 文件（less 不需要 import）。
+const AUTO_IMPORTS_AFTER_REPLACE = [
+  { symbol: 'cktsUtil', importLine: "import cktsUtil from '@/pages/hts/cktsUtil';" },
+];
+
+// 提取字符串中所有形如 `identifier.` 的 token（属性访问），返回 Set<identifier>
+function extractSymbolTokens(s) {
+  if (typeof s !== 'string') return new Set();
+  const matches = s.match(/\b[a-zA-Z_$][\w$]*\.(?!['"`\/])/g) || [];
+  return new Set(matches.map((m) => m.slice(0, -1)));
+}
+
+function ensureAutoImports(content, introducedSymbols) {
+  let text = content;
+  for (const { symbol, importLine } of AUTO_IMPORTS_AFTER_REPLACE) {
+    if (!introducedSymbols.has(symbol)) continue;
+    const usageRe = new RegExp(`\\b${symbol}\\.(?!/)`);
+    if (usageRe.test(text) && !text.includes(importLine)) {
+      const firstImportMatch = text.match(/^import\s/m);
+      if (firstImportMatch) {
+        text = text.slice(0, firstImportMatch.index) + importLine + '\n' + text.slice(firstImportMatch.index);
+      } else {
+        text = importLine + '\n' + text;
+      }
+    }
+  }
+  return text;
+}
+
+// 全局 codeTable 数组 → 字符串转换（不限 configVar / 块作用域）
+// 等价于 r15 规则但作用于所有 ts/tsx 文件，包括 type-d / type-b 等不走 SPECIAL_FIELD_RULES 的场景。
+// 典型用例：type-d 的 scsbsj.tsx 第 240 行 `codeTable: ['CODE_STATIC_TSSB_SBZT', '03']`
+// 在 type-a 路径下被 r15 处理；其他类型由本函数兜底。
+function transformCodeTableArraysGlobal(content) {
+  const re = /codeTable\s*:\s*\[\s*(['"])([^'"]+)\1\s*,\s*(['"])([^'"]+)\3\s*\]/g;
+  let count = 0;
+  const out = content.replace(re, (_match, _q1, key, _q2, view) => {
+    count++;
+    return `codeTable: '${key}:${view}'`;
+  });
+  return { content: out, count };
+}
+
+function applyContentReplaces(content, fileExt) {
+  const rules = loadReplaceRules();
+  const replaces = rules[fileExt] || [];
+
+  // 第一遍：收集所有 replace 规则"新引入"的符号（new 中有但 old 中没有的属性访问）
+  const introducedSymbols = new Set();
+  for (const { old: oldStr, new: newStr } of replaces) {
+    const oldSymbols = extractSymbolTokens(oldStr);
+    const newSymbols = extractSymbolTokens(newStr);
+    for (const s of newSymbols) {
+      if (!oldSymbols.has(s)) introducedSymbols.add(s);
+    }
+  }
+
+  // 第二遍：执行替换
+  let text = content;
+  for (const { old: oldStr, new: newStr } of replaces) {
+    if (typeof oldStr !== 'string' || oldStr.length === 0) continue;
+    text = text.split(oldStr).join(newStr);
+  }
+
+  // 第三遍：仅对被 replace 规则新引入的符号补 import（仅 ts/tsx）
+  if (fileExt === 'ts' && introducedSymbols.size > 0) {
+    text = ensureAutoImports(text, introducedSymbols);
+  }
+
+  // 第四遍：全局 codeTable 数组 → 字符串转换（仅 ts/tsx；less 不需要）
+  // 即使没有 replace 规则也要跑（兜底 type-d / type-b 等不走 r15 的场景）
+  if (fileExt === 'ts') {
+    const ctResult = transformCodeTableArraysGlobal(text);
+    if (ctResult.count > 0) {
+      text = ctResult.content;
+    }
+  }
+
+  return text;
+}
+
 // =================== index 调整函数 ===================
 function applyImportRewritesToContent(content) {
   let text = content;
@@ -1277,6 +1379,18 @@ function applyImportRewritesToContent(content) {
   text = text.replace(
     /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/util';",
+  );
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/cktsUtil';",
+  );
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/common/qxUtil';",
+  );
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
   );
   text = text.replace(
     /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
@@ -1865,6 +1979,24 @@ function applyCopyRewrites(content, srcFile) {
   // R14: costomer_toobar → customer_toolbar (拼写修正)
   text = text.replace(/\bcostomer_toobar\b/g, 'customer_toolbar');
 
+  // R15: '@/pages/common/cktsUtil' (default 导入) → '@/pages/hts/cktsUtil'
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/cktsUtil';",
+  );
+
+  // R16: '@/pages/common/qxUtil' (default 导入) → '@/pages/hts/common/qxUtil'
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/common/qxUtil';",
+  );
+
+  // R17: '@/components/DDImport/checkErrorProp' (default 导入) → '@/pages/hts/commonModule/DDImport/checkErrorProp'
+  text = text.replace(
+    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
+    "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
+  );
+
   // R6: destroyOnClose → destroyOnHidden (tsx 文件内容替换)
   text = text.replace(/\bdestroyOnClose\b/g, 'destroyOnHidden');
 
@@ -2043,6 +2175,9 @@ function processTypeA(srcFile, dstFile, args) {
   // 9. costomer_toobar → customer_toolbar (拼写修正)
   outContent = outContent.replace(/\bcostomer_toobar\b/g, 'customer_toolbar');
 
+  // 10. rules.replace.ts (ts/tsx 文本替换，作为最终步骤)
+  outContent = applyContentReplaces(outContent, 'ts');
+
   // 写出 config 文件
   fs.mkdirSync(path.dirname(dstFile), { recursive: true });
   fs.writeFileSync(dstFile, outContent, 'utf-8');
@@ -2070,9 +2205,10 @@ function processTypeA(srcFile, dstFile, args) {
     if (fs.existsSync(refIndex)) {
       try {
         const indexContent = generateIndexFileFromRef(refIndex, path.basename(dstFile, path.extname(dstFile)), '');
+        const indexContentFinal = applyContentReplaces(indexContent, 'ts');
         const outDir = path.dirname(dstFile);
         const indexFile = path.join(outDir, 'index.tsx');
-        fs.writeFileSync(indexFile, indexContent, 'utf-8');
+        fs.writeFileSync(indexFile, indexContentFinal, 'utf-8');
         console.log(`  [type-a] 已生成 index.tsx`);
       } catch (e) {
         console.log(`  [type-a] index.tsx 生成失败: ${e.message}`);
@@ -2110,6 +2246,8 @@ function processTypeA(srcFile, dstFile, args) {
           funOutput = funOutput.replace(initEditFormBlock, rewritten);
         }
 
+        funOutput = applyContentReplaces(funOutput, 'ts');
+
         const outDir = path.dirname(dstFile);
         const funFile = path.join(outDir, 'f.tsx');
         fs.writeFileSync(funFile, funOutput, 'utf-8');
@@ -2145,6 +2283,9 @@ function processTypeB(srcFile, dstFile, args) {
 
   // Step 3: return 段非 DDBunit2 组件注释化
   content = commentOutNonDDBunit2Components(content);
+
+  // Step 4: rules.replace.ts (ts/tsx 文本替换)
+  content = applyContentReplaces(content, 'ts');
 
   fs.writeFileSync(dstFile, content, 'utf-8');
   console.log(`  [type-b] 已生成 index.tsx`);
@@ -2182,27 +2323,51 @@ function processTypeC(srcFile, dstFile, args) {
 
   // Step 4: 生成 fun 文件
   const funOutput = generateFunPage({ initAddForm, extraMethods });
-  fs.writeFileSync(dstFile, funOutput, 'utf-8');
+  const funOutputFinal = applyContentReplaces(funOutput, 'ts');
+  fs.writeFileSync(dstFile, funOutputFinal, 'utf-8');
   console.log(`  [type-c] 已生成 f.tsx`);
 }
 
 /**
- * 类型 e: less 文件 → 含有 "@/assets/css/config.less" 的行注释掉
+ * 类型 e: less 文件 → 含有 "@/assets/css/config.less" 的行注释掉，
+ *                       含有 "@font_color" 的行也注释掉（保留缩进），
+ *                       并删除 "@import '~antd/lib/style/themes/default.less';"
  */
 function processTypeE(dstFile) {
   const content = fs.readFileSync(dstFile, 'utf-8');
   const lines = content.split(/\r?\n/);
   let modified = false;
-  const newLines = lines.map(line => {
-    if (/@\/assets\/css\/config\.less/.test(line)) {
-      modified = true;
-      return '// 新系统迁移时注释\n// ' + line;
-    }
-    return line;
-  });
+  const newLines = lines
+    .filter((line) => {
+      if (/@import\s+['"]~antd\/lib\/style\/themes\/default\.less['"]\s*;?/.test(line)) {
+        modified = true;
+        return false;
+      }
+      return true;
+    })
+    .map((line) => {
+      if (/@\/assets\/css\/config\.less/.test(line)) {
+        modified = true;
+        return '// 新系统迁移时注释\n// ' + line;
+      }
+      if (/@font_color/.test(line) && !line.trim().startsWith('//')) {
+        modified = true;
+        const indentMatch = line.match(/^[ \t]*/);
+        const indent = indentMatch ? indentMatch[0] : '';
+        return `${indent}// ${line.trim()}`;
+      }
+      return line;
+    });
+  let finalText = newLines.join('\n');
+  // rules.replace.less (less 文本替换，作为最终步骤)
+  const replacedText = applyContentReplaces(finalText, 'less');
+  if (replacedText !== finalText) {
+    finalText = replacedText;
+    modified = true;
+  }
   if (modified) {
-    fs.writeFileSync(dstFile, newLines.join('\n'), 'utf-8');
-    console.log(`  [type-e] 已注释含 @/assets/css/config.less 的行`);
+    fs.writeFileSync(dstFile, finalText, 'utf-8');
+    console.log(`  [type-e] 已处理 less 文件`);
   }
 }
 
@@ -2224,6 +2389,13 @@ function applyCopyRewritesToFile(srcFile, dstFile) {
   const importRewritten = applyImportRewritesToContent(content);
   if (importRewritten !== content) {
     content = importRewritten;
+    modified = true;
+  }
+
+  // rules.replace.ts (ts/tsx 文本替换，作为最终步骤)
+  const replacedContent = applyContentReplaces(content, 'ts');
+  if (replacedContent !== content) {
+    content = replacedContent;
     modified = true;
   }
 

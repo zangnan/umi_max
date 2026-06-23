@@ -53,7 +53,7 @@ Func.eventOnChange = {
     const ckbgdh = form?.getFieldValue('ckbgdh'); 
     const ssq = form?.getFieldValue('ssq'); 
     const sbxh = form?.getFieldValue('sbxh'); 
-    const qylx = myUtil.sys.enterpriseType();
+    const qylx = cktsUtil.sys.enterpriseType();
     const obj = {
       ckbgdh,
       qylx: qylx.toLocaleLowerCase(),

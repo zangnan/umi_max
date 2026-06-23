@@ -1,6 +1,7 @@
 
 // import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
+import cktsUtil from '@/pages/hts/cktsUtil';
 
 export default (initialState: any) => {
   const { currentUser } = initialState || {};
@@ -15,5 +16,6 @@ export default (initialState: any) => {
   return {
     canSeeAdmin,
     hasResourceAuthority,
+    ...cktsUtil.getAccess()
   };
 };
