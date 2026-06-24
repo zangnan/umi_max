@@ -62,9 +62,26 @@
       {
         "old": "${API_URL_BASE}",
         "new": ""
+      },
+      {
+        "old": "@/pages/common/proConfig",
+        "new": "@/components/DDAssist/constants"
+      },
+      {
+        "old": "@/pages/common/field/businessValidator",
+        "new": "@/pages/hts/common/field/businessValidator"
       }
     ],
-    "less": []
+    "less": [
+      {
+        "old": "background: url('~@/assets/css/img/icon-USB-2.png')",
+        "new": "// background: url('~@/assets/css/img/icon-USB-2.png')"
+      },
+      {
+        "old": "background: url('~@/assets/css/img/icon_pdf.png')",
+        "new": "// background: url('~@/assets/css/img/icon_pdf.png')"
+      }
+    ]
   },
   "special": [
     {

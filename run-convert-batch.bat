@@ -26,6 +26,13 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\scsbs
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\sbsjcx
 
 
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\saasMdt\wbsjgl
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\ckhwbgd
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\khdgjUtil.tsx
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\bgdgl
+
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard\common\icCardTsList';
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_TSSB_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT_TSZL___ZXSB_SB_HGSPTZ_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT_TSZL___ZXSB_SB_CKSH_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1

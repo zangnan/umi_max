@@ -1839,10 +1839,6 @@ function applyIndexImportRewrites(content) {
         : m;
     },
   );
-  text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]\.\/func['"]\s*;?[ \t]*$/gm,
-    "import $1 from './f';",
-  );
   return text;
 }
 
@@ -2254,11 +2250,12 @@ function processTypeA(srcFile, dstFile, args) {
     }
   }
 
-  // 生成 f.tsx
+  // 生成 fun 文件（保留 ref 原命名 f.tsx / fun.tsx / func.tsx）
   if (args['no-fun'] !== true) {
     const srcDir = path.dirname(srcFile);
     const refFun = fs.existsSync(path.join(srcDir, 'f.tsx')) ? path.join(srcDir, 'f.tsx')
                  : fs.existsSync(path.join(srcDir, 'fun.tsx')) ? path.join(srcDir, 'fun.tsx')
+                 : fs.existsSync(path.join(srcDir, 'func.tsx')) ? path.join(srcDir, 'func.tsx')
                  : null;
     if (refFun) {
       try {
@@ -2287,11 +2284,12 @@ function processTypeA(srcFile, dstFile, args) {
         funOutput = applyContentReplaces(funOutput, 'ts', refFun);
 
         const outDir = path.dirname(dstFile);
-        const funFile = path.join(outDir, 'f.tsx');
+        const funFileName = path.basename(refFun);  // 保留 ref 原文件名 (f.tsx / fun.tsx / func.tsx)
+        const funFile = path.join(outDir, funFileName);
         fs.writeFileSync(funFile, funOutput, 'utf-8');
-        console.log(`  [type-a] 已生成 f.tsx`);
+        console.log(`  [type-a] 已生成 ${funFileName}`);
       } catch (e) {
-        console.log(`  [type-a] f.tsx 生成失败: ${e.message}`);
+        console.log(`  [type-a] ${path.basename(refFun)} 生成失败: ${e.message}`);
       }
     }
   }
@@ -2334,12 +2332,13 @@ function processTypeB(srcFile, dstFile, args) {
  */
 function processTypeC(srcFile, dstFile, args) {
   const srcDir = path.dirname(srcFile);
-  // 查找 ref: f.tsx → fun.tsx 顺序
+  // 查找 ref: f.tsx → fun.tsx → func.tsx 顺序（保留 ref 原命名）
   const refFun = fs.existsSync(path.join(srcDir, 'f.tsx')) ? path.join(srcDir, 'f.tsx')
                : fs.existsSync(path.join(srcDir, 'fun.tsx')) ? path.join(srcDir, 'fun.tsx')
+               : fs.existsSync(path.join(srcDir, 'func.tsx')) ? path.join(srcDir, 'func.tsx')
                : null;
   if (!refFun) {
-    console.log(`  [type-c] 跳过：未找到 ref f.tsx/fun.tsx`);
+    console.log(`  [type-c] 跳过：未找到 ref f.tsx/fun.tsx/func.tsx`);
     return;
   }
 
