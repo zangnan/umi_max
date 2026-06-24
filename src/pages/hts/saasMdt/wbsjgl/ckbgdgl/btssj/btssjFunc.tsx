@@ -341,7 +341,7 @@ Func.btnSsjxseByGdw = (param: any) => {
           <Form.Item labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="人民币离岸价总额" name="rmblajHj" initialValue={myUtil.grid.formatNum(resJy?.body?.rmblajHj, '0,0.00')}>
             <Input placeholder='人民币离岸价总额' disabled={true} />
           </Form.Item>
-          <Form.Item labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="试算税率" name="sssl" rules={[{ required: true, message: '请输入试算税率' },baseValidator.zzs()]} initialValue={13}>
+          <Form.Item labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="试算税率" name="sssl" rules={[{ required: true, message: '请输入试算税率' },{ type: 'base_number', range: '+'}]} initialValue={13}>
             <Input placeholder='试算税率'  />
           </Form.Item>
           <Form.Item labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} label="试算进项转出所属期" name="ssjxzcssq" rules={[{ required: true, message: '请输入试算进项转出所属期' },businessValidator.ssq03()]} initialValue={initSsq}>

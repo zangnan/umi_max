@@ -31,7 +31,7 @@ const Index: React.FC<IcList> = ({ onRef, visible = false, saveBtn ,setDzkaickkh
   const [yqy, setYqy] = useState('');
   const [xqy, setXqy] = useState('');
 
-  const bgdsjly = myUtil.sys.bgdsjlyType();
+  const bgdsjly = cktsUtil.sys.bgdsjlyType();
 
   // 开启
   const showModal = (data: any) => {

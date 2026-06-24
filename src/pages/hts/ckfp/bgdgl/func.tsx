@@ -103,7 +103,7 @@ Func.sjxz = async (parma: any) => {
 
 Func.handleBgdTbjgzt = async (param: any) => {
   const { unitRef, otherRef } = param;
-  const bgdsjly = myUtil.sys.bgdsjlyType();
+  const bgdsjly = cktsUtil.sys.bgdsjlyType();
   let params = {
     sjgjsjDms: ['070000'],
     icCardPsw: '',
@@ -194,7 +194,7 @@ Func.handleBgdTbjgzt = async (param: any) => {
                   }
                   else {
 
-                    const bgdsjly = myUtil.sys.bgdsjlyType();
+                    const bgdsjly = cktsUtil.sys.bgdsjlyType();
                     // by --shilei  去掉判断
                     // if(bgdsjly === '4') {
                     //   otherRef[2].current!.showModal({ param }, values.kakuuid);

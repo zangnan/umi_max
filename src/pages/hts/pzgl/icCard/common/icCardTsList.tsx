@@ -29,7 +29,7 @@ const Index: React.FC<IcList> = ({onRef, visible = false, saveBtn}) => {
 
   const [sjgjsjDm, setSjgjsjDm] = useState<any>('');
 
-  const bgdsjly = myUtil.sys.bgdsjlyType();
+  const bgdsjly = cktsUtil.sys.bgdsjlyType();
 
   // 下载接口入参
   const [params, setParams] = useState();

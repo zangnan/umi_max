@@ -94,6 +94,14 @@
       {
         "old": "maskClosable={false}",
         "new": "mask={{ closable: false }}"
+      },
+      {
+        "old": "myUtil.sys.bgdsjlyType()",
+        "new": "cktsUtil.sys.bgdsjlyType()"
+      },
+      {
+        "old": "baseValidator.zzs()",
+        "new": "{ type: 'base_number', range: '+'}"
       }
     ],
     "less": [

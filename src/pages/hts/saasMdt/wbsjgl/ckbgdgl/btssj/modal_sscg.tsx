@@ -126,7 +126,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
                     <Form.Item label="人民币离岸价总额" name="rmblajHj">
                         <Input disabled></Input>
                     </Form.Item>
-                    <Form.Item  label="试算税率" name="sssl" rules={[{ required: true, message: '请输入试算税率' },baseValidator.zzs()]}>
+                    <Form.Item  label="试算税率" name="sssl" rules={[{ required: true, message: '请输入试算税率' },{ type: 'base_number', range: '+'}]}>
                         <Input placeholder='试算税率' />
                     </Form.Item>
                     <Form.Item  label="试算进项转出所属期" name="ssjxzcssq" rules={[{ required: true, message: '请输入试算进项转出所属期' },businessValidator.ssq03()]} >

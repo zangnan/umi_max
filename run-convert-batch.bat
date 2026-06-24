@@ -24,8 +24,6 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\ydgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\ydgl2
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\scsbsj
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckts\sbsjcx
-
-
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\saasMdt\wbsjgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\ckhwbgd
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard

@@ -875,7 +875,7 @@ ckbgdFunc.btnSetBq = async (param: any) => {
 // 同步结关状态（报关单）
 ckbgdFunc.handleBgdTbjgzt = async (param: any) => {
   const { unitRef, otherRef } = param;
-  const bgdsjly = myUtil.sys.bgdsjlyType();
+  const bgdsjly = cktsUtil.sys.bgdsjlyType();
   let params = {
     sjgjsjDms: ['070000'],
     icCardPsw: '',
@@ -969,7 +969,7 @@ ckbgdFunc.handleBgdTbjgzt = async (param: any) => {
                     }
                     else {
                       // 打开环境监测页面
-                      const bgdsjly = myUtil.sys.bgdsjlyType();
+                      const bgdsjly = cktsUtil.sys.bgdsjlyType();
                       // if(bgdsjly === '4'){
                       //   otherRef[7].current!.showModal({ param }, values.kakuuid);
                       // } else {

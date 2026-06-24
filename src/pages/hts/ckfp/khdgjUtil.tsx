@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { request } from 'umi';
 import { message, notification } from 'antd';
 import type { ResponseError } from 'umi-request';
@@ -40,7 +41,7 @@ const errorHandler = (error: ResponseError) => {
 };
 
 const khdgjUtil: any = {};
-const bgdsjly = myUtil.sys.bgdsjlyType();
+const bgdsjly = cktsUtil.sys.bgdsjlyType();
 
 const url = 'http://127.0.0.1:10110/';
 
