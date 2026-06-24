@@ -102,6 +102,18 @@
       {
         "old": "baseValidator.zzs()",
         "new": "{ type: 'base_number', range: '+'}"
+      },
+      {
+        "old": "@/services/hts/apiShgl",
+        "new": "@/pages/hts/services/htsApi"
+      },
+      {
+        "old": "UnitUtil.form.init",
+        "new": "formUtil.init"
+      },
+      {
+        "old": "pro.c_modal_width_max",
+        "new": "CONSTANTS.C_MODAL_WIDTH_MAX"
       }
     ],
     "less": [

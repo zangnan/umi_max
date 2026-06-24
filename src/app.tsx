@@ -178,7 +178,7 @@ export const layout = ({ initialState }: any) => {
           if (menuExample) {
             newMenuInfo = [...newMenuInfo, menuExample];
           }
-          const menuHts = defaultMenuData.find((tmp: any) => tmp.name.indexOf('慧退税-') > -1);
+          const menuHts = defaultMenuData.find((tmp: any) => tmp.name.indexOf('慧退税') > -1);
           if (menuHts) {
             newMenuInfo = [...newMenuInfo, menuHts];
           }
