@@ -16,7 +16,7 @@ const Index: React.FC<unknown> = () => {
   let myConfig = cloneDeep(unitConfig);
   const qdDm: any = history?.location?.query?.qdDm;
   if (qdDm === 'SAAS_API_SZGPS') {
-    myConfig.costomer_toobar = [];
+    myConfig.customer_toolbar = [];
   }
   if(history.location.query) {
     const bz = history.location.query?.bz;

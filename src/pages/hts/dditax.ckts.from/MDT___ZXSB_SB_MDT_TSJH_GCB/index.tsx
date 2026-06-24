@@ -15,7 +15,7 @@ const index: React.FC<unknown> = () => {
   myConfig.api_form_delete = `/yw/bszx/mdt/hwlw/tsjh/deleteHwlwTsjh`; // api 表单删除
 
   // 配置项：自定义工具栏
-  myConfig.costomer_toobar = [];
+  myConfig.customer_toolbar = [];
 
   myConfig.grid_columns_tj.forEach((item: any) => {
     if (item.dataIndex === 'bytsbz') {

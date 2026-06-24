@@ -92,7 +92,7 @@ const Index: React.FC = () => {
   if (history?.location?.pathname.indexOf('/qt/07/0705/070501') > -1) {
     // 资格备案-出口货物报关单管理
     // 外贸综合服务企业代办退税申报表
-    myconfig.costomer_toobar = [
+    myconfig.customer_toolbar = [
       // { name: '关单获取', key: 'gdhq', func: 'openGdhqModal' },
       { name: '报关单导入', key: '5B0E0D24C5540BE634F369AC77F0E230', func: 'sjdrFunc' },
       { name: '数据检查', key: '5B0E0D24C5540BE634F369AC77F0E2D4', func: 'shjcFunc' },
@@ -114,7 +114,7 @@ const Index: React.FC = () => {
     myconfig = cloneDeep(sjglConfig); // 因数据列表变动比较大，将原有config复制一份将以下配置项重新覆盖
     myconfig.grid_columns = sjgCkbgdConfig.grid_columns;
     myconfig.filter_items = sjgCkbgdConfig.filter_items;
-    myconfig.costomer_toobar = sjgCkbgdConfig.costomer_toobar;
+    myconfig.customer_toolbar = sjgCkbgdConfig.customer_toolbar;
 
     // Func.filterValidate = (param: any) => {
     //   const hgckhwbgdsbrq = param?.form.getFieldValue('hgckhwbgdsbrq');
@@ -141,7 +141,7 @@ const Index: React.FC = () => {
     // 如果不是单一窗口地区，则显示
     if (!qxUtil.getZy(zyParam)) {
       // 未确认需求，14版本暂时拿掉
-      // myconfig.costomer_toobar.push({ name: '信息检测', key: '1', func: 'handleBgdXxjc' },);
+      // myconfig.customer_toolbar.push({ name: '信息检测', key: '1', func: 'handleBgdXxjc' },);
       // myconfig.grid_columns.splice(6, 0, {
       //   title: '信息状态', dataIndex: 'czbz1', width: 120,
       //   render: { func: 'renderCkfpSjxzBgdXxzt' },
@@ -183,7 +183,7 @@ const Index: React.FC = () => {
 
   } else {
     // 其他
-    myconfig.costomer_toobar = [
+    myconfig.customer_toolbar = [
       { name: '打印', key: '5B0E0D24C5540BE634F369AC77F0E2D1', func: 'dyFunc' },
       { name: '删除', key: 'sc', func: 'btnDelete' },
     ];

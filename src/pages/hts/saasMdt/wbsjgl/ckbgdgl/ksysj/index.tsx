@@ -40,7 +40,7 @@ const Index: React.FC<{ data: any }> = ({
       { name: 'jgfsDm', label: '监管方式', type: 'Select', showType: '3', allowClear: true, showSearch: true, codeTable: 'CODE_DM_CKTS_HGJGFS:01' },
       { name: 'hgspmc', label: '海关商品名称', type: 'Input' },
     ];
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       {
         name: '批量修改',
         type: 'dropdown',
@@ -69,7 +69,7 @@ const Index: React.FC<{ data: any }> = ({
         { property: 'cdDm', value: "25020103", op: 'zdy' }
       ]
     };
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       { name: '生成明细报表', func: 'produceDetailsReport' },
       { name: '台账筛选', key: '3', func: 'importTzsx' },
       {

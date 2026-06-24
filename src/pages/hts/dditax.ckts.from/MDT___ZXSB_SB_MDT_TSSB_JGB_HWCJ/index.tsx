@@ -30,7 +30,7 @@ const index: React.FC<HwcjProps> = ({
 
 
   // 配置项：自定义工具栏
-  myConfig.costomer_toobar = [
+  myConfig.customer_toolbar = [
     { name: '冲减出口', key: 'cjck', func: 'cjck' },
     { name: '台账筛选', key: '3', func: 'importTzsx' },
   ];

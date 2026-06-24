@@ -18,7 +18,7 @@ const Index: React.FC = () => {
   };
 
   if(history?.location?.pathname.indexOf('/26/2602') > -1){
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       {
         name: '批量修改',
         type: 'dropdown',
@@ -42,7 +42,7 @@ const Index: React.FC = () => {
         { name: '出口商品代码', func: 'ckspdmPlxg' },
       ],
     });
-    myConfig.costomer_toobar = toobar;
+    myConfig.customer_toolbar = toobar;
   }
 
   const scmxSaasRef: any = useRef();

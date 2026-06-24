@@ -30,7 +30,7 @@ const Index: React.FC = () => {
   }
   if(history?.location?.pathname.indexOf('/26/2602') > -1 || history?.location?.pathname.indexOf('/27/2702') > -1){
     // 配置项：自定义工具栏
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       { name: '更新信息状态', key: 'gxxxzt', func: 'updateInfoState' },
       { name: '重新发往税务总局', key: 'cxfwswzj', func: 'sendWxxbgdToSwzj' },
       {
@@ -47,7 +47,7 @@ const Index: React.FC = () => {
     ];
   }else {
     // 配置项：自定义工具栏
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       { name: '更新信息状态', key: 'gxxxzt', func: 'updateInfoState' },
       { name: '重新发往税务总局', key: 'cxfwswzj', func: 'sendWxxbgdToSwzj' },
       {
@@ -81,7 +81,7 @@ const Index: React.FC = () => {
     ywKey: myYwKey,
   }
   if(qxUtil.getBtnQxz(paramQx)) {
-    myConfig.costomer_toobar.shift();
+    myConfig.customer_toolbar.shift();
   }
 
   Func.getOtherRef = () => {

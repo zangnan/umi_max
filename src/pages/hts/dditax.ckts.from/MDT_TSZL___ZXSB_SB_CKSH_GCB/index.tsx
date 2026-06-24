@@ -48,13 +48,13 @@ const index: React.FC<unknown> = () => {
   // 导入
   myConfig.import_key = 'SAAS_TSSB_MXCJ_CKSH_SC_DR';
   if (cktsUtil.menu.getMenuObjByPath('/hts/shgl/shsdsj')) {
-    myConfig.costomer_toobar =  [
+    myConfig.customer_toolbar =  [
       { name: '收汇提取', key: 'mdtShTq', func: 'mdtShTq' },
       { name: '模板下载', key: 'mdtShMbxz', func: 'mdtShMbxz' },
       { name: '导入', key: 'mdtShDr', func: 'mdtShDr' },
       ];
   } else {
-    myConfig.costomer_toobar =  [
+    myConfig.customer_toolbar =  [
       { name: '模板下载', key: 'mdtShMbxz', func: 'mdtShMbxz' },
       { name: '导入', key: 'mdtShDr', func: 'mdtShDr' },
       ];

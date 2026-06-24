@@ -17,13 +17,13 @@ const Index: React.FC = () => {
   }
   
   if(history?.location?.pathname.indexOf('/26/2602') > -1){
-    myConfig.costomer_toobar = [];
+    myConfig.customer_toolbar = [];
   } else {
     // eedit by yangzq 金四RPA返回的代理证明字段少，无法支撑生成明细，暂时屏蔽
     if (qxUtil.getZy({ zycode: 'S_000001_000001', accessObj: access, })) {
-      myConfig.costomer_toobar = [];
+      myConfig.customer_toolbar = [];
     }else{
-      myConfig.costomer_toobar = [
+      myConfig.customer_toolbar = [
         { name: '生成明细报表', key: 'scmxbb', func: 'produceDetailsReport' },
       ];
     }

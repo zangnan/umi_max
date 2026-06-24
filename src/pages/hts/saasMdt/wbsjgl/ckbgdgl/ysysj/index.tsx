@@ -18,9 +18,9 @@ const Index: React.FC = () => {
   };
 
   if(history?.location?.pathname.indexOf('/26/2602') > -1 || history?.location?.pathname.indexOf('/27/2702') > -1){
-    myConfig.costomer_toobar = [];
+    myConfig.customer_toolbar = [];
   } else {
-    myConfig.costomer_toobar = [
+    myConfig.customer_toolbar = [
       { name: '生成明细报表', key: 'scmxbb', func: 'produceDetailsReport' },
     ];
   }

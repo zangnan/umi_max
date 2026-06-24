@@ -49,7 +49,7 @@ const index: React.FC<unknown> = () => {
   myConfig.batch_update_url = `/yw/bszx/mdt/hwlw/tssb/mdtPlgxSbmxsj`;
 
   // 配置项：自定义工具栏
-  myConfig.costomer_toobar = [
+  myConfig.customer_toolbar = [
     {name: '台账筛选', key: '3', func: 'importTzsx'},
     /*{name: '货物冲减', key: 'glhcp', func: 'hwcj'},*/
     {

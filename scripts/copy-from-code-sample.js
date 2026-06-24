@@ -2010,9 +2010,6 @@ function applyCopyRewrites(content, srcFile) {
     "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
   );
 
-  // R14: costomer_toobar → customer_toolbar (拼写修正)
-  text = text.replace(/\bcostomer_toobar\b/g, 'customer_toolbar');
-
   // R15: '@/pages/common/cktsUtil' (default 导入) → '@/pages/hts/cktsUtil'
   text = text.replace(
     /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
@@ -2030,17 +2027,6 @@ function applyCopyRewrites(content, srcFile) {
     /^import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
   );
-
-  // R6: destroyOnClose → destroyOnHidden (tsx 文件内容替换)
-  text = text.replace(/\bdestroyOnClose\b/g, 'destroyOnHidden');
-
-  // R7: maskClosable={false} → mask={{ closable: false }} (tsx 文件内容替换)
-
-  // R8: useRouteMatch → useRouteData (tsx 文件内容替换)
-  text = text.replace(/\buseRouteMatch\b/g, 'useRouteData');
-
-  // R9: UnitUtil.form.init → formUtil.init (tsx 文件内容替换)
-  text = text.replace(/\bUnitUtil\.form\.init\b/g, 'formUtil.init');
 
   // R10: formUtil 导入（仅当源文件含 UnitUtil.form.init 时添加）
   if (!text.includes("from '@/components/DDForm/formUtil'")) {
@@ -2065,12 +2051,6 @@ function applyCopyRewrites(content, srcFile) {
     /\bUnitUtil\.code\.getCodeTableParam\s*\(\s*\{\s*formItems\s*:\s*\w+\s*\}\s*\)/g,
     'myUtil.code.getCodeTableParamFromJson({ items: formItems || [] })',
   );
-
-  // R12: UnitUtil.code.getCodeTablePromise → myUtil.code.getCodeTablePromise
-  text = text.replace(/\bUnitUtil\.code\.getCodeTablePromise\b/g, 'myUtil.code.getCodeTablePromise');
-
-  text = text.replace(/\buseRouteMatch\b/g, 'useRouteData');
-  text = text.replace(/maskClosable=\{false\}/g, 'mask={{ closable: false }}');
 
   return text;
 }

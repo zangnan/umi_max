@@ -70,6 +70,30 @@
       {
         "old": "@/pages/common/field/businessValidator",
         "new": "@/pages/hts/common/field/businessValidator"
+      },
+      {
+        "old": "destroyOnClose",
+        "new": "destroyOnHidden"
+      },
+      {
+        "old": "useRouteMatch",
+        "new": "useRouteData"
+      },
+      {
+        "old": "UnitUtil.form.init",
+        "new": "formUtil.init"
+      },
+      {
+        "old": "UnitUtil.code.getCodeTablePromise",
+        "new": "myUtil.code.getCodeTablePromise"
+      },
+      {
+        "old": "costomer_toobar",
+        "new": "customer_toolbar"
+      },
+      {
+        "old": "maskClosable={false}",
+        "new": "mask={{ closable: false }}"
       }
     ],
     "less": [
