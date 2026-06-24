@@ -4,7 +4,7 @@ import { checkBgd, uploadScHgCkbgdCj2, getBgdInfoHgck, checkCkbgdh, querySpdmXxC
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 import {Form, message, Upload, Button, Radio, Badge, Tooltip, Select, Input, Table, Checkbox} from 'antd';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import myUtil from '@/components/DDAssist/util';
 import importStyle from './importStyle.less';
 import { intl as intl2 } from '@/components/DDAssist/util';
@@ -98,9 +98,9 @@ ckbgdFunc.shjcFunc = (param: any, checkFlag: any = 'N') => {
     // 未勾选
     searchModel.forEach((item: any) => {
       if (item.op === 'dydy') {
-        params[item.property + 'Qs'] = dayjs(item.value).format('YYYY-MM-DD')
+        params[item.property + 'Qs'] = moment(item.value).format('YYYY-MM-DD')
       } else if (item.op === 'xydy') {
-        params[item.property + 'Jz'] = dayjs(item.value).format('YYYY-MM-DD')
+        params[item.property + 'Jz'] = moment(item.value).format('YYYY-MM-DD')
         params['rangeDate' + item.property] = params[item.property + 'Qs'] + ' - ' + params[item.property + 'Jz'];
         delete params[item.property + 'Qs'];
         delete params[item.property + 'Jz'];
@@ -484,7 +484,7 @@ ckbgdFunc.validator = {
 // 表单事件：OnBlur
 ckbgdFunc.eventOnBlur = {
   spdmOnblur: (form: any) => {
-    const ckrq1 = dayjs(form?.form?.getFieldValue('ckrq1')).format('YYYY-MM-DD')
+    const ckrq1 = moment(form?.form?.getFieldValue('ckrq1')).format('YYYY-MM-DD')
     const obj = { "ckspDm": form?.form?.getFieldValue('ckspDm'), "ssq": "", "ckrq1": ckrq1, "slType": "Y", "ckbgdh": "" };
     querySpdmXxCj(obj).then((res: any) => {
       const { code, msg, body } = res;

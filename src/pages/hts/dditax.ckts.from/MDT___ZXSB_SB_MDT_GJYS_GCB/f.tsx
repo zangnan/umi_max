@@ -7,7 +7,7 @@ import myUtil from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { message } from 'antd';
 import { getCmCode } from '@/pages/hts/services/htsApi';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 
 const Func: any = {
@@ -241,7 +241,7 @@ Func.eventOnChange = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: kprq ? dayjs(kprq).format('YYYY-MM-DD') : ''
+      ckrq: kprq ? moment(kprq).format('YYYY-MM-DD') : ''
     })
   },
   // 跨境应税行为代码

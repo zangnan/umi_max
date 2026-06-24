@@ -6,7 +6,7 @@ import { Drawer } from 'antd';
 import {ScheduleOutlined, ReadOutlined, QuestionCircleOutlined} from '@ant-design/icons';
 import { FormInstance } from 'antd/es/form';
 import { queryPager, querySpdmXxCj, confirmTzckspDm, getPlqrkzmCmcode } from '@/pages/hts/services/htsApi';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import myUtil from '@/components/DDAssist/util';
 import { useIntl } from 'umi';
 import ProCard from '@ant-design/pro-card';

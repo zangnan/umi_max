@@ -9,7 +9,7 @@ import { querySjByHth, queryHlxx } from '@/pages/hts/services/htsApi';
 import { getCmCode } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 
 const Func: any = {
@@ -171,9 +171,9 @@ Func.eventOnBlur = {
             let kprq = data.kprq;
             if (kprq) {
               if (kprq?.constructor === String) {
-                kprq = dayjs(new Date(Number(kprq)));
+                kprq = moment(new Date(Number(kprq)));
               } else {
-                kprq = dayjs(new Date(kprq));
+                kprq = moment(new Date(kprq));
               }
               form.setFieldsValue({ kprq: kprq });
             }
@@ -331,7 +331,7 @@ Func.eventOnChange = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: kprq ? dayjs(form?.getFieldValue('kprq')).format('YYYY-MM-DD') : ''
+      ckrq: kprq ? moment(form?.getFieldValue('kprq')).format('YYYY-MM-DD') : ''
     })
   },
   // 跨境应税行为代码

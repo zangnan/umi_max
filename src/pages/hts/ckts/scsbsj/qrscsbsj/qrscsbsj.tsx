@@ -10,7 +10,7 @@ import ExceptionGrid from '@/pages/hts/ckts/scsbsj/sjjcydlb/sjjcydlb';
 import CreateData from '@/pages/hts/ckts/scsbsj/scsjqk/scsjqk';
 import { queryScsbCsh, checkScsbsj, mtsJcSjhfx, mdtJcSjhfx, checkCkshScsbsj, queryDsbsjLb } from '@/pages/hts/services/htsApi';
 import CONSTANTS from '@/components/DDAssist/constants';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 

@@ -7,7 +7,7 @@ import myUtil from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { querySjByHth, queryHlxx } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 const Func: any = {
   unitRef: React.createRef(),
@@ -184,7 +184,7 @@ Func.eventOnChange = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: skrq ? dayjs(form?.getFieldValue('skrq')).format('YYYY-MM-DD') : ''
+      ckrq: skrq ? moment(form?.getFieldValue('skrq')).format('YYYY-MM-DD') : ''
     })
   },
   // 本期收取营业款付款单位所在国家（地区）

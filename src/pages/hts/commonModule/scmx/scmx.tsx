@@ -18,7 +18,7 @@ import { useIntl } from 'umi';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 import '@/pages/hts/commonModule/style.less';
 import { queryQywtf, checkWtqyshCk, queryCjBh } from '@/pages/hts/services/htsApi';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 export interface DDTsort {
   onRef?: any;

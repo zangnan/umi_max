@@ -6,7 +6,7 @@ import { CloseCircleOutlined, CheckCircleOutlined, ExclamationCircleOutlined } f
 import khdgjUtil from '../khdgjUtil';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import myUtil from '@/components/DDAssist/util';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { queryPagerXzrw, queryKakPassword, saveKakPassword, sqxz } from '@/pages/hts/services/htsApi';
 
 export interface BdjgProps {

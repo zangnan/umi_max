@@ -8,7 +8,7 @@ import myUtil from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { querySpdmXxCj, queryBgdByBgdNo21, queryCkspTzqspm, queryDlzmByDlckhwzmhm } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 const Func: any = {
   unitRef: React.createRef(),
@@ -58,7 +58,7 @@ Func.eventOnChange = {
           if(body){
             const obj = {
               ckbgdh,
-              ckrq1: body.ckrq1 ? dayjs(new Date(body.ckrq1)) : '',
+              ckrq1: body.ckrq1 ? moment(new Date(body.ckrq1)) : '',
               ckspDm: body.hgckspDm ? body.hgckspDm : '',
               dlckhwzmhm: dlckhwzmhm ? dlckhwzmhm : '',
               ywlx: cktmsywlxdmjh
@@ -66,9 +66,9 @@ Func.eventOnChange = {
             queryCkspTzqspm(obj).then((res: any) => {
               if (res.code == '200') {
                 form.setFieldsValue({
-                  ckrq1: body.ckrq1?dayjs(new Date(body.ckrq1)):'',
+                  ckrq1: body.ckrq1?moment(new Date(body.ckrq1)):'',
                   ckspDm: body.hgckspDm?body.hgckspDm:'',
-                  hgckhwbgdsbrq: body.hgckhwbgdsbrq ? dayjs(new Date(body.hgckhwbgdsbrq)) : '',
+                  hgckhwbgdsbrq: body.hgckhwbgdsbrq ? moment(new Date(body.hgckhwbgdsbrq)) : '',
                   sbhgspmc: res.body.ckspmc,
                   tsl: myUtil.text.getNumVal(myUtil.text.formatNum(res.body.tsl, '0, 0.0000')),
                 });
@@ -94,14 +94,14 @@ Func.eventOnChange = {
               if(res02.code === '200') {
                 if(res02.body){
                   form.setFieldsValue({
-                    ckrq1: dlzmData.ckrq1?dayjs(new Date(dlzmData.ckrq1)):'',
-                    hgckhwbgdsbrq: dlzmData.hgckhwbgdsbrq ? dayjs(new Date(dlzmData.hgckhwbgdsbrq)) : '',
+                    ckrq1: dlzmData.ckrq1?moment(new Date(dlzmData.ckrq1)):'',
+                    hgckhwbgdsbrq: dlzmData.hgckhwbgdsbrq ? moment(new Date(dlzmData.hgckhwbgdsbrq)) : '',
                     ckspDm: dlzmData.ckspDm?dlzmData.ckspDm:'',
                     sbhgspmc: dlzmData.hgspmc?dlzmData.hgspmc:'',
                   });
                   const obj = {
                     ckbgdh,
-                    ckrq1: dlzmData.ckrq1?dayjs(new Date(dlzmData.ckrq1)):'',
+                    ckrq1: dlzmData.ckrq1?moment(new Date(dlzmData.ckrq1)):'',
                     ckspDm:  body.ckspDm?body.ckspDm:'',
                     dlckhwzmhm: ckbgdh?ckbgdh:'',
                     ywlx: cktmsywlxdmjh
@@ -143,7 +143,7 @@ Func.eventOnBlur = {
     let ckrq1 = form.getFieldsValue().ckrq1;
     if(ckspDm) {
       if(ckrq1) {
-        ckrq1 = dayjs(ckrq1).format('YYYY-MM-DD');
+        ckrq1 = moment(ckrq1).format('YYYY-MM-DD');
       } else  if (!ckrq1 && ssq) {
         ckrq1 = ssq.substr(0, 4) + '-' + ssq.substr(4, 6) + '-01';
       }

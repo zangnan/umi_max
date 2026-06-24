@@ -5,7 +5,7 @@
 import React from 'react';
 import myUtil from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 const Func: any = {
   unitRef: React.createRef(),
@@ -113,7 +113,7 @@ Func.eventOnChange = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: kjrq ? dayjs(kjrq).format('YYYY-MM-DD') : ''
+      ckrq: kjrq ? moment(kjrq).format('YYYY-MM-DD') : ''
     })
   },
 }

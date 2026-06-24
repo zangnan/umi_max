@@ -1,6 +1,6 @@
 import React from 'react';
 import { message, Modal } from 'antd';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import { chsbCheck, chsb, ycsbSjzjSq, ycsbZssbNew, queryJgbHzsj, queryDsbsjLb, ycsbSjzjztCx, chBadzSJ, ycsbZssbztCx } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';

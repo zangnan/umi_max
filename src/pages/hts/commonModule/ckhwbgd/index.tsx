@@ -24,7 +24,7 @@ import { message } from 'antd';
 import { cloneDeep } from 'lodash';
 import { delTzsx } from '@/pages/hts/services/htsApi';
 import Xj from '@/pages/hts/commonModule/xj/xj';
-import dayjs from 'dayjs';
+import moment from "moment";
 
 const Index: React.FC = () => {
   const access = useAccess();

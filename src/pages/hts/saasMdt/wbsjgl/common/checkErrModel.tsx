@@ -2,7 +2,7 @@ import DDBaseGrid from "@/components/DDBaseGrid";
 import { useImperativeHandle, useState } from "react";
 import { Modal, Button, Spin, message } from "antd";
 import CONSTANTS from '@/components/DDAssist/constants';
-import dayjs from 'dayjs';
+import moment from "moment";
 import {commonDrwtdc } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 

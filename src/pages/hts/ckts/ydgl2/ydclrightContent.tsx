@@ -6,7 +6,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import UnitUtil from '@/components/DDBunit/unit_util';
 import { queryJgbForm } from '@/pages/hts/services/htsApi';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { itemType } from '@/components/DDForm/data.d';
 import { useIntl } from 'umi';
 import { baseEdit, callServiceCheck } from '@/pages/hts/services/htsApi';

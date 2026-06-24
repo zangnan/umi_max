@@ -6,7 +6,7 @@ import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import './style.less';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { queryCkbgdslForDy, pldyBgd } from '@/pages/hts/services/htsApi';
 export interface DDModalGridProps {
   onRef?: any;

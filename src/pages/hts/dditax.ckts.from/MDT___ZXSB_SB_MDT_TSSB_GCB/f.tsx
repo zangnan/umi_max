@@ -7,7 +7,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { queryJhfpl, queryBgdByBgdNo21, queryHlxx, querySpdmXxCj, queryDlzmByDlckhwzmhm, checkYwlxSpdm, importTemplate, bgdtzsx, mdtImportUpdate } from '@/pages/hts/services/htsApi';
 import {Button, Form, message, Tooltip, Upload} from 'antd';
 import myUtil from '@/components/DDAssist/util';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 import importStyle from './importStyle.less';
 import {ClockCircleOutlined, InboxOutlined} from "@ant-design/icons";
@@ -99,7 +99,7 @@ Func.formBeforeSubmit = async (param: any) => {
   if (ckspDm && cktmsywlxdmjh && cktmsywlxdmjh.length > 0) {
     await checkYwlxSpdm({
       ckspDm: ckspDm,
-      ckrq1: dayjs(ckrq1).format('YYYY-MM-DD'),
+      ckrq1: moment(ckrq1).format('YYYY-MM-DD'),
       ywlx: form.getFieldValue('cktmsywlxdmjh').join(',')
     }).then((res) => {
       const { code, msg } = res;
@@ -300,7 +300,7 @@ Func.eventOnBlur = {
     querySpdmXxCj({
       ssq: ssq,
       slType: 'Y',
-      ckrq1: ckrq1 ? dayjs(new Date(ckrq1)).format('YYYY-MM-DD') : '',
+      ckrq1: ckrq1 ? moment(new Date(ckrq1)).format('YYYY-MM-DD') : '',
       ckspDm: ckspDm,
       ckbgdh: form.getFieldValue('ckbgdh'),
       dlckhwzmhm: dlckhwzmhm,
@@ -351,7 +351,7 @@ Func.eventOnFocus = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: ckrq1 ? dayjs(form?.getFieldValue('ckrq1')).format('YYYY-MM-DD') : ''
+      ckrq: ckrq1 ? moment(form?.getFieldValue('ckrq1')).format('YYYY-MM-DD') : ''
     })
   },
 }
@@ -385,7 +385,7 @@ Func.eventOnChange = {
             // rmblaj	美元离岸价
             let rmblaj = myUtil.text.getNumVal(data.rmblaj);
             if (ckrq1) {
-              form.setFieldsValue({ ckrq1: dayjs(new Date(body.ckrq1)) });
+              form.setFieldsValue({ ckrq1: moment(new Date(body.ckrq1)) });
               // 根据收汇日期改变码表内容
               const url = '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx';
               DditCktsFormCommonFunc.util.loadCodeDmHbhlAutoComplete({
@@ -483,7 +483,7 @@ Func.eventOnChange = {
 							let yblaj = body.yblaj; // yblaj	原币离岸价
 							let rmblaj = body.rmblaj; // rmblaj	美元离岸价
               if (ckrq1) {
-                form.setFieldsValue({ ckrq1: ckrq1 ? dayjs(new Date(ckrq1)) : '' });
+                form.setFieldsValue({ ckrq1: ckrq1 ? moment(new Date(ckrq1)) : '' });
                 // 根据收汇日期改变码表内容
                 const url = '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx';
                 DditCktsFormCommonFunc.util.loadCodeDmHbhlAutoComplete({
@@ -562,7 +562,7 @@ Func.eventOnChange = {
       url,
       key: 'url_gy_hbhl',
       codeViewKey: '01',
-      ckrq: ckrq1 ? dayjs(form?.getFieldValue('ckrq1')).format('YYYY-MM-DD') : ''
+      ckrq: ckrq1 ? moment(form?.getFieldValue('ckrq1')).format('YYYY-MM-DD') : ''
     })
 
     // 申报商品代码

@@ -13,7 +13,7 @@ import { QuestionCircleOutlined, DownOutlined } from '@ant-design/icons';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import { useIntl } from 'umi';
 import EditModal from './ydclrightContent'
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { intl as intl2 } from '@/components/DDAssist/util';

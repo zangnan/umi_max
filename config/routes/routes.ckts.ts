@@ -1,6 +1,7 @@
 export default [
   // { name: '慧退税', icon: 'CodeOutlined', path: '/hts', routes: [
   { name: '慧退税-免抵退税', path: '/hts/saasMdt', icon: 'HomeOutlined', routes: [
+    { name: '首页', path: '/hts/saasMdt/home', component: './hts/saasMdt/homePage' },
     { name: '退税计划', path: '/hts/saasMdt/tuiShuiJiHua', routes: [
       { name: '退税计划登记', path: '/hts/saasMdt/tuiShuiJiHua/1', component: './hts/saasMdt/tuiShuiJiHua' },
       { name: '退税计划登记日志', path: '/hts/saasMdt/tuiShuiJiHua/2', component: './hts/saasMdt/tuiShuiJiHua/rz' },

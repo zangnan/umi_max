@@ -217,6 +217,13 @@ cktsUtil.api = {
           config.data.key?.indexOf('QTYW_ZXSB_TY_KJDSHWC_HSSB') > -1
         ) {
           config.data.key = config.data.key + '_CX';
+        } else if (config?.data?.key === 'WBSJ_CKBGD_QUERY_PAGE') {
+          config.data = {
+            ...config.data,
+            searchModel: config.data.searchModel.map((item: any) =>
+              item?.property === 'ssbz1' ? { ...item, op: 'zdy' } : item,
+            ),
+          };
         }
       }
     }

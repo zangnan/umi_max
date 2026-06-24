@@ -29,6 +29,7 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModu
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\khdgjUtil.tsx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\bgdgl
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\saasMdt\homePage
 
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard\common\icCardTsList';
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_TSSB_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1

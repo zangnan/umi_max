@@ -1094,7 +1094,7 @@ function migrateFuncMethodVariables(methodCode, methodName) {
 
 function postProcessFuncMethod(methodCode, methodName) {
   let out = methodCode;
-  out = migrateAntdUmiImports(out);
+  // out = migrateAntdUmiImports(out);
   out = migrateGetCodeValByKey(out);
   out = migrateFuncMethodVariables(out, methodName);
   out = prependFuncMethodComment(out, methodName);
@@ -1197,9 +1197,9 @@ function applyImportRewrites(importLines) {
   return importLines
     .map((line) => {
       const trimmed = line.trim();
-      if (/^import\s+moment\s+from\s+['"]moment['"]\s*;?$/.test(trimmed)) {
-        return `import dayjs from 'dayjs';`;
-      }
+      // if (/^import\s+moment\s+from\s+['"]moment['"]\s*;?$/.test(trimmed)) {
+      //   return `import dayjs from 'dayjs';`;
+      // }
       const myUtilMatch = trimmed.match(
         /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
       );
@@ -1410,10 +1410,10 @@ function applyContentReplaces(content, fileExt, srcFile) {
 // =================== index 调整函数 ===================
 function applyImportRewritesToContent(content) {
   let text = content;
-  text = text.replace(
-    /^import\s+moment\s+from\s+['"]moment['"]\s*;?[ \t]*$/gm,
-    "import dayjs from 'dayjs';",
-  );
+  // text = text.replace(
+  //   /^import\s+moment\s+from\s+['"]moment['"]\s*;?[ \t]*$/gm,
+  //   "import dayjs from 'dayjs';",
+  // );
   text = text.replace(
     /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/util';",
@@ -2247,7 +2247,7 @@ function processTypeA(srcFile, dstFile, args) {
         funOutput = applyImportRewritesToContent(funOutput);
 
         // moment → dayjs
-        funOutput = funOutput.replace(/\bmoment\(/g, 'dayjs(');
+        // funOutput = funOutput.replace(/\bmoment\(/g, 'dayjs(');
 
         // getCodeValByKey 3→2
         funOutput = migrateGetCodeValByKey(funOutput);

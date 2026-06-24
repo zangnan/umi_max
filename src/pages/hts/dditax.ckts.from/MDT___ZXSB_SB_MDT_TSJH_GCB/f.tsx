@@ -7,7 +7,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { getCmCode, queryCjCsh, queryCjGlh, queryFpWzxx, queryMdtCkxxByGlh, queryMdtGlhBySsq } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import {message} from 'antd';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import {history} from 'umi';
 
 const Func: any = {
@@ -346,7 +346,7 @@ const queryFpxxByMtsTsjhJhpzh = (param: any) => {
         // }
         if (kprq) {
           form.setFieldsValue({
-            kprq: kprq ? dayjs(new Date(kprq)) : '',
+            kprq: kprq ? moment(new Date(kprq)) : '',
           });
           // 进货明细表需带出税率
           // 根据关联号、税种、开票日期，带出出口信息

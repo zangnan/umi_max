@@ -2,7 +2,7 @@ import React, { useState, useEffect, useImperativeHandle } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Modal, Col, Upload, Badge, Select } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import ProCard from '@ant-design/pro-card';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import myUtil from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 
