@@ -31,8 +31,8 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModu
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\jhmx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\ckhwbgd
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\shgl
-
-node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjbb\sc\tjbb
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjbb\sc
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\sjgx
 
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_TSSB_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT_TSZL___ZXSB_SB_HGSPTZ_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1

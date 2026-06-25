@@ -1303,22 +1303,32 @@ function loadSpecialRules() {
 // 若新内容用到映射中的符号但缺少对应 import，则在文件顶部补齐。
 // 触发条件：replace 规则的 `new` 引入了 `old` 中没有的符号（即该符号是被替换规则"新引入"的）。
 // 仅作用于 ts/tsx 文件（less 不需要 import）。
+// matchType: 'property'（默认，匹配 `symbol.`，如 cktsUtil.X）｜ 'call'（匹配 `symbol(`，如 dayjs(x)）
 const AUTO_IMPORTS_AFTER_REPLACE = [
   { symbol: 'cktsUtil', importLine: "import cktsUtil from '@/pages/hts/cktsUtil';" },
+  { symbol: 'dayjs', importLine: "import dayjs from 'dayjs';", matchType: 'call' },
 ];
 
-// 提取字符串中所有形如 `identifier.` 的 token（属性访问），返回 Set<identifier>
+// 提取字符串中所有形如 `identifier.`（属性访问）和 `identifier(`（函数调用）的 token，
+// 返回 Set<identifier>。支持两类符号用法（属性访问 vs 函数调用），用于自动检测
+// replace 规则"新引入"的符号。
 function extractSymbolTokens(s) {
   if (typeof s !== 'string') return new Set();
-  const matches = s.match(/\b[a-zA-Z_$][\w$]*\.(?!['"`\/])/g) || [];
-  return new Set(matches.map((m) => m.slice(0, -1)));
+  // 属性访问：`identifier.` 但后不能跟引号/斜杠（避免路径字符串如 cktsUtil/）
+  const propAccess = s.match(/\b[a-zA-Z_$][\w$]*\.(?!['"`\/])/g) || [];
+  // 函数调用：`identifier(`（lookahead 不消费 `(`）
+  const funcCall = s.match(/\b[a-zA-Z_$][\w$]*(?=\()/g) || [];
+  const allMatches = [...propAccess, ...funcCall];
+  return new Set(allMatches.map((m) => m.replace(/\.$/, '')));
 }
 
 function ensureAutoImports(content, introducedSymbols) {
   let text = content;
-  for (const { symbol, importLine } of AUTO_IMPORTS_AFTER_REPLACE) {
+  for (const { symbol, importLine, matchType = 'property' } of AUTO_IMPORTS_AFTER_REPLACE) {
     if (!introducedSymbols.has(symbol)) continue;
-    const usageRe = new RegExp(`\\b${symbol}\\.(?!/)`);
+    const usageRe = matchType === 'call'
+      ? new RegExp(`\\b${symbol}\\(`)
+      : new RegExp(`\\b${symbol}\\.(?!/)`);
     if (usageRe.test(text) && !text.includes(importLine)) {
       const firstImportMatch = text.match(/^import\s/m);
       if (firstImportMatch) {

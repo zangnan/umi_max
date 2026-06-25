@@ -298,7 +298,7 @@ Func.btnSsjxseByGdw = (param: any) => {
         searchModel.push(item);
       });
     }
-    if (searchModel.length > 0) {
+    if (searchModel?.length > 0) {
       searchModel.forEach((item: any) => {
         if (item.value) {
           data[item.property] = item.value

@@ -729,6 +729,63 @@ myUtil.date = {
     const mins = myUtil.text.leadingZeroize(minutes % 60, 2);
     return `${hours}:${mins}`;
   },
+
+  // 原系统移植
+  // 获取当前时间或指定时间前N年（返回年月）
+  getDateNYBeforeCurr(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const date = year + '-' + month;
+    return date;
+  },
+  // 原系统移植
+  // 获取当前时间或指定时间前N年（返回年月）格式202208
+  getDateNYBeforeCurrFormat(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const date = String(year) + month;
+    return date;
+  },
+  // 原系统移植
+  // 获取N年前到现在月份（返回开始年月与结束年月）
+  getDateYearAgoToNow(n: any) {
+    // 获取当前日期前一年的日期
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const d = new Date(year + '-' + month);
+    d.setMonth(d.getMonth() + 1);
+    // 转化为yyyy-MM格式（前一年）
+    const time = new Date(d);
+    const lastYear = time.getFullYear();
+    const lastMonth = (time.getMonth() + 1) < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1;
+    const lastYearMonth = lastYear + '-' + lastMonth;
+    // 转化为yyyy-MM格式（当前日期）
+    const nowYear = sj.getFullYear();
+    const nowMonth = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const nowYearMonth = nowYear + '-' + nowMonth;
+
+    return [lastYearMonth, nowYearMonth];
+  },
+  // 原系统移植
+  // 获取当前时间前N年（返回年月日）
+  getDateNYRBeforeCurr(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const day = sj.getDate() < 10 ? '0' + sj.getDate() : sj.getDate();
+    const date = year + '-' + month + '-' + day;
+    return date;
+  },
+  // 原系统移植
+  // 获取当前时间前N年
+  getYearBeforeCurr(n: any) {
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    return year;
+  },
 };
 
 // ==================== 存储模块 ====================

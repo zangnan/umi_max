@@ -5,6 +5,7 @@ import CONSTANTS from '../DDAssist/constants';
 import tableUtil from '../DDBaseGrid/tableUtil';
 import DDBunit2ADBUtil from './DDBunit2ADBUtil';
 import DDIT_TOOL_CONSTANTS from './excelConfig.v2.constants';
+import cktsUtil from '@/pages/hts/cktsUtil';
 
 const CONFIG_KEY = DDIT_TOOL_CONSTANTS.CONFIG_KEY;
 // import { getAdfPlan } from '@/services/hts/api';
@@ -47,8 +48,19 @@ UnitUtil.grid = {
           value,
           op,
         };
+        let searchModelObj2: any = [];
+        if (item.type === itemType.DatePicker && item.defaultValue instanceof Array) {
+          if (param.moduleType === 'sjbb') {
+            searchModelObj2 = [...cktsUtil.grid.getSjbbDateSearchModel({ item })];
+            searchModel.length = 0;
+          }
+        }
         myUtil.mysql.addDbFields(searchModelObj, item); // 补充数据库字段
-        searchModel.push(searchModelObj);
+        if (searchModelObj2.length > 0) {
+          searchModel.push(...searchModelObj2);
+        } else {
+          searchModel.push(searchModelObj);
+        }
       }
     });
     return {

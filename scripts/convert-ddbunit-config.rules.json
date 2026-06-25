@@ -114,6 +114,26 @@
       {
         "old": "pro.c_modal_width_max",
         "new": "CONSTANTS.C_MODAL_WIDTH_MAX"
+      },
+      {
+        "old": "@/pages/common/myUtil",
+        "new": "@/components/DDAssist/util"
+      },
+      {
+        "old": "param.unitRef.current?.getGridParams()",
+        "new": "param.unitRef?.current?.getGridParams()"
+      },
+      {
+        "old": "searchModel.length",
+        "new": "searchModel?.length"
+      },
+      {
+        "old": "routeMatch?.path.indexOf",
+        "new": "routeMatch?.path?.indexOf"
+      },
+      {
+        "old": "myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1)",
+        "new": "myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d))"
       }
     ],
     "less": [

@@ -224,6 +224,36 @@ cktsUtil.api = {
               item?.property === 'ssbz1' ? { ...item, op: 'zdy' } : item,
             ),
           };
+        } else if (config?.data?.key === 'CX_SJFX_SC_CKQK_FYHZ') {
+          // 出口退税分析模块 - 将 searchModel 中每项：
+          //   1. op 统一改为 'zdy'（自定义区间）
+          //   2. value 由时间戳（毫秒）格式转换为 yyyyMM 字符串
+          // config.data = {
+          //   ...config.data,
+          //   // searchModel: config.data.searchModel.map((item: any) => {
+          //   //   // 时间戳（毫秒）→ yyyyMM 字符串；非数值类型原样保留
+          //   //   const value = item?.value;
+          //   //   const newValue = typeof value === 'number'
+          //   //     ? dayjs(value).format('YYYYMM')
+          //   //     : value;
+          //   //   return {
+          //   //     ...item,
+          //   //     op: 'zdy',
+          //   //     value: newValue,
+          //   //   };
+          //   // }),
+          //   searchModel:[
+          //   {property: "ckny", value: "202507", op: "zdy"}, 
+          //   {property: "ckny1", value: "202606", op: "zdy"}, 
+          //   {property: "cknyqq", value: "202506", op: "zdy"}, 
+          //   {property: "cknyqq1", value: "202605", op: "zdy"}, 
+          //   {property: "cknysntq", value: "202407", op: "zdy"}, 
+          //   {property: "cknysntq1", value: "202506", op: "zdy"}, 
+          //   ]
+          // };
+
+          // type:5,"property":"ckny","value":"202507","op":"zdy"}
+          // type:5,"property":"ckny","value":"202606","op":"zdy"}
         }
       }
     }
@@ -1071,6 +1101,90 @@ cktsUtil.getAccess = (currentUser: any) => {
       }
       return false;
     }
+  }
+}
+
+
+// 老系统迁移
+// 数据报表查询参数特殊处理
+cktsUtil.grid = {
+  getSjbbDateSearchModel: (param: any) => {
+    // 例如申报年月（sbny）
+    // 本期       sbnyq、sbnyz
+    // 前期       sbnyqqq、sbnyqqz
+    // 上年同期   sbnysntqq、sbnysntqz
+    const { item } = param;
+    let property: any = item.name;
+
+    let time: any = '';
+    let time1: any = '';
+    let timeqq: any = '';
+    let timeqq1: any = '';
+    let timesntq: any = '';
+    let timesntq1: any = '';
+    const tmp = [];
+    // debugger
+    if (item.format === 'yyyy-MM' || item.format === 'YYYY-MM' || item.format === 'yyyyMM' || item.format === 'YYYYMM') { // 年月 特殊处理
+      // 本期
+      if (item.format.indexOf('-') > -1) {
+        time = myUtil.date.getDateNYBeforeCurr(0, item.defaultValue[0]);
+        time1 = myUtil.date.getDateNYBeforeCurr(0, item.defaultValue[1]);
+      } else {
+        time = myUtil.date.getDateNYBeforeCurrFormat(0, item.defaultValue[0]);
+        time1 = myUtil.date.getDateNYBeforeCurrFormat(0, item.defaultValue[1]);
+      }
+      let propertyQ: any = property;
+      let propertyZ: any = property + '1';
+      let valueQ: any = (time).valueOf();
+      let valueZ: any = (time1).valueOf();
+      tmp.push({ property: propertyQ, value: valueQ, op: 'zdy' });
+      tmp.push({ property: propertyZ, value: valueZ, op: 'zdy' });
+      // 前期
+      if (item.format.indexOf('-') > -1) {
+        timeqq = myUtil.date.getDateNYBeforeCurr(0, new Date(item.defaultValue[0]).getTime() - 2592000000);
+        timeqq1 = myUtil.date.getDateNYBeforeCurr(0, new Date(item.defaultValue[1]).getTime() - 2592000000);
+      } else {
+        timeqq = myUtil.date.getDateNYBeforeCurrFormat(0, new Date(item.defaultValue[0]).getTime() - 2592000000);
+        timeqq1 = myUtil.date.getDateNYBeforeCurrFormat(0, new Date(item.defaultValue[1]).getTime() - 2592000000);
+      }
+      let propertyQqq: any = property + 'qq';
+      let propertyQqz: any = property + 'qq1';
+      let valueQqq: any = (timeqq).valueOf();
+      let valueQqz: any = (timeqq1).valueOf();
+      tmp.push({ property: propertyQqq, value: valueQqq, op: 'zdy' });
+      tmp.push({ property: propertyQqz, value: valueQqz, op: 'zdy' });
+      // 上年同期
+      if (item.format.indexOf('-') > -1) {
+        timesntq = myUtil.date.getDateNYBeforeCurr(1, item.defaultValue[0]);
+        timesntq1 = myUtil.date.getDateNYBeforeCurr(1, item.defaultValue[1]);
+      } else {
+        timesntq = myUtil.date.getDateNYBeforeCurrFormat(1, item.defaultValue[0]);
+        timesntq1 = myUtil.date.getDateNYBeforeCurrFormat(1, item.defaultValue[1]);
+      }
+      let propertySntqq: any = property + 'sntq';
+      let propertySntqz: any = property + 'sntq1';
+      let valueSntqq: any = (timesntq).valueOf();
+      let valueSntqz: any = (timesntq1).valueOf();
+      tmp.push({ property: propertySntqq, value: valueSntqq, op: 'zdy' });
+      tmp.push({ property: propertySntqz, value: valueSntqz, op: 'zdy' });
+    } else { // 年月日 正常处理
+      if (item.defaultValue[1]) {
+        time = myUtil.date.getDateNYRBeforeCurr(0, item.defaultValue[0]);
+        time1 = myUtil.date.getDateNYRBeforeCurr(0, item.defaultValue[1]);
+        let propertyQ: any = property;
+        let propertyZ: any = property + '1';
+        let valueQ: any = (time).valueOf();
+        let valueZ: any = (time1).valueOf();
+        tmp.push({ property: propertyQ, value: valueQ, op: 'zdy' });
+        tmp.push({ property: propertyZ, value: valueZ, op: 'zdy' });
+      } else {
+        time = myUtil.date.getDateNYRBeforeCurr(0, item.defaultValue);
+        let propertyQ: any = property;
+        let valueQ: any = (time).valueOf();
+        tmp.push({ property: propertyQ, value: valueQ, op: 'zdy' });
+      }
+    }
+    return tmp;
   }
 }
 

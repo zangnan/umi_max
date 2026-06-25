@@ -1478,3 +1478,75 @@ HTS 服务端的查询端点，否则列表查不到数据。
 - `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.tsx`（9 处 codeTable 转换）
 - `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.README.md`（重新生成）
 - `src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_configIndex.tsx`（重新生成）
+
+## 待提交变更（2026-06-25）
+
+### 新规则：`getDateYearAgoToNow(1)` 自动追加 `.map(dayjs)` + dayjs import 自动补齐
+
+**背景**：上一轮 6 条字面量规则迁移到 `rules.replace.ts` 后，
+`replace.ts` 已有 15 条规则。本次按用户最新指示：
+
+1. **新规则 16**（[scripts/convert-ddbunit-config.rules.json:135-137](scripts/convert-ddbunit-config.rules.json#L135-L137)）：
+   - 源：`myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1)`
+   - 目标：`myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d))`
+   - 触发原因：新协议下 DDBunit2_CKTS 期望 `defaultValue` 元素是 `Dayjs` 对象，源文件返回的 `string[]` 需包装
+
+2. **`AUTO_IMPORTS_AFTER_REPLACE` 新增 dayjs 条目**（[scripts/copy-from-code-sample.js:1306-1308](scripts/copy-from-code-sample.js#L1306-L1308)），
+   携带 `matchType: 'call'`：
+   ```js
+   { symbol: 'dayjs', importLine: "import dayjs from 'dayjs';", matchType: 'call' }
+   ```
+   触发条件：当前文件里不含 `import dayjs from 'dayjs';` 时自动补到顶部
+   （import 已存在则跳过，幂等）
+
+3. **`extractSymbolTokens` 扩展支持函数调用符号**（[scripts/copy-from-code-sample.js:1313-1321](scripts/copy-from-code-sample.js#L1313-L1321)）：
+   - 之前只匹配 `identifier.`（属性访问，如 `cktsUtil.X`）
+   - 现在同时匹配 `identifier(`（函数调用，如 `dayjs(x)`）—— lookahead 不消费 `(`，只标记 identifier
+   - 双 regex 合并后去重
+
+4. **`ensureAutoImports` 使用 `matchType` 区分 regex**（[scripts/copy-from-code-sample.js:1324-1328](scripts/copy-from-code-sample.js#L1324-L1328)）：
+   - `'property'`（默认）：`\b${symbol}\.(?!/)` —— `cktsUtil.X` 形式
+   - `'call'`：`\b${symbol}\(` —— `dayjs(x)` 形式
+
+**关键设计点**：
+- **`extractSymbolTokens` 改用 `[...propAccess, ...funcCall]`**：在 `old → new` 字面量差里检出**新引入**的 `dayjs(` 调用 token
+- **与 `cktsUtil` 现有逻辑完全平行**：与 `AUTO_IMPORTS_AFTER_REPLACE` 中 `{ symbol: 'cktsUtil' }` 同款流程；唯一区别是 `matchType` 字段
+- **自动 import 位置**：`firstImportMatch.index` 之前 —— 与既有 `prependImports` 风格一致（项目内 import 段顶部）
+- **去重保护**：`!text.includes(importLine)` —— 文件已有 `import dayjs from 'dayjs';` 时不重复添加（幂等）
+- **token 提取负向先行 `(?!['"\`\/])`**：保留原有保护，匹配 `cktsUtil.X` 而不匹配字符串字面量 `cktsUtil/X`
+- **funcCall 用 lookahead `(?=\()`**：不消费括号，仅标记 identifier
+
+**改动文件**：
+- [scripts/convert-ddbunit-config.rules.json](scripts/convert-ddbunit-config.rules.json) —— `replace.ts` 追加 1 条规则
+- [scripts/copy-from-code-sample.js](scripts/copy-from-code-sample.js) —— `AUTO_IMPORTS_AFTER_REPLACE` / `extractSymbolTokens` / `ensureAutoImports` 三处微调
+
+**端到端验证**（`src/pages/hts/sjbb/sc/tjbb/bgdtsqk/ckbgdfyhz/index.tsx`）：
+
+| 检查 | 期望 | 实际 |
+|---|---|---|
+| 触发替换 | `getDateYearAgoToNow(1).map((d: string) => dayjs(d))` 出现在 line 18 | ✓ |
+| dayjs import 自动补齐 | line 1 `import dayjs from 'dayjs';` | ✓ |
+| 重复运行幂等 | md5 两次相同 | ✓ `f6222a48a8fc67d88485b955eb7bc253` |
+| dayjs import 计数 | 1（不重复）| ✓ |
+| cktsUtil import 仍工作 | 1（不被新逻辑误改）| ✓ |
+| 现有 `replace.ts` 15 条规则 | 全部正常工作 | ✓ |
+
+**测试**：`npm run test:convert-config` → 22 通过 / 2 失败（预存在，与本次改动无关）。
+
+**已知限制**（用户决策接受）：
+- **字符串/注释里的 `dayjs(` 也会触发 import** —— 与 `cktsUtil.` 已有行为一致
+- **不同的 dayjs import 形式未处理**：若文件用 `import { dayjs } from 'dayjs';` 而非 default import，重复 import 会触发 TS 错误（与 `cktsUtil` 已有行为一致）
+- **仅作用于 `replace.ts` 数组的 `ts` 类**：`less` 类不会触发 auto-import（less 不需要 import；现有行为）
+
+### sjbb/sc 全量业务模块重生成
+
+**背景**：本轮 6 条新规则生效后 + r15 codeTable 数组转字符串 + 13 条 fun 生成规则 + 5 方法移植，端到端重新跑 78 个 sjbb/sc/ 业务模块，确认所有规则覆盖正确。
+
+**范围**：
+- `src/pages/hts/sjbb/sc/sjgx/`：4 个文件（`config.tsx` / `f.tsx` / `index.tsx` + `commonModule/sjgx/DDSjgxUpdateData.tsx`）
+- `src/pages/hts/sjbb/sc/tjbb/`：73 个文件（`bgdtsqk/` / `ckqk/` / `common/` / `tsqk/`）
+- 配套 `config/routes/routes.ckts.ts` / `run-convert-batch.bat` / `src/components/DDAssist/util/index.tsx` / `src/components/DDBunit/DDBunit2.tsx` / `src/components/DDBunit/unit_util.tsx` / `src/pages/hts/cktsUtil.tsx` / `src/pages/hts/saasMdt/wbsjgl/ckbgdgl/btssj/btssjFunc.tsx` 调整
+
+**已知限制**（与本轮一致）：
+- 字符串/注释里的 token 检测范围未做（与 `extractSymbolTokens` 同款简化）
+- 13 条 fun 生成规则的边界条件已在各自章节详述

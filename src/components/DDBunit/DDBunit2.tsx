@@ -178,6 +178,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
     filterItems,
     gridFilterQuick,
     initSearchModal,
+    moduleType,
   });
   const [queryParam, setQueryParam] = useState({ ...initQueryParam });
 
@@ -1538,6 +1539,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
       filterItems,
       gridFilterQuick: gridFilterQuick,
       initSearchModal,
+      moduleType,
     });
     if (
       initQueryParamNew &&
