@@ -1373,6 +1373,45 @@ function applySpecialReplacements(content, srcFile) {
   return text;
 }
 
+// rules.special[*].line 专用：按 fileName + 行号定位，替换生成文件中指定行的内容。
+// 触发条件：srcFile 与 rules.special[*].fileName 精确匹配 + entry.line 是非空数组。
+// 适用场景：参照文件含被注释包裹的孤儿 JSX 标签（如注释掉 {<Tabs.TabPane ...>} 后剩
+//           单独一个 </Tabs.TabPane>），需要手动补一个对应开始标签来闭合 JSX 结构。
+// 规则形态：line 数组每项为单 key 对象，如 [{ "31": "<Tabs>" }] → 改写生成文件 line 31。
+// 注意：
+//   - 行号 N 作用于生成文件（不是 ref 文件）；ref 文件 line N 内容仅用于 log 输出
+//   - 行号越界（lineNo < 1 或 > lines.length）时 console.warn 跳过，原内容保留
+//   - 同一文件 entry 可同时含 replace 和 line；line 在 replace 之后执行
+function applySpecialLineReplacements(content, srcFile) {
+  if (!srcFile) return content;
+  const normalizedSrc = srcFile.replace(/\\/g, '/');
+  const specialRules = loadSpecialRules();
+  const entry = specialRules.find((s) => s && s.fileName === normalizedSrc);
+  if (!entry || !Array.isArray(entry.line) || entry.line.length === 0) return content;
+
+  const lines = content.split('\n');
+  let touched = 0;
+  for (const lineRepl of entry.line) {
+    const keys = Object.keys(lineRepl);
+    if (keys.length === 0) continue;
+    const lineNo = parseInt(keys[0], 10);
+    const newText = lineRepl[keys[0]];
+    if (!Number.isFinite(lineNo) || lineNo < 1 || lineNo > lines.length) {
+      console.warn(
+        `  [special-line] 跳过 ${normalizedSrc} line ${lineNo}: 行号越界 (总行数 ${lines.length})`,
+      );
+      continue;
+    }
+    const oldLine = lines[lineNo - 1];
+    lines[lineNo - 1] = newText;
+    console.log(
+      `  [special-line] ${normalizedSrc} line ${lineNo}: ${JSON.stringify(oldLine)} → ${JSON.stringify(newText)}`,
+    );
+    touched++;
+  }
+  return touched > 0 ? lines.join('\n') : content;
+}
+
 function applyContentReplaces(content, fileExt, srcFile) {
   const rules = loadReplaceRules();
   const replaces = rules[fileExt] || [];
@@ -1412,6 +1451,12 @@ function applyContentReplaces(content, fileExt, srcFile) {
   // 放在最后：在所有通用转换之后执行，特殊规则可"覆盖"之前的任何输出
   if (srcFile) {
     text = applySpecialReplacements(text, srcFile);
+  }
+
+  // 第六遍：特殊文件按行号替换（按 fileName 匹配；line 字段）
+  // 在 replace 之后执行：行号级精确改写可"覆盖"任何前面的输出
+  if (srcFile) {
+    text = applySpecialLineReplacements(text, srcFile);
   }
 
   return text;
@@ -1852,51 +1897,12 @@ function applyIndexImportRewrites(content) {
   return text;
 }
 
-function commentOutNonDDBunit2Components(content) {
-  const returnRe = /(\breturn\s*<>\s*\n)([\s\S]*?)(\n\s*<\/\s*\S+?>)/;
-  const m = returnRe.exec(content);
-  if (!m) return content;
-  const returnBody = m[2];
-  const componentNames = new Set();
-  for (const line of returnBody.split('\n')) {
-    const cm = line.match(/<([A-Z][A-Za-z0-9_]*)/);
-    if (cm && cm[1] !== 'DDBunit2') {
-      componentNames.add(cm[1]);
-    }
-  }
-  if (componentNames.size === 0) return content;
-  const lines = returnBody.split('\n');
-  const newLines = [];
-  let markerInserted = false;
-  for (const line of lines) {
-    const cm = line.match(/<([A-Z][A-Za-z0-9_]*)/);
-    if (cm && cm[1] !== 'DDBunit2') {
-      const commented = line.replace(
-        /(\s*)(<\/?[A-Z][A-Za-z0-9_]*[^>]*?\/?>)\s*$/,
-        '$1{/* $2 */}',
-      );
-      newLines.push(commented);
-    } else {
-      newLines.push(line);
-      if (!markerInserted && /<DDBunit2/.test(line)) {
-        newLines.push('    {/* 暂时仅仅保留DDBunit2 */}');
-        markerInserted = true;
-      }
-    }
-  }
-  const newReturnBody = newLines.join('\n');
-  let newText = content.replace(returnRe, (full, open, _body, close) =>
-    open + newReturnBody + close,
-  );
-  for (const compName of componentNames) {
-    const importRe = new RegExp(
-      `^import\\s+${compName}\\s+from\\s+['"][^'"]+['"]\\s*;?[ \\t]*$`,
-      'gm',
-    );
-    newText = newText.replace(importRe, (match) => `// ${match.trim()}`);
-  }
-  return newText;
-}
+// 已移除 commentOutNonDDBunit2Components：
+//   该函数会把 return 体里所有非 DDBunit2 的大写 JSX 组件
+//   （如 <Tabs> / <Tabs.TabPane> 等 antd 布局组件）注释化，
+//   并连带注释对应 import。
+//   这对含 antd 布局组件的 ref（如 mbcx/slcx/index.tsx 的 <Tabs>）
+//   会破坏 JSX 结构。用户决策：不再调用。
 
 function applyIndexAdjustments(content) {
   let text = content;
@@ -1920,7 +1926,6 @@ function generateIndexFileFromRef(refPath, configImportName, funImportName) {
   output = normalizeDDBunit2Import(output);
   output = applyIndexImportRewrites(output);
   output = applyIndexAdjustments(output);
-  output = commentOutNonDDBunit2Components(output);
   return output;
 }
 
@@ -2307,10 +2312,7 @@ function processTypeB(srcFile, dstFile, args) {
   // Step 2: 应用内联调整
   content = applyIndexAdjustments(content);
 
-  // Step 3: return 段非 DDBunit2 组件注释化
-  content = commentOutNonDDBunit2Components(content);
-
-  // Step 4: rules.replace.ts (ts/tsx 文本替换)
+  // Step 3: rules.replace.ts (ts/tsx 文本替换；含 special.replace / special.line)
   content = applyContentReplaces(content, 'ts', srcFile);
 
   fs.writeFileSync(dstFile, content, 'utf-8');
@@ -2601,7 +2603,17 @@ function walkFiles(dir) {
   return out;
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
+
+// 暴露核心函数供测试脚本引用；不影响 main() 自动执行
+module.exports = {
+  applyContentReplaces,
+  applySpecialReplacements,
+  applySpecialLineReplacements,
+  loadSpecialRules,
+};

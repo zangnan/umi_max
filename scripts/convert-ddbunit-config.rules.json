@@ -134,6 +134,22 @@
       {
         "old": "myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1)",
         "new": "myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d))"
+      },
+      {
+        "old": "myUtil.menu.getMenuObjByPath",
+        "new": "cktsUtil.menu.getMenuObjByPath"
+      },
+      {
+        "old": "CommonFunc.cktsCommonSum",
+        "new": "cktsUtil.cktsCommonSum"
+      },
+      {
+        "old": "CommonFunc.cktsCommonOrder",
+        "new": "cktsUtil.cktsCommonOrder"
+      },
+      {
+        "old": "import CommonFunc from '@/components/DDBunit/f';",
+        "new": ""
       }
     ],
     "less": [
@@ -170,6 +186,14 @@
         {
           "old": "setMyConfig(config);",
           "new": ""
+        }
+      ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/sjgl/xzrwgl/hgsjxz/index.tsx",
+      "line": [
+        {
+          "3": "import Jckbgd from './jkbgd';"
         }
       ]
     }
