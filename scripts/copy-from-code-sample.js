@@ -264,7 +264,7 @@ function prependImports(content, imports) {
   const added = [];
   for (const imp of imports) {
     if (content.includes(imp)) continue;
-    const firstImportMatch = content.match(/^import\s/m);
+    const firstImportMatch = content.match(/^[ \t]*import\s/m);
     if (firstImportMatch) {
       content = content.slice(0, firstImportMatch.index) + imp + '\n' + content.slice(firstImportMatch.index);
     } else {
@@ -1182,7 +1182,7 @@ function extractRefImports(content) {
     }
     if (trimmed.startsWith('//')) continue;
     if (!trimmed.startsWith('import ')) break;
-    if (/^import\s+type\s+/.test(trimmed)) continue;
+    if (/^[ \t]*import\s+type\s+/.test(trimmed)) continue;
     if (/\.less['"]\s*;?$/.test(trimmed)) continue;
     const buffer = [line];
     if (!trimmed.endsWith(';') && !trimmed.endsWith("'") && !trimmed.endsWith('"')) {
@@ -1210,42 +1210,42 @@ function applyImportRewrites(importLines) {
   const hasCktsUtilImport = importLines.some((line) => {
     const t = line.trim();
     return (
-      /^import\s+cktsUtil\s+from\s*['"][^'"]+['"]\s*;?$/.test(t) ||
-      /^import\s*\{[^}]*\bcktsUtil\b[^}]*\}\s*from\s*['"][^'"]+['"]\s*;?$/.test(t)
+      /^[ \t]*import\s+cktsUtil\s+from\s*['"][^'"]+['"]\s*;?$/.test(t) ||
+      /^[ \t]*import\s*\{[^}]*\bcktsUtil\b[^}]*\}\s*from\s*['"][^'"]+['"]\s*;?$/.test(t)
     );
   });
   return importLines
     .map((line) => {
       const trimmed = line.trim();
-      // if (/^import\s+moment\s+from\s+['"]moment['"]\s*;?$/.test(trimmed)) {
+      // if (/^[ \t]*import\s+moment\s+from\s+['"]moment['"]\s*;?$/.test(trimmed)) {
       //   return `import dayjs from 'dayjs';`;
       // }
       const myUtilMatch = trimmed.match(
-        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
+        /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
       );
       if (myUtilMatch) {
         return `import ${myUtilMatch[1]} from '@/components/DDAssist/util';`;
       }
       const ddAlertMatch = trimmed.match(
-        /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?$/,
+        /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?$/,
       );
       if (ddAlertMatch) {
         return `import ${ddAlertMatch[1]} from '@/pages/hts/commonModule/DDAlert';`;
       }
       const staticTableCodeMatch = trimmed.match(
-        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/staticTableCode['"]\s*;?$/,
+        /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/staticTableCode['"]\s*;?$/,
       );
       if (staticTableCodeMatch) {
         return `import ${staticTableCodeMatch[1]} from '@/components/DDAssist/staticTableCode';`;
       }
       const intlMyUtilNamedMatch = trimmed.match(
-        /^import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
+        /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/pages\/common\/myUtil['"]\s*;?$/,
       );
       if (intlMyUtilNamedMatch) {
         return `import { ${intlMyUtilNamedMatch[1].trim()} } from '@/components/DDAssist/util';`;
       }
       const htsApiMatch = trimmed.match(
-        /^import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/services\/hts\/api['"]\s*;?$/,
+        /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/services\/hts\/api['"]\s*;?$/,
       );
       if (htsApiMatch) {
         const names = htsApiMatch[1]
@@ -1257,13 +1257,13 @@ function applyImportRewrites(importLines) {
         }
       }
       const baseValidatorMatch = trimmed.match(
-        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?$/,
+        /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?$/,
       );
       if (baseValidatorMatch) {
         return `import ${baseValidatorMatch[1]} from '@/components/DDAssist/field/baseValidator';`;
       }
       const cjpzUtilMatch = trimmed.match(
-        /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?$/,
+        /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?$/,
       );
       if (cjpzUtilMatch) {
         if (hasCktsUtilImport) {
@@ -1272,7 +1272,7 @@ function applyImportRewrites(importLines) {
         return `import cktsUtil from '@/pages/hts/cktsUtil';`;
       }
       const umiNamedMatch = line.match(
-        /^import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?\s*$/,
+        /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?\s*$/,
       );
       if (umiNamedMatch) {
         const inner = umiNamedMatch[1];
@@ -1350,7 +1350,7 @@ function ensureAutoImports(content, introducedSymbols) {
       ? new RegExp(`\\b${symbol}\\(`)
       : new RegExp(`\\b${symbol}\\.(?!/)`);
     if (usageRe.test(text) && !text.includes(importLine)) {
-      const firstImportMatch = text.match(/^import\s/m);
+      const firstImportMatch = text.match(/^[ \t]*import\s/m);
       if (firstImportMatch) {
         text = text.slice(0, firstImportMatch.index) + importLine + '\n' + text.slice(firstImportMatch.index);
       } else {
@@ -1359,6 +1359,35 @@ function ensureAutoImports(content, introducedSymbols) {
     }
   }
   return text;
+}
+
+// myUtil 顶层 import 自动补齐（alwaysOn；不依赖 replace 规则是否引入）：
+//   检测文本中是否有 `myUtil.`（属性访问），若已有对应 import 跳过；
+//   否则在第一个 import 行之前插入 `import myUtil from '@/components/DDAssist/util';`
+//   已有导入检测覆盖三种形式（不重复插入）：
+//     1. `import myUtil from '...';`            （纯 default 导入）
+//     2. `import myUtil, { intl } from '...';`   （default + 命名混合）
+//     3. `import { myUtil } from '...';`         （命名导入，codebase 0 处）
+//   旧版本用 content.includes(importLine) 精确字符串匹配，遇到形式 2 会漏检导致重复插入。
+// 适用场景：原 ref 可能没有 import myUtil 但代码体内用 myUtil.X；改写后 myUtil 引用被保留
+// 但 import 在原流程可能被遗漏（type-d 不跑 import 路径改写）。
+function ensureMyUtilImport(content) {
+  if (!/\bmyUtil\.(?!['"`\/])/.test(content)) return content;
+  const importLine = "import myUtil from '@/components/DDAssist/util';";
+  // 检测现有 myUtil 导入（含 default + 命名混合形式）：
+  //   - import myUtil from ...      （纯 default）
+  //   - import myUtil, { ... }      （default + named 混合）
+  //   - import { myUtil, ... }      （named 含 myUtil —— codebase 0 处但兼容）
+  //   - import myUtil,myUtil2 ...   （罕见形式）
+  const hasExistingImport =
+    /^[ \t]*import\s+myUtil\b[\s,]*(?:\{[^}]*\})?\s*from\s*['"]@\/components\/DDAssist\/util['"]/m.test(content) ||
+    /^[ \t]*import\s+\{[^}]*\bmyUtil\b[^}]*\}\s*from\s*['"]@\/components\/DDAssist\/util['"]/m.test(content);
+  if (hasExistingImport) return content;
+  const firstImportMatch = content.match(/^[ \t]*import\s/m);
+  if (firstImportMatch) {
+    return content.slice(0, firstImportMatch.index) + importLine + '\n' + content.slice(firstImportMatch.index);
+  }
+  return importLine + '\n' + content;
 }
 
 // 全局 codeTable 数组 → 字符串转换（不限 configVar / 块作用域）
@@ -1484,6 +1513,13 @@ function applyContentReplaces(content, fileExt, srcFile) {
     text = migrateFuncMethodVariablesInFile(text);
   }
 
+  // 第四点九遍：myUtil 顶层 import 自动补齐（仅 ts/tsx；alwaysOn）
+  //   检测 myUtil. 使用 → 若无对应 import 则补齐 `@/components/DDAssist/util`
+  //   不依赖 replace 规则是否引入（独立 alwaysOn 路径）
+  if (fileExt === 'ts') {
+    text = ensureMyUtilImport(text);
+  }
+
   // 第五遍：特殊文件替换（按 fileName 匹配）
   // 放在最后：在所有通用转换之后执行，特殊规则可"覆盖"之前的任何输出
   if (srcFile) {
@@ -1503,39 +1539,39 @@ function applyContentReplaces(content, fileExt, srcFile) {
 function applyImportRewritesToContent(content) {
   let text = content;
   // text = text.replace(
-  //   /^import\s+moment\s+from\s+['"]moment['"]\s*;?[ \t]*$/gm,
+  //   /^[ \t]*import\s+moment\s+from\s+['"]moment['"]\s*;?[ \t]*$/gm,
   //   "import dayjs from 'dayjs';",
   // );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/util';",
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/cktsUtil';",
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/common/qxUtil';",
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/DDAlert';",
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"](?:@\/pages\/common\/staticTableCode|@\/components\/DDAssist\/staticTableCode)['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"](?:@\/pages\/common\/staticTableCode|@\/components\/DDAssist\/staticTableCode)['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/staticTableCode';",
   );
   text = text.replace(
-    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     (_m, names) => `import { ${names.trim()} } from '@/components/DDAssist/util';`,
   );
   text = text.replace(
-    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?[ \t]*$/gm,
     (m, names) => {
       const list = names
         .split(',')
@@ -1547,7 +1583,7 @@ function applyImportRewritesToContent(content) {
     },
   );
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/field/baseValidator';",
   );
   const hasCktsUtilImport =
@@ -1560,18 +1596,38 @@ function applyImportRewritesToContent(content) {
     );
   } else {
     text = text.replace(
-      /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?[ \t]*$/gm,
+      /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cjpzUtil['"]\s*;?[ \t]*$/gm,
       "import cktsUtil from '@/pages/hts/cktsUtil';",
     );
   }
   text = text.replace(
-    /^import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s*(['"])umi\2\s*;?[ \t]*$/gm,
     (m, inner, quote) => {
       if (/\buseRouteMatch\b/.test(inner)) {
         const renamed = inner.replace(/\buseRouteMatch\b/g, 'useRouteData');
         return `import {${renamed}} from ${quote}umi${quote};`;
       }
       return m;
+    },
+  );
+
+  // 相邻行 default + named 同模块合并（避免 ref 中 `import X from` + `import { y } from X` 两行）
+  // 匹配紧邻两行：
+  //   import <default> from '<module>';
+  //   import { <named> } from '<module>';
+  // 合并为：
+  //   import <default>, { <named> } from '<module>';
+  // 限制条件：仅合并相邻两行（无空行），named 名字与 default 不重名（防命名冲突）
+  text = text.replace(
+    /(^import\s+(\w+)\s+from\s*(['"])([^'"]+)\3\s*;\s*\n)(import\s*\{([^}]+)\}\s+from\s*(['"])([^'"]+)\7\s*;)/gm,
+    (full, line1, defaultName, q1, defaultPath, line2, namedList, q2, namedPath) => {
+      if (defaultPath !== namedPath) return full;
+      const names = namedList
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0 && s !== defaultName);
+      if (names.length === 0) return full; // named 全是 defaultName（异常），不合并
+      return `import ${defaultName}, { ${names.join(', ')} } from ${q1}${defaultPath}${q1};`;
     },
   );
 
@@ -1720,7 +1776,7 @@ function buildPreRefBlock(pushes, declarations, adjStart, adjEnd) {
 
 function rewriteImportAliasToMyConfig(text, content) {
   const importAliasMatch = content.match(
-    /^import\s+(\w+)\s+from\s+['"]\.\/auto_config['"]\s*;?/m,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]\.\/auto_config['"]\s*;?/m,
   );
   if (!importAliasMatch) return text;
   const alias = importAliasMatch[1];
@@ -1908,7 +1964,7 @@ function stripGridParamsBlock(text) {
 
 function normalizeDDBunit2Import(content) {
   return content.replace(
-    /^import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
     "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
   );
 }
@@ -1916,11 +1972,11 @@ function normalizeDDBunit2Import(content) {
 function applyIndexImportRewrites(content) {
   let text = content;
   text = text.replace(
-    /^import\s+UnitUtil\s+from\s+['"]@\/components\/DDBunit\/unit_util['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+UnitUtil\s+from\s+['"]@\/components\/DDBunit\/unit_util['"]\s*;?[ \t]*$/gm,
     "import cktsUtil from '@/pages/hts/cktsUtil';",
   );
   text = text.replace(
-    /^import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/services\/hts\/apiTb['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s+['"]@\/services\/hts\/apiTb['"]\s*;?[ \t]*$/gm,
     (m, names) => {
       const list = names
         .split(',')
@@ -1966,7 +2022,7 @@ function applyCopyRewrites(content, srcFile) {
 
   // R1: '@/services/hts/api' → '@/pages/hts/services/htsApi'(多行折叠为单行)
   text = text.replace(
-    /^import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([\s\S]*?)\}\s*from\s*['"]@\/services\/hts\/api['"]\s*;?[ \t]*$/gm,
     (_m, names) => {
       const list = names
         .split(',')
@@ -1980,31 +2036,31 @@ function applyCopyRewrites(content, srcFile) {
 
   // R2: '@/pages/common/myUtil' (default 导入) → '@/components/DDAssist/util'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/util';",
   );
 
   // R2a: '@/pages/common/myUtil' (命名导入) → '@/components/DDAssist/util'
   text = text.replace(
-    /^import\s*\{([^\}]+)\}\s*from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s*\{([^\}]+)\}\s*from\s+['"]@\/pages\/common\/myUtil['"]\s*;?[ \t]*$/gm,
     (m, names) => `import { ${names.trim()} } from '@/components/DDAssist/util';`,
   );
 
   // R2b: '@/pages/common/field/baseValidator' (default 导入) → '@/components/DDAssist/field/baseValidator'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/baseValidator['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/components/DDAssist/field/baseValidator';",
   );
 
   // R2c: '@/pages/common/field/businessValidator' (default 导入) → '@/pages/hts/common/field/businessValidator'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/businessValidator['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/field\/businessValidator['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/common/field/businessValidator';",
   );
 
   // R3: '@/pages/common/proConfig' → '@/components/DDAssist/constants'
   text = text.replace(
-    /^import\s+\w+\s+from\s+['"]@\/pages\/common\/proConfig['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+\w+\s+from\s+['"]@\/pages\/common\/proConfig['"]\s*;?[ \t]*$/gm,
     "import CONSTANTS from '@/components/DDAssist/constants';",
   );
 
@@ -2013,31 +2069,31 @@ function applyCopyRewrites(content, srcFile) {
 
   // R5: '@/components/DDAlert' → '@/pages/hts/commonModule/DDAlert'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/DDAlert';",
   );
 
   // R13: '@/components/DDBunit/DDBunit2' → '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS'
   text = text.replace(
-    /^import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
     "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
   );
 
   // R15: '@/pages/common/cktsUtil' (default 导入) → '@/pages/hts/cktsUtil'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/cktsUtil';",
   );
 
   // R16: '@/pages/common/qxUtil' (default 导入) → '@/pages/hts/common/qxUtil'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/qxUtil['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/common/qxUtil';",
   );
 
   // R17: '@/components/DDImport/checkErrorProp' (default 导入) → '@/pages/hts/commonModule/DDImport/checkErrorProp'
   text = text.replace(
-    /^import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
+    /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
     "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
   );
 
@@ -2051,7 +2107,7 @@ function applyCopyRewrites(content, srcFile) {
       } catch (e) { /* 源文件不存在则跳过 */ }
     }
     if (srcHasUnitUtil) {
-      const firstImportMatch = text.match(/^import\s/m);
+      const firstImportMatch = text.match(/^[ \t]*import\s/m);
       if (firstImportMatch) {
         const pos = firstImportMatch.index;
         text = text.slice(0, pos) + "import formUtil from '@/components/DDForm/formUtil';\n" + text.slice(pos);
@@ -2467,4 +2523,7 @@ module.exports = {
   applySpecialReplacements,
   applySpecialLineReplacements,
   loadSpecialRules,
+  applyCopyRewrites,
+  applyImportRewritesToContent,
+  ensureMyUtilImport,
 };

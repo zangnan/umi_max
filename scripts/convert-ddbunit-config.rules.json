@@ -174,6 +174,19 @@
       {
         "old": ".api_form_edit_upload",
         "new": ".form_api_save_upload"
+      },
+      {
+        "old": "@/services/hts/api",
+        "new": "@/pages/hts/services/htsApi"
+      },
+      {
+        "old": "import pro from '@/components/DDAssist/constants';",
+        "new": "import CONSTANTS from '@/components/DDAssist/constants';"
+      },
+      {
+        "old": "import Invoice from '@/components/DDdocs/Invoice';",
+        "new": "import Invoice from '@/pages/hts/components/DDdocs/Invoice';"
+        
       }
     ],
     "less": [

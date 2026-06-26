@@ -9,33 +9,34 @@ export default [
         { path: '/hts/02/0202/020203', name: '发票数据下载', component: './hts/sjgl/xzrwgl/stfykjdlzm' },
         { path: '/hts/02/0202/020204', name: '税务反馈下载', component: './hts/sjgl/xzrwgl/swsjxz' },
       ] },
-      // { path: '/hts/02/0203', id: '0203', pid: '02', name: '海关数据查询', icon: 'ProjectOutlined', routes: [
-      //   { path: '/hts/02/0203/020301', id: '020301', pid: '0203', name: '出口货物报关单', component: './hts/commonModule/ckhwbgd' },
-      //   { path: '/hts/02/0203/020302', id: '020302', pid: '0203', name: '进口货物报关单', component: './hts/commonModule/jkhwbgd' },
-      // ] },
-      // { path: '/hts/02/DLCKZMCX_0204', id: '0204', pid: '02', name: '受托方已开具代理出口证明查询', icon: 'RobotOutlined', component: './hts/commonModule/dlhwzmgl' },
-      // { path: '/hts/02/0205', id: '0205', pid: '02', name: '加贸数据查询', icon: 'OneToOneOutlined', routes: [
-      //   {
-      //     path: '/hts/02/0205/020501', id: '020501', pid: '0205', name: '加贸海关数据查询', routes: [
-      //       { path: '/hts/02/0205/020501/02050101', id: '02050101', pid: '020501', name: '海关加工贸易手册数据', component: './hts/jljg/sjxz/hghxsjcx/scxxcx' },
-      //       { path: '/hts/02/0205/020501/02050102', id: '02050102', pid: '020501', name: '海关加工贸易账册数据', component: './hts/jljg/sjxz/hghxsjcx/zcxxcx' },
-      //       { path: '/hts/02/0205/020501/02050103', id: '02050103', pid: '020501', name: '海关保税核注清单数据', component: './hts/jljg/sjxz/hghxsjcx/jckhzqdcx' },
-      //       { path: '/hts/02/0205/020501/02050104', id: '02050104', pid: '020501', name: '海关核销报关单数据', component: './hts/jljg/sjxz/hghxsjcx/jckbgdcx' },
-      //     ]
-      //   },
-      //   {
-      //     path: '/hts/02/0205/020502', id: '020502', pid: '0205', name: '加贸反馈数据查询', routes: [
-      //       { path: '/hts/02/0205/020502/02050201', id: '02050201', pid: '020502', name: '税务已核销手册数据', component: './hts/jljg/sjxz/jmfksjcx/scxxcx' },
-      //       { path: '/hts/02/0205/020502/02050202', id: '02050202', pid: '020502', name: '税务已核销账册数据', component: './hts/jljg/sjxz/jmfksjcx/zcxxcx' },
-      //       { path: '/hts/02/0205/020502/02050203', id: '02050203', pid: '020502', name: '税务已核销报关单数据', component: './hts/jljg/sjxz/jmfksjcx/jckbgdcx' },
-      //       { path: '/hts/02/0205/020502/02050204', id: '02050204', pid: '020502', name: '税务免抵退出口明细数据', component: './hts/jljg/sjxz/jmfksjcx/ckmxcx' },
-      //     ]
-      //   },
-      // ] },
-      // { path: '/hts/02/0206', id: '0206', pid: '02', name: '进项发票数据查询', icon: 'LayoutOutlined', routes: [
-      //     { path: '/hts/02/0206/JXFP_020601', id: '020601', pid: '0206', name: '增值税专用发票数据', component: './hts/commonModule/zzszyfp' },
-      //   ]
-      // },
+      { path: '/hts/02/0203', name: '海关数据查询', icon: 'ProjectOutlined', routes: [
+        { path: '/hts/02/0203/020301', name: '出口货物报关单', component: './hts/commonModule/ckhwbgd' },
+        { path: '/hts/02/0203/020302', name: '进口货物报关单', component: './hts/commonModule/jkhwbgd' },
+        { path: '/hts/02/0203/020303', name: '增值税专用缴款书', component: './hts/sjgl/hgsjcx' },
+      ] },
+      { path: '/hts/02/DLCKZMCX_0204', id: '0204', pid: '02', name: '受托方已开具代理出口证明查询', icon: 'RobotOutlined', component: './hts/commonModule/dlhwzmgl' },
+      { path: '/hts/02/0205', id: '0205', pid: '02', name: '加贸数据查询', icon: 'OneToOneOutlined', routes: [
+        {
+          path: '/hts/02/0205/020501', id: '020501', pid: '0205', name: '加贸海关数据查询', routes: [
+            { path: '/hts/02/0205/020501/02050101', id: '02050101', pid: '020501', name: '海关加工贸易手册数据', component: './hts/jljg/sjxz/hghxsjcx/scxxcx' },
+            { path: '/hts/02/0205/020501/02050102', id: '02050102', pid: '020501', name: '海关加工贸易账册数据', component: './hts/jljg/sjxz/hghxsjcx/zcxxcx' },
+            { path: '/hts/02/0205/020501/02050103', id: '02050103', pid: '020501', name: '海关保税核注清单数据', component: './hts/jljg/sjxz/hghxsjcx/jckhzqdcx' },
+            { path: '/hts/02/0205/020501/02050104', id: '02050104', pid: '020501', name: '海关核销报关单数据', component: './hts/jljg/sjxz/hghxsjcx/jckbgdcx' },
+          ]
+        },
+        {
+          path: '/hts/02/0205/020502', id: '020502', pid: '0205', name: '加贸反馈数据查询', routes: [
+            { path: '/hts/02/0205/020502/02050201', id: '02050201', pid: '020502', name: '税务已核销手册数据', component: './hts/jljg/sjxz/jmfksjcx/scxxcx' },
+            { path: '/hts/02/0205/020502/02050202', id: '02050202', pid: '020502', name: '税务已核销账册数据', component: './hts/jljg/sjxz/jmfksjcx/zcxxcx' },
+            { path: '/hts/02/0205/020502/02050203', id: '02050203', pid: '020502', name: '税务已核销报关单数据', component: './hts/jljg/sjxz/jmfksjcx/jckbgdcx' },
+            { path: '/hts/02/0205/020502/02050204', id: '02050204', pid: '020502', name: '税务免抵退出口明细数据', component: './hts/jljg/sjxz/jmfksjcx/ckmxcx' },
+          ]
+        },
+      ] },
+      { path: '/hts/02/0206', id: '0206', pid: '02', name: '进项发票数据查询', icon: 'LayoutOutlined', routes: [
+          { path: '/hts/02/0206/JXFP_020601', id: '020601', pid: '0206', name: '增值税专用发票数据', component: './hts/commonModule/zzszyfp' },
+        ]
+      },
       // { path: '/hts/02/0207', id: '0207', pid: '02', name: '税务反馈数据查询', icon: 'FundOutlined', routes: [
       //     { path: '/hts/02/0207/020701', id: '020701', pid: '0207', name: '免抵退税', routes: [
       //       { path: '/hts/02/0207/020701/CXTJ_02070101', id: '02070101', pid: '020701', name: '生产企业出口货物劳务免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB', ywKey: 'MDT_TSSB' },
@@ -213,6 +214,11 @@ export default [
           ]
         },
       ] },
+    ] },
+    { name: '合规管理', icon: 'VerifiedOutlined', path: '/hts/hggl', routes: [
+      { name: '合规检测', path: '/hts/hggl/hgjc', component: './hts/hggl/hgjc' },
+      { name: '历史检测记录', path: '/hts/hggl/lsjcjl', component: './hts/hggl/lsjcjl' },
+      { name: '指标配置', path: '/hts/hggl/zbpz', component: './hts/hggl/zbpz' },
     ] },
   ] }
 ];
