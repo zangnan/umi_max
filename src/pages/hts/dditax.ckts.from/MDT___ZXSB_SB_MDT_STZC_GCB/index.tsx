@@ -11,8 +11,8 @@ const index: React.FC<unknown> = () => {
   const myConfig = { ...config };
   // 导入
   myConfig.import_key = 'SAAS_TSSB_MXCJ_STZC_DR';
-  myConfig.toolbar_default.tssb_download = true;
-  myConfig.toolbar_default.ckts_download = false;
+  config.toolbar_default.tssb_download = true;
+  config.toolbar_default.ckts_download = false;
   
   return <>
     <DDBunit2 config={myConfig} func={Func} />

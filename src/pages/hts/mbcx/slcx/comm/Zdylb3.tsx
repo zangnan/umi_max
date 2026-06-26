@@ -11,7 +11,7 @@ import treeData2 from '../data';
 import DDToolbar from '@/components/DDToolbar';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
 import UnitUtil from '@/components/DDBunit/unit_util';
-import CommonFunc from '@/components/DDBunit/DDBunitFun';
+
 import myUtil from '@/components/DDAssist/util';
 import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
@@ -84,7 +84,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   // const export_xz_key = config.export_xz_key;
   const gridViewSettingSort = config.grid_setting_sort;
   const unit_constant = config.unit_constant;
-  const unit_lcswsx_dm = UnitUtil.getLcswsxDm(unit_constant);
+  const unit_lcswsx_dm = cktsUtil.getLcswsxDm(unit_constant);
   // filter
   const filterItems = UnitUtil.filter.init(config.filter_items);
   const grid_filter_quick = UnitUtil.filter.init(config.grid_filter_quick);
@@ -165,9 +165,9 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   const [showBtnNum] = useState(5);
   // api
   const gridParamsApiQuery = config.api_grid_query || `/hx/ty/crud/queryPager`;
-  const deleteUrl = config.form_api_delete || `/hx/ty/crud/delete`;
+  const deleteUrl = config.api_form_delete || `/hx/ty/crud/delete`;
   const formShowUrl = config.form_api_show || `/hx/ty/crud/queryForm`;
-  const formSaveUrl = config.form_api_save || `/hx/ty/crud/saveOrUpdate`;
+  const formSaveUrl = config.api_form_edit || `/hx/ty/crud/saveOrUpdate`;
   const formCheckUrl = config.form_api_check;
   const importUrl = config.grid_api_import;
   const import_key = config.import_key || config.unit_key;
@@ -932,7 +932,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       gridParams: getGridParams(),
       setMasker,
     }
-    CommonFunc.cktsCommonSum(param);
+    cktsUtil.cktsCommonSum(param);
   };
 
   // 原在线申报系统模块 序号重排
@@ -946,7 +946,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       gridData: getGridData(),
       order_key,
     }
-    CommonFunc.cktsCommonOrder(param);
+    cktsUtil.cktsCommonOrder(param);
   };
 
   // 原在线申报系统模块 导出

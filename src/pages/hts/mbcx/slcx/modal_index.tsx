@@ -1,39 +1,66 @@
-import React, { useRef }  from 'react';
+/**
+ * 下载条件-明细
+ */
+import React, { useImperativeHandle, useState } from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import DDBunit3 from './comm/Zdylb3';
-import unitConfig from './config';
-import hwslconfig from './hwslconfig';
-import func from './func'
-import { Tabs } from 'antd';
-import './style.less';
-import XzMoadl from './modal_index';
+import CONSTANTS from '@/components/DDAssist/constants';
+import { Drawer, message } from 'antd';
+import config from './modal_config';
+import func from './modal_f';
 
-const Index: React.FC<unknown> = () => {
+export interface BdjgProps {
+  onRef?: any;
+}
 
-  unitConfig.gridParams = {
-    initSearchModal: [
-      { property: 'mrCkspDm', value: "99", op: 'zdy' },
-    ],
-  }
-  const refXz: any = useRef(); // 环境检测
+const DrawerglFm: React.FC<BdjgProps> = ({
+  onRef,
+}) => {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [myConfig, setMyconfig] = useState<any>(config);
 
-  func.getOtherRef = () => {
-    const otherRef = [];
-    otherRef.push(refXz);
-    return otherRef;
+  // 开启
+  const showModal = (param: any) => {
+    const aConfig = { ...myConfig };
+    const ckspDm = param?.record?.ckspDm;
+    if(ckspDm) {
+      const gridParams = {
+        initSearchModal: [
+          {property: "ckspDm",value:ckspDm,op:"zdy"}
+        ],
+      }
+      aConfig.gridParams = gridParams;
+      setMyconfig(aConfig);
+      setModalVisible(true);
+    } else {
+      message.error('查看明细打开失败')
+    }
   };
 
-  return <>
-    <Tabs defaultActiveKey="hwsl" className="dd_layout_tabs dd_layout_tabs_bzgl">
-      <Tabs.TabPane tab="货物税率" key="hwsl" className="hwsl">
-       <DDBunit3 config={hwslconfig} func={func} />
-       <XzMoadl onRef={refXz} />
-      </Tabs.TabPane>
-      <Tabs.TabPane tab="应税服务税率" key="ysfwsl" className="ysfwsl">
-        <DDBunit2 config={unitConfig} func={func} />
-      </Tabs.TabPane>
-    </Tabs>
-  </>;
+  const closeModal = () => {
+    setModalVisible(false);
+  }
+
+  useImperativeHandle(onRef, () => {
+    return {
+      showModal,
+      closeModal
+    };
+  });
+
+
+  return (
+    <Drawer
+      title="查看明细"
+      visible={modalVisible}
+      onClose={() => { setModalVisible(false) }}
+      width={CONSTANTS.C_MODAL_WIDTH_X4}
+      destroyOnHidden={true}
+      className="dd_data_page_modal"
+      mask={{ closable: false }}
+    >
+      <DDBunit2 config={myConfig} func={func} />
+    </Drawer>
+  );
 };
 
-export default Index;
+export default DrawerglFm;

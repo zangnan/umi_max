@@ -1,0 +1,288 @@
+// 新系统迁移时注释
+// @import "~@/assets/css/config.less";
+
+.main_pro_card {
+  .ant-pro-card-split-horizontal {
+      // border-bottom: 1px solid @primary_color02;
+  }
+  .grid_header_info_wrap {
+    display: inline-block;
+    .title {
+      font-size: 16px;
+      // color: @font_color01;
+      margin-right: 20px;
+    }
+    .grid_header_tatal {
+      margin: 0 15px 0 0;
+      display: inline-block;
+      .tnum {
+        margin: 0 5px;
+      }
+      .txt_b {
+        margin: 0;
+      }
+    }
+    .grid_header_info {
+      display: inline-block;
+      .grid_header_info_group {
+        margin-right: 15px;
+        display: inline-block;
+      }
+    }
+    .grid_header_info_customer {
+      display: inline-block;
+    }
+    .txt_b {
+      margin: 0 3px;
+    }
+    .txt_h {
+      // color: @font_color02;
+    }
+  }
+  .dd_quick_filter {
+    position: relative;
+    top: -1px;
+    .ant-form-item-explain, .ant-form-item-extra {
+      margin-top: -51px;
+      background-color: #f7f7f7;
+    }
+    .site-input-split {
+      background-color: #fff;
+      width: 30px;
+      border-Left: 0;
+      border-right: 0;
+      pointer-events: none;
+      border-radius: 0 !important;
+    }
+    .site-input-right {
+      border-left-width: 0;
+      &.site-input-right:hover,
+      &.site-input-right:focus {
+        border-left-width: 1px;
+      }
+    }
+
+    .grid-filter-input-search-noBtn {
+      .ant-input-group .ant-input-affix-wrapper:not(:last-child) {
+        border-top-right-radius: 4px !important;
+        border-bottom-right-radius: 4px !important;
+      }
+      .ant-input-group-addon {
+        display: none;
+      }
+    }
+  }
+}
+.dd_grid_icon {
+  .anticon {
+    margin-right: 5px;
+    &.anticon-warning {
+      // color: @primary_color02;
+    }
+    &.anticon-check {
+      // color: @primary_color03;
+    }
+    &.anticon-stop {
+      // color: @primary_color01;
+    }
+    &.anticon-transaction{
+      // color: @primary_color04;
+    }
+    &.anticon-stop {
+      // color: @primary_color01;
+    }
+  }
+}
+.quick-filter-input-range {
+  .ant-form-item-control {
+    top:-62px;
+    margin-left:130px;
+  }
+}
+.layout_tz {
+  .ant-table-wrapper {
+    border-top: 0px solid #7d7d7d;
+  }
+  th{
+    text-align: center !important;
+  }
+}
+// 列表内部滚动条布局
+.layout_grid_scroll {
+  .dd-filter-wrap {
+    .ant-pro-card-body {
+      position: relative;
+      height: 68px;
+      .dd-form {
+        position: absolute;
+        z-index: 999;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        .search-filter {
+          padding: 0 20px 0 20px !important;
+          top: 20px;
+          // border-bottom: 1px solid @primary_color02;
+        }
+      }
+    }
+  }
+}
+
+.lay_wrap_left {
+  background-color: #f7f7f7;
+  padding: 0 20px;
+  min-width: 280px;
+  overflow-x: hidden;
+  border-right: 1px solid #f07800;
+
+  .left_content {
+    width: 320px;
+
+    .ant-checkbox-group {
+      display: block;
+    }
+
+    .ant-list {
+      overflow-x: hidden;
+
+      .ant-list-item {
+        padding: 0;
+
+        .ant-checkbox-group {
+          width: 100%;
+        }
+
+        &:hover,
+        &.selected {
+          .ant-pro-card {
+            background-color: #E6F0FA;
+          }
+
+          border-bottom: 1px solid rgba(8, 84, 160, 100);
+        }
+      }
+    }
+
+    .left_toolbar {
+      line-height: 40px;
+      text-align: right;
+    }
+
+    .left_card_header {
+      background-color: #ededed;
+      padding: 0 12px;
+      line-height: 40px;
+      // color: @font_color01;
+      position: relative;
+
+      .lch_title {
+        margin: 0 0 0 10px;
+      }
+
+      .lch_btn {
+        position: absolute;
+        right: 20px;
+        top: 0;
+        cursor: pointer;
+      }
+    }
+
+    .ant-pro-card {
+      cursor: pointer;
+      -webkit-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+
+      .ant-pro-card-header {
+        position: relative;
+
+        .ant-pro-card-title {
+          font-size: 15px;
+          width: 100%;
+
+          .dcl_title {
+            margin-left: 10px;
+          }
+
+          .dcl_title_sq {
+            font-size: 14px;
+            margin-left: 10px;
+
+            .dcl_title_sq_jshj {
+              line-height: 25px;
+              float: right;
+            }
+          }
+        }
+      }
+
+      .ant-pro-card-body {
+        padding: 5px 20px 10px 38px !important;
+        border-bottom: 1px solid #cccccc;
+
+        .dd_card_list {
+          position: relative;
+
+          .dcl_item {
+            color: #6A6D70;
+            line-height: 24px;
+            font-size: 13px;
+
+            .dcl_item_h {
+              // color: @primary_color04;
+              font-weight: bold;
+              margin: 0 2px;
+            }
+          }
+
+          .dcl_item_abs {
+            position: absolute;
+            bottom: -0;
+            right: 0;
+            color: #333639;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.lay_wrap_right {
+  padding: 0 20px 0 20px;
+  background-color: #f7f7f7;
+
+  .ant-tabs-top>.ant-tabs-nav::before,
+  .ant-tabs-bottom>.ant-tabs-nav::before,
+  .ant-tabs-top>div>.ant-tabs-nav::before,
+  .ant-tabs-bottom>div>.ant-tabs-nav::before {
+    border-bottom: 1px solid #cccccc;
+  }
+
+  &.full_screen_view {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+}
+
+.dd_fpsqd_wrap {
+  position: relative;
+  padding: 0px 0px 0px 350px;
+  background-color: #f7f7f7;
+  height: calc(100vh - 153px);
+  overflow-y: hidden;
+}
+
+.tree-title{
+    height: 24px;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 280px;
+    cursor: pointer;
+}

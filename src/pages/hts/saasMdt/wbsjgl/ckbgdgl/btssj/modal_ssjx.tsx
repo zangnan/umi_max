@@ -179,11 +179,11 @@ const EditableCellQr = ({
       setActiveKey('tab02');
     }
 
-    Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ', '01')]).then(() => {
+    Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
     }).catch(() => {
       message.error('获取码表失败');
     }).finally(() => {
-      const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ', '01');
+      const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
       setHlgz(temp[0].fphlxqgzDm);
       setModalDataTz(yfzsslList);
       setPageRef(unitRef);

@@ -571,16 +571,16 @@ Func.getDisableLabelName = () => {
 }
 
 Func.initAddForm = (param: any) => {
-  const { handleModalVisible, myFormItems, setMyFormItems } = param;
+  const { handleModalVisible, formItems, setFormItems } = param;
 
   const disableNames = Func.getDisableLabelName();
-  const tmpFormItems = [...myFormItems];
+  const tmpFormItems = [...formItems];
   tmpFormItems.map(item => {
     if (disableNames.includes(item.name)) {
       delete item.disabled;
     }
   });
-  setMyFormItems([...tmpFormItems]);
+  setFormItems([...tmpFormItems]);
   handleModalVisible(true);
 }
 

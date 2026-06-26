@@ -13,8 +13,8 @@ import TextArea from "antd/lib/input/TextArea";
 import { history } from 'umi';
 import tableStyle from './style.less';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
-import businessValidator from "@/pages/hts/common/field/businessValidator";
-import pro from "@/components/DDAssist/constants";
+import businessValidator from '@/pages/hts/common/field/businessValidator';
+import CONSTANTS from '@/components/DDAssist/constants';
 
 const { Dragger } = Upload;
 
@@ -711,7 +711,7 @@ ckbgdFunc.cjbzXj = (param: any) => {
           key: 'sumCjzj',
           align: 'right'
         }],
-        width: pro.c_modal_width_x4,
+        width: CONSTANTS.C_MODAL_WIDTH_X4,
         okCallbackFn: function (thisObj: any) {
           DDAlert.close();
         },

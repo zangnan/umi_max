@@ -40,7 +40,7 @@ const Hwqd: React.FC<HwqdProps> = ({
   const [form_title, setFormTitle] = useState('');
   const [myFormSaveCheck] = useState(formSaveCheck);
   const [formItems, setFormItems] = useState<any>();
-  const unit_lcswsx_dm = UnitUtil.getLcswsxDm(unit_constant);
+  const unit_lcswsx_dm = cktsUtil.getLcswsxDm(unit_constant);
 
   const [myConfig, setMyConfig] = useState([]);
   const [myFunc, setMyFunc] = useState([]);
@@ -58,7 +58,7 @@ const Hwqd: React.FC<HwqdProps> = ({
     // 获取表单配置和func后初始化表单
     const setFormConfig = async (config: any, func: any) => {
       setUnit_key(config.unit_key);
-      setFormSaveUrl(config.form_api_save || `/hx/ty/crud/saveOrUpdate`);
+      setFormSaveUrl(config.api_form_edit || `/hx/ty/crud/saveOrUpdate`);
       setFormCheckUrl(config.form_api_check);
       setFormSaveCheck(config.form_save_check);
       setUnitConstant(config.unit_constant);

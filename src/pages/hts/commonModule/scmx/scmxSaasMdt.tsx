@@ -47,8 +47,8 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         //  初始化码表
         let codekey = cktsUtil.sys.enterpriseType().toUpperCase() === "WM" ? "06" : "09"
         Promise.all([myUtil.code.getCodeFromServerT1('code_dm_ckts_cktmsywlx', codekey),
-        myUtil.code.getCodeFromServerT1('code_dm_ckts_gnqyfs', "01"),
-        myUtil.code.getCodeFromServerT1('code_dm_ckts_hgzsrzqylx', "01"),]).then(() => {
+        myUtil.code.getCodeFromServerT1('code_dm_ckts_gnqyfs:01'),
+        myUtil.code.getCodeFromServerT1('code_dm_ckts_hgzsrzqylx:01'),]).then(() => {
         }).catch(() => {
             message.error('获取码表失败');
         }).finally(() => {

@@ -309,7 +309,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
       wtfnsrsbh: (param: any) => {
         const { form } = param;
         const wtfnsrsbh = form?.getFieldValue('wtfnsrsbh');
-        const option = myUtil.code.getCode('url_gy_qywtf', '01');
+        const option = myUtil.code.getCode('url_gy_qywtf:01');
         let wtfnsrmcs: any = '';
         let wtdlckhths: any = '';
         const tempRows = option.filter((row: any) => {

@@ -27,7 +27,7 @@ const Index: React.FC<unknown> = () => {
     <Tabs defaultActiveKey="hwsl" className="dd_layout_tabs dd_layout_tabs_bzgl">
       <Tabs.TabPane tab="货物税率" key="hwsl" className="hwsl">
        <DDBunit2 config={hwslconfig} func={func} />
-       {/* <XzMoadl onRef={refXz} /> */}
+       <XzMoadl onRef={refXz} />
       </Tabs.TabPane>
       <Tabs.TabPane tab="应税服务税率" key="ysfwsl" className="ysfwsl">
         <DDBunit2 config={unitConfig} func={func} />

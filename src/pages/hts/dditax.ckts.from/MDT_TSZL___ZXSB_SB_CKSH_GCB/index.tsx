@@ -2,11 +2,12 @@
  * title: 出口货物收汇情况表
  * author: wx
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React , { useRef } from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import config from './auto_config';
 import Func from './f'
-import cktsUtil from '@/pages/hts/cktsUtil';
+import UnitUtil from '@/components/DDBunit/unit_util';
 import ModalMbxz from './modal_mdtsh_mbxz';
 import DDImport from '@/components/DDImport';
 import ModalShtq from './modal_mdtsh_shtq';
@@ -20,7 +21,7 @@ const index: React.FC<unknown> = () => {
 
   myConfig.gridParams = {
     initSearchModal: [
-      { property: 'lcswsxDm', value: cktsUtil.getLcswsxDm(myConfig.unit_constant), op: 'al' },
+      { property: 'lcswsxDm', value: cktsUtil.getLcswsxDm(config.unit_constant), op: 'al' },
     ],
   }
   // 补充悬浮

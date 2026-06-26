@@ -9,7 +9,7 @@ import Func from './f';
 import BgdscMx from '@/pages/hts/commonModule/scmx/scmx';
 import Hwcj from '@/pages/hts/commonModule/hwcj/hwcj';
 import Tszbcs from '@/pages/hts/commonModule/tszbcs/tszbcs_sc';
-import { delTzsx } from '@/pages/hts/services/htsApi';
+import {delTzsx} from "@/pages/hts/services/htsApi";
 import ErrorMsg from './errormsg';
 import Hwccj from './hwccjModal';
 

@@ -86,7 +86,7 @@ const Hlpz: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) => 
   const columns = [
     { title: 'uuid', dataIndex: 'uuid', hidden: true },
     { title: '币制代码', dataIndex: 'hbzmDm', width: 120 },
-    { title: '币制名称', dataIndex: 'hbmc', width: 120, render: (text: any, record: any) => { return myUtil.code.getCodeValByKey(record.hbzmDm, 'code_dm_gy_hb', '01'); } },
+    { title: '币制名称', dataIndex: 'hbmc', width: 120, render: (text: any, record: any) => { return myUtil.code.getCodeValByKey(record.hbzmDm, 'code_dm_gy_hb:01'); } },
     { title: '汇率日期', dataIndex: 'hlny', width: 100 },
     {
       title: titleNamermbhl,

@@ -72,8 +72,8 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible, getdlFlag }) => {
   useEffect(() => {
     if (modalVisible) {
       loadMoreData();
-      Promise.all([myUtil.code.getCodeFromServerT1('CODE_DM_ZXSB_JSYWSSZRRLX', '01')]).then(() => {
-        const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX', '01');
+      Promise.all([myUtil.code.getCodeFromServerT1('CODE_DM_ZXSB_JSYWSSZRRLX:01')]).then(() => {
+        const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX:01');
         setgzOptions(temp);
       }).catch(() => {
         message.error('获取码表失败');
@@ -102,7 +102,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible, getdlFlag }) => {
           setYzFlag(false);
           // 保存按钮置灰
           setBcFlag(true);
-          const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX', '01');
+          const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX:01');
           for(let i=0;i<temp.length;i++){
             if(body?.zrrlxdm == temp[i].code){
               setDqdlsf(temp[i].name);
@@ -151,7 +151,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible, getdlFlag }) => {
           setYzFlag(false);
           // 保存按钮不可用
           setBcFlag(true);
-          const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX', '01');
+          const temp = myUtil.code.getCode('CODE_DM_ZXSB_JSYWSSZRRLX:01');
           for(let i=0;i<temp.length;i++){
             if(formStep1.getFieldValue('zrrlxdm') == temp[i].code){
               setDqdlsf(temp[i].name);

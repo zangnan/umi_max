@@ -26,18 +26,18 @@ Func.tszbcs =(param: any) =>{
 // 新建表单初始化
 Func.initAddForm = (param: any) => {
   DditCktsFormCommonFunc.initAddForm(param);
-  const {myFormItems, setMyFormItems} = param;
+  const {formItems, setFormItems} = param;
   const lableSpan1: any = document.querySelector("#mdt_zxsb_sb_mdt_tssb_gcb_form .dditem_label_hzcjyyDm span");
   if (lableSpan1) {
     lableSpan1.classList.remove('required');
     const tmpMyItems: any = [];
-    myFormItems.map((item: any) => {
+    formItems.map((item: any) => {
       if (item.name === 'hzcjyyDm') {
         item.disabled = true;
       }
       tmpMyItems.push(item);
     });
-    setMyFormItems([...tmpMyItems]);
+    setFormItems([...tmpMyItems]);
   }
 }
 // 编辑表单初始化
