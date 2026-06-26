@@ -37,23 +37,23 @@ export default [
           { path: '/hts/02/0206/JXFP_020601', id: '020601', pid: '0206', name: '增值税专用发票数据', component: './hts/commonModule/zzszyfp' },
         ]
       },
-      // { path: '/hts/02/0207', id: '0207', pid: '02', name: '税务反馈数据查询', icon: 'FundOutlined', routes: [
-      //     { path: '/hts/02/0207/020701', id: '020701', pid: '0207', name: '免抵退税', routes: [
-      //       { path: '/hts/02/0207/020701/CXTJ_02070101', id: '02070101', pid: '020701', name: '生产企业出口货物劳务免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB', ywKey: 'MDT_TSSB' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070102', id: '02070102', pid: '020701', name: '海关出口商品代码、名称、退税率调整对应表', component: './hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_HGSPTZ_GCB', ywKey: 'MDT_HGSPTZ' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070103', id: '02070103', pid: '020701', name: '出口货物收汇情况表', component: './hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB', ywKey: 'MDT_CKSH' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070104', id: '02070104', pid: '020701', name: '出口货物离岸价差异原因说明表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_CYSM_GCB', ywKey: 'MDT_CYSM' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070105', id: '02070105', pid: '020701', name: '视同自产进货明细清单', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB', ywKey: 'MDT_STZC' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070114', id: '02070114', pid: '020701', name: '外贸企业出口退税进货明细申报表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB', ywKey: 'MDT_TSJH' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070106', id: '02070106', pid: '020701', name: '先退税后核销企业免抵退税申报附表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_XTHH_GCB', ywKey: 'MDT_XTHHSB' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070107', id: '02070107', pid: '020701', name: '国际运输（港澳台运输）免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_GJYS_GCB', ywKey: 'MDT_GJYS' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070108', id: '02070108', pid: '020701', name: '航空国际运输收入清算账单申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_HKYS_QS_GCB', ywKey: 'MDT_HKYS' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070109', id: '02070109', pid: '020701', name: '国际客运（含香港直通车）旅客、行李包裹运输清算函件明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_KYHJ_GCB', ywKey: 'MDT_KYHJ' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070110', id: '02070110', pid: '020701', name: '中国铁路总公司国际货物运输明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TLHY_GCB', ywKey: 'MDT_TLHY' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070111', id: '02070111', pid: '020701', name: '跨境应税行为免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB', ywKey: 'MDT_YFSJ' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070112', id: '02070112', pid: '020701', name: '跨境应税行为收讫营业款明细清单', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB', ywKey: 'MDT_SYYK' },
-      //       { path: '/hts/02/0207/020701/CXTJ_02070113', id: '02070113', pid: '020701', name: '免抵退税申报汇总表', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz/swfk', ywKey: 'MDT_MDTHZ' },
-      //     ] },
+      { path: '/hts/02/0207', name: '税务反馈数据查询', icon: 'FundOutlined', routes: [
+          { path: '/hts/02/0207/020701', name: '免抵退税', routes: [
+            // { path: '/hts/02/0207/020701/CXTJ_02070101', name: '生产企业出口货物劳务免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB', ywKey: 'MDT_TSSB' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070102', name: '海关出口商品代码、名称、退税率调整对应表', component: './hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_HGSPTZ_GCB', ywKey: 'MDT_HGSPTZ' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070103', name: '出口货物收汇情况表', component: './hts/dditax.ckts.from/MDT_TSZL___ZXSB_SB_CKSH_GCB', ywKey: 'MDT_CKSH' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070104', name: '出口货物离岸价差异原因说明表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_CYSM_GCB', ywKey: 'MDT_CYSM' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070105', name: '视同自产进货明细清单', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_STZC_GCB', ywKey: 'MDT_STZC' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070114', name: '外贸企业出口退税进货明细申报表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSJH_GCB', ywKey: 'MDT_TSJH' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070106', name: '先退税后核销企业免抵退税申报附表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_XTHH_GCB', ywKey: 'MDT_XTHHSB' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070107', name: '国际运输（港澳台运输）免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_GJYS_GCB', ywKey: 'MDT_GJYS' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070108', name: '航空国际运输收入清算账单申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_HKYS_QS_GCB', ywKey: 'MDT_HKYS' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070109', name: '国际客运（含香港直通车）旅客、行李包裹运输清算函件明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_KYHJ_GCB', ywKey: 'MDT_KYHJ' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070110', name: '中国铁路总公司国际货物运输明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TLHY_GCB', ywKey: 'MDT_TLHY' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070111', name: '跨境应税行为免抵退税申报明细表', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_YFSJ_GCB', ywKey: 'MDT_YFSJ' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070112', name: '跨境应税行为收讫营业款明细清单', component: './hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB', ywKey: 'MDT_SYYK' },
+            // { path: '/hts/02/0207/020701/CXTJ_02070113', name: '免抵退税申报汇总表', component: './hts/dditax.ckts.from/mdts/sjsb/sjhz/swfk', ywKey: 'MDT_MDTHZ' },
+          ] },
       //     { path: '/hts/02/0207/020702', id: '020702', pid: '0207', name: '免退税', routes: [
       //       { path: '/hts/02/0207/020702/CXTJ_02070201', id: '02070201', pid: '020702', name: '外贸企业出口退税出口明细申报表', component: './hts/dditax.ckts.from/MTS___ZXSB_SB_MTS_TSSB_GCB', ywKey: 'MTS_TSSB' },
       //       { path: '/hts/02/0207/020702/CXTJ_02070202', id: '02070202', pid: '020702', name: '外贸企业出口退税进货明细申报表', component: './hts/dditax.ckts.from/MTS___ZXSB_SB_MTS_TSJH_GCB', ywKey: 'MTS_TSJH' },
@@ -108,8 +108,7 @@ export default [
       //     ] },
       //     { path: '/hts/02/0207/020711', id: '020711', pid: '0207', name: '税务事项通知书', component: './404' },
       //     { path: '/hts/02/0207/020712', id: '020712', pid: '0207', name: '税务事项文书', component: './404' },
-      //   ]
-      // },
+      ] },
       { path: '/hts/02/0208', id: '0208', pid: '02', name: '码表查询', icon: 'SendOutlined', routes: [
           { path: '/hts/02/0208', redirect: '/02/0208/3001' },
           { path: '/hts/02/0208/3001', id: '3001', pid: '0208', name: '税率查询', icon: 'BarChartOutlined', component: './hts/mbcx/slcx' },

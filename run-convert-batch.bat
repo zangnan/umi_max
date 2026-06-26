@@ -41,12 +41,14 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCar
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\sdppzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\mbcx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\hggl
-
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg\sjxz
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\drmbkj
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\common
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\fppzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\style.less
 
-
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\dditax.ckts.from
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\fpkjpz
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp\abgdkj
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule
 pause

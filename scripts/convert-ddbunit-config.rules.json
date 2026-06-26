@@ -187,6 +187,15 @@
         "old": "import Invoice from '@/components/DDdocs/Invoice';",
         "new": "import Invoice from '@/pages/hts/components/DDdocs/Invoice';"
         
+      },
+      {
+        "old": "import columnsRender from '@/pages/common/field/eventColRender';",
+        "new": "import columnsRender from '@/pages/hts/common/field/eventColRender';"
+      },
+      {
+        "old": "import DDFormList from '@/components/DDForm/DDFormList';",
+        "new": "import DDFormList from '@/pages/hts/components/DDForm/DDFormList';"
+        
       }
     ],
     "less": [
@@ -242,5 +251,8 @@
         }
       ]
     }
+  ],
+  "excludeFiles": [
+    "src/pages/hts/commonModule/ddbunit2_ckts/**"
   ]
 }
