@@ -786,6 +786,13 @@ myUtil.date = {
     const year = sj.getFullYear() - n;
     return year;
   },
+  // 原系统移植
+  getCurrentYearMonth() {
+    const now = new Date();
+    const year = now.getFullYear(); // 获取当前年份
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 获取当前月份，注意 getMonth() 返回的是 0-11，所以需要加 1，并且确保月份是两位数
+    return `${year}${month}`;
+  },
 };
 
 // ==================== 存储模块 ====================

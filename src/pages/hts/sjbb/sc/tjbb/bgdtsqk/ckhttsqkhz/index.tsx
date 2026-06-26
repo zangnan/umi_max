@@ -1,13 +1,13 @@
-import dayjs from 'dayjs';
 /**
  * title: 出口报关单台账
  */
+import dayjs from 'dayjs';
  import React, { useRef } from 'react';
- import DDBunit2 from '@/components/DDBunit/DDBunit2';
+import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
  import config from './config';
  import Func from './f';
  import moment from 'moment';
- import myUtil from '@/components/DDAssist/util';
+import myUtil from '@/components/DDAssist/util';
  import DrawerList from './drawer_list';
 
  const Index: React.FC<unknown> = () => {

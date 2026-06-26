@@ -1,7 +1,7 @@
-import CONSTANTS from '@/components/DDAssist/constants';
 /**
  * title: 备案单证 - 单证备案 - 单证备案
  */
+import CONSTANTS from '@/components/DDAssist/constants';
  import { itemType } from '@/components/DDForm/data.d';
 
 const ckbgdConfig: any = {};

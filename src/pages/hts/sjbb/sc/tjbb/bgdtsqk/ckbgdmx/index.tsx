@@ -1,12 +1,12 @@
-import dayjs from 'dayjs';
 /**
  * title: 生产-出口报关单明细
  */
+import dayjs from 'dayjs';
  import React from 'react';
- import DDBunit2 from '@/components/DDBunit/DDBunit2';
+import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
  import config from './config';
  import Func from './f';
- import myUtil from '@/components/DDAssist/util';
+import myUtil from '@/components/DDAssist/util';
  
  const Index: React.FC<unknown> = () => {
  
