@@ -4,8 +4,7 @@ import {getBgdInfoHgck, plxgckfph, plxgckspDm, plxgYfzssl, queryPager, updateBgd
 import { Form, Input, message, Tooltip, InputNumber, Select, Button } from 'antd';
 import React from 'react';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
-import myUtil from '@/components/DDAssist/util';
-import { intl as intl2 } from '@/components/DDAssist/util';
+import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import khdgjUtil from "@/pages/hts/ckfp/khdgjUtil";
 import ckbgdFunc from "@/pages/hts/commonModule/ckhwbgd/f";
 import { history } from 'umi';

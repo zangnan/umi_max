@@ -61,7 +61,7 @@ const DDImport: React.FC<DDImportProps> = ({
     // 导入的共同方法根据传key去判断
     setMasker(true);
     if(!gridRef.url) {
-      gridRef.url = `${API_URL_BASE}/ty/hx/dr/importData`;
+      gridRef.url = `/ty/hx/dr/importData`;
     }
     importExecl(gridRef.url, data).then((response) => {
       setMasker(false);
@@ -178,7 +178,7 @@ const DDImport: React.FC<DDImportProps> = ({
     <>
       <Modal
         title="导入Excel文件"
-        destroyOnClose
+        destroyOnHidden
         visible={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         onCancel={() => setModalVisible(false)}
@@ -188,7 +188,7 @@ const DDImport: React.FC<DDImportProps> = ({
           <Button onClick={save} type="primary">确定</Button>
         </>)}
         className={`${masker ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
         <Spin tip="Loading..." spinning={masker} key={'sjdrspin'} delay={100}>
           <Form

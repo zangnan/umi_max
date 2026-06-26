@@ -2,11 +2,11 @@
 import React, { useState, useImperativeHandle } from 'react';
 import { message, Modal, Form, Spin } from 'antd';
 import { itemType } from '@/components/DDForm/data.d';
+import { xhcp } from '@/pages/hts/services/htsApi';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { xhcp } from '@/pages/hts/services/htsApi';
 
 export type OrderProps = {
   onRef?: any;
@@ -18,9 +18,9 @@ const Order: React.FC<OrderProps> = ({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [orderType, setOrderType] = useState<any>();
   const [unitRef, setUnitRef] = useState<any>();
-  const [masker, setMasker] = useState<boolean>(false);
+  const [formData, setFormData] = useState<any>({});
   const [orderForm] = Form.useForm();
-
+  const [masker, setMasker] = useState<boolean>(false);
   // 开启
   const showModal = (param: any) => {
     setOrderType(param.type);
@@ -29,34 +29,34 @@ const Order: React.FC<OrderProps> = ({
     setModalVisible(true);
   };
 
-  // 申报批次 Blur（左侧补 0 至 3 位）
+  // 申报批次 Blur
   const onBlurSbpc = (e: any) => {
     orderForm.setFieldsValue({
       sbpc: myUtil.text.leadingZeroize(e.event.target.value, 3)
-    });
-  };
+  });
+  }
 
-  // 起始序号 Blur（左侧补 0 至 8 位；0 视为 00000001）
+  // 起始序号 Blur
   const onBlurStartNo = (e: any) => {
     let startNo = e.event.target.value;
     if (!startNo) {
       return;
     }
     orderForm.validateFields(['startNo']).then(() => {
-      if (startNo == 0) {
-        startNo = '00000001';
+      if(startNo == 0) {
+        startNo = '00000001'
       } else {
         startNo = myUtil.text.leadingZeroize(startNo, 8);
       }
       orderForm.setFieldsValue({
-        startNo,
+        startNo
       });
-    });
-  };
+    })
+  }
 
-  // 表单项: 按 orderType 动态展示
+  // 表单项: 生成申报数据
   const getFormItems = () => {
-    const formItems: any[] = [];
+    const formItems = [];
     if (orderType === 3 || orderType === 4 || orderType === 5) {
       formItems.push({ name: 'ssq', type: itemType.Input, label: '所属期', validator: [
         baseValidator.required(),
@@ -69,7 +69,7 @@ const Order: React.FC<OrderProps> = ({
       ] });
     }
     if (orderType == 5) {
-      formItems.push({ label: '起始序号', name: 'startNo', type: itemType.Hidden });
+      formItems.push({label: '起始序号', name: 'startNo', type: itemType.Hidden});
     } else {
       formItems.push({
         name: 'startNo', type: itemType.Input, label: '起始序号', onBlur: onBlurStartNo, validator: [
@@ -82,7 +82,7 @@ const Order: React.FC<OrderProps> = ({
     formItems.push({ label: 'dataGroupRule', name: 'dataGroupRule', type: itemType.Hidden });
     formItems.push({ label: 'ywCxBz', name: 'ywCxBz', type: itemType.Hidden });
     return formItems;
-  };
+  }
 
   // 初始化表单数据
   const initFormData = (param: any) => {
@@ -96,12 +96,12 @@ const Order: React.FC<OrderProps> = ({
       sortTypeName = '申请日期';
     } else if (param?.type == '3') {
       dataGroupRule = 'G_SB_PC';
-      sortTypeName = '所属期，批次';
+      sortTypeName = '所属期，批次'
     } else if (param?.type == '4') {
       dataGroupRule = 'G_SB_YM';
     } else if (param?.type == '5') {
       dataGroupRule = 'G_SB_PC_BH';
-      sortTypeName = '所属期，批次，编号';
+      sortTypeName = '所属期，批次，编号'
     }
     orderForm.setFieldsValue({
       dataGroupRule,
@@ -112,7 +112,16 @@ const Order: React.FC<OrderProps> = ({
       ywCxBz: param?.ywCxBz,
       sortTypeName,
     });
-  };
+    // setFormData({
+    //   dataGroupRule,
+    //   lcswsxDm: param?.lcswsxDm,
+    //   sbpc: param?.sbpc,
+    //   ssq: param?.ssq,
+    //   startNo: '00000001',
+    //   ywCxBz: param?.ywCxBz,
+    //   sortTypeName,
+    // });
+  }
 
   // useImperativeHandle
   useImperativeHandle(onRef, () => {
@@ -121,51 +130,49 @@ const Order: React.FC<OrderProps> = ({
     };
   });
 
-  // 保存：调 xhcp()，成功后刷新主列表
+  // 保存
   const handleSave = () => {
-    orderForm.validateFields().then((values: any) => {
+    orderForm.validateFields().then(values => {
       const param = {
         ...values,
       };
       setMasker(true);
-      xhcp(param).then((response: any) => {
+      xhcp(param).then((response) => {
         setMasker(false);
         const { code, desc } = response;
         if (code === '200') {
           message.success('序号重排成功');
-          // 主线 DDBunit2 imperative handle 仅有 reload
-          unitRef?.current?.reload?.();
+          unitRef.current!.reload2();;
           close();
         } else {
           message.error(desc);
         }
-      }).catch(() => {
-        setMasker(false);
-      });
-    });
-  };
+      })
+    })
+  }
 
   const close = () => {
     setModalVisible(false);
     orderForm.resetFields();
-  };
+  }
+
 
   return (
     <Modal
-      title="序号重排"
+      title='序号重排'
       centered
       destroyOnHidden
-      open={modalVisible}
+      visible={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       okText="保存"
       cancelText="关闭"
       onOk={handleSave}
       onCancel={() => close()}
       className={`${masker ? 'dd_modal_show_masker' : ''}`}
-      maskClosable={false}
+      mask={{ closable: false }}
     >
       <Spin tip="Loading..." spinning={masker} delay={100}>
-        <DDBaseForm items={getFormItems()} form={orderForm} layoutType="vertical" />
+        <DDBaseForm items={getFormItems()} form={orderForm} initialValues={formData} layoutType='vertical' />
       </Spin>
     </Modal>
   );

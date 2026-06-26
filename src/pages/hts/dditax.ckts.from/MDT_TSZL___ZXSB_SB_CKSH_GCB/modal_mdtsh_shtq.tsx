@@ -2,8 +2,7 @@
 import React, { useImperativeHandle, useState, useEffect , useRef} from 'react';
 import { Button, Spin, Modal, Form, Input, message, Row, Col} from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import myUtil from '@/components/DDAssist/util';
-import { intl as intl2 } from '@/components/DDAssist/util';
+import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import { queryCkshSbxx, ckhwshQkTqsh } from '@/pages/hts/services/htsApi';
 import ModalShtqjg from './modal_mdtsh_shtqjg';
 

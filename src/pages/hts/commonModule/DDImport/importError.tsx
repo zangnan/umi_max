@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { Modal, Button, Table, message, Spin } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import {commonDrwtdc } from '@/services/hts/api';
+import {commonDrwtdc } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import { history } from 'umi';
 
@@ -75,7 +75,7 @@ const error_grid_columns = [
         </>)}
         onCancel={() => setModalVisible(false)}
         className={`${masker ? 'dd_modal_show_masker' : ''}`}
-        maskClosable={false}
+        mask={{ closable: false }}
       >
         <Spin tip="Loading..." spinning={masker} delay={100}>
           <>

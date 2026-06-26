@@ -38,20 +38,20 @@ export default defineConfig({
     // EXAMPLE_MENU_SHOW: true, // 是否显示示例菜单 后端菜单下生效
 
     // node env local
-    // API_URL_BASE_NODE: 'http://127.0.0.1:7001', // node env
-    // API_URL_BASE: 'http://127.0.0.1:7001', // node env
-    // LOCAL_MENU: false, // 是否采用本地菜单
-    // ENV_TYPE: 'node', // 后端环境类型
-    // EXAMPLE_MENU_SHOW: true, // 是否显示示例菜单 后端菜单下生效
-    // API_URL_HTS: 'https://pre.ddit.online:10007/cktsgl/v1', // 慧退税
-
-    // node env 21.5
-    API_URL_BASE_NODE: 'http://192.168.21.5:7001', // node env
-    API_URL_BASE: 'http://192.168.21.5:7001', // node env
+    API_URL_BASE_NODE: 'http://127.0.0.1:7001', // node env
+    API_URL_BASE: 'http://127.0.0.1:7001', // node env
     LOCAL_MENU: false, // 是否采用本地菜单
     ENV_TYPE: 'node', // 后端环境类型
     EXAMPLE_MENU_SHOW: true, // 是否显示示例菜单 后端菜单下生效
-    API_URL_HTS: 'http://192.168.0.134:4111/cktsgl/v1', // 慧退税
+    API_URL_HTS: 'https://pre.ddit.online:10007/cktsgl/v1', // 慧退税
+
+    // node env 21.5
+    // API_URL_BASE_NODE: 'http://192.168.21.5:7001', // node env
+    // API_URL_BASE: 'http://192.168.21.5:7001', // node env
+    // LOCAL_MENU: false, // 是否采用本地菜单
+    // ENV_TYPE: 'node', // 后端环境类型
+    // EXAMPLE_MENU_SHOW: true, // 是否显示示例菜单 后端菜单下生效
+    // API_URL_HTS: 'http://192.168.0.134:4111/cktsgl/v1', // 慧退税
 
     // 正式库 联调环境  v0.1
     // API_URL_BASE: 'http://192.168.0.194:18088',  // 正式库 联调环境  v0.1

@@ -212,7 +212,7 @@ class Alert extends Component {
         destroyOnHidden={true}
         onCancel={() => this.close()}
         className={`${isTableContent? '': 'dd_modal_wrap' } ${masker ? 'dd_modal_show_masker' : ''}`}
-        // maskClosable={false}
+        // mask={{ closable: false }}
         mask={{ closable: false }}
         keyboard={opts.keyboard}
       >

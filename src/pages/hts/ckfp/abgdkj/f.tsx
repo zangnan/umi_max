@@ -1,0 +1,660 @@
+import React from 'react';
+import { history } from 'umi';
+import { message, Form, Radio, List, Space, DatePicker, Input } from 'antd';
+import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import { intl as intl2 } from '@/components/DDAssist/util';
+import myUtil from '@/components/DDAssist/util';
+import CONSTANTS from '@/components/DDAssist/constants';
+import locale from 'antd/es/date-picker/locale/zh_CN';
+import { tbbgdsjtj, tbbgdsjcl, queryParams, ssflbmcx, gmfxxcx, hlxxcx, zbkpztsz, tjkpxx, kbjkpbgdcx, xbgdkhxx, qdfpissckp, getCode } from '@/pages/hts/services/htsApi';
+import { baseDelete } from '@/pages/hts/services/htsApi';
+import {
+  WarningOutlined,
+  StopOutlined,
+  CheckOutlined,
+} from '@ant-design/icons';
+
+// 
+
+
+
+const abgdkjFunc: any = {
+  unitRef: React.createRef(),
+};
+
+
+
+let ssflbmRef: any;
+// 编辑开票btnBjkp
+abgdkjFunc.btnBjkp = (param: any) => {
+  const { selectionRows, otherRef, unitRef } = param;
+  if (history?.location?.pathname === '/hts/ckfp/abgdkj21') {
+    message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_18bgd' }));
+    return;
+  }
+  if (!selectionRows || selectionRows.length === 0) {
+    message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
+    return;
+  } else {
+    const tempRows = selectionRows.filter((row: any) => {
+      return (row.ckfpkjsjztDm != "1" || row.zbkpbz === 'Y');
+    })
+    if (tempRows.length != 0) {
+      const tempMessage = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_scfpscd' }), { gnmc: '编辑开票' })
+      message.info(tempMessage);
+      return;
+    }
+    unitRef.current!.setMasker(true);
+    kbjkpbgdcx(getParam(selectionRows)).then((response: any) => {
+      unitRef.current!.setMasker(false);
+      const { code, body, desc } = response;
+      if (code === '200') {
+        otherRef[4].current!.showModal({ data: body, ref: unitRef });
+      } else {
+        message.error(desc)
+      }
+    })
+
+  }
+};
+
+//获取报关单
+abgdkjFunc.abgdkjHqbgd = (param: any) => {
+  const { unitRef, access ,otherRef} = param;
+  let sbrqFlag = true;
+  // 顺络电子不显示按申报日期获取
+  if (access?.isNsrsbh){
+    sbrqFlag = false;
+  }
+  otherRef[5].current!.showModal(sbrqFlag,unitRef,access);
+
+  // DDAlert.open({
+  //   title: '获取报关单',
+  //   infoType: 'warning',
+  //   modalType: 'form',
+  //   isFormContent: true,
+  //   closeStatus: false,
+  //   initFormContentValues: { tblx: '1' },
+  //   content: <>
+  //     <Form.Item name="tblx" wrapperCol={{ offset: 5, span: 14 }} rules={[{ required: true, message: '请选择获取方式' }]}>
+  //       <Radio.Group onChange={onChangeHqbgd}>
+  //         <Space direction="vertical">
+  //           <Radio value='1'>根据出口日期获取</Radio>
+  //           <Form.Item name="ckrq" wrapperCol={{ offset: 0, span: 14 }}>
+  //             <DatePicker.RangePicker locale={locale} format={myUtil.date.formatList()} />
+  //           </Form.Item>
+  //           <Radio style= {{display : sbrqFlag ? 'block':'none'}} value='3'>根据申报日期获取</Radio>
+  //           <Form.Item name="hgckhwbgdsbrq" style = {{display : sbrqFlag ? 'block':'none'}} wrapperCol={{ offset: 0, span: 14 }}>
+  //             <DatePicker.RangePicker locale={locale} format={myUtil.date.formatList()} />
+  //           </Form.Item>
+  //           <Radio value='4'>根据下载日期获取</Radio>
+  //           <Form.Item name="ckbgdxzrq" wrapperCol={{ offset: 0, span: 14 }}>
+  //             <DatePicker.RangePicker locale={locale} format={myUtil.date.formatList()} />
+  //           </Form.Item>
+  //           <Radio value='2'>根据报关单号获取</Radio>
+  //           <Form.Item name="ckbgd" wrapperCol={{ offset: 0, span: 14 }}>
+  //             <Input />
+  //           </Form.Item>
+  //         </Space>
+  //       </Radio.Group>
+  //     </Form.Item>
+  //   </>,
+  //   okCallbackFn: function (thisObj: any) {
+  //     DDAlert.getForms().validateFields().then((values: any) => {
+  //       const tblx = values.tblx;
+  //       let param: any = { tblx: tblx };
+  //       if (tblx === '1') {
+  //         if (values.ckrq && values.ckrq.length > 0) {
+  //           param.ckrq1Q = new Date(values.ckrq[0].format('YYYY/MM/DD')).getTime();
+  //           param.ckrq1Z = myUtil.date.accurateDate(values.ckrq[1].format('YYYY/MM/DD'), '2');
+  //         } else {
+  //           message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_check1' }));
+  //           return;
+  //         }
+  //       } else if (tblx === '3') {
+  //         if (values.hgckhwbgdsbrq && values.hgckhwbgdsbrq.length > 0) {
+  //           param.hgckhwbgdsbrqQ = new Date(values.hgckhwbgdsbrq[0].format('YYYY/MM/DD')).getTime();
+  //           param.hgckhwbgdsbrqZ = myUtil.date.accurateDate(values.hgckhwbgdsbrq[1].format('YYYY/MM/DD'), '2');
+  //         } else {
+  //           message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hgckhwbgdsbrq_check1' }));
+  //           return;
+  //         }
+  //       } else if (tblx === '2') {
+  //         if (values.ckbgd) {
+  //           param.bgdhgbh = values.ckbgd;
+  //         } else {
+  //           message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_check2' }));
+  //           return;
+  //         }
+  //       } else if (tblx === '4') {
+  //         if (values.ckbgdxzrq && values.ckbgdxzrq.length > 0) {
+  //           param.ckbgdxzrqQ = new Date(values.ckbgdxzrq[0].format('YYYY/MM/DD')).getTime();
+  //           param.ckbgdxzrqZ = myUtil.date.accurateDate(values.ckbgdxzrq[1].format('YYYY/MM/DD'), '2');
+  //         } else {
+  //           message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_ckbgdxzrq_check1' }));
+  //           return;
+  //         }
+
+  //       }
+  //       thisObj.setState({ masker: true });
+  //       tbbgdsjtj(param).then((response: any) => {
+  //         DDAlert.close();
+  //         const { code, body, desc ,msg} = response;
+  //         if (code === '200') {
+  //           openAckrqhq(body, param, unitRef, access);
+  //         } else {
+  //           if (code === '300' && body.gdykpbz === 'Y') {
+  //             message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_error' }));
+  //           } else {
+  //             message.error(msg)
+  //           }
+  //         }
+  //       })
+  //     });
+  //   },
+  // });
+}
+
+// 获取报关单弹窗点击单选后根据单选赋值
+const onChangeHqbgd = (e: any) => {
+  if (e.target.value === '2') {
+    DDAlert.getForms().setFieldsValue({ ckrq: [], hgckhwbgdsbrq: [], ckbgdxzrq: [] });
+  } else if (e.target.value === '3') {
+    DDAlert.getForms().setFieldsValue({ ckrq: [], ckbgd: '', ckbgdxzrq: []  });
+  } else if (e.target.value === '1') {
+    DDAlert.getForms().setFieldsValue({ ckbgd: '', hgckhwbgdsbrq: [], ckbgdxzrq: [] });
+  } else if (e.target.value === '4') {
+    DDAlert.getForms().setFieldsValue({ ckrq: [], ckbgd: '', hgckhwbgdsbrq: [] });
+  }
+}
+
+// 弹出统计条数，点击确定后调用接口处理数据
+const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
+  const tmpMessage = intl2.formatMessage({ id: access.isNsrsbh ? 'message_ckfp_abgdkj_hqbgd_ackrq_sl_success' : 'message_ckfp_abgdkj_hqbgd_ackrq_success' });
+  const infoMessage = myUtil.text.formatRepalce(tmpMessage, param)
+  DDAlert.open({
+    title: intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_ackrq_title' }),
+    info: infoMessage,
+    infoType: 'warning',
+    modalType: 'confirm',
+    okText: '确定',
+    closeStatus: false,
+    isFormContent: false,
+    okCallbackFn: function (thisObj: any) {
+      thisObj.setState({ masker: true });
+      // 获取数据对应的数据处理
+      tbbgdsjcl(param1).then((response: any) => {
+        const { code, desc } = response;
+        if (code === '200') {
+          queryParams({ key: 'GFCX_CS_ZXSB_FPKJ_KHGLPZ', searchModel: [{ property: 'qybz', value: 'Y', op: 'rl' }], }).then((response) => {
+            const { code, body } = response;
+            DDAlert.close();
+            if (code === '200') {
+              const temp: any = [];
+              body.forEach((item: any) => {
+                temp.push(Object.assign(item, { code: item.khuuid, name: item.ghfnsrmc }));
+              })
+              myUtil.code.saveCodeToLocalTable('CODE_CKFP_ABGDKJ_GMFMC',temp,'01');
+              unitRef.current?.reload2();
+              message.success(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_success' }));
+            }
+          });
+        } else {
+          DDAlert.close();
+          message.error(desc)
+        }
+      })
+    },
+    content: '',
+  });
+}
+// 生产发票申请单
+abgdkjFunc.btnScfpspd = (param: any) => {
+  Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
+  }).catch(() => {
+    message.error('获取码表失败');
+  }).finally(async () => {
+    const { selectionRows, otherRef, unitRef, access, unit_key, gridRef } = param;
+    const bgdhs: any = [];
+    if (selectionRows && selectionRows.length > 0) {
+      const tempRows = selectionRows.filter((row: any) => {
+        return (row.ckfpkjsjztDm != "1" || row.zbkpbz === 'Y');
+      })
+      if (tempRows.length != 0) {
+        const tempMessage = intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_scfpscd_info' });
+        message.info(tempMessage);
+        return;
+      }
+
+      // 18位报关单取报关单号/统一编号,21位时取隐藏列 21报关单号
+      selectionRows.forEach((row: any) => { // 18位时有报关单号取报关单号，没有取统一编号
+        bgdhs.push(row.bgdhgbh);
+      });
+      // const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
+      // if(temp && temp[0].fpzlDm1 === '5'){
+      //   var qdfpissckpResp = await qdfpissckp({bgdhs:bgdhs});
+      //   if(qdfpissckpResp && qdfpissckpResp.code === '900'){
+      //     unitRef.current!.setMasker(false);
+      //     const tempMessage = intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_qdfpissckp' });
+      //     message.info(tempMessage);
+      //     return;
+      //   }
+      // }
+    }
+    const gridData = unitRef.current?.getGridData();
+    const searchModel = unitRef.current?.getGridParams().searchModel || [];
+    const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+    const allSearchModel: any = searchModel.concat(headerSearchModel);
+    if(gridData.length === 0) {
+      message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
+      return;
+    }
+    const params:any = getParam(selectionRows, access);
+    params.key = unit_key;
+    params.cxtj = allSearchModel;
+    unitRef.current!.setMasker(true);
+    tjkpxx(params).then((response) => {
+      const { code, body, msg } = response;
+      unitRef.current!.setMasker(false);
+      if (code === '200') {
+        otherRef[3].current!.showModal(selectionRows, body, unitRef, params);
+      } else {
+        message.error(msg);
+      }
+    });
+  })
+};
+
+// 批量设置中方法使用的组装参数方法
+function getParam(selectionRows: any, access?: any) {
+  let bgdlx = '1';
+  if (history?.location?.pathname === '/hts/ckfp/abgdkj21') {
+    bgdlx = '2';
+  }
+  // 顺络
+  if (access?.isNsrsbh) {
+    bgdlx = '2'
+  }
+  const bgdhs: any = [];
+  if(selectionRows && selectionRows.length > 0) {
+    // 18位报关单取报关单号/统一编号,21位时取隐藏列 21报关单号
+    selectionRows.forEach((row: any) => { // 18位时有报关单号取报关单号，没有取统一编号
+      bgdhs.push(bgdlx === '1' ? (row.bgdhgbh || row.bgdtybh) : row.ckbgdh);
+    });
+  }
+  return { bgdlx, bgdhs }
+}
+
+// 设置税收分类编码
+abgdkjFunc.btnSetSsflbm = (param: any) => {
+  const { selectionRows, otherRef, unitRef, gridRef, unit_key } = param;
+  const gridData = unitRef.current?.getGridData()
+  if(gridData && gridData.length === 0) {
+    message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
+    return;
+  }
+  if(selectionRows.length == 0){
+    message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
+    return;
+  }
+  if(selectionRows.length >50){
+    message.info(intl2.formatMessage('每次勾选50条记录！')); 
+    return;
+  }
+  const tempParam:any = getParam(selectionRows);
+  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const allSearchModel: any = searchModel.concat(headerSearchModel);
+  tempParam.key = unit_key;
+  tempParam.cxtj = allSearchModel;
+  myUtil.sessionStore.setItem('tmp_ckfp_setssflbm');
+  myUtil.sessionStore.setItem('tmp_ckfp_setssflbm_tableSource');
+  unitRef.current!.setMasker(true);
+  ssflbmcx(tempParam).then((response: any) => {
+    unitRef.current!.setMasker(false);
+    const { code, body, desc } = response;
+    if (code === '200' && body.length > 0) {
+      // Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
+
+      // }).catch(() => {
+      //   message.error('获取码表失败');
+      // }).finally(() => {
+      //   const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
+      //   otherRef[0].current!.showModal({ data: body, ref: unitRef, fphwxxxqgzDm: temp[0]?.fphwxxxqgzDm, ssflTemp: tempParam ,temp:temp[0]});
+      // });
+
+      getCode({codeStoreKey:'CODE_CS_ZXSB_FPKJ_CSPZ',codeViewKey:'01'}).then((resCode:any)=> {
+        if(resCode.code === "200") {
+          const temp = resCode.body;
+          myUtil.code.saveCodeToLocalTable('CODE_CS_ZXSB_FPKJ_CSPZ', resCode.body, '01');
+          const szwxtssflbmbz = temp[0]?.szwxtssflbmbz;
+          if(szwxtssflbmbz === 'Y') {
+            myUtil.sessionStore.setItem('szwxtssflbmbz', true);
+          } else {
+            myUtil.sessionStore.setItem('szwxtssflbmbz', false);
+          }
+          otherRef[0].current!.showModal({ data: body, ref: unitRef, fphwxxxqgzDm: temp[0]?.fphwxxxqgzDm, ssflTemp: tempParam ,temp:temp[0]});
+        } else {
+          message.error('获取码表失败');
+        }
+      })
+    } else if(code === '300') {
+      message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
+    } else if(code === '900') {
+      message.info(desc);  
+    } else { 
+      message.error(desc);
+    }
+  })
+  
+};
+
+// 设置购买方
+abgdkjFunc.btnSetGmf = (param: any) => {
+  const { selectionRows, otherRef, unitRef, gridRef, unit_key } = param;
+  const gridData = unitRef.current?.getGridData()
+  if(gridData.length === 0) {
+    message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
+    return;
+  }
+  if(selectionRows.length == 0){
+    message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
+    return;
+  }
+  if(selectionRows.length >50){
+    message.info(intl2.formatMessage('每次勾选50条记录！')); 
+    return;
+  }
+  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const allSearchModel: any = searchModel.concat(headerSearchModel);
+
+  unitRef.current!.setMasker(true);
+  let tempParam:any = getParam(selectionRows);
+  tempParam.key = unit_key;
+  tempParam.cxtj = allSearchModel;
+  tempParam.bgdwd = 'N';
+  gmfxxcx(tempParam).then((response: any) => {
+    unitRef.current!.setMasker(false);
+    const { code, body, desc } = response;
+    if (code === '200' && body?.dataList.length > 0) {
+      // Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
+      // }).catch(() => {
+      //   message.error('获取码表失败');
+      // }).finally(() => {
+      //   const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
+      //   otherRef[1].current!.showModal(body, unitRef, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
+      // });
+      getCode({codeStoreKey:'CODE_CS_ZXSB_FPKJ_CSPZ',codeViewKey:'01'}).then((resCode:any)=> {
+        if(resCode.code === '200') {
+          const temp = resCode.body;
+          myUtil.code.saveCodeToLocalTable('CODE_CS_ZXSB_FPKJ_CSPZ', resCode.body, '01');
+          if(temp[0]?.szwxtgmfbz === 'Y') {
+            myUtil.sessionStore.setItem('szwxtgmfbz', true);
+          } else {
+            myUtil.sessionStore.setItem('szwxtgmfbz', false);
+          }
+          otherRef[1].current!.showModal(body, unitRef, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
+        } else {
+          message.error('获取码表失败');
+        }
+      })
+    } else if(code === '300') {
+      message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
+    } else if(code === '900'){
+      message.info(desc);
+    } else {
+      message.error(desc);
+    }
+  })
+};
+
+// 设置汇率
+abgdkjFunc.btnSetHl = (param: any) => {
+  const { selectionRows, otherRef, unitRef } = param;
+  if (!selectionRows || selectionRows.length === 0) {
+    message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
+    return;
+  } else {
+    unitRef.current!.setMasker(true);
+    hlxxcx(getParam(selectionRows)).then((response: any) => {
+      unitRef.current!.setMasker(false);
+      const { code, body, desc } = response;
+      if (code === '200') {
+        otherRef[2].current!.showModal(body, unitRef);
+      } else {
+        message.error(desc);
+      }
+    })
+  }
+};
+
+// 暂不开票
+abgdkjFunc.zbkp = (param: any) => {
+  const { selectionRows, unitRef } = param;
+  if (!selectionRows || selectionRows.length === 0) {
+    message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
+    return;
+  } else {
+    DDAlert.open({
+      title: '暂不开票设置',
+      infoType: 'warning',
+      modalType: 'form',
+      closeStatus: false,
+      isFormContent: true,
+      initFormContentValues: { zbkpbz: 'Y' },
+      content: <>
+        <Form.Item name="zbkpbz" wrapperCol={{ offset: 5, span: 14 }} >
+          <Radio.Group >
+            <Radio value="Y">设置暂不开票</Radio>
+            <Radio value="N">取消暂不开票</Radio>
+          </Radio.Group>
+        </Form.Item>
+      </>,
+      okCallbackFn: function (thisObj: any) {
+        DDAlert.getForms().validateFields().then((values: any) => {
+          thisObj.setState({ masker: true });
+          zbkpztsz(Object.assign(getParam(selectionRows), values)).then((response: any) => {
+            DDAlert.close();
+            const { code, desc, msg } = response;
+            if (code === '200') {
+              if (values.zbkpbz === 'Y') {
+                message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_setzbkp_success' }));
+              } else {
+                message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_cancelzbkp_success' }));
+              }
+              unitRef.current?.reload2();
+            } else {
+              message.error(desc);
+            }
+          })
+        });
+      },
+    });
+  }
+};
+
+// 根据单据号打开详情
+abgdkjFunc.openBjkp = (bgdhORtybh: any, param: any) => {
+  const { unitRef } = param;
+  const otherRef = unitRef.current?.getOtherRefs();
+  if (otherRef[4]) {
+    otherRef[4].current?.showModal();
+  }
+};
+
+// 配置项：快捷筛选
+abgdkjFunc.handleOnChangeBgd = (param: any) => {
+  const ckrq :any = ['','']; 
+  const hgckhwbgdsbrq1 :any = ['','']; 
+  const searchModel =  param.unitRef.current.getGridParams().searchModel;
+  const p = {};
+  for(let i=0;i< searchModel?.length;i++){
+    const property = searchModel[i].property;
+    if('bgdhgbh' == property || 'ckhth' == property ||'jgfsDm' == property){
+      const values  = searchModel[i].values ?searchModel[i].values:searchModel[i].value;
+      p[property] = values;
+    }
+    if('ckrq1' == property){
+      const op = searchModel[i].op;
+      const values  = searchModel[i].values ?searchModel[i].values:searchModel[i].value;
+      if("dydy" == op){
+        ckrq[0] = values;
+      }else{
+        ckrq[1] = values;
+      }
+      p.ckrq1 = ckrq;
+    }
+    if('hgckhwbgdsbrq' == property){ 
+      const op = searchModel[i].op;
+      const values  = searchModel[i].values ?searchModel[i].values:searchModel[i].value;
+      if("dydy" == op){
+        hgckhwbgdsbrq1[0] = values;
+      }else{
+        hgckhwbgdsbrq1[1] = values;
+      }
+      p.hgckhwbgdsbrq = hgckhwbgdsbrq1;
+
+    }
+    
+  }
+  
+  const { value } = param;
+  if (value == '2') {
+    history.push({ pathname: '/hts/ckfp/abgdkj21', query: p } )
+  } else {
+    history.push({ pathname: '/hts/ckfp/abgdkj', query: p } )
+
+  }
+};
+
+// 行编辑购买方名称选中对应方法
+abgdkjFunc.selectChangeGmfmc = (params: any) => {
+  const { record, values, reload, unitRef } = params;
+  if (values.khuuid != record.khuuid) {
+    const bgdhgbhs: any = [].concat((record.bgdhgbh || record.bgdtybh));
+    xbgdkhxx({ bgdhgbhs, khuuid: values.khuuid }).then((response) => {
+      const { code, desc } = response;
+      if (code === '200') {
+        reload();
+        message.success(intl2.formatMessage({ id: 'message_ckfp_abgdkj_setgmf_success' }));
+      } else {
+        message.error(desc);
+      }
+    });
+  }
+};
+
+// 删除失败后自定义提示信息
+abgdkjFunc.afterDeletionFailure = (params: any) => {
+  const { body } = params;
+  DDAlert.open({
+    title: '删除',
+    infoType: 'warning',
+    info: '以下18位报关单存在部分开票的情况，无法删除，请选择未开票的报关单进行操作。',
+    okText: '确定',
+    closeStatus: false,
+    isFormContent: false,
+    width: CONSTANTS.C_MODAL_WIDTH_X2,
+    content: <>
+      <List
+        size="small"
+        split={false}
+        locale={{emptyText: '暂无数据'}}
+        dataSource={body?.bgdhgbhs}
+        renderItem={(item: any) => <List.Item>{item}</List.Item>}
+      />
+    </>,
+    okCallbackFn: function (thisObj: any) {
+      DDAlert.close();
+    },
+  });
+};
+
+// 列表自定义渲染
+abgdkjFunc.columnsRender = {
+  // 数据状态
+  renderAbgdkjSjzt: (param: any) => {
+    const { text, record } = param;
+      let col: any = <></>;
+      if (record.zbkpbz === 'Y') {
+        col = <span className="dd_grid_icon"><StopOutlined />暂不开票</span>;
+      } else if (text === '1') {
+        col = <span className="dd_grid_icon"><CheckOutlined />可以开具发票 </span>;
+      } else if (text === '2') {
+        col = <span className="dd_grid_icon"> <WarningOutlined />缺少购买方信息</span>;
+      } else if (text === '3') {
+        col = <span className="dd_grid_icon"> <WarningOutlined />缺少税收分类编码</span>;
+      } else if (text === '4') {
+        col = <span className="dd_grid_icon"><WarningOutlined />缺少购买方信息...</span>;
+      }
+      return col;
+  },
+  // 报关单号/统一编号
+  renderAgdhgbh: (param: any) => {
+    const { record } = param;
+    let col: any = <></>;
+    if (record.bgdhgbh) {
+      col = <span>{record.bgdhgbh}</span>;
+    } else if (record.bgdtybh) {
+      col = <span>{record.bgdtybh}</span>;
+    }
+    return col;
+  },
+}
+
+// 顺络删除
+abgdkjFunc.slDelete = (params: any) => {
+  const { selectionRows, unitRef, unit_key } = params;
+  if (selectionRows?.length <= 0) {
+    message.info(intl2.formatMessage({ id: 'message_delete_unselected' }));
+    return;
+  }
+  DDAlert.open({
+    title: '系统提示',
+    info: intl2.formatMessage({ id: 'message_inquiry_delete' }),
+    infoType: 'question',
+    modalType: 'confirm',
+    closeStatus: false,
+    okCallbackFn: function (thisObj: any) {
+      thisObj.setState({ masker: true });
+      const data: any = {
+        key: unit_key || '',
+      };
+      let bgdhgbhValues: any = [];
+      selectionRows.forEach((item: any) => {
+        bgdhgbhValues.push(item.bgdhgbh || item.bgdtybh)
+      })
+      data['bgdhgbhs'] = bgdhgbhValues;
+      baseDelete({ data: data, url: `/yw/fpzs/bgdkp/scbgdsj` }).then((response) => {
+        DDAlert.close();
+        const { code, body, desc } = response;
+        if (code === '200') {
+          message.success(intl2.formatMessage({ id: 'message_delete_success' }));
+          unitRef.current?.reload2();
+        } else {
+          message.success(desc);
+          // if (func.afterDeletionFailure) {
+          //   func.afterDeletionFailure({
+          //     unitRef,
+          //     gridRef: refDDBaseGrid,
+          //     body
+          //   });
+          // } else{
+          //   message.error(intl.formatMessage({ id: 'message_delete_error' }));
+          // }
+        }
+      })
+    },
+  });
+};
+
+// 表单事件：OnChange
+abgdkjFunc.eventOnChange = {
+  // 行编辑购买方名称选中对应方法
+  selectChangeGmfmc:(params: any) => {
+    abgdkjFunc.selectChangeGmfmc(params);
+  },
+}
+
+export default abgdkjFunc;
