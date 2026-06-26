@@ -34,6 +34,10 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\shgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjbb\sc
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\sjgx
 
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjgl\xzrwgl
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\sdppzgl
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\mbcx
+
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT___ZXSB_SB_MDT_TSSB_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT_TSZL___ZXSB_SB_HGSPTZ_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1
 :: node scripts/convert-ddbunit-config.js --src code_sample\src\pages\hts\dditax.ckts.from\MDT_TSZL___ZXSB_SB_CKSH_GCB\auto_config.tsx --path /hts/saasMdt/mxcj/1

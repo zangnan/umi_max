@@ -3,10 +3,10 @@ import React, {useRef, useEffect} from 'react';
 import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
 import config from "./bgdKsyConfig";
 import bgdKsyFunc from "./bgdKsyFunc";
-// import Hgbgd from "@/pages/hts/commonModule/ckhwbgd/Yl";
-// import DrawerListHl from '@/pages/hts/saasMdt/wbsjgl/common/modal_plbthl';
-// import ScmxSaasMdt from '@/pages/hts/commonModule/scmx/scmxSaasMdt';
-// import CheckErrModel from '../../common/checkErrModel';
+import Hgbgd from "@/pages/hts/commonModule/ckhwbgd/Yl";
+import DrawerListHl from '@/pages/hts/saasMdt/wbsjgl/common/modal_plbthl';
+import ScmxSaasMdt from '@/pages/hts/commonModule/scmx/scmxSaasMdt';
+import CheckErrModel from '../../common/checkErrModel';
 import { history } from 'umi';
 import { delTzsx } from '@/pages/hts/services/htsApi';
 
@@ -99,11 +99,10 @@ const Index: React.FC<{ data: any }> = ({
   return <>
     <div key={data}>
       <DDBunit2 config={myConfig} func={bgdKsyFunc} />
-    {/* 暂时仅仅保留DDBunit2 */}
-      {/* <Hgbgd onRef={hgbgdRef} /> */}
-      {/* <DrawerListHl onRef={drawerRefHl} /> */}
-      {/* <ScmxSaasMdt onRef={scmxSaasRef} /> */}
-      {/* <CheckErrModel onRef={errRefCkspDm} /> */}
+      <Hgbgd onRef={hgbgdRef} />
+      <DrawerListHl onRef={drawerRefHl} />
+      <ScmxSaasMdt onRef={scmxSaasRef} />
+      <CheckErrModel onRef={errRefCkspDm} />
     </div>
   </>
 };
