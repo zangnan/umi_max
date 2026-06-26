@@ -33,7 +33,6 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModu
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\shgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjbb\sc
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\commonModule\sjgx
-
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjgl\xzrwgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\sdppzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\mbcx

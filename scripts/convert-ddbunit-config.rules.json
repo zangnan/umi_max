@@ -150,6 +150,30 @@
       {
         "old": "import CommonFunc from '@/components/DDBunit/f';",
         "new": ""
+      },
+      {
+        "old": "@/services/hts/apiTb",
+        "new": "@/pages/hts/services/htsApi"
+      },
+      {
+        "old": "UnitUtil.getLcswsxDm",
+        "new": "cktsUtil.getLcswsxDm"
+      },
+      {
+        "old": ".form_api_save",
+        "new": ".api_form_edit"
+      },
+      {
+        "old": ".form_api_save_upload",
+        "new": ".form_api_save_upload"
+      },
+      {
+        "old": ".form_api_delete",
+        "new": ".api_form_delete"
+      },
+      {
+        "old": ".api_form_edit_upload",
+        "new": ".form_api_save_upload"
       }
     ],
     "less": [
@@ -194,6 +218,14 @@
       "line": [
         {
           "3": "import Jckbgd from './jkbgd';"
+        }
+      ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/mbcx/slcx/index.tsx",
+      "line": [
+        {
+          "29": "       <DDBunit2 config={hwslconfig} func={func} />"
         }
       ]
     }

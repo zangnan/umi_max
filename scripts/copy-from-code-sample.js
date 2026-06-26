@@ -1084,11 +1084,31 @@ function prependFuncMethodComment(methodCode, methodName) {
 }
 
 function migrateFuncMethodVariables(methodCode, methodName) {
-  if (methodName !== 'initEditForm') return methodCode;
+  // 同时作用于 initEditForm 和 initAddForm（ref 中 initAddForm 通常是
+  // DditCktsFormCommonFunc.initAddForm(param) 委托，无 unit_key / myFormItems；
+  // 若 ref 用了解构形式同样需要 rename；其它方法无此约定差异，不动）
+  if (methodName !== 'initEditForm' && methodName !== 'initAddForm') return methodCode;
   let out = methodCode;
+  // 顺序无关：`\b` 词边界避免误改 unitKeyXxx / formItemsXxx / setFormItemsXxx 等变体
   out = out.replace(/\bunit_key\b/g, 'unitKey');
   out = out.replace(/\bmyFormItems\b/g, 'formItems');
   out = out.replace(/\bsetMyFormItems\b/g, 'setFormItems');
+  return out;
+}
+
+// 应用到整个文件（不限 type-d）—— 扫描所有 Func.initEditForm / Func.initAddForm 方法体，
+// 抽取 → 应用 migrateFuncMethodVariables → 替换回 text。
+// 用 replace 链：先全量匹配方法块、改写、再放回；多次 replace 互不干扰。
+function migrateFuncMethodVariablesInFile(text) {
+  let out = text;
+  for (const methodName of ['initEditForm', 'initAddForm']) {
+    const block = extractFuncMethod(out, methodName);
+    if (!block) continue;
+    const rewritten = migrateFuncMethodVariables(block, methodName);
+    if (rewritten !== block) {
+      out = out.replace(block, rewritten);
+    }
+  }
   return out;
 }
 
@@ -1445,6 +1465,23 @@ function applyContentReplaces(content, fileExt, srcFile) {
     if (ctResult.count > 0) {
       text = ctResult.content;
     }
+  }
+
+  // 第四点五遍：getCodeFromServerT1 / getCodeValByKey / getCode 3 参 → 2 参合并（仅 ts/tsx）
+  //   myUtil.code.getCodeFromServerT1('aaa', 'bbb') → myUtil.code.getCodeFromServerT1('aaa:bbb')
+  //   原有实现面向 fun 方法体（postProcessFuncMethod 调用），现在扩展到所有 ts/tsx 文件
+  if (fileExt === 'ts') {
+    text = migrateGetCodeValByKey(text);
+    text = migrateGetCode(text);
+    text = migrateGetCodeFromServerT1(text);
+  }
+
+  // 第四点八遍：Func.initEditForm / Func.initAddForm 方法体变量改名（仅 ts/tsx）
+  //   unit_key → unitKey / myFormItems → formItems / setMyFormItems → setFormItems
+  //   含 params.unit_key → params.unitKey 同步（regex \b 已覆盖）
+  //   复用 extractFuncMethod 定位方法块 + migrateFuncMethodVariables 改写
+  if (fileExt === 'ts') {
+    text = migrateFuncMethodVariablesInFile(text);
   }
 
   // 第五遍：特殊文件替换（按 fileName 匹配）
@@ -1919,48 +1956,9 @@ function applyIndexAdjustments(content) {
   return text;
 }
 
-function generateIndexFileFromRef(refPath, configImportName, funImportName) {
-  const refContent = fs.readFileSync(refPath, 'utf-8');
-  let output = refContent;
-  output = applyImportRewritesToContent(output);
-  output = normalizeDDBunit2Import(output);
-  output = applyIndexImportRewrites(output);
-  output = applyIndexAdjustments(output);
-  return output;
-}
-
-// =================== fun 生成函数 ===================
-function generateFunPage({ initAddForm, refImports = [], extraMethods = {} } = {}) {
-  const importsBlock = refImports.length > 0
-    ? refImports.join('\n') + '\n\n'
-    : '';
-  const extraMethodsBlock = [
-    extraMethods.initEditForm,
-    extraMethods.validator,
-    extraMethods.eventOnBlur,
-    extraMethods.eventOnFocus,
-    extraMethods.eventOnChange,
-  ]
-    .filter(Boolean)
-    .map((s) => s + '\n\n')
-    .join('');
-
-  if (!initAddForm && !extraMethodsBlock) {
-    return `${importsBlock}const Func: any = {
-  refUnit: React.createRef(),
-};
-
-export default Func;
-`;
-  }
-  const initAddFormBlock = initAddForm ? `${initAddForm}\n\n` : '';
-  return `${importsBlock}const Func: any = {
-  refUnit: React.createRef(),
-};
-
-${initAddFormBlock}${extraMethodsBlock}export default Func;
-`;
-}
+// 已移除 generateIndexFileFromRef / generateFunPage：
+//   后续每份 ts/tsx 走 type-d 流程独立处理（基于自身参照 + applyCopyRewritesToFile），
+//   不再由 type-a 末尾生成配对 index/fun，也不再有 ref 提取 / 方法抽取。
 
 // =================== 复制后改写规则 ===================
 function applyCopyRewrites(content, srcFile) {
@@ -2073,31 +2071,28 @@ function applyCopyRewrites(content, srcFile) {
 // =================== 文件类型分类 ===================
 /**
  * 根据文件名和内容判断文件类型
- * @returns 'a' | 'b' | 'c' | 'd' | 'f'
+ * @returns 'a' | 'd' | 'e' | 'f'
+ *
+ * 后续简化（用户决策）：所有 ts/tsx 走统一"复制 + 改写"流程。
+ * - type-a: config 文件（特殊字段规则 r-renames / r-special 转换）
+ * - type-d: 其它 ts/tsx（含 index / modal_index / func / 任意 .tsx）
+ *   每份文件独立基于自身参照处理，无 ref 提取 / 方法抽取 / 配对 index/fun 生成
+ * - type-e: less 文件（含 @primary_ / @font_color 等行注释规则）
+ * - type-f: 排除
  */
 function classifyFile(filepath, content) {
   const basename = path.basename(filepath);
   const hasConfigName = /auto_config|config/i.test(basename);
-  const hasIndexName = /index/i.test(basename);
-  const hasFunName = /^[ff]un(?:c)?\.tsx$/i.test(basename) || /^fun/i.test(basename);
 
   // a: config 文件（文件名含 config + 内容含关键属性之一）
   if (hasConfigName && /\b(grid_columns|filter_items|form_items|toolbar_default|grid_handle_columns_default)\b/.test(content)) {
     return 'a';
   }
-  // b: index 入口文件（文件名含 index + 引用 DDBunit2）
-  if (hasIndexName && /\bDDBunit2\b/.test(content)) {
-    return 'b';
-  }
-  // c: fun 方法文件（文件名含 fun + 内容含关键方法之一）
-  if (hasFunName && /\b(validator|eventOnChange|eventOnFocus|eventOnBlur|initAddForm|initEditForm|formBeforeSubmit)\b/.test(content)) {
-    return 'c';
-  }
-  // d: 其他 ts/tsx 文件
+  // d: 其它 ts/tsx 文件（含 index / modal_index / func / 任意 .tsx）—— 复制 + applyCopyRewrites + applyContentReplaces
   if (/\.tsx?$/.test(basename)) {
     return 'd';
   }
-  // e: less 文件（首行含 @import "~@/assets/css/config.less"）
+  // e: less 文件（含 @primary_ / @font_color 等行注释规则）
   if (/\.less$/.test(basename)) {
     return 'e';
   }
@@ -2222,144 +2217,19 @@ function processTypeA(srcFile, dstFile, args) {
       actions,
       rules,
     });
-    fs.mkdirSync(path.dirname(readmePath), { recursive: true });
+    fs.mkdirSync(path.dirname(readmePath), {recursive: true});
     fs.writeFileSync(readmePath, readme, 'utf-8');
     console.log(`  [type-a] 已生成 README`);
   }
 
-  // 生成 index.tsx
-  if (args['no-index'] !== true) {
-    const srcDir = path.dirname(srcFile);
-    const refIndex = path.join(srcDir, 'index.tsx');
-    if (fs.existsSync(refIndex)) {
-      try {
-        const indexContent = generateIndexFileFromRef(refIndex, path.basename(dstFile, path.extname(dstFile)), '');
-        const indexContentFinal = applyContentReplaces(indexContent, 'ts', refIndex);
-        const outDir = path.dirname(dstFile);
-        const indexFile = path.join(outDir, 'index.tsx');
-        fs.writeFileSync(indexFile, indexContentFinal, 'utf-8');
-        console.log(`  [type-a] 已生成 index.tsx`);
-      } catch (e) {
-        console.log(`  [type-a] index.tsx 生成失败: ${e.message}`);
-      }
-    }
-  }
-
-  // 生成 fun 文件（保留 ref 原命名 f.tsx / fun.tsx / func.tsx）
-  if (args['no-fun'] !== true) {
-    const srcDir = path.dirname(srcFile);
-    const refFun = fs.existsSync(path.join(srcDir, 'f.tsx')) ? path.join(srcDir, 'f.tsx')
-                 : fs.existsSync(path.join(srcDir, 'fun.tsx')) ? path.join(srcDir, 'fun.tsx')
-                 : fs.existsSync(path.join(srcDir, 'func.tsx')) ? path.join(srcDir, 'func.tsx')
-                 : null;
-    if (refFun) {
-      try {
-        const funRefContent = fs.readFileSync(refFun, 'utf-8');
-        let funOutput = funRefContent;
-
-
-        // 11 条 imports 改写
-        funOutput = applyImportRewritesToContent(funOutput);
-
-        // moment → dayjs
-        // funOutput = funOutput.replace(/\bmoment\(/g, 'dayjs(');
-
-        // getCodeValByKey 3→2
-        funOutput = migrateGetCodeValByKey(funOutput);
-        funOutput = migrateGetCode(funOutput);
-        funOutput = migrateGetCodeFromServerT1(funOutput);
-
-        // initEditForm 变量改名
-        const initEditFormBlock = extractFuncMethod(funOutput, 'initEditForm');
-        if (initEditFormBlock) {
-          const rewritten = migrateFuncMethodVariables(initEditFormBlock, 'initEditForm');
-          funOutput = funOutput.replace(initEditFormBlock, rewritten);
-        }
-
-        funOutput = applyContentReplaces(funOutput, 'ts', refFun);
-
-        const outDir = path.dirname(dstFile);
-        const funFileName = path.basename(refFun);  // 保留 ref 原文件名 (f.tsx / fun.tsx / func.tsx)
-        const funFile = path.join(outDir, funFileName);
-        fs.writeFileSync(funFile, funOutput, 'utf-8');
-        console.log(`  [type-a] 已生成 ${funFileName}`);
-      } catch (e) {
-        console.log(`  [type-a] ${path.basename(refFun)} 生成失败: ${e.message}`);
-      }
-    }
-  }
-}
-
-/**
- * 类型 b: 基础单元入口文件 → 生成 index.tsx
- */
-function processTypeB(srcFile, dstFile, args) {
-  // 读取 ref index.tsx（从 srcDir，即 code_sample 目录）
-  const srcDir = path.dirname(srcFile);
-  const refIndex = path.join(srcDir, 'index.tsx');
-  if (!fs.existsSync(refIndex)) {
-    console.log(`  [type-b] 跳过：未找到 ref ${refIndex}`);
-    return;
-  }
-
-  let content = fs.readFileSync(refIndex, 'utf-8');
-
-  // Step 1: 应用 index 专用 import 改写
-  content = applyImportRewritesToContent(content);
-  content = normalizeDDBunit2Import(content);
-  content = applyIndexImportRewrites(content);
-
-  // Step 2: 应用内联调整
-  content = applyIndexAdjustments(content);
-
-  // Step 3: rules.replace.ts (ts/tsx 文本替换；含 special.replace / special.line)
-  content = applyContentReplaces(content, 'ts', srcFile);
-
-  fs.writeFileSync(dstFile, content, 'utf-8');
-  console.log(`  [type-b] 已生成 index.tsx`);
-}
-
-/**
- * 类型 c: 基础单元方法文件 → 生成 f.tsx
- */
-function processTypeC(srcFile, dstFile, args) {
-  const srcDir = path.dirname(srcFile);
-  // 查找 ref: f.tsx → fun.tsx → func.tsx 顺序（保留 ref 原命名）
-  const refFun = fs.existsSync(path.join(srcDir, 'f.tsx')) ? path.join(srcDir, 'f.tsx')
-               : fs.existsSync(path.join(srcDir, 'fun.tsx')) ? path.join(srcDir, 'fun.tsx')
-               : fs.existsSync(path.join(srcDir, 'func.tsx')) ? path.join(srcDir, 'func.tsx')
-               : null;
-  if (!refFun) {
-    console.log(`  [type-c] 跳过：未找到 ref f.tsx/fun.tsx/func.tsx`);
-    return;
-  }
-
-  let content = fs.readFileSync(refFun, 'utf-8');
-
-
-  // Step 2: 11 条 imports 路径改写
-  content = applyImportRewritesToContent(content);
-
-  // Step 3: 提取并后处理方法体
-  const initAddForm = extractInitAddFormFromFile(content);
-  const extraMethods = {
-    initEditForm: postProcessFuncMethod(extractFuncMethod(content, 'initEditForm'), 'initEditForm'),
-    validator: postProcessFuncMethod(extractFuncMethod(content, 'validator'), 'validator'),
-    eventOnBlur: postProcessFuncMethod(extractFuncMethod(content, 'eventOnBlur'), 'eventOnBlur'),
-    eventOnFocus: postProcessFuncMethod(extractFuncMethod(content, 'eventOnFocus'), 'eventOnFocus'),
-    eventOnChange: postProcessFuncMethod(extractFuncMethod(content, 'eventOnChange'), 'eventOnChange'),
-  };
-
-  // Step 4: 生成 fun 文件
-  const funOutput = generateFunPage({ initAddForm, extraMethods });
-  const funOutputFinal = applyContentReplaces(funOutput, 'ts', srcFile);
-  fs.writeFileSync(dstFile, funOutputFinal, 'utf-8');
-  console.log(`  [type-c] 已生成 f.tsx`);
+  // 不再生成配对 index.tsx / fun.tsx：index/fun 文件作为独立 tsx 文件
+  // 由目录批处理走 type-d 流程单独处理（基于自身参照 + applyCopyRewritesToFile）。
 }
 
 /**
  * 类型 e: less 文件 → 含有 "@/assets/css/config.less" 的行注释掉，
  *                       含有 "@font_color" 的行也注释掉（保留缩进），
+ *                       含有 "@primary_" 的行也注释掉（保留缩进），
  *                       并删除 "@import '~antd/lib/style/themes/default.less';"
  */
 function processTypeE(srcFile, dstFile) {
@@ -2379,7 +2249,10 @@ function processTypeE(srcFile, dstFile) {
         modified = true;
         return '// 新系统迁移时注释\n// ' + line;
       }
-      if (/@font_color/.test(line) && !line.trim().startsWith('//')) {
+      if (
+        (/@font_color/.test(line) || /@primary_/.test(line)) &&
+        !line.trim().startsWith('//')
+      ) {
         modified = true;
         const indentMatch = line.match(/^[ \t]*/);
         const indent = indentMatch ? indentMatch[0] : '';
@@ -2476,12 +2349,6 @@ async function main() {
         case 'a':
           processTypeA(args.src, out, args);
           break;
-        case 'b':
-          processTypeB(args.src, out, args);
-          break;
-        case 'c':
-          processTypeC(args.src, out, args);
-          break;
         case 'e':
           processTypeE(args.src, out);
           break;
@@ -2539,22 +2406,6 @@ async function main() {
             console.log(`  ↪ 已应用改写规则`);
           }
           processTypeA(srcFile, dstFile, args);
-          break;
-        case 'b':
-          const rewrittenB = applyCopyRewrites(content, srcFile);
-          if (rewrittenB !== content) {
-            fs.writeFileSync(dstFile, rewrittenB, 'utf-8');
-            console.log(`  ↪ 已应用改写规则`);
-          }
-          processTypeB(srcFile, dstFile, args);
-          break;
-        case 'c':
-          const rewrittenC = applyCopyRewrites(content, srcFile);
-          if (rewrittenC !== content) {
-            fs.writeFileSync(dstFile, rewrittenC, 'utf-8');
-            console.log(`  ↪ 已应用改写规则`);
-          }
-          processTypeC(srcFile, dstFile, args);
           break;
         case 'e':
           processTypeE(srcFile, dstFile);
