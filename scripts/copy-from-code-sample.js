@@ -25,6 +25,22 @@
 const fs = require('fs');
 const path = require('path');
 
+// =================== 文件 IO 辅助 ===================
+
+/**
+ * 写入文件并归一换行符为 LF。
+ *
+ * 背景：项目仓库约定所有文本文件使用 LF 行尾（git show HEAD:<file>
+ * 验证：HEAD blob 内只有 0a，无 0d 0a）。但 code_sample 源文件可能
+ * 是 CRLF（Windows 编辑器残留），脚本构造的字符串模板字面量有时
+ * 含 \r\n。用此辅助函数统一归一为 LF，让生成文件与仓库约定一致，
+ * 避免 git status 出现行尾 mismatch 的"伪修改"标记。
+ */
+function writeFileWithEol(file, content, encoding = 'utf-8') {
+  const normalized = String(content).replace(/\r\n/g, '\n');
+  fs.writeFileSync(file, normalized, encoding);
+}
+
 // =================== 从 convert-ddbunit-config.js 内联的函数 ===================
 
 // =================== CLI 解析 ===================
@@ -807,7 +823,7 @@ function addRouteToCktsFile({ cktsFile, newEntry, parentPath }) {
     if (existingMatch) {
       const newLine = `{ name: '${newEntry.name}', path: '${newEntry.path}', component: '${newEntry.component}' }`;
       const newContent = content.replace(existingRe, newLine);
-      fs.writeFileSync(cktsFile, newContent, 'utf-8');
+      writeFileWithEol(cktsFile, newContent);
       return { added: true, updated: true, content: newContent };
     }
     return { added: false, content };
@@ -835,7 +851,7 @@ function addRouteToCktsFile({ cktsFile, newEntry, parentPath }) {
   const indent = detectIndentBefore(content, insertPos);
   const newLine = `\n${indent}{ name: '${newEntry.name}', path: '${newEntry.path}', component: '${newEntry.component}' },`;
   const newContent = content.slice(0, insertPos) + newLine + content.slice(insertPos);
-  fs.writeFileSync(cktsFile, newContent, 'utf-8');
+  writeFileWithEol(cktsFile, newContent);
   return { added: true, content: newContent };
 }
 
@@ -2260,7 +2276,7 @@ function processTypeA(srcFile, dstFile, args) {
 
   // 写出 config 文件
   fs.mkdirSync(path.dirname(dstFile), { recursive: true });
-  fs.writeFileSync(dstFile, outContent, 'utf-8');
+  writeFileWithEol(dstFile, outContent);
   console.log(`  [type-a] 已生成 auto_config.tsx`);
 
   // 生成 README
@@ -2274,7 +2290,7 @@ function processTypeA(srcFile, dstFile, args) {
       rules,
     });
     fs.mkdirSync(path.dirname(readmePath), {recursive: true});
-    fs.writeFileSync(readmePath, readme, 'utf-8');
+    writeFileWithEol(readmePath, readme);
     console.log(`  [type-a] 已生成 README`);
   }
 
@@ -2324,7 +2340,7 @@ function processTypeE(srcFile, dstFile) {
     modified = true;
   }
   if (modified) {
-    fs.writeFileSync(dstFile, finalText, 'utf-8');
+    writeFileWithEol(dstFile, finalText);
     console.log(`  [type-e] 已处理 less 文件`);
   }
 }
@@ -2358,7 +2374,7 @@ function applyCopyRewritesToFile(srcFile, dstFile) {
   }
 
   if (modified) {
-    fs.writeFileSync(dstFile, content, 'utf-8');
+    writeFileWithEol(dstFile, content);
     console.log(`  [type-d] 已应用改写规则`);
   }
 }
@@ -2394,7 +2410,7 @@ async function main() {
     const content = fs.readFileSync(out, 'utf-8');
     const rewritten = applyCopyRewrites(content, args.src);
     if (rewritten !== content) {
-      fs.writeFileSync(out, rewritten, 'utf-8');
+      writeFileWithEol(out, rewritten);
       console.log(`[copy] 已应用改写规则`);
     }
     // 3. 识别文件类型并处理
@@ -2458,7 +2474,7 @@ async function main() {
           // 先应用 applyCopyRewrites
           const rewrittenA = applyCopyRewrites(content, srcFile);
           if (rewrittenA !== content) {
-            fs.writeFileSync(dstFile, rewrittenA, 'utf-8');
+            writeFileWithEol(dstFile, rewrittenA);
             console.log(`  ↪ 已应用改写规则`);
           }
           processTypeA(srcFile, dstFile, args);
