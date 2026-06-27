@@ -1,0 +1,523 @@
+
+.rowColor {
+  background-color: white;
+  .ant-empty-normal {
+    margin: 40% 0;
+    color: rgba(0, 0, 0, 0.25);
+}
+
+}
+
+.colColor {
+  background-color: #f7f7f7;
+}
+
+.picPage {
+  margin-left: 5%;
+  min-width: 760px;
+}
+
+.picList {
+  width: 13%;
+  height: 729px;
+  float: right;
+  overflow: auto;
+  background: rgba(82, 95, 127, 0.5);
+  text-align: center;
+  padding: 10px 15px;
+  top: 0;
+  right: 0;
+}
+
+.picList .listItem {
+  margin-bottom: 15px;
+  padding-top: 20px;
+}
+
+.picList .listItem img {
+  width: 83%;
+  height: auto;
+  cursor: pointer;
+}
+
+.picList .listItem .picName {
+  font-size: 12px;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0 auto;
+}
+
+.listItem {
+  margin-top: 10px;
+}
+
+.picList .active img {
+  border: 2px solid #007DDB;
+  text-align: center;
+}
+
+.picList .active {
+  background-color: #fff;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.picBox {
+  margin-left: 2%;
+  margin-top: 5%;
+  height: 520px;
+  width: 620px;
+  // background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+  background-size: contain;
+  padding: 50px;
+  position: absolute;
+}
+
+.picBox .picBoxImage {
+  width: 250px;
+  height: auto;
+  display: inline-block;
+  overflow: hidden;
+  margin-left: 2px;
+}
+
+.picBox .picBoxImage .showImage {
+  width: auto;
+  height: auto;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.picBox .picBoxImage .showImage img {
+  width: 98%;
+  height: auto;
+  padding-bottom: 120px;
+}
+
+.picBox .picBoxImage .showPDf {
+  width: 190px;
+  height: 460px;
+  padding: 35px;
+  position: relative;
+}
+
+
+.picBox .picBoxImage .showPDf .htbhDiv {
+  font-size: 13px;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.picBox .picBoxImage .showPDf .htjfDiv {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 90%;
+}
+
+.picBox .picBoxImage .showPDf .htsTitle {
+  font-size: 30px;
+  width: 32px;
+  height: 100px;
+  line-height: 40px;
+  font-weight: bold;
+}
+
+.picBox .picBoxImage .showPDf .htxxDiv {
+  font-size: 13px;
+  font-weight: bold;
+  position: absolute;
+  bottom: 55px;
+  width: 90%;
+}
+
+.picBox .picBoxImage .showImageLeft {
+  position: absolute;
+  left: -20px;
+  top: 40%;
+  width: 40px;
+  display: none;
+  cursor: pointer;
+}
+
+.picBox .picBoxImage .showImageRight {
+  position: absolute;
+  right: -20px;
+  top: 40%;
+  width: 40px;
+  cursor: pointer;
+}
+
+.picBoxFull {
+  position: absolute;
+  top: 55px;
+  font-size: 16px;
+  color: #004B87;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.picBoxFull .fullImgLeft {
+  height: 25px;
+  width: 25px;
+  // background: url('~@/assets/css/img/showFull-image.png') no-repeat top center;
+  background-size: contain;
+  display: inline-block;
+  position: absolute;
+}
+
+.picBoxFull .fullImgRight {
+  height: 25px;
+  width: 25px;
+  // background: url('~@/assets/css/img/showFull-image.png') no-repeat top center;
+  background-size: contain;
+  display: inline-block;
+  position: absolute;
+  right: 33px;
+}
+.picBoxImage .showPicLeft {
+  background-size: contain !important;
+  // background: url('~@/assets/css/img/showPic-left.png') no-repeat top center;
+  position: absolute;
+  left: -20px;
+  top: 40%;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  cursor: pointer;
+}
+.picBoxImage .showPicRight {
+  background-size: contain !important;
+  // background: url('~@/assets/css/img/showPic-right.png') no-repeat top center;
+  position: absolute;
+  right: -20px;
+  top: 40%;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.htsTitleLeft {
+  margin-top: 17%;
+  margin-left: 57%;
+}
+
+.htsTitleRight {
+  margin-top: 17%;
+  margin-left: 82%;
+}
+
+.htxxDiv {
+  margin-bottom: 16%;
+}
+
+#pdfRight {
+  margin-left: 25px;
+}
+
+#pdfRightZhd {
+  margin-left: 25px;
+}
+
+#pdfRightTyd {
+  margin-left: 25px;
+}
+
+#pdfRightQtdz {
+  margin-left: 25px;
+}
+
+#imageLeft {
+  margin-top: 15%;
+}
+
+#imageRight {
+  margin-left: 17%;
+}
+
+.zlxzTitle {
+  margin: 0 -20px 20px -20px;
+  padding: 0 10px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 32px;
+  background-color: #f1f4f7;
+}
+
+// @media screen and (max-width: 1280px) {
+//   .picBox {
+//     margin-left: 2%;
+//     margin-top: 5%;
+//     height: 255px;
+//     width: 323px;
+//     background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+//     background-size: contain;
+//     padding: 50px;
+//     position: absolute;
+//   }
+
+//   .picBoxFull {
+//     position: absolute;
+//     top: 35px;
+//     font-size: 15px;
+//     color: #004B87;
+//     cursor: pointer;
+//     z-index: 5;
+//   }
+
+//   .picBox .picBoxImage .showPDf {
+//     width: 101px;
+//     height: 270px;
+//     padding: 20px;
+//     position: relative;
+//   }
+
+//   .picBox .picBoxImage .showPDf .htsTitle {
+//     font-size: 20px;
+//     width: 32px;
+//     height: 100px;
+//     line-height: 30px;
+//     font-weight: bold;
+//   }
+
+//   .picBox .picBoxImage {
+//     width: 157px;
+//     height: auto;
+//     display: inline-block;
+//     overflow: hidden;
+//     margin-left: -5px;
+//   }
+
+//   .picBox .picBoxImage .showImageLeft {
+//     position: absolute;
+//     left: -27px;
+//     top: 40%;
+//     width: 25px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picBox .picBoxImage .showImageRight {
+//     position: absolute;
+//     left: 425px;
+//     top: 40%;
+//     width: 25px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picList {
+//     width: 16%;
+//     height: 423px;
+//     float: right;
+//     overflow: auto;
+//     background: rgba(82, 95, 127, 0.5);
+//     text-align: center;
+//     padding: 10px 15px;
+//     top: 0;
+//     right: 0;
+//   }
+
+//   .picBox .picBoxImage .showPDf .htbhDiv {
+//     font-size: 11px;
+//   }
+
+//   .picBox .picBoxImage .showPDf .htxxDiv {
+//     font-size: 11px;
+//   }
+// }
+
+// @media (min-width: 1360px) and (max-width: 1440px) {
+//   .picBox {
+//     margin-left: 2%;
+//     margin-top: 0;
+//     height: 264px;
+//     width: 356px;
+//     background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+//     background-size: contain;
+//     padding: 50px;
+//     position: absolute;
+//   }
+
+//   .picBoxFull {
+//     position: absolute;
+//     top: 35px;
+//     font-size: 15px;
+//     color: #004B87;
+//     cursor: pointer;
+//     z-index: 5;
+//   }
+
+//   .picBox .picBoxImage .showPDf {
+//     width: 101px;
+//     height: 270px;
+//     padding: 20px;
+//     position: relative;
+//   }
+
+//   .picBox .picBoxImage .showPDf .htsTitle {
+//     font-size: 20px;
+//     width: 32px;
+//     height: 100px;
+//     line-height: 30px;
+//     font-weight: bold;
+//   }
+
+//   .picBox .picBoxImage {
+//     width: 179px;
+//     height: auto;
+//     display: inline-block;
+//     overflow: hidden;
+//     margin-left: -15px;
+//   }
+
+//   .picBox .picBoxImage .showImageLeft {
+//     position: absolute;
+//     left: -14px;
+//     top: 40%;
+//     width: 25px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picBox .picBoxImage .showImageRight {
+//     position: absolute;
+//     left: 440px;
+//     top: 40%;
+//     width: 25px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picList {
+//     width: 16%;
+//     height: 445px;
+//     float: right;
+//     overflow: auto;
+//     background: rgba(82, 95, 127, 0.5);
+//     text-align: center;
+//     padding: 10px 15px;
+//     top: 0;
+//     right: 0;
+//   }
+
+//   #pdfRight {
+//     margin-left: 45px;
+//   }
+//   #pdfRightZhd {
+//     margin-left: 45px;
+//   }
+//   #pdfRightTyd {
+//     margin-left: 45px;
+//   }
+//   #pdfRightQtdz {
+//     margin-left: 45px;
+//   }
+
+// }
+
+// @media (min-width: 1600px) and (max-width: 1680px) {
+//   .picBox {
+//     margin-left: 2%;
+//     margin-top: 4%;
+//     height: 400px;
+//     width: 420px;
+//     background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+//     background-size: contain;
+//     padding: 50px;
+//     position: absolute;
+//   }
+
+//   .picBoxFull {
+//     position: absolute;
+//     top: 47px;
+//     font-size: 15px;
+//     color: #004B87;
+//     cursor: pointer;
+//     z-index: 5;
+//   }
+
+//   .picBox .picBoxImage .showPDf {
+//     width: 129px;
+//     height: 298px;
+//     padding: 25px;
+//     position: relative;
+//   }
+
+//   .picBox .picBoxImage .showPDf .htsTitle {
+//     font-size: 25px;
+//     width: 32px;
+//     height: 100px;
+//     line-height: 40px;
+//     font-weight: bold;
+//   }
+
+//   .picBox .picBoxImage {
+//     width: 165px;
+//     height: auto;
+//     display: inline-block;
+//     overflow: hidden;
+//     margin-left: -5px;
+//   }
+
+//   .picBox .picBoxImage .showImageLeft {
+//     position: absolute;
+//     left: -27px;
+//     top: 35%;
+//     width: 37px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picBox .picBoxImage .showImageRight {
+//     position: absolute;
+//     left: 527px;
+//     top: 35%;
+//     width: 37px;
+//     display: none;
+//     cursor: pointer;
+//   }
+
+//   .picList {
+//     width: 16%;
+//     height: 582px;
+//     float: right;
+//     overflow: auto;
+//     background: rgba(82, 95, 127, 0.5);
+//     text-align: center;
+//     padding: 10px 15px;
+//     top: 0;
+//     right: 0;
+//   }
+
+//   #pdfRight {
+//     margin-left: 20px;
+//   }
+//   #pdfRightZhd {
+//     margin-left: 20px;
+//   }
+//   #pdfRightTyd {
+//     margin-left: 20px;
+//   }
+//   #pdfRightQtdz {
+//     margin-left: 20px;
+//   }
+// }
+
+// @media (max-width: 1680px) {
+//   .picList {
+//     height: 730px;
+//   }
+// }
+
+// @media (max-width: 1600px) {
+//   .picList {
+//     height: 580px;
+//   }
+// }

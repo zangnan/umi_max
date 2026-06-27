@@ -1,7 +1,7 @@
 export default [
   { name: '慧退税', path: '/hts', icon: 'HomeOutlined', routes: [
     // 数据管理
-    { path: '/hts/02', id: '02', name: '数据管理', icon: 'BookOutlined', routes: [
+    { name: '数据管理', path: '/hts/02', icon: 'BookOutlined', routes: [
       // { path: '/hts/02/0201', name: '任务管理', icon: 'FileProtectOutlined', component: './hts/sjgl/xzrwgl/jdcx' },
       { path: '/hts/02/0202', name: '数据下载', icon: 'InteractionOutlined', routes: [
         { path: '/hts/02/0202/020201', name: '海关数据下载', component: './hts/sjgl/xzrwgl/sjxz' },
@@ -170,7 +170,7 @@ export default [
       { name: '合同收汇情况查询',  component: './hts/shgl/htshqkcx', path: '/hts/shgl/htshqkcx' },
       // { name: '任务管理',  component: './hts/shgl/rwgl', path: '/hts/shgl/rwgl' },
     ] },
-    { name: '数据报表（生产）', id: '24', icon: 'AuditOutlined', path: '/hts/sjbb/sc', routes: [
+    { name: '数据报表（生产）', icon: 'AuditOutlined', path: '/hts/sjbb/sc', routes: [
       { name: '数据更新', id: '2401', pid: '24', icon: 'ProfileOutlined', path: '/hts/sjbb/sc/sjgx', component: './hts/sjbb/sc/sjgx' },
       { name: '统计报表', id: '2402', pid: '24', icon: 'OneToOneOutlined', path: '/hts/sjbb/sc/tjbb', routes: [
         {
@@ -238,6 +238,18 @@ export default [
       { name: '发票管理', id: '9008', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/fpgl', component: './hts/ckfpkj/fpgl' },
       { name: '发票管理', id: '9009', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/hzfpgl', component: './hts/ckfpkj/fpgl', parentKeys: ['/hts/ckfpkj/fpgl'], hideInMenu: true },
       { name: '发票管理', id: '9010', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/zffpgl', component: './hts/ckfpkj/fpgl', parentKeys: ['/hts/ckfpkj/fpgl'], hideInMenu: true },
+    ] },
+    { name: '备案单证2.0', icon: 'VerifiedOutlined', path: '/hts/badz2', routes: [
+      { name: '工作台', path: '/hts/badz2/home', component: './hts/badz2/home' },
+      { name: '备案单证基础数据登记', path: '/hts/badz2/jcsjdj', routes: [
+        { name: '购销合同', path: '/hts/badz2/jcsjdj/gxht', component: './hts/badz2/jcsjdj/gxht' },
+        { name: '运输单据', path: '/hts/badz2/jcsjdj/ysdj', component: './hts/badz2/jcsjdj/ysdj' },
+        { name: '委托报关单据', path: '/hts/badz2/jcsjdj/wtbgdj', component: './hts/badz2/jcsjdj/wtbgdj' },
+        { name: '其他单证', path: '/hts/badz2/jcsjdj/qtdz', component: './hts/badz2/jcsjdj/qtdz' },
+      ] },
+      { name: '申报业务数据匹配', path: '/hts/badz2/sjpp', component: './hts/badz2/sjpp' },
+      { name: '备案单证装订成册', path: '/hts/badz2/zdcc', component: './hts/badz2/zdcc' },
+      { name: '资料管理', path: '/hts/badz2/zlgl', component: './hts/badz2/zlgl' },
     ] },
   ] }
 ];
