@@ -180,6 +180,14 @@
         "new": "@/pages/hts/services/htsApi"
       },
       {
+        "old": "@/pages/hts/services/htsApiBadz",
+        "new": "@/pages/hts/services/htsApi"
+      },
+      {
+        "old": "@ant-design/icons/lib",
+        "new": "@ant-design/icons"
+      },
+      {
         "old": "import pro from '@/components/DDAssist/constants';",
         "new": "import CONSTANTS from '@/components/DDAssist/constants';"
       },

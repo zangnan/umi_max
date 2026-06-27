@@ -1,0 +1,311 @@
+// 新系统迁移时注释
+// @import "~@/assets/css/config.less";
+
+.dd_layout_tabs_bzgl {
+  .ant-tabs-tabpane {
+
+    &.jckppz,
+    &.gdkppz {
+      background-color: transparent !important;
+      margin: -20px -20px 0 -20px;
+    }
+
+    &.bzgl {
+      min-height: calc(100vh - 130px);
+    }
+
+    &.xsfpz {
+      min-height: calc(100vh - 130px);
+    }
+
+    &.zdpdJcpz {
+      min-height: calc(100vh - 130px);
+      background-color: transparent !important;
+      margin: -20px -20px 0 -20px;
+    }
+
+    .znpdJcpz_wrap,
+    .jckppz_wrap {
+      padding: 20px;
+    }
+  }
+}
+
+.dd_layout_tabs_icCard {
+  .ant-tabs-tabpane {
+
+    &.jckppz,
+    &.gdkppz {
+      background-color: transparent !important;
+      margin: 15px -20px 0 -20px;
+    }
+
+    &.bzgl {
+      min-height: calc(100vh - 130px);
+    }
+
+    &.xsfpz {
+      min-height: calc(100vh - 130px);
+    }
+
+    &.zdpdJcpz {
+      min-height: calc(100vh - 130px);
+      background-color: transparent !important;
+      margin: -20px -20px 0 -20px;
+    }
+  
+    .znpdJcpz_wrap,
+    .jckppz_wrap {
+      padding: 20px;
+    }
+  }
+}
+
+.fpkjpz_titl {
+  width: 300px;
+  height: 180px;
+  background-color: #ffffff;
+  border: 1px solid rgba(204, 204, 204, 100);
+  box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 15px;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.5s;
+
+  .title_main {
+    color: #33363a;
+    font-size: 16px;
+    margin-bottom: 0;
+    line-height: 21px;
+    width: 100%;
+
+    Input {
+      width: 100%;
+    }
+    .content_fpxe {
+      .ant-space-item {
+        width: 100px;
+      }
+    }
+    .ant-form-item {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      color: rgba(0, 0, 0, 0.85);
+      font-size: 14px;
+      font-variant: tabular-nums;
+      line-height: 1.5715;
+      list-style: none;
+      font-feature-settings: 'tnum', "tnum";
+      margin-bottom: 0px;
+      vertical-align: top;
+      transition: margin-bottom 0.3s 0.017s linear;
+    }
+    .ant-form-item-label {
+      padding: 0px !important;
+      line-height: 1.5715;
+      white-space: initial;
+      text-align: left;
+    }
+  }
+
+  .title_sub {
+    color: #6a6d70;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .fpk-text-zc {
+    font-size: 14px;
+    color: #52c41a;
+    margin-right: 8px;
+  }
+  .fpk-text-wzc {
+    font-size: 14px;
+    color: #b00;
+    margin-right: 8px;
+  }
+  .fpk-icon-sx {
+    font-size: 14px;
+    color: #0a6ed1;
+    cursor: pointer;
+  }
+
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+
+    .desc {
+      color: #6a6d70;
+
+      &.color1 {
+        color: #6a6d70;
+      }
+
+      &.color2 {
+        color: #e9730c;
+      }
+
+      &.color3 {
+        color: #0a6ed1;
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+
+    .default {
+      padding: 0 0 0 35px;
+
+      .num {
+        color: #6a6d70;
+
+        .num_1 {
+          font-size: 36px;
+          line-height: 36px;
+        }
+
+        .num_2 {
+          font-size: 14px;
+          margin: 0 0 0 3px;
+        }
+
+        &.color1 {
+          color: #6a6d70;
+        }
+
+        &.color2 {
+          color: #b00;
+        }
+
+        &.color3 {
+          color: #0000EE;
+        }
+      }
+
+      .anticon {
+        font-size: 30px;
+        color: #5A7DA0;
+        position: absolute;
+        left: 0;
+        top: 4px;
+      }
+    }
+  }
+
+  &:hover {
+    box-shadow: none;
+    border-bottom-color: #F07800;
+  }
+}
+
+.group_tile_c1 {
+  color: #333639;
+  font-size: 16px;
+  margin: 0 0 10px 0;
+}
+
+.tile_group {
+  margin: 0 0 40px 0;
+}
+
+
+// 左&右（上下）2
+.lay_wrap_bzgl {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .lay_wrap_bzgl_left {
+    flex-shrink: 0; //如果希望缩小时宽度不被压缩可以使用这个
+    // background-color: #fff;
+    margin-right: 20px;
+  }
+
+  .lay_wrap_bzgl_right {
+    flex: 9;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-pro-card-header {
+    padding: 11px 20px;
+  }
+}
+
+.bzgl_right_main {
+  height: 180px;
+  background-color: #ffffff;
+  border: 1px dashed #f07800;
+  border-radius: 0px;
+  padding: 15px;
+  overflow: auto;
+
+  .bzgl_right_main_title {
+    border-bottom: 1px solid #000;
+  }
+
+  Input {
+    size: 14px;
+    width: 208px;
+    height: 34px;
+    box-sizing: border-box;
+  }
+}
+
+.bzgl_right_main_content {
+  font-size: 14px;
+  line-height: 34px;
+  // min-width: 300px;
+}
+
+.bz_tootip {
+  min-width: 440px;
+}
+
+// 汇率管理
+.hlgmMenu {
+  display: 'inline-block';
+  margin-top: -50px;
+  margin-right: 20px;
+  float: right;
+}
+
+.hlgl-form {
+  margin-bottom: 10px;
+}
+
+.hlgl-yhl {
+  margin-bottom: 10px;
+  width: 100px !important;
+}
+
+.hlgl-btn {
+  margin-right: 10px;
+}
+
+.lay_wrap_hlgl {
+  .ant-pro-card-header {
+    padding-bottom: 5px;
+  }
+
+  .ant-form-item-label>label {
+    height: 29px;
+  }
+}
+
+.dd_xsfpz_wraf {
+  .ant-radio-group {
+    display: block !important;
+  }
+}
+
+.content_fail_color {
+  color: #eb2525;
+}

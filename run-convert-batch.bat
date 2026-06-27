@@ -18,11 +18,13 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjgl\hgsjc
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\mbcx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\hggl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg\sjxz
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfpkj
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz2
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\icCard
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\sdppzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\fppzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\style.less
-node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp
-node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfpkj
-node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz2
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\dzbapzgl
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz
 pause
