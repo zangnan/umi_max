@@ -1,0 +1,259 @@
+// 新系统迁移时注释
+// @import "~@/assets/css/config.less";
+/* 按钮 */
+.btn-style-01 {
+  background-color: #4490DB;
+  width: 380px;
+  color: #fff;
+  height: 38px !important;
+  position: absolute;
+  bottom: 55px;
+  left: 50%;
+  margin-left: -193px;
+}
+.btn-style-02 {
+  width: 115px;
+  height: 38px !important;
+}
+.btn-style-03 {
+  height: 38px !important;
+  background-color: #4490DB;
+  color: #fff;
+  width: 120px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -62px;
+}
+
+.mndlym_main {
+  height: 410px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  position: relative;
+  // wait
+  .ant-steps-item-wait .ant-steps-item-icon {
+    background-color: #F2F3F5;
+    border-color: #F2F3F5;
+  }
+  .ant-steps-item-wait .ant-steps-item-icon > .ant-steps-icon {
+    color: #333639
+  }
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after{
+    background-color: #999;
+  }
+  .ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+    background-color: #999;
+  }
+  // process
+  .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+    background: #4490DB;
+  }
+  .ant-steps-item-process .ant-steps-item-icon {
+    border-color: #4490DB;
+  }
+  // finish
+  .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #E8F3FF;
+    border-color: #4490DB;
+    color: #4490DB;
+  }
+  .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after{
+    background-color: #4490DB;
+  }
+  .ant-steps-small .ant-steps-item-icon {
+    width: 27px;
+    height: 27px;
+    margin: 0 8px 0 0;
+    font-size: 12px;
+    line-height: 24px;
+    border-radius: 27px
+  }
+  .yz-steps {
+    border-bottom: 1px solid #ddd;
+    padding: 0 20px 20px;
+  }
+  .steps-content {
+    .ant-form-item {
+      margin-bottom: 32px;
+    }
+    .ant-form-item-with-help {
+      margin-bottom: 0px;
+    }
+    .ant-form-item-with-help .ant-form-item-explain {
+      min-height: 32px;
+    }
+    // form
+    .form-item {
+      .yz-input {
+        width: 380px;
+        height: 38px !important;
+      }
+      .ant-input-affix-wrapper .ant-input {
+        height: 34px !important;
+      }
+    }
+    .form-item-yzm {
+      // width: 380px;
+      .yz-input {
+        height: 38px !important;
+      }
+      .ant-input-affix-wrapper .ant-input {
+        height: 34px !important;
+      }
+    }
+    .back-login {
+      position: absolute;
+      top: 70px;
+      left: 38px;
+      font-size: 16px;  
+      color: #333639;
+      cursor: pointer;
+      .leftoutlined-icon {
+        font-size: 16px;
+        color: #333639;
+        margin-right: 8px;
+      }
+    }
+
+    .login-form-title {
+      font-size: 18px;
+      height: 32px;
+      text-align: center;
+      margin-bottom: 32px;
+      color: #333639;
+    }
+
+    .sf-content {
+      margin: 32px auto ;
+      text-align: center;
+    }
+
+    .sf-content-box {
+      width: 130px;
+      display: inline-block;
+      margin: 0 10px;
+    }
+  
+    .sf-content-box .sf-card-style {
+      height: 145px;
+      background-color: #39a0ed;
+      text-align: center;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      position: relative;
+    }
+  
+    .sf-content-box .sf-card-style:hover {
+      background-color: rgba(57, 160, 237, 0.9);
+    }
+  
+    .sf-content-box .sf-card-style .sf-img {
+      position: absolute;
+      top: 20px;
+      text-align: center;
+      width: 70px;
+      left: 50%;
+      margin-left: -35px;
+    }
+  
+    .sf-content-box .sf-card-style .sf-text {
+      font-size: 16px;
+      font-weight: bold;
+      position: absolute;
+      bottom: 16px;
+      width: 90px;
+      left: 50%;
+      margin-left: -45px;
+    }
+
+    /* 第四模块-验证成功 */
+    .tc-success {
+      padding: 20px;
+    }
+
+    .tc-success .success-ts {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .tc-success .success-ts-icon {
+      font-size: 50px;
+      color: #39a0ed;
+      font-weight: bold;
+    }
+
+    .tc-success .success-ts .success-title {
+      font-size: 18px;
+      color: #333639;
+      margin-top: 10px;
+    }
+
+    .tc-success .success-text {
+      font-size: 18px;
+      color: #333639;
+      width: 500px;
+      height: 30px;
+      line-height: 30px;
+      margin: 20px auto;
+      padding-left: 100px;
+    }
+
+    .tc-success .success-text .success-name {
+      width: 130px;
+      display: inline-block;
+    }
+  }
+
+  .qr-code-content {
+    padding: 20px;
+    .qr-code-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333639;
+    }
+    .qr-title-icon {
+      font-size: 20px;
+      margin-right: 8px;
+      color: #0084FF;
+    }
+    .qr-code-box {
+      margin: 40px auto 0;
+      text-align: center;
+    }
+    .qr-code-text {
+      font-size: 12px;
+      color: #333639;
+    }
+    .qr-code-text-error {
+      font-size: 12px;
+      color: #e51c23;
+    }
+    .qr-code-img {
+      margin-top: 20px;
+    }
+    .qr-code-img img {
+      width: 230px;
+      height: 230px;
+    }
+    .sx-img-mask {
+      width: 230px;
+      height: 230px;
+      background: rgba(255, 255, 255, 0.9);
+      text-align: center;
+      padding-top: 87px;
+      position: absolute;
+      top: 128px;
+      left: 50%;
+      margin-left: -115px;
+      cursor: pointer;
+    }
+    .sx-icon-img {
+      font-size: 50px;
+      color: #0084FF;
+    }
+
+  }
+}
+

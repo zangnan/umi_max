@@ -186,7 +186,10 @@
       {
         "old": "import Invoice from '@/components/DDdocs/Invoice';",
         "new": "import Invoice from '@/pages/hts/components/DDdocs/Invoice';"
-        
+      },
+      {
+        "old": "'@/components/DDdocs/editableCell'",
+        "new": "'@/pages/hts/components/DDdocs/editableCell'"
       },
       {
         "old": "import columnsRender from '@/pages/common/field/eventColRender';",
@@ -195,7 +198,6 @@
       {
         "old": "import DDFormList from '@/components/DDForm/DDFormList';",
         "new": "import DDFormList from '@/pages/hts/components/DDForm/DDFormList';"
-        
       }
     ],
     "less": [

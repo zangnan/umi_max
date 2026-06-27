@@ -219,5 +219,25 @@ export default [
       { name: '历史检测记录', path: '/hts/hggl/lsjcjl', component: './hts/hggl/lsjcjl' },
       { name: '指标配置', path: '/hts/hggl/zbpz', component: './hts/hggl/zbpz' },
     ] },
+    { name: '出口发票开具', icon: 'SendOutlined', path: '/hts/ckfpkj', routes: [
+      { name: '发票概览', path: '/hts/ckfpkj/ckfpgl', component: './hts/ckfpkj/ckfpgl' },
+      { name: '报关单管理', path: '/hts/ckfpkj/bgdgl', component: './hts/ckfpkj/bgdgl' },
+      { name: '按报关单开具', path: '/hts/ckfpkj/abgdkj', component: './hts/ckfpkj/abgdkj' },
+      { name: '按报关单开具', path: '/hts/ckfpkj/abgdkj21', component: './hts/ckfpkj/abgdkj', parentKeys: ['/hts/ckfpkj/abgdkj'], hideInMenu: true },
+      { name: '导入模板开具', path: '/hts/ckfpkj/drmbkj', component: './hts/ckfpkj/drmbkj' },
+      { name: '发票申请单',  path: '/hts/ckfpkj/fpsqd', component: './hts/ckfpkj/fpsqd' },
+      { name: '出口发票开具', path: '/hts/ckfpkj/ckfpkj', routes: [
+        { name: '数电票开具', path: '/hts/ckfpkj/ckfpkj/sdpkj', component: './hts/ckfpkj/ckfpkj/sdpkj' },
+        { name: '税控票开具', path: '/hts/ckfpkj/ckfpkj/skpkj', component: './hts/ckfpkj/ckfpkj/skpkj' },
+        { name: '发票红冲', path: '/hts/ckfpkj/ckfpkj/fphc', component: './hts/ckfpkj/ckfpkj/fphc' },
+        { name: '发票作废', path: '/hts/ckfpkj/ckfpkj/fpzf', component: './hts/ckfpkj/ckfpkj/fpzf' },
+        { name: '开票状态跟踪', path: '/hts/ckfpkj/ckfpkj/fpztgz', component: './hts/ckfpkj/ckfpkj/fpztgz' },
+        { name: '开票状态跟踪', path: '/hts/ckfpkj/ckfpkj/hzFpztgz', component: './hts/ckfpkj/ckfpkj/fpztgz', parentKeys: ['/hts/ckfpkj/ckfpkj/fpztgz'], hideInMenu: true },
+        { name: '开票状态跟踪', path: '/hts/ckfpkj/ckfpkj/zfFpztgz', component: './hts/ckfpkj/ckfpkj/fpztgz', parentKeys: ['/hts/ckfpkj/ckfpkj/fpztgz'], hideInMenu: true },
+      ] },
+      { name: '发票管理', id: '9008', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/fpgl', component: './hts/ckfpkj/fpgl' },
+      { name: '发票管理', id: '9009', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/hzfpgl', component: './hts/ckfpkj/fpgl', parentKeys: ['/hts/ckfpkj/fpgl'], hideInMenu: true },
+      { name: '发票管理', id: '9010', pid: '90', icon: 'FormOutlined', path: '/hts/ckfpkj/zffpgl', component: './hts/ckfpkj/fpgl', parentKeys: ['/hts/ckfpkj/fpgl'], hideInMenu: true },
+    ] },
   ] }
 ];
