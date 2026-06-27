@@ -367,13 +367,13 @@ const Znpdmx: React.FC<ZnpdmxProps> = ({
         height: myUtil.heightCalc.getCalc(['header', 'cardMargin', '73px', '40px', '20px', '20px']),// header cardMargin 73搜索栏 40工具栏 40工具栏 20padding
         overflow: 'auto',
       }}>
-        {/* <InfiniteScroll */}
+        {/* <InfiniteScroll
           dataLength={data.length}
           next={gdloadMoreData}
           hasMore={data.length < maxRowCount}
           loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
           scrollableTarget="scrollableDiv"
-        >
+        > */}
           <List
             dataSource={data}
             renderItem={(item: any, index: number) => (
