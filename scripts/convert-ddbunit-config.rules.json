@@ -276,6 +276,15 @@
           "29": "       <DDBunit2 config={hwslconfig} func={func} />"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/badz2/sjpp/ppLeft/index.tsx",
+      "line": [
+        {
+          "34": "       gridLeftClick({ ...param, record: {} }, (gridData && gridData[0]?.ppgzDm === '01') ? 'bgd' : 'sbpc');"
+        }
+      ]
+      
     }
   ],
   "excludeFiles": [

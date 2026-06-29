@@ -31,7 +31,7 @@ const Index: React.FC<leftProps> = ({
     if (gridData && gridData.length > 0) {
       gridLeftClick({ ...param, record: gridData[0] }, gridData[0]?.ppgzDm === '01' ? 'bgd' : 'sbpc');
     } else{
-      gridLeftClick({ ...param, record: {} }, gridData[0]?.ppgzDm === '01' ? 'bgd' : 'sbpc');
+       gridLeftClick({ ...param, record: {} }, (gridData && gridData[0]?.ppgzDm === '01') ? 'bgd' : 'sbpc');
     }
   }
 

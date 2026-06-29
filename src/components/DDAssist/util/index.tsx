@@ -878,6 +878,28 @@ myUtil.date = {
     const month = String(now.getMonth() + 1).padStart(2, '0'); // 获取当前月份，注意 getMonth() 返回的是 0-11，所以需要加 1，并且确保月份是两位数
     return `${year}${month}`;
   },
+  // 原系统移植
+  // 获取当前时间前N年（返回日期）
+  getDateBeforeCurr(n: any) {
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    const month = sj.getMonth() + 1;
+    const date = year + '-' + month + '-01';
+    return date;
+  },
+  // 原系统移植
+  /**
+   * 获取当前月的第一天 （精确到秒）
+   * 入参： 毫秒数
+   * 出参：毫秒数
+   * */
+  getMonthFirstDay(mon: any) {
+    const time = new Date(mon);
+    const nowMonth = time.getMonth();
+    const nowYear = time.getFullYear();
+    const monthStartDate = new Date(nowYear, nowMonth, 1);
+    return this.accurateDate(monthStartDate.getTime(), '1');
+  },
 };
 
 // ==================== 存储模块 ====================
