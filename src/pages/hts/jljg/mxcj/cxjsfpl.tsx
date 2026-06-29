@@ -216,7 +216,7 @@ const Cxjsfpl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
     }
     const divCardCurrent: any = document.querySelector(".fpsqd_item" + index);
     if (divCardCurrent) {
-      divCardCurrent.classList.add('selected');
+      divCardCurrent?.classList?.add('selected');
     }
     const c = { ...fplfbconfig};
     const initSearchModal: any = [];

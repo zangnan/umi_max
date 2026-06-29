@@ -17,7 +17,6 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjgl\xzrwg
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\sjgl\hgsjcx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\mbcx
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\hggl
-node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg\sjxz
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfp
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\ckfpkj
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz2
@@ -27,4 +26,5 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\fppzg
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\style.less
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\dzbapzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg
 pause

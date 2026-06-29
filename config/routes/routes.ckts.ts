@@ -251,42 +251,75 @@ export default [
       { name: '备案单证装订成册', path: '/hts/badz2/zdcc', component: './hts/badz2/zdcc' },
       { name: '资料管理', path: '/hts/badz2/zlgl', component: './hts/badz2/zlgl' },
     ] },
-  // 配置管理
-  {
-    name: '配置管理', id: '22', icon: 'CoffeeOutlined', path: '/hts/pzgl', routes: [
-      // { name: '电子税务局登录', path: '/hts/pzgl/dzswjpzgl', component: './hts/pzgl/dzswjpzgl' },
-      { name: '退税汇率管理', path: '/hts/pzgl/tshlgl', component: './hts/pzgl/tshlgl' },
-      { name: '客户信息管理', path: '/hts/pzgl/khxxgl', routes: [
-        { name: '受托/委托企业信息管理', path: '/hts/pzgl/khxxgl/stwtqyxxgl', component: './hts/pzgl/khxxgl/stwtqyxxgl' },
-        { name: '外商管理', path: '/hts/pzgl/khxxgl', routes: [
-          { name: '外商开票信息管理', path: '/hts/pzgl/khxxgl/wsgl', component: './hts/pzgl/khxxgl/wsgl' },
-          { name: '外商付汇关系管理', path: '/hts/pzgl/khxxgl/wsglwjj/wsfhgxgl', component: './hts/pzgl/khxxgl/wsglwjj/wsfhgxgl' },
+    // 配置管理
+    {
+      name: '配置管理', id: '22', icon: 'CoffeeOutlined', path: '/hts/pzgl', routes: [
+        // { name: '电子税务局登录', path: '/hts/pzgl/dzswjpzgl', component: './hts/pzgl/dzswjpzgl' },
+        { name: '退税汇率管理', path: '/hts/pzgl/tshlgl', component: './hts/pzgl/tshlgl' },
+        { name: '客户信息管理', path: '/hts/pzgl/khxxgl', routes: [
+          { name: '受托/委托企业信息管理', path: '/hts/pzgl/khxxgl/stwtqyxxgl', component: './hts/pzgl/khxxgl/stwtqyxxgl' },
+          { name: '外商管理', path: '/hts/pzgl/khxxgl', routes: [
+            { name: '外商开票信息管理', path: '/hts/pzgl/khxxgl/wsgl', component: './hts/pzgl/khxxgl/wsgl' },
+            { name: '外商付汇关系管理', path: '/hts/pzgl/khxxgl/wsglwjj/wsfhgxgl', component: './hts/pzgl/khxxgl/wsglwjj/wsfhgxgl' },
+          ] },
         ] },
-      ] },
-      { name: '发票配置管理', id: '2203', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fppzgl', component: './hts/pzgl/fppzgl' },
-      // { name: '数电配置管理', id: '2208', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/sdppzgl', routes: [
-      //   { name: '电局登录配置', id: '220801', pid: '2208', icon: 'UserOutlined', path: '/hts/pzgl/sdppzgl/djdlpz', component: './hts/pzgl/sdppzgl/djdlpz' },
+        { name: '发票配置管理', id: '2203', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fppzgl', component: './hts/pzgl/fppzgl' },
+        // { name: '数电配置管理', id: '2208', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/sdppzgl', routes: [
+        //   { name: '电局登录配置', id: '220801', pid: '2208', icon: 'UserOutlined', path: '/hts/pzgl/sdppzgl/djdlpz', component: './hts/pzgl/sdppzgl/djdlpz' },
+        // ] },
+        // { name: '进料核销配置管理', id: '2208', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/jlhxgl', component: './hts/pzgl/jlhxgl' },
+        { name: '单证备案配置管理', id: '2212', pid: '22', icon: 'ProfileOutlined', path: '/hts/pzgl/badzsz', component: './hts/badz2/badzsz' },
+        { name: '监管方式码表管理', id: '2205', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/jgfsmbgl', component: './hts/pzgl/jgfsmbgl' },
+        { name: '海关IC卡管理', id: '2206', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/icCard', routes: [
+            { name: '海关IC卡管理', id: '220601', pid: '2206', icon: 'UserOutlined', path: '/hts/pzgl/icCard/icCardgl', component: './hts/pzgl/icCard/icCardgl' },
+            { name: '解除禁用IC卡', id: '220602', pid: '2206', icon: 'ProfileOutlined', path: '/hts/pzgl/icCard/icCardjy', component: './hts/pzgl/icCard/icCardjy' },
+            { name: '海关IC卡操作日志', id: '220603', pid: '2206', icon: 'HomeOutlined', path: '/hts/pzgl/icCard/icCardrz', component: './hts/pzgl/icCard/icCardrz' },
+          ]
+        },
+        // { name: '智能配单配置管理', id: '2207', pid: '22', icon: 'FormOutlined', path: '/hts/pzgl/znpdpzgl', routes: [
+        //     { path: '/hts/pzgl/znpdpzgl', redirect: '/hts/pzgl/znpdpzgl/zdpppzgl', id: '2200', pid: '22' },
+        //     { name: '自动匹配配置管理', id: '220701', pid: '2207', icon: 'UserOutlined', path: '/hts/pzgl/znpdpzgl/zdpppzgl', component: './hts/pzgl/znpdpzgl/zdpppzgl' },
+        //   ]
+        // },
+        // { path: '/hts/pzgl/dsrw', id: '2211', pid: '22', name: '数据定时下载管理', icon: 'RobotOutlined', component: './hts/pzgl/dsrw' },
+        // { name: '发票下载', id: '2213', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fpxz', component: './hts/pzgl/fpxz' },
+        // { name: '换汇成本管理', id: '2212', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/hhcbgl', component: './hts/pzgl/hhcbgl' },
+        // { name: 'AI配单配置管理', id: '2215', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/aipdgl', component: './hts/pzgl/aipdgl' },
+        // { name: '超级配单配置管理', id: '2216', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/cjpdgl', component: './hts/pzgl/cjpdgl' },
+        // { name: '收汇数据定时匹配管理', id: '2214', pid: '22', icon: 'RobotOutlined', path: '/hts/pzgl/shsjdsppgl', component: './hts/pzgl/shsjdsppgl' },
+      ]
+    },
+    // 进料加工
+    { name: '进料加工核销', id: '11', icon: 'SendOutlined', path: '/hts/jljg', routes: [
+      // { name: '数据下载管理', id: '1101', pid: '11', icon: 'FundOutlined', path: '/hts/jljg/sjxz', routes: [
+      //   { name: '数据下载', id: '110101', pid: '1101', path: '/hts/jljg/sjxz/sjxz', component: './hts/jljg/sjxz/sjxz' },
+      //   { name: '进度查询', id: '110102', pid: '1101', path: '/hts/jljg/sjxz/jdcx', component: './hts/jljg/sjxz/jdcx' },
+      //   { name: '加贸海关数据查询', id: '110103', pid: '1101', path: '/hts/jljg/sjxz/hghxsjcx', routes: [
+      //       { name: '加工贸易手册数据', id: '11010301', pid: '110103', path: '/hts/jljg/sjxz/hghxsjcx/scxxcx', component: './hts/jljg/sjxz/hghxsjcx/scxxcx' },
+      //       { name: '加工贸易账册数据', id: '11010302', pid: '110103', path: '/hts/jljg/sjxz/hghxsjcx/zcxxcx', component: './hts/jljg/sjxz/hghxsjcx/zcxxcx' },
+      //       { name: '保税核注清单数据', id: '11010303', pid: '110103', path: '/hts/jljg/sjxz/hghxsjcx/jckhzqdcx', component: './hts/jljg/sjxz/hghxsjcx/jckhzqdcx' },
+      //       { name: '核销报关单数据', id: '11010304', pid: '110103', path: '/hts/jljg/sjxz/hghxsjcx/jckbgdcx', component: './hts/jljg/sjxz/hghxsjcx/jckbgdcx' },
+      //     ] },
+      //   { name: '加贸反馈数据查询', id: '110104', pid: '1101', path: '/hts/jljg/sjxz/jmfksjcx', icon: 'SnippetsOutlined', routes: [
+      //     { name: '已核销手册数据', id: '11010401', pid: '110104', path: '/hts/jljg/sjxz/jmfksjcx/scxxcx', component: './hts/jljg/sjxz/jmfksjcx/scxxcx' },
+      //     { name: '已核销账册数据', id: '11010402', pid: '110104', path: '/hts/jljg/sjxz/jmfksjcx/zcxxcx', component: './hts/jljg/sjxz/jmfksjcx/zcxxcx' },
+      //     { name: '已核销报关单数据', id: '11010403', pid: '110104', path: '/hts/jljg/sjxz/jmfksjcx/jckbgdcx', component: './hts/jljg/sjxz/jmfksjcx/jckbgdcx' },
+      //     { name: '免抵退出口明细数据', id: '11010404', pid: '110104', path: '/hts/jljg/sjxz/jmfksjcx/ckmxcx', component: './hts/jljg/sjxz/jmfksjcx/ckmxcx' },
+      //   ] },
       // ] },
-      // { name: '进料核销配置管理', id: '2208', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/jlhxgl', component: './hts/pzgl/jlhxgl' },
-      { name: '单证备案配置管理', id: '2212', pid: '22', icon: 'ProfileOutlined', path: '/hts/pzgl/badzsz', component: './hts/badz2/badzsz' },
-      { name: '监管方式码表管理', id: '2205', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/jgfsmbgl', component: './hts/pzgl/jgfsmbgl' },
-      { name: '海关IC卡管理', id: '2206', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/icCard', routes: [
-          { name: '海关IC卡管理', id: '220601', pid: '2206', icon: 'UserOutlined', path: '/hts/pzgl/icCard/icCardgl', component: './hts/pzgl/icCard/icCardgl' },
-          { name: '解除禁用IC卡', id: '220602', pid: '2206', icon: 'ProfileOutlined', path: '/hts/pzgl/icCard/icCardjy', component: './hts/pzgl/icCard/icCardjy' },
-          { name: '海关IC卡操作日志', id: '220603', pid: '2206', icon: 'HomeOutlined', path: '/hts/pzgl/icCard/icCardrz', component: './hts/pzgl/icCard/icCardrz' },
-        ]
-      },
-      // { name: '智能配单配置管理', id: '2207', pid: '22', icon: 'FormOutlined', path: '/hts/pzgl/znpdpzgl', routes: [
-      //     { path: '/hts/pzgl/znpdpzgl', redirect: '/hts/pzgl/znpdpzgl/zdpppzgl', id: '2200', pid: '22' },
-      //     { name: '自动匹配配置管理', id: '220701', pid: '2207', icon: 'UserOutlined', path: '/hts/pzgl/znpdpzgl/zdpppzgl', component: './hts/pzgl/znpdpzgl/zdpppzgl' },
-      //   ]
-      // },
-      // { path: '/hts/pzgl/dsrw', id: '2211', pid: '22', name: '数据定时下载管理', icon: 'RobotOutlined', component: './hts/pzgl/dsrw' },
-      // { name: '发票下载', id: '2213', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fpxz', component: './hts/pzgl/fpxz' },
-      // { name: '换汇成本管理', id: '2212', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/hhcbgl', component: './hts/pzgl/hhcbgl' },
-      // { name: 'AI配单配置管理', id: '2215', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/aipdgl', component: './hts/pzgl/aipdgl' },
-      // { name: '超级配单配置管理', id: '2216', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/cjpdgl', component: './hts/pzgl/cjpdgl' },
-      // { name: '收汇数据定时匹配管理', id: '2214', pid: '22', icon: 'RobotOutlined', path: '/hts/pzgl/shsjdsppgl', component: './hts/pzgl/shsjdsppgl' },
+      { name: '智能分析', id: '1102', pid: '11', path: '/hts/jljg/znfx', icon: 'ProfileOutlined', component: './hts/jljg/znfx' },
+      { name: '内部台账', id: '1103', pid: '11', path: '/hts/jljg/nbtzhd', icon: 'SaveOutlined', component: './hts/jljg/nbtzhd' },
+      { name: '核销申报数据管理', id: '1104', pid: '11', path: '/hts/jljg/mxcj', icon: 'ShopOutlined', component: './hts/jljg/mxcj' },
+      { name: '核销数据申报', id: '1105', pid: '11', path: '/hts/jljg/ckts/scsbsj/JLJG_MDTHX', icon: 'ScheduleOutlined', component: './hts/ckts/scsbsj/scsbsj', routes: [
+        { name: '进料加工业务免抵退税核销表', id: '110501', pid: '1105', path: '/hts/jljg/ckts/scsbsj/JLJG_MDTHX/SBMXCX_JLJG_01', component: './hts/jljg/mxcj/mdthx', hideInMenu: true },
+        { name: '已核销手（账）册海关数据调整表', id: '110502', pid: '1105', path: '/hts/jljg/ckts/scsbsj/JLJG_MDTHX/SBMXCX_JLJG_02', component: './hts/jljg/mxcj/yhxtz', hideInMenu: true },
+      ] },
+      { name: '申报进度查询', id: '1106', pid: '11', path: '/hts/jljg/ckts/sbsjcx/JLJG_MDTHX', icon: 'CreditCardOutlined', component: './hts/ckts/sbsjcx/sbsjcx' },
+      { name: '核销数据查询', id: '1107', pid: '11', path: '/hts/jljg/sbjgcx', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx' },
+      { name: '核销数据查询', id: '1108', pid: '11', path: '/hts/jljg/sbjgcxHmdthxF', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
+      { name: '核销数据查询', id: '1109', pid: '11', path: '/hts/jljg/sbjgcxHmdthxJ', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
+      { name: '核销数据查询', id: '1110', pid: '11', path: '/hts/jljg/sbjgcxHyhxtzJ', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
+      { name: '核销数据查询', id: '1111', pid: '11', path: '/hts/jljg/sbjgcxHyhxtzF', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
     ]
   },
   ] }
