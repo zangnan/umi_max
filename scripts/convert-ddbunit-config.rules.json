@@ -284,6 +284,17 @@
           "34": "       gridLeftClick({ ...param, record: {} }, (gridData && gridData[0]?.ppgzDm === '01') ? 'bgd' : 'sbpc');"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/shgl/shsdsj/drawer_gdfsxz.tsx",
+      "line": [
+        {
+          "114": "    unitRef?.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows"
+        },
+        {
+          "115": "    unitRef?.current?.setSelectionRows(checkRow);  // 设置SelectionRows"
+        }
+      ]
       
     }
   ],

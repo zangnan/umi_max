@@ -111,8 +111,8 @@ const DrawerForm: React.FC<BdjgProps> = ({
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    unitRef?.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    unitRef?.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   const close = async () => {
