@@ -321,6 +321,64 @@ export default [
       { name: '核销数据查询', id: '1110', pid: '11', path: '/hts/jljg/sbjgcxHyhxtzJ', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
       { name: '核销数据查询', id: '1111', pid: '11', path: '/hts/jljg/sbjgcxHyhxtzF', icon: 'GroupOutlined', component: './hts/jljg/sbjgcx', parentKeys: ['/hts/jljg/sbjgcx'], hideInMenu: true },
     ]
-  },
+    },
+    // AntD其他业务
+    { path: '/hts/qt/08', id: '08', name: 'AntD其他业务', icon: 'RadarChartOutlined', routes: [
+      // { path: '/hts/qt/08/0801/080101', id: '080101', pid: '08', name: '一类出口企业评定申请', component: './hts/template/template_step2', nav: 'QT_QTLYW_SK#出口企业分类管理#iconQT_YLCKQYPDSQ', routes: [
+      //   { path: '/hts/qt/08/0801/080101', redirect: '/qt/08/0801/080101/08010101/0801010101', id: '08010100', pid: '080101' },
+      //   { path: '/hts/qt/08/0801/080101/08010101', id: '08010101', pid: '080101', name: '明细数据采集', component: './hts/template/template_tab2', hideInMenu: true, routes: [
+      //     { path: '/hts/qt/08/0801/080101/08010101/0801010101', id: '0801010101', pid: '08010101', name: '出口退（免）税企业内部风险控制体系建设情况报告', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_QYNBFKTXJS_GCB' },
+      //     { path: '/hts/qt/08/0801/080101/08010101/0801010102', id: '0801010102', pid: '08010101', name: '生产型出口企业生产能力情况报告（生产）', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_SCXQYSCNLQK_GCB' }
+      //   ] },
+      //   { path: '/hts/qt/08/0801/080101/08010102', id: '08010102', pid: '080101', name: '数据申报（生产）', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_SCYLQYPD', routes: [
+      //     { path: '/hts/qt/08/0801/080101/08010102/SBMXCX_0801010201', id: '0801010201', pid: '08010102', name: '出口退（免）税企业内部风险控制体系建设情况报告', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_QYNBFKTXJS_GCB', hideInMenu: true },
+      //     { path: '/hts/qt/08/0801/080101/08010102/SBMXCX_0801010202', id: '0801010202', pid: '08010102', name: '生产型出口企业生产能力情况报告（生产）', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_SCXQYSCNLQK_GCB', hideInMenu: true },
+      //   ] },
+      //   { path: '/hts/qt/08/0801/080101/08010103', id: '08010103', pid: '080101', name: '数据申报（外贸）', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_WMYLQYPD', routes: [
+      //     { path: '/hts/qt/08/0801/080101/08010103/SBMXCX_0801010301', id: '0801010301', pid: '08010103', name: '出口退（免）税企业内部风险控制体系建设情况报告', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_QYNBFKTXJS_GCB', hideInMenu: true },
+      //   ] },
+      //   { path: '/hts/qt/08/0801/080101/08010104', id: '08010104', pid: '080101', name: '申报结果查询（生产）', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_SCYLQYPD' },
+      //   { path: '/hts/qt/08/0801/080101/08010105', id: '08010105', pid: '080101', name: '申报结果查询（外贸）', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_WMYLQYPD' },
+      // ] },
+      { path: '/hts/qt/08/0801/080102', id: '080102', pid: '08', name: '出口企业分类管理复评', component: './hts/template/template_step2', nav: 'QT_QTLYW_SK#出口企业分类管理#iconQT_FLGLFPSQ', routes: [
+        { path: '/hts/qt/08/0801/080102/08010201', id: '08010201', pid: '080102', name: '明细数据采集', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_QYGLLBFPPD_GCB', hideInMenu: true },
+        { path: '/hts/qt/08/0801/080102/08010202', id: '08010202', pid: '080102', name: '数据申报', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_FLGLFP', routes: [
+          { path: '/hts/qt/08/0801/080102/08010202/SBMXCX_0801020201', id: '0801020201', pid: '08010202', name: '出口企业分类管理复评申请表', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_QYGLLBFPPD_GCB', hideInMenu: true },
+        ] },
+        { path: '/hts/qt/08/0801/080102/08010203', id: '08010203', pid: '080102', name: '申报结果查询', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_FLGLFP' }
+      ] },
+      // { path: '/hts/qt/08/0802', id: '0802', pid: '08', name: '进货凭证信息回退', component: './hts/template/template_step2', icon: 'CreditCardOutlined', nav: 'QT_QTLYW_SK#其他业务管理#iconQT_JHPZXXHTSQ', routes: [
+      //   { path: '/hts/qt/08/0802', redirect: '/qt/08/0802/080201', id: '080200', pid: '0802' },
+      //   { path: '/hts/qt/08/0802/080201', id: '080201', pid: '0802', name: '明细数据采集', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_KSPZWGQWBTSHT_GCB', hideInMenu: true },
+      //   { path: '/hts/qt/08/0802/080202', id: '080202', pid: '0802', name: '数据申报', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_JHPZXXHT', routes: [
+      //     { path: '/hts/qt/08/0802/080202/SBMXCX_08020201', id: '08020201', pid: '080202', name: '进货凭证信息回退', component: './hts/dditax.ckts.from/QTYW___ZXSB_QT_KSPZWGQWBTSHT_GCB', hideInMenu: true },
+      //   ] },
+      //   { path: '/hts/qt/08/0802/080203', id: '080203', pid: '0802', name: '申报结果查询', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_JHPZXXHT' }
+      // ] },
+      // { path: '/hts/qt/08/0803', id: '0803', pid: '08', name: '出口信息查询', component: './hts/template/template_step2', icon: 'AreaChartOutlined', nav: 'QT_QTLYW_SK#其他业务管理#iconQT_CKTMSXXCX', routes: [
+      //   { path: '/hts/qt/08/0803', redirect: '/qt/08/0803/080301', id: '080300', pid: '0803' },
+      //   { path: '/hts/qt/08/0803/080301', id: '080301', pid: '0803', name: '明细数据采集', component: './hts/dditax.ckts.from/QTYW___ZXSB_SB_CKXXCX_GCB', hideInMenu: true },
+      //   { path: '/hts/qt/08/0803/080302', id: '080302', pid: '0803', name: '数据申报', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_CKXXCX', routes: [
+      //       { path: '/hts/qt/08/0803/080302/SBMXCX_08030201', id: '08030201', pid: '080302', name: '出口信息查询', component: './hts/dditax.ckts.from/QTYW___ZXSB_SB_CKXXCX_GCB', hideInMenu: true },
+      //     ] },
+      //   { path: '/hts/qt/08/0803/080303', id: '080303', pid: '0803', name: '申报结果查询', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_CKXXCX' }
+      // ] },
+      // { path: '/hts/qt/08/0804', id: '0804', pid: '08', name: '企业撤回退（免）税申报（生产）', component: './hts/template/template_step2', icon: 'SendOutlined', nav: 'QT_QTLYW_SK#其他业务管理#iconQT_QYCHSBSJ', routes: [
+      //   { path: '/hts/qt/08/0804', redirect: '/qt/08/0804/080401', id: '080400', pid: '0804' },
+      //   { path: '/hts/qt/08/0804/080401', id: '080401', pid: '0804', name: '明细数据采集', component: './hts/dditax.ckts.from/QTYW_SC___ZXSB_SB_QYCHSBSJ_GCB', hideInMenu: true },
+      //   { path: '/hts/qt/08/0804/080402', id: '080402', pid: '0804', name: '数据申报', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_QYCHSB', routes: [
+      //     { path: '/hts/qt/08/0804/080402/SBMXCX_08040201', id: '08040201', pid: '080402', name: '企业撤回退（免）税申报申请表（生产）', component: './hts/dditax.ckts.from/QTYW_SC___ZXSB_SB_QYCHSBSJ_GCB', hideInMenu: true },
+      //   ] },
+      //   { path: '/hts/qt/08/0804/080403', id: '080403', pid: '0804', name: '申报结果查询', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_QYCHSB' }
+      // ] },
+      // { path: '/hts/qt/08/0805', id: '0805', pid: '08', name: '企业撤回退（免）税申报（外贸）', component: './hts/template/template_step2', icon: 'SendOutlined', nav: 'QT_QTLYW_SK#其他业务管理#iconQT_QYCHSBSJ', routes: [
+      //   { path: '/hts/qt/08/0805', redirect: '/qt/08/0805/080501', id: '080500', pid: '0805' },
+      //   { path: '/hts/qt/08/0805/080501', id: '080501', pid: '0805', name: '明细数据采集', component: './hts/dditax.ckts.from/QTYW_WM___ZXSB_SB_QYCHSBSJ_GCB', hideInMenu: true },
+      //   { path: '/hts/qt/08/0805/080502', id: '080502', pid: '0805', name: '数据申报', component: './hts/ckts/scsbsj/scsbsj', hideInMenu: true, ywKey: 'QTYW_QYCHSB', routes: [
+      //       { path: '/hts/qt/08/0805/080502/SBMXCX_08050201', id: '08050201', pid: '080502', name: '企业撤回退（免）税申报申请表（外贸）', component: './hts/dditax.ckts.from/QTYW_WM___ZXSB_SB_QYCHSBSJ_GCB', hideInMenu: true },
+      //     ] },
+      //   { path: '/hts/qt/08/0805/080503', id: '080503', pid: '0805', name: '申报结果查询', component: './hts/ckts/sbsjcx/sbsjcx', hideInMenu: true, ywKey: 'QTYW_QYCHSB' }],
+      // } 
+    ] },
   ] }
 ];

@@ -27,4 +27,5 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\style
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\dzbapzgl
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\template
 pause
