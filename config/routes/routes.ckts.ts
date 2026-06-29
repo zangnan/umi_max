@@ -1,5 +1,19 @@
 export default [
   { name: '慧退税', path: '/hts', icon: 'HomeOutlined', routes: [
+    // 权限管理
+    { name: '权限管理', id: '21', icon: 'DeploymentUnitOutlined', path: '/hts/qxgl', routes: [
+      { name: '用户管理', id: '2101', pid: '21', icon: 'UserOutlined', path: '/hts/qxgl/yh', component: './hts/qxgl/yh' },
+      { name: '企业管理', id: '2102', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qy', component: './hts/qxgl/qy' },
+      { name: '角色管理', id: '2103', pid: '21', icon: 'SecurityScanOutlined', path: '/hts/qxgl/js', component: './hts/qxgl/js' },
+      { name: '菜单管理', id: '2104', pid: '21', icon: 'ProfileOutlined', path: '/hts/qxgl/cd', component: './hts/qxgl/cd' },
+      { name: '权限组管理', id: '2105', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qxz', component: './hts/qxgl/qxz' },
+      { name: '渠道管理', id: '2106', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qd', component: './hts/qxgl/qd' },
+      { name: '资源管理', id: '2107', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/zy', component: './hts/qxgl/zy' },
+      { name: '后端服务管理', id: '2108', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/fw', component: './hts/qxgl/fw' },
+      { name: 'API服务管理', id: '2109', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/api', component: './hts/qxgl/api' },
+      { name: '企业配置管理', id: '2109', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qypzgl', component: './hts/qxgl/qypzgl' },
+      { name: '菜单分组管理', id: '2111', pid: '21', icon: 'ProfileOutlined', path: '/hts/qxgl/cdfz', component: './hts/qxgl/cdfz' },
+    ] },
     // 数据管理
     { name: '数据管理', path: '/hts/02', icon: 'BookOutlined', routes: [
       // { path: '/hts/02/0201', name: '任务管理', icon: 'FileProtectOutlined', component: './hts/sjgl/xzrwgl/jdcx' },

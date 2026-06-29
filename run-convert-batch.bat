@@ -28,4 +28,5 @@ node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\pzgl\dzbap
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\badz
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\jljg
 node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\template
+node scripts/copy-from-code-sample.js --src code_sample\src\pages\hts\qxgl
 pause
