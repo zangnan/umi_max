@@ -834,7 +834,7 @@ const Fp: React.FC<unknown> = () => {
       card.classList.remove('selected');
     });
     const divCardCurrent: any = document.querySelector(".fpsqd_item" + index);
-    divCardCurrent.classList.add('selected');
+    divCardCurrent?.classList?.add('selected');
 
     const param: any = { fpsqduuid: item.fpsqduuid };
     sqdmxcx(param);
@@ -853,7 +853,7 @@ const Fp: React.FC<unknown> = () => {
         if (hwxxList.length > 0) {
           const tmpHwxxList: any = [];
           hwxxList.forEach((item: any) => {
-            item.uuid = myUtil.getUUID(32);
+            item.uuid = myUtil.text.uuid(32);
             tmpHwxxList.push(item);
           });
           if (tmpHwxxList.length < 8) {
@@ -867,7 +867,7 @@ const Fp: React.FC<unknown> = () => {
         if (bgdxxList?.length > 0) {
           const tmpBgdxxList: any = [];
           bgdxxList.forEach((item: any) => {
-            item.uuid = myUtil.getUUID(32);
+            item.uuid = myUtil.text.uuid(32);
             if (item.children) {
               item.children.forEach((item1: any) => {
                 delete item1.bgdhgbh;
@@ -981,7 +981,7 @@ const Fp: React.FC<unknown> = () => {
         const tmptzData: any = [];
         const tmptzMxData: any = [];
         body.forEach((item: any) => {
-          const uuid = myUtil.getUUID(32);
+          const uuid = myUtil.text.uuid(32);
           item.uuid = uuid;
           item.gmfjzfpsqduuid = item.fpsqduuid;
           item.fpzlDm1 = checkedList[0].fpzlDm1;

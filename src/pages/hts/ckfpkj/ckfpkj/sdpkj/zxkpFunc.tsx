@@ -25,7 +25,7 @@ ckfpFunc.columnUpdate = (param: any, event: any) => {
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
-        item.uuid = myUtil.getUUID(32);
+        item.uuid = myUtil.text.uuid(32);
         // je是未税金额，dj是未税单价 需要保存返回后台 
         item.wsje = item.je;
         item.wsdj = item.dj;

@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { List, Skeleton, Tabs, Checkbox, Space, Button, Dropdown, Menu, message, Spin, Popover, Form, Input, Drawer, Tooltip } from 'antd';
 import { DownOutlined, FullscreenOutlined, FullscreenExitOutlined, WarningOutlined } from '@ant-design/icons';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 import ProCard from '@ant-design/pro-card';
 import Invoice from '@/pages/hts/components/DDdocs/Invoice';
 import DDAlert from '@/pages/hts/commonModule/DDAlert';
@@ -611,7 +611,7 @@ const Fp: React.FC<unknown> = () => {
       card.classList.remove('selected');
     });
     const divCardCurrent: any = document.querySelector(".fpsqd_item" + index);
-    divCardCurrent.classList.add('selected');
+    divCardCurrent?.classList?.add('selected');
 
     const param: any = { fpsqduuid: item.fpsqduuid };
     sqdmxcx(param);
@@ -630,7 +630,7 @@ const Fp: React.FC<unknown> = () => {
         if (hwxxList.length > 0) {
           const tmpHwxxList: any = [];
           hwxxList.forEach((item: any) => {
-            item.uuid = myUtil.getUUID(32);
+            item.uuid = myUtil.text.uuid(32);
             tmpHwxxList.push(item);
           });
           if (tmpHwxxList.length < 8) {
@@ -644,7 +644,7 @@ const Fp: React.FC<unknown> = () => {
         if (bgdxxList?.length > 0) {
           const tmpBgdxxList: any = [];
           bgdxxList.forEach((item: any) => {
-            item.uuid = myUtil.getUUID(32);
+            item.uuid = myUtil.text.uuid(32);
             if (item.children) {
               item.children.forEach((item1: any) => {
                 delete item1.bgdhgbh;
@@ -759,7 +759,7 @@ const Fp: React.FC<unknown> = () => {
         const tmptzData: any = [];
         const tmptzMxData: any = [];
         body.forEach((item: any) => {
-          const uuid = myUtil.getUUID(32);
+          const uuid = myUtil.text.uuid(32);
           item.uuid = uuid;
           item.gmfjzfpsqduuid = item.fpsqduuid;
           item.fpzlDm1 = checkedList[0].fpzlDm1;
@@ -1141,14 +1141,14 @@ const Fp: React.FC<unknown> = () => {
         marginBottom: '20px',
       }}
     >
-      <InfiniteScroll
+      {/* <InfiniteScroll
         dataLength={data.length}
         next={gdloadMoreData}
         hasMore={data.length < maxRowCount}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         // endMessage={<Divider plain>It is all, nothing more</Divider>}
         scrollableTarget="scrollableDiv"
-      >
+      > */}
         <Checkbox.Group value={checkedList} onChange={onChange}>
           <List
             dataSource={data}
@@ -1186,7 +1186,7 @@ const Fp: React.FC<unknown> = () => {
             )}
           />
         </Checkbox.Group>
-      </InfiniteScroll>
+      {/* </InfiniteScroll> */}
     </div>
   </div>;
 

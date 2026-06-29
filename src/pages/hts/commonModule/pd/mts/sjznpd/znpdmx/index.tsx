@@ -239,7 +239,7 @@ const Znpdmx: React.FC<ZnpdmxProps> = ({
       card.classList.remove('selected');
     });
     const divCardCurrent: any = document.querySelector(".fpsqd_item" + index);
-    divCardCurrent.classList.add('selected');
+    divCardCurrent?.classList?.add('selected');
     setMyConfig(null);
     const c = { ...config };
     const initSearchModal = [];

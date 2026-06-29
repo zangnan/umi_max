@@ -452,7 +452,7 @@ drmbkjFunc.sdcjkj = (param: any) => {
         unitRef.current!.setMasker(false);
         if (code === '200') {
           otherRef[1].current!.setDjh(body);
-          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.getUUID(32) }] }, false, unitRef);
+          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.text.uuid(32) }] }, false, unitRef);
         }
       })
     }
@@ -470,7 +470,7 @@ drmbkjFunc.openFp = (djh: any, param: any) => {
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
-        item.uuid = myUtil.getUUID(32);
+        item.uuid = myUtil.text.uuid(32);
         // je是未税金额，dj是未税单价 需要保存返回后台 
         item.wsje = item.je;
         item.wsdj = item.dj;

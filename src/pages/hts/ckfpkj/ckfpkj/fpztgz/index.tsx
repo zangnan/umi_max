@@ -2,6 +2,7 @@
  * title: 发票开具管理-主页面
  * author: yxy
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useState, useRef, useImperativeHandle } from 'react'; 
 import lzfpConfig from './lzfpConfig';// 蓝字发票
 import hzfpConfig from './hzfpConfig';// 红字发票
@@ -502,7 +503,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
   if (history?.location?.pathname?.indexOf('/ckfpkj/fpztgz') > -1) { 
     // 蓝字
     Promise.all([]).then(async () => {
-      const res = await myUtil.code.getTsbz();
+      const res = await cktsUtil.code.getTsbz();
       if (res.code == '200' && res.body?.czbz == 'Y') {
         setCzbz("Y");
       }});

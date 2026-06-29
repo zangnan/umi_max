@@ -339,7 +339,7 @@ const DzglImport: React.FC<DzglImportProps> = ({ onRef, gnmk, visible = false })
     // 预览时显示原图
     file.fjwjm = name;
     file.fjxx = await getBase64(file);
-    file.fjuuid2 = myUtil.getUUID();
+    file.fjuuid2 = myUtil.text.uuid();
     return false;
   }
 
@@ -421,7 +421,7 @@ const DzglImport: React.FC<DzglImportProps> = ({ onRef, gnmk, visible = false })
     const le = newFileList?.length - 1;
     newFileList[le].fjgsDm = newFileList[le].type == 'application/pdf' ? '1' : '2';
     if (newFileList[le].type != 'application/pdf') {
-      newFileList[le].fjuuid2 = myUtil.getUUID();
+      newFileList[le].fjuuid2 = myUtil.text.uuid();
       setFileList(newFileList);
     } else {
       setFileList(newFileList);

@@ -2,7 +2,7 @@ import { request, history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message } from 'antd';
-import { xj, getOneTimeToken, downloadGet, downloadUrlPost, downloadUrlList } from '@/pages/hts/services/htsApi';
+import { xj, getOneTimeToken, downloadGet, downloadUrlPost, downloadUrlList, sfczdlzfp } from '@/pages/hts/services/htsApi';
 
 const cktsUtil: any = {};
 
@@ -299,8 +299,8 @@ cktsUtil.api = {
   async loginOauth(username: string): Promise<boolean> {
     try {
       const OAUTH_BASE = `${API_URL_HTS}/hx/qx/token/oauth`;
-      // const baseParams = { clientId: '1', d1zh: 'dGVzdF9zYw==', d1mm: 'MTIzNDU2' };
-      const baseParams = { clientId: '1', d1zh: 'dGVzdF9rcA==', d1mm: 'MTIzNDU2' };
+      const baseParams = { clientId: '1', d1zh: 'dGVzdF9zYw==', d1mm: 'MTIzNDU2' };
+      // const baseParams = { clientId: '1', d1zh: 'dGVzdF9rcA==', d1mm: 'MTIzNDU2' };
       const baseHeaders = { 'Content-Type': 'application/json' };
 
       // 第一步：获取企业列表 qxQysSaas，取第一个 sbqyuuid
@@ -1186,6 +1186,13 @@ cktsUtil.grid = {
     }
     return tmp;
   }
+}
+
+cktsUtil.code = {
+  async getTsbz() {
+    const result = await sfczdlzfp({});
+    return result;
+  },
 }
 
 export default cktsUtil;

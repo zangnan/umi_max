@@ -564,7 +564,7 @@ const Fpsqdtz: React.FC<FpsqdtzProps> = ({
   // 拆分后重新组装数据
   const dealCfData = () => {
     // 新增主表数据
-    const zbuuid = myUtil.getUUID(32);
+    const zbuuid = myUtil.text.uuid(32);
     const tmpZzDjh = zzDjh;
     const djbh = '****************' + myUtil.text.leadingZeroize(tmpZzDjh, 4);
     setZzDjh(tmpZzDjh + 1);

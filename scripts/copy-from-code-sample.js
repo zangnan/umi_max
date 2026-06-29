@@ -2300,8 +2300,8 @@ function processTypeA(srcFile, dstFile, args) {
 
 /**
  * 类型 e: less 文件 → 含有 "@/assets/css/config.less" 的行注释掉，
- *                       含有 "@font_color" 的行也注释掉（保留缩进），
- *                       含有 "@primary_" 的行也注释掉（保留缩进），
+ *                       含有 "@font_color" / "@primary_" / "@base_font_"
+ *                       / ".png')" 的行也注释掉（保留缩进），
  *                       并删除 "@import '~antd/lib/style/themes/default.less';"
  */
 function processTypeE(srcFile, dstFile) {
@@ -2322,7 +2322,10 @@ function processTypeE(srcFile, dstFile) {
         return '// 新系统迁移时注释\n// ' + line;
       }
       if (
-        (/@font_color/.test(line) || /@primary_/.test(line)) &&
+        (/@font_color/.test(line) ||
+          /@primary_/.test(line) ||
+          /@base_font_/.test(line) ||
+          /\.png'\)/.test(line)) &&
         !line.trim().startsWith('//')
       ) {
         modified = true;

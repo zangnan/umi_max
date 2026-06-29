@@ -1550,3 +1550,42 @@ HTS 服务端的查询端点，否则列表查不到数据。
 **已知限制**（与本轮一致）：
 - 字符串/注释里的 token 检测范围未做（与 `extractSymbolTokens` 同款简化）
 - 13 条 fun 生成规则的边界条件已在各自章节详述
+
+## 待提交变更（2026-06-29）
+
+### processTypeE：less 文件新增 2 条行注释规则
+
+**背景**：`scripts/copy-from-code-sample.js` 的 `processTypeE` 已有 4 类 less 行注释规则
+（`@/assets/css/config.less` 整行注释 + `@font_color` / `@primary_` 行注释 +
+删除 `@import '~antd/lib/style/themes/default.less';`）。本次按用户最新指示新增 2 条
+同款规则（保留缩进）：
+
+| # | 规则 | 触发 | 效果 |
+|---|---|---|---|
+| 1 | `@base_font_` 行注释 | 任意行含 `@base_font_` | 行首加 `// `（保留缩进）|
+| 2 | `.png')` 行注释 | 任意行含 `.png')`（如 `url('~@/assets/css/img/bookBg.png')`）| 行首加 `// `（保留缩进）|
+
+**示例**：
+```less
+font-size: @base_font_12x  !important;
+background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+```
+↓
+```less
+// font-size: @base_font_12x  !important;
+// background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
+```
+
+**关键设计点**（与现有 `@font_color` / `@primary_` 一致）：
+- 合并到现有 `if ((@font_color || @primary_ || @base_font_ || .png') ...)` 单个 if 分支
+- `&& !line.trim().startsWith('//')` 保护已注释行（避免重复嵌套 `// //`）
+- 保留原缩进：`` `${indent}// ${line.trim()}` ``
+- 处理顺序在 `applyContentReplaces(less)` 之前，rules.replace.less 仍可继续生效
+- 函数顶部 JSDoc 同步更新（`@font_color` / `@primary_` → 加 `@base_font_` / `.png')`）
+
+**改动文件**：[scripts/copy-from-code-sample.js:2301-2337](scripts/copy-from-code-sample.js#L2301)
+
+**已知限制**（用户决策接受，与现有 4 规则一致）：
+- 不区分 `//` 单行注释 vs `/* */` 块注释；块注释内的 `@base_font_` / `.png')` 也可能被误注释（codebase 实际数据无此场景）
+- `.png')` 严格按 `')` 结尾匹配（与用户示例 `url('~...png')` 一致）；不带 `')` 结尾的 `.png` 引用不受影响
+- 不处理 `url("...png")` 双引号形式（与本规则 `')` 触发条件不匹配；如未来需要可扩展）

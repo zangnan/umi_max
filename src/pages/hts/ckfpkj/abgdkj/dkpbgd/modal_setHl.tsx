@@ -67,7 +67,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
     }).finally(() => {
       const newData = param;
       newData.forEach((item: any) => {
-        item.uuid = myUtil.getUUID(32);
+        item.uuid = myUtil.text.uuid(32);
       });
       setHlData(newData);
       const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');

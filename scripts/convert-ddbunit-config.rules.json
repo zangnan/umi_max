@@ -206,6 +206,22 @@
       {
         "old": "import DDFormList from '@/components/DDForm/DDFormList';",
         "new": "import DDFormList from '@/pages/hts/components/DDForm/DDFormList';"
+      },
+      {
+        "old": "getCodeFromServerT2",
+        "new": "getCodeFromServerT1"
+      },
+      {
+        "old": "divCardCurrent.classList.",
+        "new": "divCardCurrent?.classList?."
+      },
+      {
+        "old": "myUtil.getUUID(",
+        "new": "myUtil.text.uuid("
+      },
+      {
+        "old": "myUtil.code.getTsbz()",
+        "new": "cktsUtil.code.getTsbz()"
       }
     ],
     "less": [

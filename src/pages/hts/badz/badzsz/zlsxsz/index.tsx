@@ -178,7 +178,7 @@ const DDColumn: React.FC<DDColumnProps> = ({
           const ssjvalue = getFjdValue(row.sjbadzlxDm);
           const ssjTitle = myUtil.getTreeName(dataAllls, ssjvalue);
           body.rows[key].balx = ssjTitle;
-          const uuid = myUtil.getUUID(32);
+          const uuid = myUtil.text.uuid(32);
           body.rows[key].uuid = uuid;
         });
         setDelList([]);
@@ -478,7 +478,7 @@ const DDColumn: React.FC<DDColumnProps> = ({
   // 添加凭证
   const tjpz = () => {
     const grid = [...gridData];
-    const uuid = myUtil.getUUID(32);
+    const uuid = myUtil.text.uuid(32);
     grid.push({ balx: '', dzlx: '', badzlxDm: '', badzlxmc: '', sfkbjbz: 'Y', sjbadzlxDm: '', xh: '', xybz: 'Y', yzjdbz: 'Y', uuid: uuid, flag: true });
     setGridData(grid);
     document.getElementById("divIdsss")?.scrollIntoView();

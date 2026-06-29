@@ -25,7 +25,7 @@ const index: React.FC<unknown> = () => {
   useEffect( () => {
     // 台账筛选
     delTzsx({ cdDm: '26030101' }).then(() => { });
-    Promise.all([myUtil.code.getCodeFromServerT2('code_dm_ckts_cktmsywlx', '04')]).then(() => {
+    Promise.all([myUtil.code.getCodeFromServerT1('code_dm_ckts_cktmsywlx:04')]).then(() => {
     }).catch(() => {
       message.error('获取码表失败');
     }).finally(() => {
