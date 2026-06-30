@@ -1656,3 +1656,57 @@ background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
 - `staticTableCode` 路径（`commonModule/staticTableCode`）不在本次范围 —— R7/R12 规则未调整
 - `cjpzUtil` → `cktsUtil` 改写（规则 11）已在新路径下仍工作 —— 不影响
 - Windows FS 不区分大小写，所以 `ddbunit2_ckts` vs `DDBunit2_ckts` 在 Windows 上无问题；Linux/macOS CI 必须严格匹配 PascalCase
+
+## 待提交变更（2026-06-30）
+
+### R13b 自愈分支：处理 stale code_sample ref 文件已含旧目标路径
+
+**背景**：上一轮 cc3b54f 改完规则后，重新跑 `node scripts/copy-from-code-sample.js --src code_sample\...\MDT___ZXSB_SB_MDT_SYYK_GCB` 时发现生成文件 line 6 仍是 `commonModule/ddbunit2_ckts/DDBunit2_CKTS`。但跑同目录的 `MDT___ZXSB_SB_MDT_STZC_GCB` 正常。
+
+**根因**：脚本 R13 规则（[scripts/copy-from-code-sample.js:2092-2096](scripts/copy-from-code-sample.js#L2092-L2096) + [scripts/convert-ddbunit-config.js:2828-2833](scripts/convert-ddbunit-config.js#L2828-L2833)）**只匹配源端 `@/components/DDBunit/DDBunit2`**，不匹配"已经重写过的旧目标"。
+
+数据扫描（[code_sample/src/pages/hts/dditax.ckts.from/](code_sample/src/pages/hts/dditax.ckts.from/)）：
+
+| ref 内容 | 数量 | 行为 |
+|---|---|---|
+| `import DDBunit2 from '@/components/DDBunit/DDBunit2';`（源端）| 60+ | R13 匹配 → 重写为 `components/DDBunit2_ckts/DDBunit2_CKTS` ✓ |
+| `import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';`（已重写过的旧目标）| **1**（`MDT___ZXSB_SB_MDT_SYYK_GCB/index.tsx`）| R13 不匹配 → 原样拷贝 ✗ |
+
+只有那 1 个 ref 文件 line 6 早就"固化"了旧目标路径（早于 cc3b54f 规则改动），现在重跑时规则不再回溯处理。`MDT___ZXSB_SB_MDT_STZC_GCB` ref 用源端模式 → R13 能匹配 → 正确生成新路径。
+
+**改动**：给 R13 加一条 R13b "自愈"分支（与 R13 平行，输出同一目标）：
+
+- 源端 → 新目标（R13，原有）：
+  ```
+  import DDBunit2 from '@/components/DDBunit/DDBunit2';
+  ```
+- 旧目标 → 新目标（R13b，新增）：
+  ```
+  import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+  ```
+- 两者都重写为：
+  ```
+  import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
+  ```
+
+**关键设计点**：
+- **不动 DDAlert / DDImport 规则**：扫描全 `code_sample/` 0 处命中旧 `commonModule/DDAlert` / `commonModule/DDImport`，所以 R5 / R17 不需要加自愈分支
+- **不动 code_sample ref 文件**：脚本侧修复最稳健；未来若有其他 ref 文件被"提前固化"旧路径也能自愈
+- **大小写严格**：R13b 正则用小写 `ddbunit2_ckts`（与 code_sample 文件内容一致），输出目标用 PascalCase `DDBunit2_ckts`（与磁盘 components/ 目录一致）
+- **幂等**：R13b 输出已是新目标，不匹配自身；与 R13 串联无冲突
+- **两脚本平行改**：保持既有"R13 同时存在于 copy-from-code-sample.js / convert-ddbunit-config.js"的约定
+
+**改动文件**：
+
+1. **[scripts/copy-from-code-sample.js:2092-2100](scripts/copy-from-code-sample.js#L2092-L2100)** —— R13 后追加 R13b
+2. **[scripts/convert-ddbunit-config.js:2828-2842](scripts/convert-ddbunit-config.js#L2828-L2842)** —— `normalizeDDBunit2Import` 改为双 `.replace` 链 + JSDoc 同步更新
+
+**端到端验证**：
+- 用户命令：`node scripts/copy-from-code-sample.js --src code_sample/src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_SYYK_GCB`
+- 生成文件 line 6 = `import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';` ✓
+
+**测试**：`npm run test:convert-config` → 22 通过 / 4 失败（无回归）；`npm run test:special-line` → 8 通过。
+
+**已知限制**（用户决策接受）：
+- 仅处理默认导入 `import DDBunit2 from ...;`（命名导入 / `import *` 不在范围；codebase 无此用法）
+- 不动 ref 源文件 —— 若用户后续希望同步，可单独跑一次性脚本

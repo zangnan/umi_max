@@ -2095,6 +2095,13 @@ function applyCopyRewrites(content, srcFile) {
     "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
   );
 
+  // R13b: '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS'（已重写过的旧目标）→ '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS'
+  //   处理 code_sample ref 文件已含旧目标路径的"stale ref"场景（ref 早于本轮规则改动时固化）
+  text = text.replace(
+    /^[ \t]*import\s+DDBunit2\s+from\s+['"]@\/pages\/hts\/commonModule\/ddbunit2_ckts\/DDBunit2_CKTS['"]\s*;?[ \t]*$/gm,
+    "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
+  );
+
   // R15: '@/pages/common/cktsUtil' (default 导入) → '@/pages/hts/cktsUtil'
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/cktsUtil['"]\s*;?[ \t]*$/gm,

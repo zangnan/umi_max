@@ -10,7 +10,6 @@ import { Base64 } from 'js-base64';
 import myUtil from '@/components/DDAssist/util';
 // import logo from '@/assets/css/img/logo_rpa.png';
 import CONSTANTS from '@/components/DDAssist/constants';
-import cktsUtil from '@/pages/hts/cktsUtil';
 import './index.less';
 import nbglxtUtil from '@/pages/nbglxt/common/nbglxtUtil';
 
@@ -61,10 +60,6 @@ export default () => {
         await fetchUserInfo();
         await nbglxtUtil.app.init();
         const urlParams = new URL(window.location.href).searchParams;
-        // ====== 业务附加：oauth 两步调用，写 accessToken 至 localStorage ======
-        // 逻辑封装在 cktsUtil.api.loginOauth 中（详见该方法注释）
-        await cktsUtil.api.loginOauth(values.username);
-        // =============================================================
         history.push(urlParams.get('redirect') || '/');
         if (ENV_TYPE === 'node') {
           history.push(urlParams.get('redirect') || CONSTANTS.ROUTE.ROUTE_LOGIN_REDIRECT_DEFAULT_DC);

@@ -2818,18 +2818,28 @@ function stripGridParamsBlock(text) {
 
 /**
  * index 路径专属 import 改写：把 DDBunit2 老路径归一为 ckts 项目内版本。
- * 规则 A.12：`import DDBunit2 from '@/components/DDBunit/DDBunit2';`
+ * 规则 A.12（R13）：`import DDBunit2 from '@/components/DDBunit/DDBunit2';`
  *   → `import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';`
+ * 规则 A.13（R13b）：`import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';`
+ *   → `import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';`
+ *   （处理 code_sample ref 文件已含旧目标路径的"stale ref"场景）
  * silent fallback：ref 不含 DDBunit2 import / 已是新路径 → 原样保留
  *
  * @param {string} content  ref 文件全文
  * @returns {string}  改写后文本
  */
 function normalizeDDBunit2Import(content) {
-  return content.replace(
+  // 源端 → 新目标（R13）
+  content = content.replace(
     /^import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
     "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
   );
+  // 旧目标 → 新目标（R13b：处理 stale ref）
+  content = content.replace(
+    /^import\s+DDBunit2\s+from\s+['"]@\/pages\/hts\/commonModule\/ddbunit2_ckts\/DDBunit2_CKTS['"]\s*;?[ \t]*$/gm,
+    "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
+  );
+  return content;
 }
 
 /**
