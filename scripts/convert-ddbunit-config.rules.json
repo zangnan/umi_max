@@ -222,6 +222,14 @@
       {
         "old": "myUtil.code.getTsbz()",
         "new": "cktsUtil.code.getTsbz()"
+      },
+      {
+        "old": "@/components/DDtile/tile_group",
+        "new": "@/pages/hts/components/DDtile/tile_group"
+      },
+      {
+        "old": "@/pages/user/Login/companyModal",
+        "new": "@/pages/hts/user/Login/companyModal"
       }
     ],
     "less": [
