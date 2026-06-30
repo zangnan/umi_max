@@ -4,7 +4,7 @@
  */
 import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import { List, Skeleton, message, Spin, Popover, Form, Input, Space, Button, Modal, Drawer } from 'antd';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import ProCard from '@ant-design/pro-card';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import { queryZnpdmxSjxqList, mtsZnpdmxFqpd, queryMtsZnpdSbxx, mtsZnpdmxScmx, queryMtsZnpdmxTsxx, exportPager, checkZnpdSbxx } from '@/pages/hts/services/htsApi';
@@ -367,13 +367,13 @@ const Znpdmx: React.FC<ZnpdmxProps> = ({
         height: myUtil.heightCalc.getCalc(['header', 'cardMargin', '73px', '40px', '20px', '20px']),// header cardMargin 73搜索栏 40工具栏 40工具栏 20padding
         overflow: 'auto',
       }}>
-        {/* <InfiniteScroll
+        <InfiniteScroll
           dataLength={data.length}
           next={gdloadMoreData}
           hasMore={data.length < maxRowCount}
           loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
           scrollableTarget="scrollableDiv"
-        > */}
+        >
           <List
             dataSource={data}
             renderItem={(item: any, index: number) => (
@@ -409,7 +409,7 @@ const Znpdmx: React.FC<ZnpdmxProps> = ({
               </List.Item>
             )}
           />
-        {/* </InfiniteScroll> */}
+        </InfiniteScroll>
     </div>
   </>;
 

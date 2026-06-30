@@ -11,16 +11,16 @@ import smyStyles from './smyStyless.less';
 import myUtil from '@/components/DDAssist/util';
 import { MenuUnfoldOutlined, MenuFoldOutlined, MoreOutlined, CameraOutlined, EyeOutlined, DeleteOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { CloseOutlined, RedoOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, FullscreenExitOutlined, SnippetsOutlined, PictureOutlined } from "@ant-design/icons";
-// import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
+import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 
 const { TreeNode } = TreeSelect;
 
-// const SortableContainer = sortableContainer(({ children }) => {
-//   return <div>{children}</div>;
-// });
+const SortableContainer = sortableContainer(({ children }) => {
+  return <div>{children}</div>;
+});
 
 export interface DzglSmyProps {
   onRef?: any;
@@ -285,40 +285,40 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
   }
 
 
-  // const SortableItem = sortableElement(({ value, xh }) => {
-  //   let es = <div className={smyStyles.dd_badz_card_pdf}></div>;
-  //   if(moduel && moduel === 'badz') {
-  //     es = <div className={smyStyles.dd_badz_card_pdf2}></div>;
-  //   } else {
-  //     es = <div className={smyStyles.dd_badz_card_pdf}></div>;
-  //   }
+  const SortableItem = sortableElement(({ value, xh }) => {
+    let es = <div className={smyStyles.dd_badz_card_pdf}></div>;
+    if(moduel && moduel === 'badz') {
+      es = <div className={smyStyles.dd_badz_card_pdf2}></div>;
+    } else {
+      es = <div className={smyStyles.dd_badz_card_pdf}></div>;
+    }
     
-  //   {
-  //     return <div className={smyStyles.dd_badz_card}>
-  //       <div className={smyStyles.dd_badz_card_01}>
-  //         <span className={smyStyles.dd_badz_card_xh}>{xh + 1}</span>
-  //         {value.fjgsDm == '1' ? es : <img style={{ width: 168, height: 168 }} src={value.fjxx} />}
-  //         <span className={smyStyles.dd_badz_card_icon}>
-  //           <Dropdown placement="bottomRight" overlay={(
-  //             <Menu className="dd_badz_card_btn_r">
-  //               <Menu.Item key="1" onClick={() => { handleDownload(value) }} ><ArrowDownOutlined />下载</Menu.Item>
-  //               <Menu.Item key="2" onClick={() => preview(value)}><EyeOutlined />预览</Menu.Item>
-  //               <Menu.Item key="3" onClick={() => { handleDelete(value) }}><DeleteOutlined />删除</Menu.Item>
-  //             </Menu>
-  //           )} >
-  //             <MoreOutlined />
-  //           </Dropdown>
-  //         </span>
-  //       </div>
-  //       <div className={smyStyles.dd_badz_card_02}>{value.fjwjm}</div>
-  //       <div className={smyStyles.dd_badz_card_03}>{myUtil.date.formatDate(value.scsj, 'YYYY-MM-DD HH:mm')}</div>
-  //     </div>
-  //   }
-  // });
+    {
+      return <div className={smyStyles.dd_badz_card}>
+        <div className={smyStyles.dd_badz_card_01}>
+          <span className={smyStyles.dd_badz_card_xh}>{xh + 1}</span>
+          {value.fjgsDm == '1' ? es : <img style={{ width: 168, height: 168 }} src={value.fjxx} />}
+          <span className={smyStyles.dd_badz_card_icon}>
+            <Dropdown placement="bottomRight" overlay={(
+              <Menu className="dd_badz_card_btn_r">
+                <Menu.Item key="1" onClick={() => { handleDownload(value) }} ><ArrowDownOutlined />下载</Menu.Item>
+                <Menu.Item key="2" onClick={() => preview(value)}><EyeOutlined />预览</Menu.Item>
+                <Menu.Item key="3" onClick={() => { handleDelete(value) }}><DeleteOutlined />删除</Menu.Item>
+              </Menu>
+            )} >
+              <MoreOutlined />
+            </Dropdown>
+          </span>
+        </div>
+        <div className={smyStyles.dd_badz_card_02}>{value.fjwjm}</div>
+        <div className={smyStyles.dd_badz_card_03}>{myUtil.date.formatDate(value.scsj, 'YYYY-MM-DD HH:mm')}</div>
+      </div>
+    }
+  });
 
-  // const gitmen = ({ oldIndex, newIndex }) => {
-  //   setDate(arrayMove(date, oldIndex, newIndex));
-  // }
+  const gitmen = ({ oldIndex, newIndex }) => {
+    setDate(arrayMove(date, oldIndex, newIndex));
+  }
 
   // 文件下载
   const handleDownload = (value: any) => {
@@ -726,11 +726,11 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
                   </span>
                 </div>
                 <div className={smyStyles.badz_smy_main_left_main_wrap}>
-                  {/* <SortableContainer onSortEnd={gitmen} axis="x" >
+                  <SortableContainer onSortEnd={gitmen} axis="x" >
                     {date.map((value: any, index: any) => (
                       <SortableItem key={index} index={index} value={value} xh={index} />
                     ))}
-                  </SortableContainer> */}
+                  </SortableContainer>
                 </div>
               </div>
               <div className={smyStyles.badz_smy_main_right}>

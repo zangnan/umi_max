@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { List, Skeleton, Tabs, Checkbox, Space, Button, Dropdown, Menu, message, Spin, Popover, Form, Input, Drawer, Tooltip } from 'antd';
 import { DownOutlined, FullscreenOutlined, FullscreenExitOutlined, WarningOutlined } from '@ant-design/icons';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import ProCard from '@ant-design/pro-card';
 import Invoice from '@/pages/hts/components/DDdocs/Invoice';
 import DDAlert from '@/pages/hts/components/DDAlert';
@@ -1141,14 +1141,14 @@ const Fp: React.FC<unknown> = () => {
         marginBottom: '20px',
       }}
     >
-      {/* <InfiniteScroll
+      <InfiniteScroll
         dataLength={data.length}
         next={gdloadMoreData}
         hasMore={data.length < maxRowCount}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
         // endMessage={<Divider plain>It is all, nothing more</Divider>}
         scrollableTarget="scrollableDiv"
-      > */}
+      >
         <Checkbox.Group value={checkedList} onChange={onChange}>
           <List
             dataSource={data}
@@ -1186,7 +1186,7 @@ const Fp: React.FC<unknown> = () => {
             )}
           />
         </Checkbox.Group>
-      {/* </InfiniteScroll> */}
+      </InfiniteScroll>
     </div>
   </div>;
 

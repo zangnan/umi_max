@@ -16,16 +16,16 @@ import { badzZlgdYl, badzZlgdYlCkxq, getDzmcTree, badzDzbaZlcjJcgljk, dzbadzglxz
 import { getGridData } from '@/pages/hts/services/htsApi';
 import { useIntl } from 'umi';
 import DDAlert from '@/pages/hts/components/DDAlert';
-// import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
+import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
 import { history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import { TreeNodeProps } from 'rc-tree-select/lib/TreeNode';
 
 const { TreeNode } = TreeSelect;
 
-// const SortableContainer = sortableContainer(({ children }) => {
-//   return <div>{children}</div>;
-// });
+const SortableContainer = sortableContainer(({ children }) => {
+  return <div>{children}</div>;
+});
 
 export interface BadzZlylProps {
   onRef?: any;
@@ -468,32 +468,32 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
 
 
   // 可拖拽内容主体
-  // const SortableItem = sortableElement(({ row, xh }) => {
-  //   return titleMain(row, xh);
-  // });
+  const SortableItem = sortableElement(({ row, xh }) => {
+    return titleMain(row, xh);
+  });
 
-  // //  拖拽文件重新调整数据
-  // const gitmen = ({ oldIndex, newIndex }, index: any) => {
-  //   const newData = [...dzData];
-  //   // 获取当前操作最外层数据
-  //   const tempData = newData[index];
-  //   // 根据移动角标重新调整数据中的content
-  //   const newContent = arrayMove(tempData.dzs, oldIndex, newIndex);
-  //   // 将最新的值回写到数组中
-  //   tempData.dzs = newContent;
-  //   // 更新最外层数据
-  //   newData.splice(index, 1, tempData);
-  //   const data = { "badzbgduuid": formDate?.badzbgduuid, "tzsxs": [...newData] };
-  //   tzsx(data).then((response) => {
-  //     const { code, body } = response;
-  //     if (code === '200') {
-  //       setdzData(newData);
-  //       message.success(intl.formatMessage({ id: 'message_ckfp_fppz_common_save_success' }));
-  //     } else {
-  //       message.error(body?.desc);
-  //     }
-  //   })
-  // }
+  //  拖拽文件重新调整数据
+  const gitmen = ({ oldIndex, newIndex }, index: any) => {
+    const newData = [...dzData];
+    // 获取当前操作最外层数据
+    const tempData = newData[index];
+    // 根据移动角标重新调整数据中的content
+    const newContent = arrayMove(tempData.dzs, oldIndex, newIndex);
+    // 将最新的值回写到数组中
+    tempData.dzs = newContent;
+    // 更新最外层数据
+    newData.splice(index, 1, tempData);
+    const data = { "badzbgduuid": formDate?.badzbgduuid, "tzsxs": [...newData] };
+    tzsx(data).then((response) => {
+      const { code, body } = response;
+      if (code === '200') {
+        setdzData(newData);
+        message.success(intl.formatMessage({ id: 'message_ckfp_fppz_common_save_success' }));
+      } else {
+        message.error(body?.desc);
+      }
+    })
+  }
 
   // 文件夹可拖拽列表
   const sortTileGruop = () => {
@@ -502,11 +502,11 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
         <div key={index + '1'}>
           <div id={group.badzlxDm} key={index + '2'} className={style.group_tile_c2}>{group.badzlxmc}</div>
           <Space key={index + '3'} size={[0, 0]} wrap className={style.tile_group}>
-            {/* <SortableContainer distance={10} onSortEnd={(event: any) => gitmen(event, index)} axis="x" >
+            <SortableContainer distance={10} onSortEnd={(event: any) => gitmen(event, index)} axis="x" >
               {group.dzs.map((row: any, contIndex: any) => {
                 return <SortableItem key={contIndex} index={contIndex} row={row} xh={contIndex} />
               })}
-            </SortableContainer> */}
+            </SortableContainer>
             <div key={group.length + 1} className={`${smyStyles.dd_badz_card} ${smyStyles.dd_badz_card_upload}`} onClick={() => dzbaZlcjOnClick('add', group)}>
               <div className={`${smyStyles.dd_badz_card_01} ${smyStyles.dd_badz_card_folder_01}`}>
                 <PlusOutlined className={`${smyStyles.dd_badz_card_upload_icon}`} />
