@@ -1,0 +1,195 @@
+.new-user-data-access {
+  padding: 20px;
+  background-color: #f0f2f5;
+
+  .page-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .section {
+    margin-bottom: 24px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    &-label {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #333;
+      display: block;
+    }
+  }
+
+  .download-period {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .warning-text {
+      display: flex;
+      align-items: center;
+      color: #faad14;
+
+      i {
+        margin-right: 4px;
+      }
+    }
+
+    .download-button {
+      margin-left: auto;
+    }
+  }
+
+  // 重点调整的数据下载进度区域样式
+  .download-status {
+    border: 1px solid #f0f0f0;
+    border-radius: 4px;
+
+    // 三部分均分一行的容器
+    .progress-status-container {
+      display: flex;
+      width: 100%;
+      gap: 16px;
+      align-items: center;
+    }
+
+    // 进度条部分 (占1/3)
+    .progress-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .progress-container {
+        height: 16px;
+        background-color: #f5f5f5;
+        border-radius: 3px;
+        overflow: hidden;
+        max-width: 200px; /* 可根据需要调整这个值 */
+        width: 100%;     /* 确保在小屏幕上能自适应收缩 */
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: #1890ff;
+        transition: width 0.3s ease;
+      }
+
+      .progress-text {
+        font-size: 14px;
+        color: #666;
+        white-space: nowrap;
+        width: 40px;
+        text-align: right;
+      }
+    }
+
+    // 状态部分 (占1/3，居中)
+    .status-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      .status-tag {
+        white-space: nowrap;
+      }
+    }
+
+    // 功能按钮部分 (占1/3)
+    .buttons-section {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;  // 按钮之间的间距
+    }
+  }
+
+  // 数据下载结果区域 - 调整导出按钮位置
+  .download-results {
+    // 标题和导出按钮在同一行
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    // 数据卡片区域
+    .results-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .result-card {
+      flex: 1;
+      border: 1px solid #e8f4ff;
+      border-radius: 4px;
+      min-height: 120px; /* 增加卡片高度 */
+
+      .card-title {
+        background-color: #e8f4ff;
+        padding: 8px 16px;
+        margin: -16px -16px 16px -16px;
+        border-radius: 4px 4px 0 0;
+        font-weight: bold;
+        color: #1890ff;
+        text-align: center;
+      }
+
+      .stats-row {
+        display: flex;
+        justify-content: space-around;
+        padding: 16px 0;
+        flex-wrap: wrap;
+      }
+
+      .stat-item {
+        text-align: center;
+        margin: 0 16px;
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 4px;
+      }
+
+      .stat-value {
+        font-size: 16px;
+        font-weight: bold;
+        color: #333;
+      }
+    }
+
+  }
+
+  .basic-data {
+    .basic-data-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      .basic-data-description {
+        color: #666;
+        flex: 1;
+      }
+
+      .basic-data-buttons {
+        display: flex;
+        gap: 16px;
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
 
   useEffect(() => {
-    Promise.all([myUtil.code.getCodeFromServerT2('code_dm_gy_xzqh', '01')]).then(() => {
+    Promise.all([myUtil.code.getCodeFromServerT1('code_dm_gy_xzqh:01')]).then(() => {
     }).catch(() => {
       message.error('获取码表失败');
     }).finally(() => {

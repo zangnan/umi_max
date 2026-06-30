@@ -1,0 +1,59 @@
+// 进项发票管理-已使用数据
+import React, {useRef}  from 'react';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
+import config from './ksyConfig';
+import Func from './ksyFunc';
+import Fpmx from './fpmx';
+import {useAccess } from 'umi';
+import qxUtil from '@/pages/hts/common/qxUtil';
+import { cloneDeep } from 'lodash';
+
+const Index: React.FC = () => {
+  const access = useAccess();
+
+  const zyParam = {
+    zycode: '',
+    accessObj: access,
+  }
+
+  const myConfig = cloneDeep(config);
+
+  if (qxUtil.getZy(zyParam)) {
+    // 配置项：自定义工具栏
+    myConfig.customer_toolbar = [];
+  }
+
+  myConfig.customer_toolbar.push({
+    name: '批量修改',
+    type: 'dropdown',
+    key: 'jxfpplxg',
+    list: [
+      { name: '是否退税', func: 'btnSetSfts' },
+      { name: '业务编号', func: 'btnSetYwbh' },
+      { name: '标签', func: 'btnSetBq' },
+    ],
+  });
+
+  // 配置列表列
+  myConfig.gridParams = {
+    initSearchModal: [
+      { property: 'cxlx', value: '1', op: 'zdy' },
+    ]
+  }
+
+  const mtsPdRef: any = useRef();
+  Func.getOtherRef = () => {
+    const otherRef = [];
+    otherRef.push(mtsPdRef);
+    return otherRef;
+  };
+  
+  return (
+    <div>
+      <DDBunit2 config={myConfig} func={Func} />
+      <Fpmx onRef={mtsPdRef} />
+    </div>
+  );
+}
+
+export default Index;
