@@ -6,7 +6,7 @@ import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history, useRouteData } from 'umi';
 // import { constant } from 'lodash';
 

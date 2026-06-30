@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import { List, Skeleton, message, Spin, Popover, Form, Input, Space, Button, Modal, Drawer } from 'antd';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import ProCard from '@ant-design/pro-card';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { queryZnpdmxSjxqList, mtsZnpdmxFqpd, queryMtsZnpdSbxx, mtsZnpdmxScmx, queryMtsZnpdmxTsxx, exportPager, checkZnpdSbxx } from '@/pages/hts/services/htsApi';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import Znpdmxfb from './znpdmxfb';
@@ -16,7 +16,7 @@ import config from './config';
 import { history } from 'umi';
 import Scmx from './scmx';
 import CONSTANTS from '@/components/DDAssist/constants';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import configFail from './fail_config';
 import fFail from './fail_f';
 

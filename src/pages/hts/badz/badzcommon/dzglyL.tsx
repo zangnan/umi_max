@@ -14,7 +14,7 @@ import myUtil from '@/components/DDAssist/util';
 import { getDzmcTree, funcDzglbc, badzZlgdYlCkxq, jzfjToPath, changeJzfjToPath, } from "@/pages/hts/services/htsApi";
 import importstyless from './importstyless.less';
 import smyStyles from './smyStyless.less';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 

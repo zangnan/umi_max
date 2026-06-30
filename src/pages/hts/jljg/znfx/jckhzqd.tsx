@@ -4,7 +4,7 @@
  * creator: yxy
  */
 import React, { useImperativeHandle, useState, useEffect, useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import jckhzqdConfig from '../sjxz/hghxsjcx/jckhzqdconfig';
 import ZnfxJckhzqdFunc from '../sjxz/hghxsjcx/func'
 import CONSTANTS from '@/components/DDAssist/constants';

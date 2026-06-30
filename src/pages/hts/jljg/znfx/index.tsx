@@ -4,7 +4,7 @@
  * creator: yxy
  */
 import React, { useRef, useState } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './config';
 import ZnfxFunc from './f';
 import ModalBdjg from './bdjg';
@@ -19,7 +19,7 @@ import { useIntl } from 'umi';
 import { useRequest } from 'ahooks';
 import { bgdtjmyjjy, queryFxzSjTs } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Znfx: React.FC<unknown> = () => {

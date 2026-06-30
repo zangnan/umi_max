@@ -6,8 +6,8 @@ import { Form, Input, message, Switch, Select, DatePicker, Spin, } from 'antd';
 import './style.less';
 import myUtil from '@/components/DDAssist/util';
 import {jnhydSaveOrUpdate, jnhydDel, getJnhydsj } from '@/pages/hts/services/htsApi';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import Func from './f';
 

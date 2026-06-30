@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { zrqrb, queryCjSbpc, bydqdqrsj } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Form, message, Tooltip, Radio, Input } from 'antd';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import {  Access } from 'umi';

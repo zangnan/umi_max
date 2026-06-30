@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Popover, Image } from 'antd';
 import moment from 'moment';
 import ProCard from '@ant-design/pro-card';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { xzrw, queryEwmtp, queryKakPassword, saveKakPassword } from '@/pages/hts/services/htsApi';

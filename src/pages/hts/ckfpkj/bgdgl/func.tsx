@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import 'moment/locale/zh-cn';
 import { Badge, Form, Select } from "antd";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { message, Button } from "antd";
 import { queryKak, hgsjxz, xzrwjy } from '@/pages/hts/services/htsApi';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';

@@ -15,7 +15,7 @@ import DzglSmy from "@/pages/hts/badz/badzcommon/dzglSmy";
 import { badzZlgdYl, badzZlgdYlCkxq, getDzmcTree, badzDzbaZlcjJcgljk, dzbadzglxz, xxybc, tzsx, } from "@/pages/hts/services/htsApi";
 import { getGridData } from '@/pages/hts/services/htsApi';
 import { useIntl } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 // import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
 import { history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
@@ -472,7 +472,7 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
   //   return titleMain(row, xh);
   // });
 
-  //  拖拽文件重新调整数据
+  // //  拖拽文件重新调整数据
   // const gitmen = ({ oldIndex, newIndex }, index: any) => {
   //   const newData = [...dzData];
   //   // 获取当前操作最外层数据

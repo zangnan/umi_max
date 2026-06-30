@@ -1,6 +1,6 @@
 // 出口报关单管理-代理出口-不退税数据
 import React  from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './bktssjConfig';
 import Func from './bktssjFunc';
 

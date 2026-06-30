@@ -7,7 +7,7 @@ import ProCard from '@ant-design/pro-card';
 import { changeYdcl, querySpdmXxCj, mxSetzbsb, ydtj, queryYdclList, queryYdclXxList, queryYdxxTzff, queryYdclSpList, scHgsptzGcb, queryYdplclSpList, pageRightYdtj, checkSsqPcYsb, checkSsqYsbCj, checkYdglYsb } from '@/pages/hts/services/htsApi';
 import './style.less';
 import DDBaseGrid from '@/components/DDBaseGrid';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { QuestionCircleOutlined, DownOutlined } from '@ant-design/icons';
 import cktsUtil from '@/pages/hts/cktsUtil';

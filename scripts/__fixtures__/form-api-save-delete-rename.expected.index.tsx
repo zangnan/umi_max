@@ -8,7 +8,7 @@
  *   - form_api_delete → api_form_delete, 值从 ${API_URL_BASE}/test/delete → /test/delete
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './form-api-save-delete-rename';
 
 const Index: React.FC<unknown> = () => {

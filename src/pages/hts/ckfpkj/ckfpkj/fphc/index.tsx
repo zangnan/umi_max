@@ -1,13 +1,13 @@
 // 出口发票开具-出口发票开具-发票红冲（new）
 import React, { useState, useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './zxhcConfig';
 import func from './zxhcFunc';
 import myUtil from '@/components/DDAssist/util';
 import unitConfigDc from './dckpConfig';
 import funcDc from './dckpFunc';
 import { Form, message, Radio, Space, Spin } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { fphc, sdpfphc, sdphdtjkp, checkDlt2, sdpfphc2, sdpZtsxtb } from '@/pages/hts/services/htsApi';
 import { history } from 'umi';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';

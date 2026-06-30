@@ -3,7 +3,7 @@
  * author: wx
  */
 import React, { useEffect, useState, useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './config';
 import Func from './f'
 import ProCard from '@ant-design/pro-card';
@@ -13,7 +13,7 @@ import ModalForm from './modal_form';
 import ModalGlyh from './modal_glyh';
 import myUtil from '@/components/DDAssist/util';
 import '../style.less';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteJs } from '@/pages/hts/services/htsApi';
 

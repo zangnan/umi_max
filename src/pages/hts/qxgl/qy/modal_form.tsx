@@ -8,7 +8,7 @@ import { Modal, Button, Form, Spin, Input, Select, message } from 'antd';
 import myUtil from '@/components/DDAssist/util';
 import { saveOrUpdateQy, queryDmDqLoginSaas } from '@/pages/hts/services/htsApi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 export interface BdjgProps {

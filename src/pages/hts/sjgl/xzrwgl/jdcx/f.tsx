@@ -3,7 +3,7 @@ import React from 'react';
 import { message, Badge, Tooltip, Button, Divider } from 'antd';
 import {
   sjxzDelrw, rwjdcxxz, rwjdsx, queryKakPassword, rwycgx, rwsxForGpt, queryPager, qxzxForGpt, gxBgdCzbzSx, qxzxForYbt, gdhdrwqxzx, gdhdrwqxzxcheck, qxzxForLtkhdgj, cxzirwForLtkhdgjqxzx, qxzxJshst } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import myUtil from '@/components/DDAssist/util';
 

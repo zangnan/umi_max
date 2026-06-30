@@ -3,7 +3,7 @@ import { Modal, message, Spin } from 'antd';
 import './style.less';
 import { ExclamationCircleFilled, SyncOutlined } from '@ant-design/icons';
 import { sdpPrCode, getSfrzcode } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 
 export interface DDModalGridProps {

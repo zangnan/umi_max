@@ -5,7 +5,7 @@ import React, {useEffect, useImperativeHandle, useState} from 'react';
 import { Button, Col, Drawer, Form, InputNumber, message, Modal, Space, Spin, Table} from 'antd';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import {itemType} from '@/components/DDForm/data.d';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import {useIntl} from 'umi';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import UnitUtil from '@/components/DDBunit/unit_util';

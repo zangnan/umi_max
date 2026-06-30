@@ -2,7 +2,7 @@
  * title: 开票状态跟踪
  */
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { message, Popover, Button } from 'antd';
 import { cxkp, qxkp, fpzf } from '@/pages/hts/services/htsApi';
 import { lzorzfGxzt, ztgzHpDelete, gxhpfpzt, djcsjkptj, ztgzZfDelete,fpmxcx2,fpxz } from '@/pages/hts/services/htsApi'; // 新加接口

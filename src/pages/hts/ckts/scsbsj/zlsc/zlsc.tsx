@@ -6,7 +6,7 @@ import { queryFlzlJcInfo, queryFlzlInfo, queryBzmxbInfo, flzlQr, deleteFlzl, upl
 import cktsUtil from '@/pages/hts/cktsUtil';
 import ZlscModal from '@/pages/hts/ckts/scsbsj/zlsc/zlscModal';
 import CONSTANTS from '@/components/DDAssist/constants';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from './importStyle.less';
 import myUtil from '@/components/DDAssist/util';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';

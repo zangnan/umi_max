@@ -11,7 +11,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { history } from 'umi';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import {queryCjCsh, queryCjGlh } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from './importStyle.less';
 import {ClockCircleOutlined, InboxOutlined} from "@ant-design/icons";
 import tableStyle from './style.less';

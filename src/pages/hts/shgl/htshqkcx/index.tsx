@@ -2,7 +2,7 @@
  * 合同收汇情况查询
  */
 import React, { useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import htshqkconfig from './htshqkconfig';
 import func from './htshqkFunc'
 

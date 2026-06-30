@@ -4,7 +4,7 @@
  * + initSearchModal（literal value）—— 模拟 TSSB_GCB 模式
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './grid-columns-adjustment';
 
 const Index: React.FC<unknown> = () => {

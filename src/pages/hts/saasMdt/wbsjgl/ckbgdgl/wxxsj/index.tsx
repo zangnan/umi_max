@@ -1,6 +1,6 @@
 // 出口报关单管理-无信息数据
 import React, { useRef }  from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './wxxsjConfig';
 import Func from './wxxsjFunc';
 import ScmxSaasMdt from '@/pages/hts/commonModule/scmx/scmxSaasMdt';

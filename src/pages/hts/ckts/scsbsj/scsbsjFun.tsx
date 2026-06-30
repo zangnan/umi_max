@@ -5,7 +5,7 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import { chsbCheck, chsb, ycsbSjzjSq, ycsbZssbNew, queryJgbHzsj, queryDsbsjLb, ycsbSjzjztCx, chBadzSJ, ycsbZssbztCx } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { history,useIntl } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
   unitRef: React.createRef(),

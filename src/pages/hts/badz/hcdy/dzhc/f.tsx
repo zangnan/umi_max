@@ -3,7 +3,7 @@
  * author: mfc
  */
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Button, Form, message, Upload, Badge } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { badzHcdyHcbs, gtTsxx, saveRwxxHcsmbc } from '@/pages/hts/services/htsApi';

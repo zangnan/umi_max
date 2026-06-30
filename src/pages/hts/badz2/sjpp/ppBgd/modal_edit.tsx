@@ -6,7 +6,7 @@ import React, { useRef, useState, useImperativeHandle } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { CloseOutlined } from '@ant-design/icons';
 import '../../style.less';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import func from './modalEditFunc'
 import { cloneDeep } from 'lodash';
 

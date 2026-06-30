@@ -2,7 +2,7 @@
  * title: 退税申报情况生产
  */
 import React, { useRef, useEffect, useState }from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import { message, Spin} from 'antd';
 import Sbbqd from './sbbqd';
 import Xxym from './xxym';

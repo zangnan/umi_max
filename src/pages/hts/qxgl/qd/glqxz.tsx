@@ -1,7 +1,7 @@
 import React, { useRef, useState,useImperativeHandle } from 'react';
 import { Spin, Drawer, message, Switch} from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from '../qxz/config';
 import func from '../qxz/f';
 import { glqxz, setAsTheDefaultPermissionGroup } from '@/pages/hts/services/htsApi';

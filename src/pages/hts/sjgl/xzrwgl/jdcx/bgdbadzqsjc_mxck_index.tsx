@@ -2,7 +2,7 @@
  * 下载条件-明细
  */
 import React, {useImperativeHandle, useRef, useState} from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
 import {Drawer, message} from 'antd';
 import config from './bgdbadzqsjc_mxck_config';

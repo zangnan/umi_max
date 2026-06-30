@@ -3,7 +3,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { querySjByHth, queryHlxx } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import dayjs from 'dayjs';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import baseValidator from '@/components/DDAssist/field/baseValidator';

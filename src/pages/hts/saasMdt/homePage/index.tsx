@@ -9,7 +9,7 @@ import { ProjectOutlined, FileProtectOutlined, FileDoneOutlined, ContainerOutlin
 import { history } from 'umi';
 import {drJ4HgCkbgd, bgdAndDlckzmTj, mdtseTj, queryWsxzSj } from '@/pages/hts/services/htsApi';
 import cktsUtil from '@/pages/hts/cktsUtil';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from './importStyle.less';
 
 const { Dragger } = Upload;

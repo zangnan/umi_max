@@ -3,7 +3,7 @@ import { Modal, message, Spin, Table, Button} from 'antd';
 import { commonDrwtdc } from '@/pages/hts/services/htsApi';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface DDInvoiceProps {
   onRef?: any;

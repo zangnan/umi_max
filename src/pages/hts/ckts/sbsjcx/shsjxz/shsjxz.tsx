@@ -3,7 +3,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import { Modal, Button, Form, Spin, Input, message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import myUtil from '@/components/DDAssist/util';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import shsjxz_config from './shsjxzConfig';
 import Func from './shsjxzFun';
 import { ycsbYzfFkxzSq, ycsbYzfFkxzsqztCx, ycsbYzfFksjjs } from '@/pages/hts/services/htsApi';

@@ -6,7 +6,7 @@ import React from 'react';
 import { Button, message, Select, Form, Input, Alert, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { useState, useEffect, useImperativeHandle, useContext } from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 import { useIntl } from 'umi';
 

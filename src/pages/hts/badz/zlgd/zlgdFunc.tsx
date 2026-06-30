@@ -5,7 +5,7 @@ import { message, Popover } from 'antd';
 import React from 'react';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import { cancellationOfFiling, dataArchiving, dzbaZlgdXz } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const zlgdFunc: any = {
   unitRef: React.createRef(),

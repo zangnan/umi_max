@@ -2,7 +2,7 @@
  * 发票开具配置  外销商品管理
  */
 import React, { useRef,useState } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './wxspglconfig';
 import func from './wxspglFunc'
 import FmGrid from './fm/wxspglfm'
@@ -11,7 +11,7 @@ import { message, Form, Button, Upload, Tooltip } from 'antd';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';
 
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { importTemplate, plfmdr } from '@/pages/hts/services/htsApi';
 import { UploadOutlined } from '@ant-design/icons';
 import ErrorMsgGrid from '@/components/DDImport/importError';

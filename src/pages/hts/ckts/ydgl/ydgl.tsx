@@ -2,7 +2,7 @@
 import React, { useState, useImperativeHandle } from 'react';
 import { Tag, Drawer } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import ydgl_config from './ydglConfig';
 import Func from './f';
 

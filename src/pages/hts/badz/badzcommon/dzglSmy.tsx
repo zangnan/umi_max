@@ -12,7 +12,7 @@ import myUtil from '@/components/DDAssist/util';
 import { MenuUnfoldOutlined, MenuFoldOutlined, MoreOutlined, CameraOutlined, EyeOutlined, DeleteOutlined, ArrowDownOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { CloseOutlined, RedoOutlined, UndoOutlined, ZoomInOutlined, ZoomOutOutlined, FullscreenExitOutlined, SnippetsOutlined, PictureOutlined } from "@ant-design/icons";
 // import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 

@@ -6,7 +6,7 @@ import React from 'react';
 import { message, Badge } from 'antd';
 import { history } from "@@/core/history";
 import badzUtil from "@/pages/hts/badz/badzcommon/badzUtil";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteHcrwHcrwsc, hcdyHcrwSchcwj, hcdyHcrwDy } from "@/pages/hts/services/htsApi";
 

@@ -5,11 +5,11 @@ import React, { useImperativeHandle, useState } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Button, Drawer, message, Spin } from 'antd';
 import Func from './dzxxFunc';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import dzxxConfig from './dzxxConfig';
 import { badzDzbaZlcjGldzjk, badzDzbaZlcjJcgljk } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface DzxxProps {
   onRef?: any;

@@ -6,7 +6,7 @@ import React from 'react';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { Button, message, Form, Input} from 'antd';
 import { deleteQxfw, dcjb } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {

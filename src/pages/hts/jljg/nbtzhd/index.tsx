@@ -10,7 +10,7 @@ import myUtil from '@/components/DDAssist/util';
 import './style.less';
 import Nbtzhdfb from './nbtzhdfb';
 import ErrorMsgGrid from '@/components/DDImport/importError';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { QuestionCircleOutlined, ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import fb18config from './fbconfig';

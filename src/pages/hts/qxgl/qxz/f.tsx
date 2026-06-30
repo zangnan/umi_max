@@ -1,6 +1,6 @@
 import React from 'react';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { message, Form, Input, } from 'antd';
 import {scQxz, scjy, dcjb } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';

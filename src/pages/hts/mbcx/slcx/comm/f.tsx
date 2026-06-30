@@ -5,7 +5,7 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import { xj } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
 import UnitUtil from '@/components/DDBunit/unit_util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {};
 

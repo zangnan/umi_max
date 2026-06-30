@@ -2,7 +2,7 @@
  * title: 进料加工业务免抵退税核销表 查看明细
  */
  import React, { useImperativeHandle, useState, useEffect, useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
  import ckmxConfig from './ckmxconfig';
  import ZnfxJckhzqdHgFunc from '../sjxz/hghxsjcx/func';
  import DyGrid from '../sjxz/common/dyGrid';

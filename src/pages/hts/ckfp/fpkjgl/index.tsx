@@ -7,7 +7,7 @@ import lzfpConfig from './lzfpConfig';// 蓝字发票
 import hzfpConfig from './hzfpConfig';// 红字发票
 import zffpConfig from './zffpConfig';// 作废发票
 import dckpConfig from './dckpConfig'; // 导出开票
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import zxkpFunc from './zxkpFunc';
 import dckpFunc from './dckpFunc';
 import myUtil from '@/components/DDAssist/util';
@@ -16,7 +16,7 @@ import { history } from 'umi';
 import SfyzModal from '../common/modal_sfyz'
 import KprzModal from '../common/modal_kprz'
 import { fphc, sdpfphc, sdphdtjkp, fpztsx, fpztsxZx, sdpZtsxtb } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const refSfyz: any = React.createRef();
 const refKprz: any = React.createRef();

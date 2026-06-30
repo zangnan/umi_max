@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import bgdConfig from './bgdConfig';
 import Func from './bgdFunc';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import MtsPd from './mtsPd';
 import { history } from 'umi';
 import Zdpd from './zdpd/index';

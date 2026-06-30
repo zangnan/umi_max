@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useState } from 'react';
 import { message, Spin, Drawer } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import '@/pages/hts/commonModule/style.less';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import FuncQd from '../qd/f';
 import unitConfigQd from '../qd/config';
 import { glqd } from '@/pages/hts/services/htsApi';

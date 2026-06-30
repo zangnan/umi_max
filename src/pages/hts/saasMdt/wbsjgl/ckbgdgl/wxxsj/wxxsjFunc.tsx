@@ -1,4 +1,4 @@
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl } from '@/components/DDAssist/util';
 import {getBgdInfoHgck, plxgckfph, plxgckspDm, plxgYfzssl, queryPager, updateBgdCzbz, bgdpdfyl, queryKak, xzrwjy } from '@/pages/hts/services/htsApi';
 import { Form, Input, message, Tooltip, InputNumber, Select, Button } from 'antd';

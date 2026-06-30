@@ -1,7 +1,7 @@
 import React from 'react';
 import { message, } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import badzUtil from "@/pages/hts/badz/badzcommon/badzUtil";
 import { dzbaZlcdBgd, abgdDyData } from "@/pages/hts/services/htsApi";
 

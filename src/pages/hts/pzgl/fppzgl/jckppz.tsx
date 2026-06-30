@@ -12,7 +12,7 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { useAccess, Access } from 'umi';
 import qxUtil from '@/pages/hts/common/qxUtil';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   data,

@@ -5,7 +5,7 @@ import { message, } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import React from 'react';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { dzbadzglxz, badzZlgdYlCkxq, deleteCheck } from '@/pages/hts/services/htsApi';
 
 const dzglFunc: any = {

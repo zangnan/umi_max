@@ -10,7 +10,7 @@ import IcList from '@/pages/hts/pzgl/icCard/common/icCardTsList';
 import cardStyle from '../sjxz/cardLess2.less';
 import tableStyle from "@/pages/hts/commonModule/ckhwbgd/style.less";
 import importStyle from "@/pages/hts/commonModule/ckhwbgd/importStyle.less";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export type ActionType = {
   reload: (resetPageIndex?: boolean) => void;

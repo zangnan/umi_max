@@ -6,7 +6,7 @@ import { Modal, Button, message, Form, Radio, Tooltip, Select, Alert, Input, Spa
 import { QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { scfpsqd, xbgdkhxx, tjkpxx } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 import { useIntl, history, useAccess } from 'umi';
 import './style.less';

@@ -1,5 +1,5 @@
 import React, { useRef,useState } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './config';
 import Func from './f';
 import GeneratedData from '@/pages/hts/commonModule/pd/mts/sjznpd/tzpd/pdrwqk/ckrwmx/rwmxcx';

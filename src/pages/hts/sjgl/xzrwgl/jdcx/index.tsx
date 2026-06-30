@@ -1,5 +1,5 @@
 import unitConfig from './config';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './f';
 import React, { useRef } from 'react';
 import { useIntl } from 'umi';
@@ -9,7 +9,7 @@ import IcListYbt from '@/pages/hts/pzgl/icCard/common/icCardTsListYbt';
 import { queryKakPassword, checkDlt2, gxBgdCzbzCxzx, queryPager } from '@/pages/hts/services/htsApi';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import { message, Button } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import { useAccess } from 'umi';
 import qxUtil from '@/pages/hts/common/qxUtil';

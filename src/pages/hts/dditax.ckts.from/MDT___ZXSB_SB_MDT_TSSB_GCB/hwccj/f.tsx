@@ -1,7 +1,7 @@
 // 货物冲减
 import { Form, Input, message, Select, Table, Button} from 'antd';
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import {mdtHwccj, downloadTemplate } from '@/pages/hts/services/htsApi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import myUtil from '@/components/DDAssist/util';

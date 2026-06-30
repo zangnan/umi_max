@@ -1,7 +1,7 @@
 import React from 'react';
 import { queryCjCsh, queryCjGlh } from '@/pages/hts/services/htsApi';
 import { Button, DatePicker, Spin, Modal, Form, Radio, Space, Input, message, Upload, Tooltip} from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';

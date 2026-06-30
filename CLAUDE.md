@@ -1188,7 +1188,7 @@ myConfig.toolbar_default.ckts_download = false;
   import React, {useRef} from 'react';
   import cktsUtil from '@/pages/hts/cktsUtil';
   import myUtil from '@/components/DDAssist/util';
-  import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+  import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
   ```
   ✓
 
@@ -1589,3 +1589,70 @@ background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
 - 不区分 `//` 单行注释 vs `/* */` 块注释；块注释内的 `@base_font_` / `.png')` 也可能被误注释（codebase 实际数据无此场景）
 - `.png')` 严格按 `')` 结尾匹配（与用户示例 `url('~...png')` 一致）；不带 `')` 结尾的 `.png` 引用不受影响
 - 不处理 `url("...png")` 双引号形式（与本规则 `')` 触发条件不匹配；如未来需要可扩展）
+
+## 待提交变更（2026-06-30）
+
+### DDAlert / DDImport / DDBunit2 路径重写目标：commonModule → components
+
+**背景**：`src/pages/hts/commonModule/{DDAlert,DDImport,ddbunit2_ckts}` 与
+`src/pages/hts/components/{DDAlert,DDImport,DDBunit2_ckts}` 字节完全相同（同一份代码两份目录）。
+现有 520+ 个 import 仍使用 `commonModule/` 路径。用户决策：
+**不迁移文件（保留两份目录）**，但后续生成的代码改用 `components/` 路径。
+
+本轮只调整 `scripts/copy-from-code-sample.js` + `scripts/convert-ddbunit-config.js`
++ `scripts/convert-ddbunit-config.rules.json` 的"重写目的地"，让工具下次运行时输出
+`@/pages/hts/components/...`，现有 520+ 个 import 不动（两份目录都在盘上，运行时无影响）。
+
+**目标路径对应**：
+- `@/components/DDAlert` → `@/pages/hts/components/DDAlert`
+- `@/components/DDImport/checkErrorProp` → `@/pages/hts/components/DDImport/checkErrorProp`
+- `@/components/DDBunit/DDBunit2` → `@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS`
+  （注意大小写：`commonModule` 是小写 `ddbunit2_ckts`，`components` 是 PascalCase `DDBunit2_ckts`）
+
+**改动文件**：
+
+1. **[scripts/copy-from-code-sample.js](scripts/copy-from-code-sample.js)** — 6 处重写字符串 + 4 处注释同步：
+   - L1249 `applyImportRewrites` 单行匹配 DDAlert → components
+   - L1575 `applyImportRewritesToContent` 内 R17 (DDImport/checkErrorProp) → components
+   - L1579 同函数内 R5 (DDAlert) → components
+   - L1984 `normalizeDDBunit2Import` DDBunit2 模板 → components/DDBunit2_ckts（大小写）
+   - L2086/L2089 `applyCopyRewrites` R5 注释 + 替换字符串 → components
+   - L2092/L2095 同函数 R13 注释 + 替换字符串 → components/DDBunit2_ckts
+   - L2110/L2113 同函数 R17 注释 + 替换字符串 → components
+
+2. **[scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js)** — 5 处平行规则：
+   - L2016 规则 5 docstring 注释
+   - L2064 `applyImportRewrites` 单行匹配 DDAlert
+   - L2178 规则 5 替换字符串
+   - L2822 `normalizeDDBunit2Import` docstring 注释
+   - L2831 `normalizeDDBunit2Import` 替换字符串 → components/DDBunit2_ckts
+
+3. **[scripts/convert-ddbunit-config.rules.json](scripts/convert-ddbunit-config.rules.json)** — L302 `excludeFiles`：
+   - `"src/pages/hts/commonModule/ddbunit2_ckts/**"` → `"src/pages/hts/components/DDBunit2_ckts/**"`
+   - 保持规则引擎继续排除 DDBunit2_CKTS 子树
+
+4. **9 个 expected fixture 文件**（规则改动后必须同步）：
+   - 8 个 `*.expected.index.tsx`：line 6/7/11 DDBunit2 import 路径
+     `commonModule/ddbunit2_ckts` → `components/DDBunit2_ckts`
+   - 1 个 `fun-injection.expected.fun.tsx`：line 6 DDAlert import 路径
+     `commonModule/DDAlert` → `components/DDAlert`
+
+5. **10 个 actual fixture 文件**（test runner 自动重生成）：
+   - 9 个 `*.actualIndex.tsx` 在测试运行时由 `derivePagePaths` 自动写出
+   - 1 个 `fun-injection.actualFun.tsx` 手动同步（line 6 路径 + 改 LF 行尾 + 末尾加 `\n`）
+
+**测试验证**：
+- `npm run test:convert-config` → **22 通过 / 4 失败**
+  - 22 通过包含 8 个新 components 路径 fixture + 14 个其它无关 fixture
+  - 4 失败为预存在（combo / default-nodes-and-xhcp / multi-line-remove / toolbar-ckts-sum），与本次改动无关
+- `npm run test:special-line` → **8 通过 / 0 失败**（无影响）
+- 端到端冒烟：`node scripts/convert-ddbunit-config.js --src code_sample/src/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/auto_config.tsx`
+  生成 index.tsx / f.tsx 已正确使用新路径：
+  - `import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';`
+  - `import DDAlert from '@/pages/hts/components/DDAlert';`
+
+**已知限制**（用户决策接受）：
+- 现有 520+ 个 `commonModule/` import 不动 —— 保留两份目录是必要的
+- `staticTableCode` 路径（`commonModule/staticTableCode`）不在本次范围 —— R7/R12 规则未调整
+- `cjpzUtil` → `cktsUtil` 改写（规则 11）已在新路径下仍工作 —— 不影响
+- Windows FS 不区分大小写，所以 `ddbunit2_ckts` vs `DDBunit2_ckts` 在 Windows 上无问题；Linux/macOS CI 必须严格匹配 PascalCase

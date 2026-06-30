@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import fpConfig from './fpConfig';
 import Func from './fpFunc';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import MtsPd from './mtsPd';
 
 const MdtBgdIndx: React.FC<unknown> = () => {

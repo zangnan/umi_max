@@ -9,7 +9,7 @@ import { Tree, Form, Input, Button, Switch, Spin, message, Select } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { queryCdTree, saveOrUpdateCd, checkCd, deleteCd, cdDcsjzd, dcjb } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import '../style.less';
 import ModalForm from './modal_form';
 

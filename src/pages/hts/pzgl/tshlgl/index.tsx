@@ -11,8 +11,8 @@ import '../style.less';
 import myUtil from '@/components/DDAssist/util';
 import moment from 'moment';
 import { useIntl } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
-import DDAlert2 from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
+import DDAlert2 from '@/pages/hts/components/DDAlert';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 
 

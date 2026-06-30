@@ -9,7 +9,7 @@ import DDBaseGrid from '@/components/DDBaseGrid';
 import DDFilter from '@/components/DDForm/DDFilter';
 import treeData2 from '../data';
 import DDToolbar from '@/components/DDToolbar';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import UnitUtil from '@/components/DDBunit/unit_util';
 
 import myUtil from '@/components/DDAssist/util';

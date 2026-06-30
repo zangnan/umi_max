@@ -5,7 +5,7 @@ import React from 'react';
 import { message, Switch, Button, Form, DatePicker } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteJwshr, qyHtyQy } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 import { wsgltqkh } from '@/pages/hts/services/htsApi';
 import locale from 'antd/es/date-picker/locale/zh_CN';

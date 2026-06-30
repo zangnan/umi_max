@@ -1,7 +1,7 @@
 import React from 'react';
 import 'moment/locale/zh-cn';
 import { Form, message, Upload, Button, Tooltip } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from '../../../style.less';
 import myUtil from '@/components/DDAssist/util';
 import { badzCallServiceCheck, uploadBadzWjnr, deleteWtbgxyByIds } from '@/pages/hts/services/htsApi';

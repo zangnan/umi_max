@@ -9,7 +9,7 @@ import myUtil from '@/components/DDAssist/util';
 import { exportssflbm, importssflbm, ssflbmsz, szwxtbz } from '@/pages/hts/services/htsApi';
 import Wxspglfm from '@/pages/hts/pzgl/fppzgl/fm/wxspglfm';
 import { FormInstance } from 'antd/es/form';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import DDBaseGrid from '@/components/DDBaseGrid';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 const EditableContext = React.createContext(null);

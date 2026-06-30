@@ -4,10 +4,10 @@
 import React, { useImperativeHandle, useState } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer, Spin, message } from 'antd';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import { cloneDeep } from 'lodash';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { deleteFhr } from '@/pages/hts/services/htsApi';
 
 

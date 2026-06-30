@@ -2,7 +2,7 @@ import {Button, Form, Input, InputNumber, message} from 'antd';
 import React from 'react';
 import 'moment/locale/zh-cn';
 import {bgdshqkSjgx, bgdshqkRgsz, shglBgdBatchSetBgd} from "@/pages/hts/services/htsApi";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import moment from 'moment';
 import TextArea from "antd/lib/input/TextArea";

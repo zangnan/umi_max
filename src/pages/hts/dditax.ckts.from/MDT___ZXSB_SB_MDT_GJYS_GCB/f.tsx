@@ -8,7 +8,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { message } from 'antd';
 import { getCmCode } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
   unitRef: React.createRef(),

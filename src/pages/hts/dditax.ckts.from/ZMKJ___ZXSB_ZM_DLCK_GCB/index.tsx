@@ -3,7 +3,7 @@
  * author: wx
  */
 import React, { useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './auto_config';
 import sjglConfig from './sjglConfig';
 import Func from './f'

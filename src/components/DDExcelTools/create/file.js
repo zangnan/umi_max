@@ -807,7 +807,7 @@ export default unitConfig;
 		let filePathIndex = path.resolve(__dirname, `${targetDir}\\index.tsx`);	// auto_config.tsx文件及路径
 		let htmlCodeIndex =
 			`import React, { useContext, useState, useEffect, useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './auto_config';
 import Func from './f';
 

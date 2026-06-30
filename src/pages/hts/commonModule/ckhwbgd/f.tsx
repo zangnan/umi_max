@@ -1,7 +1,7 @@
 import cktsUtil from '@/pages/hts/cktsUtil';
 import React from 'react';
 import { checkBgd, uploadScHgCkbgdCj2, getBgdInfoHgck, checkCkbgdh, querySpdmXxCj, updateBgdCzbz, cxxj, bgdpdfyl, queryPagerXzrw, bgdscDelete, queryKak, hgsjxz, xzrwjy, drJ4HgCkbgd, bgdtzsx, importTemplate, btssjZts, bgdzbts, batchSetBgd, sjglCkbgdcxCjbzxj } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import {Form, message, Upload, Button, Radio, Badge, Tooltip, Select, Input, Table, Checkbox} from 'antd';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import moment from 'moment';

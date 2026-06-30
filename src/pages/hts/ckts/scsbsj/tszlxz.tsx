@@ -6,7 +6,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import { history, } from 'umi';
 import { tszlxzjy, tszljydc, tszlxz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { cloneDeep } from 'lodash';
 
 export type AttachmentDataProps = {

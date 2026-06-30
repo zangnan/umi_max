@@ -9,7 +9,7 @@ import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import './style.less';
 import { useIntl } from 'umi';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import IcList from '@/pages/hts/pzgl/icCard/common/icCardTsListGpt';
 import cardStyle from '../sjxz/cardLess2.less';
 

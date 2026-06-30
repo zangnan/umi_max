@@ -4,7 +4,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import { querySpdmXxCj, fpxxScTsjh } from '@/pages/hts/services/htsApi';
 import { Modal, Spin, Button, Form, Select, InputNumber, message, Input, Row, Col } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import '@/pages/hts/commonModule/style.less';
 
 export interface DDTsort {

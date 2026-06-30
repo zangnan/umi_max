@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Col, Row, DatePicker, Space, Radio, Spin, Empty, Alert, Button, message, } from 'antd';
 import { BarChartOutlined, ExclamationCircleFilled, CheckCircleFilled, BarsOutlined, CloseCircleFilled } from '@ant-design/icons';
 import DDBaseGrid from '@/components/DDBaseGrid';
-// import { DualAxes, MultiView } from '@ant-design/charts';
+import { DualAxes, MultiView } from '@ant-design/charts';
 import { useAccess } from 'umi';
 import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
@@ -681,11 +681,11 @@ const Index: React.FC<DDCard> = () => {
   const getContent = () => {
     if (isThereData) {
       if (clickBtn === '1' && clickIcon === '1') {
-        // return <DualAxes {...chart01} style={{ height: height }} />
+        return <DualAxes {...chart01} style={{ height: height }} />
       } else if (clickBtn === '2' && clickIcon === '1') {
-        // return <MultiView {...chart02} style={{ height: height }} />
+        return <MultiView {...chart02} style={{ height: height }} />
       } else if (clickBtn === '3' && clickIcon === '1') {
-        // return <DualAxes {...chart03} style={{ height: height }} />
+        return <DualAxes {...chart03} style={{ height: height }} />
       } else if (clickBtn === '1' && clickIcon === '2') {
         return <DDBaseGrid userDataSource={kpqsData} columns={kpqsColumns} pagination={false} key='1' />
       } else if (clickBtn === '2' && clickIcon === '2') {

@@ -2013,7 +2013,7 @@ function extractRefImports(content) {
  *   - 规则 3: import moment from 'moment'; → import dayjs from 'dayjs';
  *   - 规则 4: import <name> from '@/pages/common/myUtil'; → import <name> from '@/components/DDAssist/util';
  *              （默认导入；与规则 8 命名导入互斥）
- *   - 规则 5: import <name> from '@/components/DDAlert'; → import <name> from '@/pages/hts/commonModule/DDAlert';
+ *   - 规则 5: import <name> from '@/components/DDAlert'; → import <name> from '@/pages/hts/components/DDAlert';
  *   - 规则 6: 其它 import —— 原样保留
  *   - 规则 7: import <name> from '@/pages/common/staticTableCode'; → import <name> from '@/components/DDAssist/staticTableCode';
  *   - 规则 8: import { ... } from '@/pages/common/myUtil'; → import { ... } from '@/components/DDAssist/util';
@@ -2061,7 +2061,7 @@ function applyImportRewrites(importLines) {
         /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?$/,
       );
       if (ddAlertMatch) {
-        return `import ${ddAlertMatch[1]} from '@/pages/hts/commonModule/DDAlert';`;
+        return `import ${ddAlertMatch[1]} from '@/pages/hts/components/DDAlert';`;
       }
 
       // 规则 7: getStaticTableCode 路径（保留原 default 名字；只改路径）
@@ -2175,7 +2175,7 @@ function applyImportRewritesToContent(content) {
   // 规则 5: DDAlert 路径（保留原 default 名字；只改路径）
   text = text.replace(
     /^import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
-    "import $1 from '@/pages/hts/commonModule/DDAlert';",
+    "import $1 from '@/pages/hts/components/DDAlert';",
   );
 
   // 规则 7 + 规则 12: staticTableCode 路径（合并：老路径 + DDAssist 路径都改写为 commonModule 路径）
@@ -2819,7 +2819,7 @@ function stripGridParamsBlock(text) {
 /**
  * index 路径专属 import 改写：把 DDBunit2 老路径归一为 ckts 项目内版本。
  * 规则 A.12：`import DDBunit2 from '@/components/DDBunit/DDBunit2';`
- *   → `import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';`
+ *   → `import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';`
  * silent fallback：ref 不含 DDBunit2 import / 已是新路径 → 原样保留
  *
  * @param {string} content  ref 文件全文
@@ -2828,7 +2828,7 @@ function stripGridParamsBlock(text) {
 function normalizeDDBunit2Import(content) {
   return content.replace(
     /^import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
-    "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
+    "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
   );
 }
 

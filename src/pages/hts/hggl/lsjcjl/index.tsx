@@ -1,6 +1,6 @@
 // 发票配置管理
 import React, { useState, useEffect } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './Func';
 import config from './config';
 import { Button, Divider, Col, Row, Typography, message, Space, Popover, Tag, Badge, Spin, Tooltip } from 'antd';

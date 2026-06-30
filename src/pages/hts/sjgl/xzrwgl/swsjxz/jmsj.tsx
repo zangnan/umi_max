@@ -3,7 +3,7 @@ import { Button, Form, Space, message, DatePicker, Upload, Radio, Spin, Tooltip 
 import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
 import { history } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { ycsbsjxz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import { useIntl } from 'umi';

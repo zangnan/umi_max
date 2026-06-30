@@ -9,7 +9,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import { itemType } from '@/components/DDForm/data.d';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import UnitUtil from '@/components/DDBunit/unit_util';
 import moment from 'moment';
 import '@/pages/hts/commonModule/style.less';

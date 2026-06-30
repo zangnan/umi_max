@@ -1,7 +1,7 @@
 import { DatePicker, Form, message, Tooltip, Switch } from 'antd';
 import React from 'react';
 import { khglszzt, khglsc, khgltqbgdxx, checkghfnsrmc, qtspwhcheck } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import 'moment/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { QuestionCircleOutlined } from '@ant-design/icons';

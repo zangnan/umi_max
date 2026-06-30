@@ -7,14 +7,14 @@ import React, { useState, useRef, useImperativeHandle } from 'react';
 import lzfpConfig from './lzfpConfig';// 蓝字发票
 import hzfpConfig from './hzfpConfig';// 红字发票
 import zffpConfig from './zffpConfig';// 作废发票
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import zxkpFunc from './zxkpFunc';
 import myUtil from '@/components/DDAssist/util';
 import { Form, message, Radio, Space, Spin, Alert } from 'antd';
 import { history, useAccess } from 'umi';
 import DrmbkjInvoice from '../../drmbkj/drmbkjInvoice';
 import { fphc, sdpfphc, sdpfphc2, fpztsx, fpztsxZx, sfczdlzfp, checkDlt2, djcsjkptj, ddtjkp2 } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import qxUtil from '@/pages/hts/common/qxUtil';
 import { cloneDeep } from 'lodash';

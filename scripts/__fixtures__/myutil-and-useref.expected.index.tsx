@@ -4,7 +4,7 @@
  * + useRef() 调用（触发 React 行合并 {useRef} 注入）
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './myutil-and-useref';
 
 const Index: React.FC<unknown> = () => {

@@ -7,7 +7,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import { tssbTzpdZdpd } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { useIntl } from 'umi';
 import { history } from 'umi';
 

@@ -9,7 +9,7 @@ import './style.less';
 import cardStyle from '../sjxz/cardLess2.less';
 import moment from 'moment';
 import importStyle from "@/pages/hts/commonModule/ckhwbgd/importStyle.less";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import tableStyle from "@/pages/hts/commonModule/ckhwbgd/style.less";
 
 export interface Hgsjxzjy {

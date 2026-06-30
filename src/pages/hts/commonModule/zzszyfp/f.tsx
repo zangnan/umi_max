@@ -3,7 +3,7 @@ import React from 'react';
 import { Form, message, Upload, Button, Radio, Tooltip, Select } from 'antd';
 import { yzfPtFpxxCx, batchSetJxfp, importTemplate, zzsfptzsx, fpyl, cxxj2 } from '@/pages/hts/services/htsApi';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import TextArea from "antd/lib/input/TextArea";
 import importStyle from '../ckhwbgd/importStyle.less';
 import tableStyle from '../ckhwbgd/style.less';

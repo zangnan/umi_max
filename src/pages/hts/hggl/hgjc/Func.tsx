@@ -3,7 +3,7 @@ import React from 'react';
 import 'moment/locale/zh-cn';
 import { getXzbg, downloadTemplate, cxscbg } from '@/pages/hts/services/htsApi';
 import { message } from "antd";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 const Func: any = {

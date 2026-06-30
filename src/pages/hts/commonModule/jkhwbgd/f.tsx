@@ -2,7 +2,7 @@ import React from 'react';
 import { getBgdInfoHgck, bgdscDelete } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const jkbgdFunc: any = {
   unitRef: React.createRef(),

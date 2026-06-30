@@ -3,7 +3,7 @@ import React from 'react';
 import { message, Badge, Tooltip, Button, Form, Upload } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { checkDlzm, importData, importTemplate, scdlzm } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import moment from 'moment';
 import importStyle from './importStyle.less';
 import myUtil from '@/components/DDAssist/util';

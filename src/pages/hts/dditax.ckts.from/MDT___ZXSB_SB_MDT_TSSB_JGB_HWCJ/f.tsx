@@ -1,7 +1,7 @@
 // 货物冲减
 import { Form, message, Upload, Button, Tooltip, Input, Radio, Select} from 'antd';
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { mdtYsbToCj, importTemplate, bgdtzsx } from '@/pages/hts/services/htsApi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 const { Dragger } = Upload;

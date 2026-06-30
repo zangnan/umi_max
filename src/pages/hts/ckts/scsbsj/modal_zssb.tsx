@@ -4,7 +4,7 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Spin, Modal, Form, message, Input } from 'antd';
 import { queryYcsbZssbDzxx, sendTestMail, ycsbZssbNew } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { useIntl } from 'umi';
 import { history } from 'umi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';

@@ -2,7 +2,7 @@
  * 导入模板开具 主页面
  */
 import React, { useRef, useState, useEffect } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import drmbkjConfig from './config';
 import drmbkjFunc from './f';
 import ErrorMsgGrid from './errormsg_grid';
@@ -12,7 +12,7 @@ import SfyzModal from '../common/modal_sfyz'
 import KprzModal from '../common/modal_kprz'
 import { Button, message, Tooltip } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 
 

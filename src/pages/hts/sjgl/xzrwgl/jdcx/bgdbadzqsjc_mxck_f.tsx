@@ -1,6 +1,6 @@
 import React from 'react';
 import { checkSjglRwglBgdbadzqsjcMxckSjxz, hgsjxz, queryKak, xzrwjy } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import khdgjUtil from "@/pages/hts/ckfp/khdgjUtil";
 import {Button, Form, message, Select} from 'antd';
 import {history} from "@@/core/history";

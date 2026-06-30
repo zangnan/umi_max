@@ -3,7 +3,7 @@ import { message, Popover } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
 import { fpmxcx2, qxkp } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const ckfpFunc: any = {
   unitRef: React.createRef(),

@@ -4,7 +4,7 @@ import ProCard from '@ant-design/pro-card';
 import { Typography, message, Menu, Layout, Spin, Modal, Table, Form, Input, Button, Checkbox} from 'antd';
 import { FileOutlined } from '@ant-design/icons';
 import { getZblx, queryFxzbByZbdm, saveFxzbByZbdm } from '@/pages/hts/services/htsApi';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './Func';
 import config from './config';
 // 复制

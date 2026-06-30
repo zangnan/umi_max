@@ -2,7 +2,7 @@ import { getBgdInfoHgck, btssjZts, plxgYfzssl, queryPager, btssjSsjy, btssjSsxx,
 import { Form, InputNumber, Tooltip, message, Input, Checkbox } from 'antd';
 import React from 'react';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from './importStyle.less';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import businessValidator from '@/pages/hts/common/field/businessValidator';

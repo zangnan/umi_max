@@ -10,7 +10,7 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 import myUtil from '@/components/DDAssist/util';
 import { tbbgdsjtj, tbbgdsjcl, queryParams } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 

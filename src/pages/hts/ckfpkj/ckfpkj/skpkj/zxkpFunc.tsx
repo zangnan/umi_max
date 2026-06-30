@@ -6,7 +6,7 @@ import { WarningOutlined } from '@ant-design/icons';
 import myUtil from '@/components/DDAssist/util';
 import { history } from 'umi';
 import { fpmxcx2, qxkp } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const ckfpFunc: any = {
   unitRef: React.createRef(),

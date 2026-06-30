@@ -9,7 +9,7 @@ import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import { cloneDeep } from 'lodash';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface IcList {
   onRef?: any;

@@ -6,7 +6,7 @@ import { glhcp, queryCjCsh, queryCjGlh, queryCjBh, checkMtsTssbGlh, checkJtgszbQ
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import moment from 'moment';
 import { history } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const DditCktsFormCommonFunc: any = {
   unitRef: React.createRef(),

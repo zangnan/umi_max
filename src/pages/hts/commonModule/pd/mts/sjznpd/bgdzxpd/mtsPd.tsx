@@ -6,7 +6,7 @@ import { Button, Col, Drawer, Form, InputNumber, message, Modal, Space, Spin, Sw
 import columnsRender from '@/pages/hts/common/field/eventColRender';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import {itemType} from '@/components/DDForm/data.d';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import {history, useIntl} from 'umi';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import UnitUtil from '@/components/DDBunit/unit_util';
@@ -17,7 +17,7 @@ import pdFun from './pdFun';
 import moment from 'moment';
 import {BarsOutlined, QuestionCircleOutlined} from '@ant-design/icons';
 import {checkMtsTssbGlh, checkSsqPcYsb, pdCheckByHistoryData, queryCjGlh, querySpdmXxCj, znpdBgdPd, znpdBgdPdDb } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 export interface DDModalGridProps {

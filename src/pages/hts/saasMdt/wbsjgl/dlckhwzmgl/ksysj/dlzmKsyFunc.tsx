@@ -1,7 +1,7 @@
 import React from 'react';
 import { plxgckfph, plxgckspDm, queryPager } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl, intl as intl2 } from '@/components/DDAssist/util';
 import {Form, Input} from "antd";
 import baseValidator from '@/components/DDAssist/field/baseValidator';

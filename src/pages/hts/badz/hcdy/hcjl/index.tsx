@@ -3,7 +3,7 @@
  * author: mfc
  */
 import cktsUtil from '@/pages/hts/cktsUtil';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import React, { useState, useRef } from 'react';
 import { useIntl } from 'umi';
 import hcjlFunc from './f';

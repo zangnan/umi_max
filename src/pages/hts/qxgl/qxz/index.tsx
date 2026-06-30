@@ -1,6 +1,6 @@
 import React, { useRef, } from 'react';
 import unitConfig from './config';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './f';
 import Add from './add';
 import Pbcd from './pbcd';

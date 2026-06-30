@@ -2,7 +2,7 @@ import React from 'react';
 import myUtil from '@/components/DDAssist/util';
 import { Button, Form, message, Space, Table, Tooltip, Upload} from 'antd';
 import {queryPager, checkShpzhWxy, downloadTemplate, getShhl, hqFhfs, importTemplate, shsdsjDelete, shsdsjdr, shglppqjy, shglSdplzdpp, initShsdPpsj } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import {ClockCircleOutlined, InboxOutlined} from '@ant-design/icons';
 import importStyle from './importStyle.less';
 import moment from 'moment';

@@ -8,7 +8,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
  import { bcfpsqd, queryParams, fpmxbc2 } from '@/pages/hts/services/htsApi';
  import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
  import { WarningOutlined } from '@ant-design/icons';
  
  export interface DDModalGridProps {

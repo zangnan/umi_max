@@ -1,7 +1,7 @@
 // 出口发票开具-出口发票开具-数电票开具（new）
 import React, { useEffect, useRef, useState } from 'react';
 import { Tabs, message } from 'antd';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './zxkpConfig';
 import func from './zxkpFunc';
 import unitConfigDc from './dckpConfig';
@@ -9,7 +9,7 @@ import funcDc from './dckpFunc';
 import myUtil from '@/components/DDAssist/util';
 import { djcsjkptj, scjc, ddtjkp2, checkDlt2 } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../../pzgl/sdppzgl/djdlpz/tab_kprz';
 import { useAccess } from 'umi';

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { kppzwh } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import { useIntl, useAccess, Access } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Index: React.FC<{ data?: any }> = ({
   data

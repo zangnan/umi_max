@@ -2,7 +2,7 @@ import React, { useState, useImperativeHandle } from 'react';
 import { Tag, Drawer } from 'antd';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import CONSTANTS from '@/components/DDAssist/constants';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import history_config from './lssbsjcxConfig';
 import Func from './lssbsjcxFun';
 

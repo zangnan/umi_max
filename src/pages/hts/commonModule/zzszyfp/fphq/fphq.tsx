@@ -3,7 +3,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import { Modal, Button, Form, Spin, DatePicker, message } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import myUtil from '@/components/DDAssist/util';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import shsjxz_config from './fphqConfig';
 import Func from './fphqFun';
 import { yzfPtDzfpSq, yzfPtDzfpCx, yzfPtDlzmSq, yzfPtDlzmCx } from '@/pages/hts/services/htsApi';

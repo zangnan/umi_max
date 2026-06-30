@@ -1,4 +1,4 @@
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import React from 'react';
 import { calBgdTjmyj, calHzqdTjmyj } from '@/pages/hts/services/htsApi';
 import 'moment/locale/zh-cn';

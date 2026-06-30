@@ -9,7 +9,7 @@ import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons';
 import DDBaseGrid from '@/components/DDBaseGrid';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import DrawerSbyyxq from './sbyyxq';
 import ModalScmx from './modalScmx';
 import moment from 'moment';

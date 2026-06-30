@@ -10,7 +10,7 @@ import moment from 'moment';
 import { itemType } from '@/components/DDForm/data.d';
 import { useIntl } from 'umi';
 import { baseEdit, callServiceCheck } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 import { history } from 'umi';
 

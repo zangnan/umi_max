@@ -10,7 +10,7 @@ import { getCmCode } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
   unitRef: React.createRef(),

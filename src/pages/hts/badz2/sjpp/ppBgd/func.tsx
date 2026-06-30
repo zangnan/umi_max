@@ -1,7 +1,7 @@
 import React from 'react';
 import 'moment/locale/zh-cn';
 import { Form, message, Radio, Space } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import htcxFun from '../../common/htcx/func';
 import { badzJcpp } from '@/pages/hts/services/htsApi';
 const Func: any = {

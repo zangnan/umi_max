@@ -13,7 +13,7 @@ import Jkbgd from '../hgsjxz/jkbgd';
 import Zzszyjks from '../hgsjxz/zzszyjks';
 import Jgszch from '../hgsjxz/jgszch';
 import Badzzl from '../hgsjxz/badzzl';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import IcList from '@/pages/hts/pzgl/icCard/common/icCardTsList';
 import IcListGpt from '@/pages/hts/pzgl/icCard/common/icCardTsListGpt';
 import IcListYbt from '@/pages/hts/pzgl/icCard/common/icCardTsListYbt';

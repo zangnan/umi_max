@@ -5,7 +5,7 @@
 import { Button, message, Spin, Modal, Form, Select, Alert } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
  import ProTable from '@ant-design/pro-table';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
  import { DrawerForm } from '@ant-design/pro-form';
 import myUtil from '@/components/DDAssist/util';
  import { useIntl } from 'umi';

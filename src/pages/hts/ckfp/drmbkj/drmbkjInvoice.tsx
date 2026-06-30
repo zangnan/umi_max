@@ -8,7 +8,7 @@ import Invoice from '@/pages/hts/components/DDdocs/Invoice';
 import { bcfpsqd, queryParams } from '@/pages/hts/services/htsApi';
 import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { WarningOutlined } from '@ant-design/icons';
 
 export interface DDModalGridProps {

@@ -2,7 +2,7 @@
  * title: 出口报关单台账
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './config';
 import configsb from './configsb';
 import configkj from './configkj';

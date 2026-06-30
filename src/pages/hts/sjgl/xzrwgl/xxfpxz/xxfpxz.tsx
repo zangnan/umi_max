@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Form, Space, message, Checkbox, Spin, DatePicker, Row, Col } from 'antd';
 import ProCard from '@ant-design/pro-card';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import { checkDlt2, cjrw } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';

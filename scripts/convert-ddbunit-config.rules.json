@@ -299,6 +299,6 @@
     }
   ],
   "excludeFiles": [
-    "src/pages/hts/commonModule/ddbunit2_ckts/**"
+    "src/pages/hts/components/DDBunit2_ckts/**"
   ]
 }

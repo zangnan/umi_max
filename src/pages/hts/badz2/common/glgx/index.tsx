@@ -2,7 +2,7 @@
  * 关联关系
  */
 import React, { useState, useImperativeHandle } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer } from 'antd';
 import Config from './config';

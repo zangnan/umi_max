@@ -4,7 +4,7 @@
  *   cktsUtil.getLcswsxDm(myConfig.unit_constant) 并在生成文件顶部加 import cktsUtil
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './cktsUtil-rewrite';
 import cktsUtil from '@/pages/hts/cktsUtil';
 

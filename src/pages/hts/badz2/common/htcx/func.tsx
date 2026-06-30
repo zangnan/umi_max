@@ -3,7 +3,7 @@ import 'moment/locale/zh-cn';
 import { Button, message } from "antd";
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteBaqkAndDzRelation, saveBaqkAndDzRelation } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 const Func: any = {
   unitRef: React.createRef(),

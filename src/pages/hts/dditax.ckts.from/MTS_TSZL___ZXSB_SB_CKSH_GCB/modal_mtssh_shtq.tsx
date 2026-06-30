@@ -4,7 +4,7 @@ import { Button, Spin, Modal, Form, Input, message, Row, Col} from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import { queryCkshSbxx, ckhwshQkTqsh } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import ModalShtqjg from './modal_mtssh_shtqjg';
 
 export interface AbgdBjProps {

@@ -3,7 +3,7 @@
  * 含 initSearchModal 段（literal value），工具会把它原样注入到生成的 auto_configIndex.tsx
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './index-from-reference';
 
 const Index: React.FC<unknown> = () => {

@@ -2,7 +2,7 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import React from 'react';
 import { history } from 'umi';
 import { message, Form, Radio, List, Space, DatePicker, Switch, Upload, Button, Tooltip } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';

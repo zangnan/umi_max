@@ -2,7 +2,7 @@ import { Radio, Form, Button, Switch, message, Space } from 'antd';
 import React from 'react';
 import 'moment/locale/zh-cn';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { gxQybz } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { ExclamationCircleOutlined, } from '@ant-design/icons';

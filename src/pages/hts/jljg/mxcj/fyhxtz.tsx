@@ -1,4 +1,4 @@
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { commonInitJbxx, recalculateMdthxfpl, queryMdthxFpl, mdttzbplsc, mdttzbsjhb } from '@/pages/hts/services/htsApi';
 import { message, Form, Input, Radio, Space, Modal } from 'antd';
 import React from 'react';

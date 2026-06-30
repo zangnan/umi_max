@@ -1,5 +1,5 @@
 import { Upload, message, Form, Radio, Button, Tooltip, Space } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { xsfpzcx, fpsqdmxcx, fpsqdqrkp, queryDjbh, drmbkjSc, fpsqdsjdr, importTemplate, qrkpjy, kpddxz, ddtjkp, commonDrwtdc, skxxcx } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined, WarningOutlined } from '@ant-design/icons';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';

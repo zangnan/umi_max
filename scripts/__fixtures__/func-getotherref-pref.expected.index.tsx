@@ -4,7 +4,7 @@
  * 预期：工具应在生成的 myConfig 之前注入 5 个 useRef 定义
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './func-getotherref-pref';
 
 const Index: React.FC<unknown> = () => {

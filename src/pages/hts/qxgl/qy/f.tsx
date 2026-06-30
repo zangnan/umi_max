@@ -6,7 +6,7 @@ import React from 'react';
 import { message, Switch, Button } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteQy, qyHtyQy } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
   unitRef: React.createRef(),

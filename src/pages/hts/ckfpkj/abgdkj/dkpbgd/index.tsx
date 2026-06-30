@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import abgdkjConfig from './config';
 import abgdkjFunc from './f';
 import ModalSsflbm from './modal_setSsflbm';

@@ -1,7 +1,7 @@
 import { message, Badge } from 'antd';
 import React from 'react';
 import { deleteTzData } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {

@@ -5,13 +5,13 @@
 import React, { useImperativeHandle, useState } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer, Spin, message, Button } from 'antd';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from '../qy/config';
 import config2 from '../yh/config';
 import { qyyg } from '@/pages/hts/services/htsApi';
 import ProCard from '@ant-design/pro-card';
 import { cloneDeep } from 'lodash';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 

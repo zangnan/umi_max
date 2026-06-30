@@ -3,7 +3,7 @@
  * author: yxy
  */
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { message, Popover, Tooltip, Form, Radio, Space, Select } from 'antd';
 import { cxkp, qxkp, fphc, fpzf, fpxz, fpztsx, dyjcx, dyfp, downloadTemplate, sdpfphc } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';

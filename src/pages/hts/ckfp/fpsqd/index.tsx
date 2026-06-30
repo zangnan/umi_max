@@ -8,7 +8,7 @@ import { DownOutlined, FullscreenOutlined, FullscreenExitOutlined, WarningOutlin
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import ProCard from '@ant-design/pro-card';
 import Invoice from '@/pages/hts/components/DDdocs/Invoice';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { queryPager, querySqdmxcx, saveFpsqdxxbc, querySqdqrkptj, sqdqrkp, sqdSccz, sqddjxhcp, xzsqdtzmxcx, xzsqdtzbc, queryParams, kpddxz, commonDrwtdc, qrkpjy, ddtjkp, sdpqrkp, sdpddtjkp, skxxcx } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import Bgdxq from './bgdxq';

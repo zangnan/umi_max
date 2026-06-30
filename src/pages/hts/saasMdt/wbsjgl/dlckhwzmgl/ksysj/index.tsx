@@ -1,6 +1,6 @@
 // 代理出口货物证明-可使用数据
 import React, {useRef} from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from "./dlzmKsyConfig";
 import Func from "./dlzmKsyFunc";
 import ScmxSaasMdt from '@/pages/hts/commonModule/scmx/scmxSaasMdt';

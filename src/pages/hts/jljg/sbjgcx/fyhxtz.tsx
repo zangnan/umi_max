@@ -2,7 +2,7 @@ import { queryReportData } from '@/pages/hts/services/htsApi';
 import { message, Form, Input } from 'antd';
 import React from 'react';
 import { history } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import businessValidator from "../common/businessValidator";
 
 const Func: any = {

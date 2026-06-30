@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './config';
 import func from './func'
 import { cloneDeep } from 'lodash';
 import ZdppBgd from '../../common/zdpp/zdppBgd';
 import { Form, message, Radio, Space } from "antd";
 import { zdppBadz, badzJcpp } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface leftProps {
   gridLeftClick?: any

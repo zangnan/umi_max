@@ -10,7 +10,7 @@ import { updateDataTz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import { history, useRouteData } from 'umi';
 import style from './style.less';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface DDTzUpdateDataProps {
   onRef?: any;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { queryPager, plxgckfph, downloadTemplate, importData, ckhthTockfph, getBgdInfoHgck, bgdpdfyl } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Form, message, Upload, Button, Input, Tooltip } from 'antd';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import myUtil, {intl } from '@/components/DDAssist/util';

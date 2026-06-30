@@ -2,7 +2,7 @@
  * title: 导出开票：出口发票开具-出口发票开具-发票红冲（new）
  */
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Popover, Tooltip, message, Button } from 'antd';
 import { fpch, fpzfDckp, downloadTemplate, dckphczftj } from '@/pages/hts/services/htsApi';
 import { intl as intl2 } from '@/components/DDAssist/util';

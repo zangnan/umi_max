@@ -1246,7 +1246,7 @@ function applyImportRewrites(importLines) {
         /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?$/,
       );
       if (ddAlertMatch) {
-        return `import ${ddAlertMatch[1]} from '@/pages/hts/commonModule/DDAlert';`;
+        return `import ${ddAlertMatch[1]} from '@/pages/hts/components/DDAlert';`;
       }
       const staticTableCodeMatch = trimmed.match(
         /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/pages\/common\/staticTableCode['"]\s*;?$/,
@@ -1572,11 +1572,11 @@ function applyImportRewritesToContent(content) {
   );
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
-    "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
+    "import $1 from '@/pages/hts/components/DDImport/checkErrorProp';",
   );
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
-    "import $1 from '@/pages/hts/commonModule/DDAlert';",
+    "import $1 from '@/pages/hts/components/DDAlert';",
   );
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"](?:@\/pages\/common\/staticTableCode|@\/components\/DDAssist\/staticTableCode)['"]\s*;?[ \t]*$/gm,
@@ -1981,7 +1981,7 @@ function stripGridParamsBlock(text) {
 function normalizeDDBunit2Import(content) {
   return content.replace(
     /^[ \t]*import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
-    "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
+    "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
   );
 }
 
@@ -2083,16 +2083,16 @@ function applyCopyRewrites(content, srcFile) {
   // R4: pro.c_modal_width_x[1-4] → CONSTANTS.C_MODAL_WIDTH_X[1-4]
   text = text.replace(/\bpro\.c_modal_width_x([1-4])\b/g, 'CONSTANTS.C_MODAL_WIDTH_X$1');
 
-  // R5: '@/components/DDAlert' → '@/pages/hts/commonModule/DDAlert'
+  // R5: '@/components/DDAlert' → '@/pages/hts/components/DDAlert'
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDAlert['"]\s*;?[ \t]*$/gm,
-    "import $1 from '@/pages/hts/commonModule/DDAlert';",
+    "import $1 from '@/pages/hts/components/DDAlert';",
   );
 
-  // R13: '@/components/DDBunit/DDBunit2' → '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS'
+  // R13: '@/components/DDBunit/DDBunit2' → '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS'
   text = text.replace(
     /^[ \t]*import\s+DDBunit2\s+from\s+['"]@\/components\/DDBunit\/DDBunit2['"]\s*;?[ \t]*$/gm,
-    "import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';",
+    "import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';",
   );
 
   // R15: '@/pages/common/cktsUtil' (default 导入) → '@/pages/hts/cktsUtil'
@@ -2107,10 +2107,10 @@ function applyCopyRewrites(content, srcFile) {
     "import $1 from '@/pages/hts/common/qxUtil';",
   );
 
-  // R17: '@/components/DDImport/checkErrorProp' (default 导入) → '@/pages/hts/commonModule/DDImport/checkErrorProp'
+  // R17: '@/components/DDImport/checkErrorProp' (default 导入) → '@/pages/hts/components/DDImport/checkErrorProp'
   text = text.replace(
     /^[ \t]*import\s+(\w+)\s+from\s+['"]@\/components\/DDImport\/checkErrorProp['"]\s*;?[ \t]*$/gm,
-    "import $1 from '@/pages/hts/commonModule/DDImport/checkErrorProp';",
+    "import $1 from '@/pages/hts/components/DDImport/checkErrorProp';",
   );
 
   // R10: formUtil 导入（仅当源文件含 UnitUtil.form.init 时添加）

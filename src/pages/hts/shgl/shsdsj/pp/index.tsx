@@ -10,7 +10,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import YppBgdGrid from './yppBgdGrid';
 import WppBgdGrid from './wppBgdGrid';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import Gdpp from './modal_gdpp';
 import Htpp from './modal_htpp';

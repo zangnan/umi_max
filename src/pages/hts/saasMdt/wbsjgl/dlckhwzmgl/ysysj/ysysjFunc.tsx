@@ -1,4 +1,4 @@
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl } from '@/components/DDAssist/util';
 import { message } from 'antd';
 import React from 'react';

@@ -5,7 +5,7 @@ import { PlusOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import cardStyle from './cardLess.less';
 import { queryKak, jcjyKak, deleteKak } from '@/pages/hts/services/htsApi';
 import { history } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Index: React.FC<{ data: any }> = ({
   data

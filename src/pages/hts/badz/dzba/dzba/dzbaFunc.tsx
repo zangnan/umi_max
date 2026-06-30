@@ -1,7 +1,7 @@
 /**
  * title: 备案单证 - 单证备案 - 单证备案
  */
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { modifySlrqjk, sbsjsc } from '@/pages/hts/services/htsApi';
 import { DatePicker, Form, message, Button, Tooltip } from 'antd';
 import React from 'react';

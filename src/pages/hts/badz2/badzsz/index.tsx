@@ -3,7 +3,7 @@ import { message, Switch, Spin } from 'antd';
 import ProCard from '@ant-design/pro-card';
 import { queryBadzepz, updateXybz, checkPzglExistsDzlxInSjpp } from '@/pages/hts/services/htsApi';
 import DDBaseGrid from '@/components/DDBaseGrid';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl } from '@/components/DDAssist/util';
 
 export interface DDTsort {

@@ -3,7 +3,7 @@
  * author: yxy
  */
 import React from 'react';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Badge, Button, Form, Input, message} from 'antd';
 import {history} from 'umi';
 import './style.less';

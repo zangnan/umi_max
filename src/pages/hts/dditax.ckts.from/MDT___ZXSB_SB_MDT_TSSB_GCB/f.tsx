@@ -8,7 +8,7 @@ import { queryJhfpl, queryBgdByBgdNo21, queryHlxx, querySpdmXxCj, queryDlzmByDlc
 import {Button, Form, message, Tooltip, Upload} from 'antd';
 import myUtil from '@/components/DDAssist/util';
 import moment from 'moment';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import importStyle from './importStyle.less';
 import {ClockCircleOutlined, InboxOutlined} from "@ant-design/icons";
 import tableStyle from './style.less';

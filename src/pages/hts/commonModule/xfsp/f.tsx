@@ -1,6 +1,6 @@
 import React from 'react';
 import { xfsfptzsx, importTemplate, xfsfppdfyl } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { Form, message, Upload, Button, Tooltip } from 'antd';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import myUtil from '@/components/DDAssist/util';

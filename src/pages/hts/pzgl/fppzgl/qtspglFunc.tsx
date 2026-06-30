@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import React from 'react';
 import { qtspsc, qtspwhcheck } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import 'moment/locale/zh-cn';
 import { intl as intl2 } from '@/components/DDAssist/util';
 

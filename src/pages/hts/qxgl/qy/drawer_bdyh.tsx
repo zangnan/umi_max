@@ -5,7 +5,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer, Spin, message } from 'antd';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import yhConfig from '../yh/config';
 import Func from './f_bdyh'
 import { yhBdQy } from '@/pages/hts/services/htsApi';

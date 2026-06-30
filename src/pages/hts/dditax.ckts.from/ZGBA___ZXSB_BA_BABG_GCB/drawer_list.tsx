@@ -10,7 +10,7 @@ import ProCard from '@ant-design/pro-card';
 import { querybgsjCsh, queryCjCsh, checkTbrq, checkzxsbbababg, saveBabgsj } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
 import { request } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface BdjgProps {
   onRef?: any;

@@ -3,7 +3,7 @@ import { Table } from 'antd';
 import type { DDBaseGridProps, PaginationProps } from '@/components/DDBaseGrid/data.d';
 import { getGridData } from '@/pages/hts/services/htsApi';
 import UnitUtil from '@/components/DDBunit/unit_util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import './style.less';
 
 const ZnfxGrid: React.FC<DDBaseGridProps> = ({

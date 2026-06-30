@@ -3,7 +3,7 @@
  * author: yxy
  */
 import React, { useImperativeHandle, useState, useEffect } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import bdjgConfig from './bdjgconfig';
 import ZnfxBdjgFunc from './fbdjg';
 import CONSTANTS from '@/components/DDAssist/constants';

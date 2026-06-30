@@ -8,7 +8,7 @@ import { Spin, Button, message, Space, Input, Form, Select, Modal, InputNumber }
 import { querySjhzSsqList, querySjhzcxData, deleteHzsjcxData, saveHzsjcxData, querySchzbCscs, mdtJcSjhfx, mdtSchzb } from '@/pages/hts/services/htsApi';
 import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import CONSTANTS from '@/components/DDAssist/constants';
 import DDBaseGrid from '@/components/DDBaseGrid';
 import { useIntl } from 'umi';

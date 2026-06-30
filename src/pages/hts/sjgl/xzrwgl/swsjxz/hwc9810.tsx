@@ -5,7 +5,7 @@ import {ycsbYzfFkxzSq } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import './style.less';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history, useIntl } from 'umi';
 import { shfkdr2Check } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';

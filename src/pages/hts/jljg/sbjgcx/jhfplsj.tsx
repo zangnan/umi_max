@@ -3,7 +3,7 @@
  * creator: zxy
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import jhfplsjConfig from './jhfplsjconfig';
 import Func from './f';
 import { useIntl } from 'umi';

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Row, Col, Card } from 'antd';
 import ProCard from '@ant-design/pro-card';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import { xzrw, queryKakPassword, saveKakPassword, rwycgx, hgsjxz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';

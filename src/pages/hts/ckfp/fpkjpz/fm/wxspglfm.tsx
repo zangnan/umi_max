@@ -2,7 +2,7 @@
  * 发票开具配置  外销商品管理 赋码
  */
 import React, { useImperativeHandle, useState } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer } from 'antd';
 import config from './config';

@@ -10,7 +10,7 @@ import businessValidator from '@/pages/hts/common/field/businessValidator';
 import '@/pages/hts/commonModule/style.less';
 import { hqSsSsq, hqSsPc, tszbqd, tszbqdMdt, tszbcsMdt, mdtTszbcsHqTszbyz } from '@/pages/hts/services/htsApi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import Func from "@/pages/hts/dditax.ckts.from/MDT___ZXSB_SB_MDT_TSSB_GCB/f";
 
 export interface DDTsort {

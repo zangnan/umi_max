@@ -8,7 +8,7 @@ import { useIntl } from 'umi';
 import { exportgmf, gmfxxsz, importgmf, queryParams, szwxtbz, gmfxxcx, queryPager, downloadTemplate } from '@/pages/hts/services/htsApi';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import { FormInstance } from 'antd/es/form';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import DDBaseGrid from '@/components/DDBaseGrid';
 const EditableContext = React.createContext(null);

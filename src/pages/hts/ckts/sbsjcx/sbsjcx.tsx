@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { useRouteData} from 'umi';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import {  message, Tag, Badge, Space, Form, Upload, Button, Tooltip} from 'antd';
 import { QuestionCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 import cktsUtil from '@/pages/hts/cktsUtil';
@@ -12,7 +12,7 @@ import unitConfig from './sbsjcxConfig';
 import Func from './sbsjcxFun';
 import myUtil from '@/components/DDAssist/util';
 import { UploadOutlined, ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { shfkdr2, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import importStyle from './importStyle.less';
 import Tsxx from '../../ckts/scsbsj/tsxx';

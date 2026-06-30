@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 import { history, request } from 'umi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { zdpd } from '@/pages/hts/services/htsApi';
 import { message,Form, DatePicker } from 'antd';

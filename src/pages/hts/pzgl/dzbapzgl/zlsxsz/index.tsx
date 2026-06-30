@@ -10,7 +10,7 @@ import { request, } from 'umi';
 import { badzSzSxszSave, getTreeCode2, getDzmcTree } from '@/pages/hts/services/htsApi';
 import './style.less';
 import YlPicViewer from "@/pages/hts/badz/badzcommon/ylPicViewer";
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 
 const EditableContext = React.createContext(null);

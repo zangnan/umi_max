@@ -4,7 +4,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, Spin, Modal, Form, message, Radio } from 'antd';
 import { myxzszClfs } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface ModalClfsProps {
   onRef?: any;

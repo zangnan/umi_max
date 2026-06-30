@@ -9,7 +9,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import UnitUtil from '@/components/DDBunit/unit_util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface DDModalGridProps {
   onRef?: any;

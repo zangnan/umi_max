@@ -4,7 +4,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { Drawer, Spin, message } from 'antd';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import { cloneDeep } from 'lodash';
 
 import qyConfig from './config';

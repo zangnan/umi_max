@@ -12,7 +12,7 @@ import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { useIntl, request } from 'umi';
 import Wxspglfm from '@/pages/hts/ckfp/fpkjpz/fm/wxspglfm';
 import UnitUtil from '@/components/DDBunit/unit_util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 
 export interface DDBatchUpdateProps {
   onRef?: any;

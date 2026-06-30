@@ -4,7 +4,7 @@ import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
 import { Button, Divider, Col, Row, Typography, message, Space, Popover, Tag, Badge, Spin, Tooltip } from 'antd';
 import importStyle from './style.less';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './Func';
 import unitConfig from './config';
 import { getSmzt, getCgtj, initSm, getZblx, getInitTj } from '@/pages/hts/services/htsApi';

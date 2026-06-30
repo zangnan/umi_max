@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, Fragment, useState, } from 'react';
 import { useRouteData, history } from 'umi';
 import { useAccess, useIntl} from 'umi';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './scsbsjFun';
 import { Button, Tag, Tooltip, Badge, Space, message, Upload, Form} from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -19,7 +19,7 @@ import myUtil from '@/components/DDAssist/util';
 import qxUtil from '@/pages/hts/common/qxUtil';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import Tsxx from './tsxx';
 import Tszlxz from './tszlxz';
 import Zssb from './modal_zssb';

@@ -2,7 +2,7 @@
 // sbpc 3位补零 未完成
 import React, { useState, useImperativeHandle, Fragment , useRef} from 'react';
 import { Modal, message, Button, Form } from 'antd';
-import ErrorMsgGrid from '@/pages/hts/commonModule/DDImport/checkErrorProp';
+import ErrorMsgGrid from '@/pages/hts/components/DDImport/checkErrorProp';
 import { itemType } from '@/components/DDForm/data.d';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';

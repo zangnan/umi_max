@@ -7,7 +7,7 @@ import { checkYglhYcj, hysbqkByIds } from '@/pages/hts/services/htsApi';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import { message,Table } from 'antd';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 

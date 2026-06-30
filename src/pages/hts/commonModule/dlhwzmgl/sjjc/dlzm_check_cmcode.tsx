@@ -6,7 +6,7 @@ import { Modal, Button, Table, message, Spin } from 'antd';
 import { useIntl } from 'umi';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { updateDlzmTzCmcode } from '@/pages/hts/services/htsApi';
 
 import CheckCmcodeBgdxq from './dlzm_check_cmcode_bgdxq';

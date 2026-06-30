@@ -1,7 +1,7 @@
 import React from 'react';
 import { message, Badge, Tooltip } from 'antd';
 import { sjxzDelrw, sjxzCxxz } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 
 const Func: any = {

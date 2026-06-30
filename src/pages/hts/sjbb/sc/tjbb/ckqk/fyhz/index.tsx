@@ -1,7 +1,7 @@
 
 import dayjs from 'dayjs';
 import React, { useRef } from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './config';
 import Func from '../../common/f'
 import DrawerList from '../../common/drawer_list';

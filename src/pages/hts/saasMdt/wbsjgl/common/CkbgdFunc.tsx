@@ -1,6 +1,6 @@
 import React from 'react';
 import { bgdzbts } from '@/pages/hts/services/htsApi';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import {Form, message, Radio} from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 

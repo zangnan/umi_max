@@ -1,4 +1,4 @@
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import { getBgdInfoHgck, bgdzbts, bgdpdfyl } from '@/pages/hts/services/htsApi';
 import { message, Tooltip } from 'antd';
 import React from 'react';

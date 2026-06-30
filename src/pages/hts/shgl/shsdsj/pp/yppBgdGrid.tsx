@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Table, Form, Tooltip, Button, Divider, message} from 'antd';
 import type { DDBaseGridProps, PaginationProps } from '@/components/DDBaseGrid/data.d';
 import UnitUtil from '@/components/DDBunit/unit_util';
-import DDAlert from '@/pages/hts/commonModule/DDAlert';
+import DDAlert from '@/pages/hts/components/DDAlert';
 import './style.less';
 import myUtil from '@/components/DDAssist/util';
 import { EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
