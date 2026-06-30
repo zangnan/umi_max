@@ -8,6 +8,11 @@ let routes: any = [
     { name: 'login', path: '/user/login', component: './User/Login' },
     { name: 'transition', path: '/user/transition', component: './Transition' }
   ]},
+  {
+    path: '/htsuser', layout: false, routes: [
+      { name: 'login', path: '/htsuser/login', component: './hts/user/Login' }
+    ]
+  },
   { path: '/ai', layout: false, routes: [
     { name: 'xcn', path: '/ai/x-cn', component: './example/ai/deepseek01' },
     { name: 'x', path: '/ai/x', component: './example/ai/deepseek01' },
