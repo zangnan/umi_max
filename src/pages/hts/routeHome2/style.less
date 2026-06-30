@@ -1,0 +1,84 @@
+// 新系统迁移时注释
+// @import "~@/assets/css/config.less";
+.routeHome-header {
+    background: #32465A;
+    height: 44px!important;
+    padding: 0 8px 0 50px;
+    .routeHome-menu {
+        background: #32465A;
+        height: 45px!important;
+        flex: 1 1 0%;
+        .ant-menu-horizontal {
+            border-bottom: none;
+        }
+        .ant-menu-item {
+            color: #D1E8FF;
+            position: relative;
+            top: 0px;
+            display: inline-block;
+            vertical-align: bottom;
+            margin-top: 0px;
+        }
+        .ant-menu-item:hover,
+        .ant-menu-item:focus {
+            background-color: #1e2a36!important;
+            color: #D1E8FF;
+        }
+        .ant-menu-item-selected{
+            background-color: #1e2a36!important;
+            .routeHome-menu-item-title{
+                color: #fff!important;
+            }
+        }
+        .ant-menu-item-selected:after:hover {
+            border-bottom: none;
+        }
+        .ant-menu-item-selected::after {
+            border-bottom: none;
+        }
+        .ant-menu-item-selected::after {
+            border-bottom: none;
+        }
+        .ant-menu-item::after{
+            border-bottom: none;
+        }
+        .routeHome-menu-item-title {
+            margin-left: 10px;
+        }
+        
+    }
+}
+.empty-description {
+  font-size: 16px;
+  font-weight: bold;
+  color: #a6a6a6;
+}
+
+.bgPage {
+    background-color: #fff;
+    // width: 100vw;
+    height: calc(100vh - 90px);
+    position: relative;
+    padding-top: 30px;
+}
+.bgPageText {
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: #999999;
+    text-align: center;
+    position: absolute;
+    top: 510px;
+    width: 400px;
+    left: 50%;
+    margin-left: -200px;
+}
+.bgEmpty{
+    // background: url('../../../../public/img/empty2.png') center center;
+    // background: url('~@/assets/css/img/empty2.png') center center;
+    background-size: contain;
+    background-repeat: no-repeat; 
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+}
+

@@ -230,6 +230,14 @@
       {
         "old": "@/pages/user/Login/companyModal",
         "new": "@/pages/hts/user/Login/companyModal"
+      },
+      {
+        "old": "@/components/UrlhtmlShow",
+        "new": "@/pages/hts/components/UrlhtmlShow"
+      },
+      {
+        "old": "@/components/RightContent",
+        "new": "@/pages/hts/components/RightContent"
       }
     ],
     "less": [
