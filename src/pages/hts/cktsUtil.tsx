@@ -414,11 +414,15 @@ cktsUtil.menu = {
     return targetMenuObj;
   },
   // 获取慧退税菜单
-  getHtsMenu: async () => {
+  getHtsMenu: async ({treeData}: any) => {
     const resHts = await fetchMenuData({});
     let resMenu = []
     if (resHts.code === '200' && resHts?.body) {
-      resMenu = (resHts.body || []).filter((tmp: any) => tmp.id === 'A01') || [];
+      resMenu = (resHts.body || []).filter((tmp: any) => (tmp.id === 'A01' || tmp.id === 'A99')) || [];
+      if (resMenu?.length > 0) {
+        resMenu = resMenu[0].routes || [];
+        treeData(resMenu);
+      }
     }
     return resMenu;
   }
