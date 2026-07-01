@@ -318,7 +318,7 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
             <DatePicker.RangePicker locale={locale} format={myUtil.date.formatList()} disabled={sqyxqbz}/>
           </Form.Item>
           <Form.Item labelCol={{span: 6}} wrapperCol={{span: 14}}
-                     rules={[baseValidator.zzsOr0(), baseValidator.range2({min: 0, max: 3})]} label="试用月数" name="syys">
+                     rules={[{ type: 'base_number', range: '+0'}, baseValidator.range2({min: 0, max: 3})]} label="试用月数" name="syys">
             <Input disabled={yssqbz}/>
           </Form.Item>
           <Form.Item labelCol={{span: 6}} wrapperCol={{span: 14}}

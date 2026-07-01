@@ -135,7 +135,7 @@ const index: React.FC<unknown> = () => {
       jsDm = dataSource[0].jsDm;
       setJsDm(jsDm);
       if (dataSource.length > 0) {
-        unitRef.current?.setSelectionRowKeys([jsDm]);  // 设置SelectionRows
+        unitRef?.current?.setSelectionRowKeys([jsDm]);  // 设置SelectionRows
       }
     }else{
       setJsDm('');

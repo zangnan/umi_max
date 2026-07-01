@@ -79,6 +79,18 @@ baseValidator.len2 = (targetLen: any) => {
   return { validator };
 };
 
+// 长度或
+baseValidator.lenOr= (name:any, param: any, param1 :any) => {
+  const validator = (_rule: any, values: any) => {
+    let value :any = values;
+    if(value && value?.length != param && value?.length != param1){
+      return Promise.reject(new Error(`${name}长度必须为${param}个字符或${param1}个字符`));
+    }
+    return Promise.resolve();
+  }
+  return { validator };
+};
+
 // 类型 string/number/boolean/method/regexp/integer/float/array/object/enum/date/url/hex/email/any
 baseValidator.type = (type: any) => {
   return { type }

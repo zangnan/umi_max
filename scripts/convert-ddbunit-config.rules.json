@@ -100,6 +100,10 @@
         "new": "cktsUtil.sys.bgdsjlyType()"
       },
       {
+        "old": "baseValidator.zzsOr0()",
+        "new": "{ type: 'base_number', range: '+0'}"
+      },
+      {
         "old": "baseValidator.zzs()",
         "new": "{ type: 'base_number', range: '+'}"
       },
@@ -313,6 +317,15 @@
         },
         {
           "115": "    unitRef?.current?.setSelectionRows(checkRow);  // 设置SelectionRows"
+        }
+      ]
+      
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/qxgl/js/index.tsx",
+      "line": [
+        {
+          "138": "        unitRef?.current?.setSelectionRowKeys([jsDm]);  // 设置SelectionRows"
         }
       ]
       
