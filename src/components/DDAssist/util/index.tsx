@@ -4474,6 +4474,8 @@ myUtil.api = {
       apiPrefix = API_URL_EXAMPLE;
     } else if(window.location.href.indexOf('/hts/') > -1 ||
       window.location.href.indexOf('/02') > -1 ||
+      window.location.href.indexOf('/26') > -1 ||
+      window.location.href.indexOf('/40') > -1 ||
       window.location.href.indexOf('/qt/') > -1 ||
       window.location.href.indexOf('/25') > -1) {
       apiPrefix = API_URL_HTS;

@@ -1441,10 +1441,62 @@ let routesHts: any = [
 
 ];
 
+  // 配置管理
+let cktsPzgl: any = [
+  {
+    name: '配置管理', id: '22', icon: 'CoffeeOutlined', path: '/hts/pzgl', routes: [
+      // { path: '/hts/pzgl', redirect: '/hts/pzgl/dzswjpzgl' },
+      // { name: '电子税务局登录', id: '2208', pid: '22', icon: 'UserOutlined', path: '/hts/pzgl/dzswjpzgl', component: './hts/pzgl/dzswjpzgl' },
+      // { name: '退税汇率管理', id: '2201', pid: '22', icon: 'UserOutlined', path: '/hts/pzgl/tshlgl', component: './hts/pzgl/tshlgl' },
+      // { name: '客户信息管理', id: '2202', pid: '22', icon: 'HomeOutlined', path: '/hts/pzgl/khxxgl', routes: [
+      //     { path: '/hts/pzgl/khxxgl', redirect: '/hts/pzgl/khxxgl/stwtqyxxgl', id: '2200', pid: '22' },
+      //     { name: '受托/委托企业信息管理', id: '220201', pid: '2202', icon: 'UserOutlined', path: '/hts/pzgl/khxxgl/stwtqyxxgl', component: './hts/pzgl/khxxgl/stwtqyxxgl' },
+      //     { name: '外商管理', id: '220203', pid: '2202', icon: 'BarChartOutlined', path: '/hts/pzgl/khxxgl', routes: [
+      //       { path: '/hts/pzgl/khxxgl', redirect: '/hts/pzgl/khxxgl/wsgl',id: '22020300', pid: '220203' },
+      //       { name: '外商开票信息管理', id: '220202', pid: '220203', icon: 'HomeOutlined', path: '/hts/pzgl/khxxgl/wsgl', component: './hts/pzgl/khxxgl/wsgl' },
+      //       { name: '外商付汇关系管理', id: '22020301', pid: '220203', icon: 'UserOutlined', path: '/hts/pzgl/khxxgl/wsglwjj/wsfhgxgl', component: './hts/pzgl/khxxgl/wsglwjj/wsfhgxgl' },
+      //       ]
+      //     },
+      //   ]
+      // },
+
+      // { name: '发票配置管理', id: '2203', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fppzgl', component: './hts/pzgl/fppzgl' },
+      // { name: '数电配置管理', id: '2208', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/sdppzgl', routes: [
+      //   { path: '/hts/pzgl/sdppzgl', redirect: '/hts/pzgl/sdppzgl/djdlpz', pid: '22' },
+      //   { name: '电局登录配置', id: '220801', pid: '2208', icon: 'UserOutlined', path: '/hts/pzgl/sdppzgl/djdlpz', component: './hts/pzgl/sdppzgl/djdlpz' },
+      // ]
+      // },
+      // { name: '进料核销配置管理', id: '2208', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/jlhxgl', component: './hts/pzgl/jlhxgl' },
+      // // { name: '单证备案配置管理', id: '2204', pid: '22', icon: 'ProfileOutlined', path: '/hts/pzgl/dzbapzgl', component: './hts/pzgl/dzbapzgl' },
+      // { name: '单证备案配置管理', id: '2212', pid: '22', icon: 'ProfileOutlined', path: '/hts/pzgl/badzsz', component: './hts/badz2/badzsz' },
+      // { name: '监管方式码表管理', id: '2205', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/jgfsmbgl', component: './hts/pzgl/jgfsmbgl' },
+      // { name: '海关IC卡管理', id: '2206', pid: '22', icon: 'BarChartOutlined', path: '/hts/pzgl/icCard', routes: [
+      //     { path: '/hts/pzgl/icCard', redirect: '/hts/pzgl/icCard/icCardgl', pid: '22' },
+      //     { name: '海关IC卡管理', id: '220601', pid: '2206', icon: 'UserOutlined', path: '/hts/pzgl/icCard/icCardgl', component: './hts/pzgl/icCard/icCardgl' },
+      //     { name: '解除禁用IC卡', id: '220602', pid: '2206', icon: 'ProfileOutlined', path: '/hts/pzgl/icCard/icCardjy', component: './hts/pzgl/icCard/icCardjy' },
+      //     { name: '海关IC卡操作日志', id: '220603', pid: '2206', icon: 'HomeOutlined', path: '/hts/pzgl/icCard/icCardrz', component: './hts/pzgl/icCard/icCardrz' },
+      //   ]
+      // },
+      // { name: '智能配单配置管理', id: '2207', pid: '22', icon: 'FormOutlined', path: '/hts/pzgl/znpdpzgl', routes: [
+      //     { path: '/hts/pzgl/znpdpzgl', redirect: '/hts/pzgl/znpdpzgl/zdpppzgl', id: '2200', pid: '22' },
+      //     { name: '自动匹配配置管理', id: '220701', pid: '2207', icon: 'UserOutlined', path: '/hts/pzgl/znpdpzgl/zdpppzgl', component: './hts/pzgl/znpdpzgl/zdpppzgl' },
+      //   ]
+      // },
+      { path: '/hts/pzgl/dsrw', id: '2211', pid: '22', name: '数据定时下载管理', icon: 'RobotOutlined', component: './hts/pzgl/dsrw' },
+      { name: '发票下载', id: '2213', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/fpxz', component: './hts/pzgl/fpxz' },
+      { name: '换汇成本管理', id: '2212', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/hhcbgl', component: './hts/pzgl/hhcbgl' },
+      { name: 'AI配单配置管理', id: '2215', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/aipdgl', component: './hts/pzgl/aipdgl' },
+      { name: '超级配单配置管理', id: '2216', pid: '22', icon: 'SecurityScanOutlined', path: '/hts/pzgl/cjpdgl', component: './hts/pzgl/cjpdgl' },
+      { name: '收汇数据定时匹配管理', id: '2214', pid: '22', icon: 'RobotOutlined', path: '/hts/pzgl/shsjdsppgl', component: './hts/pzgl/shsjdsppgl' },
+    ]
+  },
+]
+
 export default [
   ...cktsMenu_cxtj,
   ...cktsMenu,
   ...routesHts,
+  ...cktsPzgl,
   // 测试用
   { name: '慧退税', path: '/hts', icon: 'HomeOutlined', routes: [
     // 权限管理
