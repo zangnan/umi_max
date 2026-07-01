@@ -521,7 +521,7 @@ const DrawerList: React.FC<BdjgProps> = ({
       title="退（免）税备案变更采集"
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onCancel={() => setModalVisible(false)}
       footer={(

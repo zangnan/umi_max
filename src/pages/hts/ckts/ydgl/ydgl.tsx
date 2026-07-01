@@ -125,7 +125,7 @@ const Ydgl: React.FC<YdglProps> = ({
   return (
     <Drawer
       title="疑点管理"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => {setModalVisible(false)}}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}

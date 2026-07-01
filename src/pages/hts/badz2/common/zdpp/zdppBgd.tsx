@@ -152,7 +152,7 @@ const ZdppBgd: React.FC<ZdppBgd> = ({ onRef, visible = false }) => {
       title={'ZDPP' === openType ? "自动匹配" : "装订成册备案"}
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       width={bgdPpbz ? CONSTANTS.C_MODAL_WIDTH_MAX : CONSTANTS.C_MODAL_WIDTH_X1}
       onCancel={() => close()}
       footer={(<>

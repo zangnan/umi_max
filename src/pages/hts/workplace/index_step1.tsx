@@ -346,7 +346,7 @@ const Index: React.FC<BdjgProps> = ({
       {getContent(flagKey)}
       <DrawerForm
         title=""
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         className='abgd_bjkp_drawer'
         onVisibleChange={setModalVisible}

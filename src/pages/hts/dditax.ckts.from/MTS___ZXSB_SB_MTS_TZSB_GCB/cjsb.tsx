@@ -154,7 +154,7 @@ const Hgdzxzjy: React.FC<DDInvoiceProps> = ({
     <Modal
       title='冲减申报'
       wrapClassName='standard-modal-1  dd-gpy'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       okText="生成冲减"
       cancelText="关闭"

@@ -277,7 +277,7 @@ const App: React.FC<DDExportProps> = ({
     <Modal
       wrapClassName='standard-modal-1'
       title='差异化路由'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onCancel={() => setModalVisible(false)}
       footer={(<>

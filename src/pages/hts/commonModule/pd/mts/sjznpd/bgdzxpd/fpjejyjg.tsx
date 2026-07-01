@@ -82,7 +82,7 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
       <Modal
         title='系统消息'
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         wrapClassName='standard-modal-1'
         className={`${masker ? 'dd_modal_show_masker' : ''}`}

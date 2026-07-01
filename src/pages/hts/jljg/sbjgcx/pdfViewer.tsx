@@ -38,7 +38,7 @@ const CreateData: React.FC<CreateDataProps> = ({
     <Modal
       title={title}
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       cancelText="关闭"

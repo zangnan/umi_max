@@ -240,7 +240,7 @@ const DyViewer: React.FC<DyViewerProps> = ({
       <Modal
         title={`所属期：${mainParams?.record?.ssq || ''} 批次：${mainParams?.record?.sbpc || ''}`}
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         zIndex={998}
         mask={{ closable: false }}

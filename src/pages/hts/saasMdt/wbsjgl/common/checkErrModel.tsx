@@ -99,7 +99,7 @@ const CheckErrModel: React.FC<DDTsort> = ({ onRef, visible = false }) => {
             <Modal
                 title={title}
                 destroyOnHidden={true}
-                visible={modalVisible}
+                open={modalVisible}
                 width={CONSTANTS.C_MODAL_WIDTH_X4}
                 style={{ height: 700 }}
                 footer={(<>

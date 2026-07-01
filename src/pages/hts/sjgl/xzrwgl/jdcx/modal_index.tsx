@@ -51,7 +51,7 @@ const DrawerglFm: React.FC<BdjgProps> = ({
   return (
     <Drawer
       title="查看明细"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => { setModalVisible(false) }}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       destroyOnHidden={true}

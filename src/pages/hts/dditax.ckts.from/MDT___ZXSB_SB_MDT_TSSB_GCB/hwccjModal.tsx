@@ -41,7 +41,7 @@ const HwccjModal: React.FC<DDTsort> = ({onRef, visible = false}) => {
     <Modal
       title="海外仓冲减"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       footer={null}
       wrapClassName='standard-modal-1'

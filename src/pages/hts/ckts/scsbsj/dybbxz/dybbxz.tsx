@@ -196,7 +196,7 @@ const ReportGrid: React.FC<ReportGridProps> = ({
       title="打印报表下载"
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       okText="生成"

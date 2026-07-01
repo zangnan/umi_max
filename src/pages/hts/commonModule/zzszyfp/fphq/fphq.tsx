@@ -224,7 +224,7 @@ const Shsjxz: React.FC<BdjgProps> = ({
   return (
     <Modal
       title={title}
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}

@@ -99,7 +99,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         <Modal
             title="试算进项税额转出额"
             destroyOnHidden={true}
-            visible={modalVisible}
+            open={modalVisible}
             width={CONSTANTS.C_MODAL_WIDTH_X2}
             footer={<>
                 <Button onClick={exportModal}>导出</Button>

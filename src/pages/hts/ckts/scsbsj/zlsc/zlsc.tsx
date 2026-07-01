@@ -485,7 +485,7 @@ const Zlsc: React.FC<ZlscProps> = ({
         title="报送资料维护"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         wrapClassName='standard-modal-1'
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         okText="确认提交"

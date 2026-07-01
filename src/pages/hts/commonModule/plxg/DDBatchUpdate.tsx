@@ -405,7 +405,7 @@ const DDBatchUpdate: React.FC<DDBatchUpdateProps> = ({ onRef, visible = false })
       <Modal
         title="批量修改"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         footer={
           <>

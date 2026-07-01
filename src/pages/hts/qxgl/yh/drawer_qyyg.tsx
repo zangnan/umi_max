@@ -184,7 +184,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     <Drawer
       title="关联企业"
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}
       onClose={() => { close() }}

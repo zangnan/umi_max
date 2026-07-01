@@ -151,7 +151,7 @@ const Zlxz: React.FC<DDTsort> = ({ onRef, visible = false }) => {
       title="资料下载"
       destroyOnHidden={true}
       centered
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X2}
       footer={
         <>

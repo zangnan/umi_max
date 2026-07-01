@@ -304,7 +304,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
       <Drawer
         title={title}
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         className='dd_data_page_modal'
         mask={{ closable: false }}

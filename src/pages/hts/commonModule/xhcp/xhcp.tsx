@@ -162,7 +162,7 @@ const Order: React.FC<OrderProps> = ({
       title='序号重排'
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       okText="保存"
       cancelText="关闭"

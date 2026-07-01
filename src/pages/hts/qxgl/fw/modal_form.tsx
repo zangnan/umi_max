@@ -172,7 +172,7 @@ const ModalForm: React.FC<BdjgProps> = ({
     <>
       <Drawer
         title='服务明细'
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         onClose={() => close() }
       >

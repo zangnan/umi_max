@@ -185,7 +185,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
         title={`匹配备案单证`}
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName='standard-modal-1'
         zIndex={999}

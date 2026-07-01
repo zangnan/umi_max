@@ -96,7 +96,7 @@ const ModelZdpd: React.FC<AbgdBjProps> = ({
       <Modal
         title="自动配单"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         mask={{ closable: false }}
         footer={

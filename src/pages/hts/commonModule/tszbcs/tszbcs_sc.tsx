@@ -179,7 +179,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     <Modal
       title='退税指标测算'
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       wrapClassName='standard-modal-1'
       footer={<>

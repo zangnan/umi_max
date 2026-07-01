@@ -112,7 +112,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     <Drawer
       title="撤销删除"
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}
       onClose={() => { close() }}

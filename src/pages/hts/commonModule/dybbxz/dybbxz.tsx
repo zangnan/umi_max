@@ -185,7 +185,7 @@ const Dybbxz: React.FC<DybbxzProps> = ({
         title="打印报表下载"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         okText="确认"
         cancelText="关闭"

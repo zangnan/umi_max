@@ -81,7 +81,7 @@ const DrawerglFm: React.FC<BdjgProps> = ({
   return (
     <Drawer
       title="明细查看"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => {
         debugger;
         zymUnitRef?.current!.reload2();

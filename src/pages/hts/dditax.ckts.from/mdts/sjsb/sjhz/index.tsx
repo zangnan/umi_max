@@ -716,7 +716,7 @@ const Index: React.FC<unknown> = () => {
       <Modal
         title="数据检查异常疑点列表"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
         footer={

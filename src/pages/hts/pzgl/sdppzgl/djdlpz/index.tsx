@@ -65,7 +65,7 @@ const Index: React.FC<{ data: any }> = ({
   return (
     <Modal
       title='企业'
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal'
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onCancel={() => setModalVisible(false)}

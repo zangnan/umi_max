@@ -242,7 +242,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
         centered
         maskClosable= {false}
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         onCancel={onclose}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         footer={

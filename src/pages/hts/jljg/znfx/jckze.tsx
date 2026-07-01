@@ -53,7 +53,7 @@ const ModalJckgd: React.FC<JckgdProps> = ({
     <>
       <Drawer
         title={title}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         onClose={() => { setModalVisible(false) }}
         className="dd_data_page_modal"

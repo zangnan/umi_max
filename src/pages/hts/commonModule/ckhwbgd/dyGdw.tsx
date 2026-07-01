@@ -273,7 +273,7 @@ const Index: React.FC<DDModalGridProps> = ({
     <>
       <Modal
         title="打印"
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         onCancel={() => close()}
         destroyOnHidden

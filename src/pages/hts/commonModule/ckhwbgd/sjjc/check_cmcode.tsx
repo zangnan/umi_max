@@ -177,7 +177,7 @@ const Ycspmcl: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) 
       <Modal
         title="异常商品码调整"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
         onCancel={() => close()}

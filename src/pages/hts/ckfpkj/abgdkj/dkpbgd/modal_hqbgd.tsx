@@ -173,7 +173,7 @@ const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
       <Modal
         title="获取报关单"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         mask={{ closable: false }}
         footer={

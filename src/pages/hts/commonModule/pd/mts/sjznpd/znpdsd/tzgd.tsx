@@ -246,7 +246,7 @@ const Tzgd: React.FC<TzgdProps> = ({ onRef, visible = false }) => {
     <Modal
       title="调整关单"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       wrapClassName='standard-modal-1'
       footer={

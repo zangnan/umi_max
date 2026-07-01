@@ -69,7 +69,7 @@ const ModalGdpp: React.FC<ModalGdppProps> = ({
       <Modal
         title="滚动匹配"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={400}
         mask={{ closable: false }}
         footer={

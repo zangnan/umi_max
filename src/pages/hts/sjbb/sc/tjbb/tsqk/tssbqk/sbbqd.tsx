@@ -154,7 +154,7 @@ const sbbqd: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
     <>
       <Drawer
         title="申报表清单"
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         onClose={() => { setModalVisible(false) }}
         className="dd_data_page_modal"

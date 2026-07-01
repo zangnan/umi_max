@@ -78,7 +78,7 @@ const DjhcpGrid: React.FC<DDModalGridProps> = ({
       <Modal
         title='单据号重排'
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={650}
         footer={(<>
           <Button onClick={() => setModalVisible(false)} >取消</Button>

@@ -78,7 +78,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   return (
     <Modal
       title="绑定角色"
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       onCancel={() => setModalVisible(false)}
       footer={(<>

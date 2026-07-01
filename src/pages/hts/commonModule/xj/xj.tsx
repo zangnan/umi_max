@@ -45,7 +45,7 @@ const Sum: React.FC<SumProps> = ({
       title='小计'
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal'
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       footer={null}

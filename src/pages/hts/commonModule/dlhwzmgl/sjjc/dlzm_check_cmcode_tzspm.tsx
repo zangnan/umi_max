@@ -145,7 +145,7 @@ const ModalTzspm: React.FC<TzspmProps> = ({
       title="请填写信息"
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       okText="保存"
       cancelText="关闭"

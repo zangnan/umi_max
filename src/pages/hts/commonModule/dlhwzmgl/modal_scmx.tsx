@@ -170,7 +170,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
        <Modal
          title='生成明细'
          destroyOnHidden={true}
-         visible={modalVisible}
+         open={modalVisible}
          width={CONSTANTS.C_MODAL_WIDTH_X2}
          footer={(<>
            <Button onClick={close} >取消</Button>

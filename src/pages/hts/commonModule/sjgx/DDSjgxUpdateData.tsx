@@ -294,7 +294,7 @@ const DDTzUpdateData: React.FC<DDTzUpdateDataProps> = ({ onRef, visible = false 
       <Modal
         title="更新报表"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         className={`${loading ? 'dd_modal_show_masker' : ''}`}
         footer={<>

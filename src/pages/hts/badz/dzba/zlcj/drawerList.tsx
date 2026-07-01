@@ -145,7 +145,7 @@ const DrawerList: React.FC<DzxxProps> = ({
   return (
     <Drawer
       title={myTitle}
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => { setModalVisible(false) }}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}

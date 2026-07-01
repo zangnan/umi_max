@@ -154,7 +154,7 @@ const onChangeSwitch = async (param: any) => {
     <>
       <Drawer
         title="关联权限组"
-        visible={modalVisible}
+        open={modalVisible}
         onClose={() => { close() }}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         destroyOnHidden={true}

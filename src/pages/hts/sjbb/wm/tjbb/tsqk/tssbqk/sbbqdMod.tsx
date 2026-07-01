@@ -109,7 +109,7 @@ const DrawerList: React.FC<BdjgProps> = ({
     <>
       <Drawer
         title="申报表清单"
-        visible={modalVisible}
+        open={modalVisible}
         onClose={() => { setModalVisible(false) }}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         destroyOnHidden={true}

@@ -63,7 +63,7 @@ const DrawerBgdxq: React.FC<BgdxqProps> = ({
   return (
     <Drawer
       title="代理证明详情"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => { setModalVisible(false) }}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       destroyOnHidden={true}

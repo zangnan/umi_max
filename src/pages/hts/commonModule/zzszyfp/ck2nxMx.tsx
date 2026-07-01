@@ -248,7 +248,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     <Modal
       title="生成转内销明细"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       wrapClassName='standard-modal-1'
       footer={<>

@@ -364,7 +364,7 @@ const Cxjsfpl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
       <DrawerForm
         title="更新计划分配率确认"
         className='dd_data_page_modal'
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         onVisibleChange={setModalVisible}
         drawerProps={{ className: "dd_mdthxfpl_draw_outer" }}

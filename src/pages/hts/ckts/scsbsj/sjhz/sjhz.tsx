@@ -43,7 +43,7 @@ const SummaryForm: React.FC<SummaryFormProps> = ({
       title="生成汇总"
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       okText="导出"

@@ -359,7 +359,7 @@ const Jhmx2: React.FC<DDTsort> = ({
     <Modal
       title="发票生成进货信息列表"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       wrapClassName='standard-modal-1'
       footer={<>

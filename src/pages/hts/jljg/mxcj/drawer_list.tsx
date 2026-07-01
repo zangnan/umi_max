@@ -77,7 +77,7 @@ const DrawerList: React.FC<BdjgProps> = ({
   return (
     <Drawer
       title={title}
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => { close() }}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}

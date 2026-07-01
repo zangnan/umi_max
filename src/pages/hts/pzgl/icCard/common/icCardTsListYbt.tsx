@@ -470,7 +470,7 @@ const Index: React.FC<IcList> = ({onRef, visible = false, saveBtn}) => {
     <Modal
       title='环境检测'
       keyboard={false}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       wrapClassName='standard-modal-1'
       closable={true}

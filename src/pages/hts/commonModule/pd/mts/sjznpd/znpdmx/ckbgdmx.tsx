@@ -61,7 +61,7 @@ const ModalCkbgdmx: React.FC<CkbgdmxProps> = ({
     <Spin tip="Loading..." spinning={masker} delay={100}>
       <Drawer
         title={'关单详情'}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         onClose={() => { setModalVisible(false) }}
         className="dd_data_page_modal"

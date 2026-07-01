@@ -162,7 +162,7 @@ const Shjdcx: React.FC<{ onRef?: any }> = ({ onRef }) => {
   return (
     <Modal
       title="退税审核进度查询"
-      visible={modalVisible}
+      open={modalVisible}
       // wrapClassName='standard-modal-1'
       className={'dd_modal_wrap'}
       width={CONSTANTS.C_MODAL_WIDTH_X2}

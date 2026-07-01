@@ -69,7 +69,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   return (
     <Modal
       title="关联用户"
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       onCancel={() => setModalVisible(false)}
       footer={(<>

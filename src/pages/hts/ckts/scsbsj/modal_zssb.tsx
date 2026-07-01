@@ -138,7 +138,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
       <Modal
         title="正式申报"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={550}
         mask={{ closable: false }}
         footer={

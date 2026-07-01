@@ -68,7 +68,7 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
       <Modal
         title='导出Excel模板'
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName='standard-modal-1'
         footer={(<>

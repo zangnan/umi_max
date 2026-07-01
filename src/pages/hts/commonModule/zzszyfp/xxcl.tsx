@@ -379,7 +379,7 @@ import myUtil from '@/components/DDAssist/util';
        <Modal
          title={type === 'fpscmx' ? "出口货物转内销信息列表处理" : "报关单生成商品码调整表"}
          destroyOnHidden={true}
-         visible={modalVisible}
+         open={modalVisible}
          width={CONSTANTS.C_MODAL_WIDTH_X4}
          wrapClassName="standard-modal-1"
          footer={

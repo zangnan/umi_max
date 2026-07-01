@@ -434,7 +434,7 @@ const Modalsphfwssflhbbm: React.FC<DDModalGridProps> = ({ onRef, visible = false
       <Modal
         title="设置税收分类编码"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         wrapClassName="standard-modal-1"
         footer={

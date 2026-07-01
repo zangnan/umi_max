@@ -213,7 +213,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
        <Modal
          title={isFpsqdFlag === '4'? '编辑' : readonly ? '导入数据预览' : '手动采集开具'}
          destroyOnHidden={true}
-         visible={modalVisible}
+         open={modalVisible}
          width={CONSTANTS.C_MODAL_WIDTH_X4}
          wrapClassName='standard-modal-1'
          footer={(<>

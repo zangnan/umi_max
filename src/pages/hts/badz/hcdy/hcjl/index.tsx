@@ -203,7 +203,7 @@ const Index: React.FC<ScsbsjProps> = ({
       <Modal
         title="创建核查任务"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         footer={
           <>

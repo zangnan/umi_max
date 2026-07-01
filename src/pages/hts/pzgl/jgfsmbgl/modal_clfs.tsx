@@ -85,7 +85,7 @@ const ModelClfs: React.FC<ModalClfsProps> = ({
       <Modal
         title="处理方式"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={550}
         mask={{ closable: false }}
         footer={

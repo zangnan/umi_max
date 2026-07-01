@@ -183,7 +183,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         <Modal
             title={modalTile}
             destroyOnHidden={true}
-            visible={modalVisible}
+            open={modalVisible}
             width={CONSTANTS.C_MODAL_WIDTH_X1}
             footer={<>
                 <Button onClick={closeModal}>取消</Button>

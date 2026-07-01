@@ -238,6 +238,10 @@
       {
         "old": "@/components/RightContent",
         "new": "@/pages/hts/components/RightContent"
+      },
+      {
+        "old": "visible={modalVisible}",
+        "new": "open={modalVisible}"
       }
     ],
     "less": [

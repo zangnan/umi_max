@@ -86,7 +86,7 @@ const ExceptionGrid: React.FC<ExceptionGridProps> = ({
         title="数据检查异常疑点列表"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         wrapClassName='standard-modal-1'
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         okText="继续"

@@ -884,7 +884,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
       <Modal
         title="配单"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
         className={`${masker ? 'dd_modal_show_masker' : ''}`}

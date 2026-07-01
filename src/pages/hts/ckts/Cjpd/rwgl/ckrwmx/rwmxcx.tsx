@@ -76,7 +76,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
       <Modal
         title="查看明细"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName="standard-modal-1"
         onCancel={() => setModalVisible(false)}

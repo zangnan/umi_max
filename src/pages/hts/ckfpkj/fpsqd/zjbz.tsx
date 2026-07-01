@@ -58,7 +58,7 @@ const ModalList: React.FC<BdjgProps> = ({
   return (
     <Modal
       title="追加备注项"
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X2}
       onCancel={() => setModalVisible(false)}
       footer={(<>

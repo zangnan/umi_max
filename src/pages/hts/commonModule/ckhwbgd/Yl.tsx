@@ -111,7 +111,7 @@ const Index: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
 				title={`备案单证预览`}
 				centered
 				destroyOnHidden
-				visible={modalVisible}
+				open={modalVisible}
 				width={CONSTANTS.C_MODAL_WIDTH_X4}
 				wrapClassName='standard-modal-1'
 				zIndex={999}

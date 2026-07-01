@@ -224,7 +224,7 @@ const ModalScmx: React.FC<ModalScmxProps> = ({
       <Modal
         title="生成明细"
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         onCancel={() => setModalVisible(false)}
         footer={(<>

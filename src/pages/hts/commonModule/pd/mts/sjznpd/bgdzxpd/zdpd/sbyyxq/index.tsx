@@ -59,7 +59,7 @@ const Index: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
       title="失败原因"
       destroyOnHidden={true}
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onClose={() => setModalVisible(false)}
       mask={{ closable: false }}

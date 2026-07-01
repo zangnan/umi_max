@@ -702,7 +702,7 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
       <Modal
         title={ModelTitle()}
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         wrapClassName='standard-modal-1 dd-gpy'
         footer={ModalButton()}

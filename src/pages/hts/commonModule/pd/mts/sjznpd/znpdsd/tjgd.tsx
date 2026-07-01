@@ -188,7 +188,7 @@ const Tjgd: React.FC<TjgdProps> = ({ onRef, visible = false }) => {
       title="添加关单"
       destroyOnHidden={true}
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onClose={() => setModalVisible(false)}
       mask={{ closable: false }}

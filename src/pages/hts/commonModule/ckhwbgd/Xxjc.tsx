@@ -82,7 +82,7 @@ const Scmx: React.FC<DDModalGridProps> = ({
       <Modal
         title='信息检测'
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         footer={(<>
           <Button onClick={() => close()} >取消</Button>

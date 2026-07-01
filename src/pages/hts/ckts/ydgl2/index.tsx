@@ -1215,7 +1215,7 @@ const Ydcl: React.FC<YdclProps> = ({
     <Drawer
       title="疑点管理"
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onClose={() => setModalVisible(false)}
       mask={{ closable: false }}

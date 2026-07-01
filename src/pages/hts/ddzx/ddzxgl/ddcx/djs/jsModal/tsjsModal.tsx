@@ -212,7 +212,7 @@ const Maintain: React.FC<Props> = ({
     <Modal
       title="退税结算"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       mask={{ closable: false }}
       footer={

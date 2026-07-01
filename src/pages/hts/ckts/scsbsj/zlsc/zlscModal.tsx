@@ -116,7 +116,7 @@ const ZlscModal: React.FC<zlscModalProps> = ({
   return (
     <Modal
       title='上传'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       onCancel={() => setModalVisible(false)}
       destroyOnHidden

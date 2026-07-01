@@ -273,7 +273,7 @@ const Index: React.FC = () => {
       <Modal
         wrapClassName='standard-modal-4'
         title='阈值设置'
-        visible={modalVisible}
+        open={modalVisible}
         width={1200}
         destroyOnHidden={true}
         mask={{ closable: false }}

@@ -184,7 +184,7 @@ const Zmxcj: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
         title="转明细采集"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         okText="确定"
         cancelText="取消"

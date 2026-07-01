@@ -126,7 +126,7 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
       <Modal
         title='系统消息'
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X3}
         wrapClassName='standard-modal-1'
         footer={(<>

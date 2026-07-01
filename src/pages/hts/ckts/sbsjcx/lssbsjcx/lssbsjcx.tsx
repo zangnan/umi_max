@@ -75,7 +75,7 @@ const History: React.FC<HistoryProps> = ({
   return (
     <Drawer
       title="历史申报记录"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => {setModalVisible(false)}}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       destroyOnHidden={true}

@@ -89,7 +89,7 @@ import myUtil from '@/components/DDAssist/util';
      <>
        <Drawer
          title={title}
-         visible={modalVisible}
+         open={modalVisible}
          width={CONSTANTS.C_MODAL_WIDTH_X4}
          onClose={() => { setModalVisible(false) }}
          className="dd_data_page_modal"

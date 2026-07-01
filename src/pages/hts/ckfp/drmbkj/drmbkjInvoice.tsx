@@ -167,7 +167,7 @@ const DrmbkjInvoice: React.FC<DDModalGridProps> = ({
       <Modal
         title={readonly ? '导入数据预览' : '手动采集开具'}
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         wrapClassName='standard-modal-1'
         footer={(<>

@@ -50,7 +50,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
     <>
       <DrawerForm
         title="商品详情"
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         onVisibleChange={setModalVisible}
       >

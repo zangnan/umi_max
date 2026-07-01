@@ -281,7 +281,7 @@ const ModalZdpp: React.FC<ZdppProps> = ({
     <>
       <Modal
         title={'自动匹配'}
-        visible={modalVisible}
+        open={modalVisible}
         wrapClassName='standard-modal-1'
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         okText="确定配单"

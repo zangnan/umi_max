@@ -73,7 +73,7 @@ const DrawerXzspm: React.FC<XzspmProps> = ({
   return (
     <Drawer
       title="选择商品信息"
-      visible={modalVisible}
+      open={modalVisible}
       onClose={() => { setModalVisible(false) }}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       destroyOnHidden={true}

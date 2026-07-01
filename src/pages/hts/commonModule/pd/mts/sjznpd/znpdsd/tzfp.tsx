@@ -250,7 +250,7 @@ const Tzfp: React.FC<TzfpProps> = ({ onRef, visible = false }) => {
     <Modal
       title="调整发票"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       wrapClassName='standard-modal-1'
       footer={

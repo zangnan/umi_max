@@ -593,7 +593,7 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
       <Modal
         title={<div><span>所属期：{formDate?.ssq}</span>{cktsUtil.sys.enterpriseType()=='WM'?<span style={{ marginLeft: 20 }}>批次：{formDate?.sbpc}</span>:<></>}</div>}
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         wrapClassName='standard-modal-1 dd-gpy'
         footer={<Space>

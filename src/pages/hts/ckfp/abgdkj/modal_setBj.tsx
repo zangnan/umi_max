@@ -304,7 +304,7 @@ const ModalBj: React.FC<AbgdBjProps> = ({
   return (
     <DrawerForm
       title="编辑开票"
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       // className='abgd_bjkp_drawer'
       className={`abgd_bjkp_drawer ${masker ? 'dd_modal_show_masker' : ''}`}

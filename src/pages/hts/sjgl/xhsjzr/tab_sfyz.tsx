@@ -297,7 +297,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible, getdlFlag }) => {
     <>
       <Modal
         title='数电登录'
-        visible={modalVisible}
+        open={modalVisible}
         wrapClassName='standard-modal-1'
         destroyOnHidden
         width={CONSTANTS.C_MODAL_WIDTH_X4}

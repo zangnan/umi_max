@@ -98,7 +98,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
         title={`选择备案方式`}
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         zIndex={997}
         footer={

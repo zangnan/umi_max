@@ -201,7 +201,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         <Modal
             title={modalTile}
             destroyOnHidden={true}
-            visible={modalVisible}
+            open={modalVisible}
             width={CONSTANTS.C_MODAL_WIDTH_X2}
             footer={<>
                 <Button onClick={closeModal}>取消</Button>

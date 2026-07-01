@@ -38,7 +38,7 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
       title="商品信息"
       destroyOnHidden={true}
       className='dd_data_page_modal'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       onClose={() => setModalVisible(false)}
       mask={{ closable: false }}

@@ -60,7 +60,7 @@ const Hysbqk: React.FC<DDInvoiceProps> = ({
         title="系统提示"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         okText="确定"
         cancelText="取消"

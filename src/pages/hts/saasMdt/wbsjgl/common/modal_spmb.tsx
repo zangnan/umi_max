@@ -587,7 +587,7 @@ const EditableCellQr = ({
   return (
     <Drawer
        title="批量确认"
-       visible={modalVisible}
+       open={modalVisible}
        onClose={() => { closeModal() }}
        width={CONSTANTS.C_MODAL_WIDTH_X4}
        destroyOnHidden={true}

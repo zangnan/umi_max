@@ -234,7 +234,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
         title={`配单结果`}
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         wrapClassName='standard-modal-1'
         zIndex={999}

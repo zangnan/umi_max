@@ -97,7 +97,7 @@ const CreateData: React.FC<CreateDataProps> = ({
       title="生成数据情况"
       centered
       destroyOnHidden
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X3}
       okText="生成"

@@ -197,7 +197,7 @@ const ModalList: React.FC<BdjgProps> = ({
   return (
     <Modal
       title="关单获取"
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal-1'
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onCancel={() => setModalVisible(false)}

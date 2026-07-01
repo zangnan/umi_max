@@ -177,7 +177,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
     <>
     <Modal
         title='扫脸认证'
-        visible={modalVisible}
+        open={modalVisible}
         wrapClassName='standard-modal-1'
         destroyOnHidden
         width={CONSTANTS.C_MODAL_WIDTH_X4}

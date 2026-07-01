@@ -86,7 +86,7 @@ const ModalHtpp: React.FC<ModalHtppProps> = ({
       <Modal
         title={'保存结果'}
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={1000}
         mask={{ closable: false }}
         footer={

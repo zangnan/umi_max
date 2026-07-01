@@ -101,7 +101,7 @@ const GeneratedData: React.FC<GeneratedDataProps> = ({
   return (
     <Modal
       title='已生成数据查询'
-      visible={modalVisible}
+      open={modalVisible}
       wrapClassName='standard-modal'
       footer={null}
       width={CONSTANTS.C_MODAL_WIDTH_X4}

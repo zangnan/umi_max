@@ -33,7 +33,7 @@ const sbbqd: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
     <>
       <Drawer
         title={bdmc}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         key='scSbbqd2'
         onClose={() => { setModalVisible(false) }}

@@ -250,7 +250,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleColseM
         title="电子税务局身份验证"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width='700px'
         onCancel={YzSuccess}
         mask={{ closable: false }}

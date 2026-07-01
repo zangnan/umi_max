@@ -121,7 +121,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     <>
       <Drawer
         title="关联资源"
-        visible={modalVisible}
+        open={modalVisible}
         onClose={() => { close() }}
         width={CONSTANTS.C_MODAL_WIDTH_X4}
         destroyOnHidden={true}

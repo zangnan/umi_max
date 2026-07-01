@@ -200,7 +200,7 @@ const LoginCompany: React.FC<LoginCompanyProps> = ({
       <Modal
         title='打印'
         okText="保存"
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         footer={<>
           <Button onClick={closeModal}>取消</Button>

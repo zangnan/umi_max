@@ -94,7 +94,7 @@ const ModelShtq: React.FC<AbgdBjProps> = ({
       <Modal
         title="提取收汇"
         destroyOnHidden={true}
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         mask={{ closable: false }}
         footer={

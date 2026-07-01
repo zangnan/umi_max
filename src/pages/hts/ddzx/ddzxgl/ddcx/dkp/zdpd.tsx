@@ -270,7 +270,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   return (
     <Modal
       title='自动配单'
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       onCancel={() => close()}
       footer={(<>

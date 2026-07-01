@@ -174,7 +174,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
         title="获取申报数据"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         onCancel={() => setModalVisible(false)}
         footer={(

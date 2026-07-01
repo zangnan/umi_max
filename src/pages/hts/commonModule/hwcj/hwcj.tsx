@@ -41,7 +41,7 @@ const BgdScmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     <Modal
       title="货物冲减"
       destroyOnHidden={true}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X4}
       footer={null}
       wrapClassName='standard-modal-1'

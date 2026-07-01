@@ -129,7 +129,7 @@ const ModalSsflbmDrDc: React.FC<DDImportProps> = ({
       <Modal
         title="税收分类编码导入"
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X2}
         onCancel={onclose}
         footer={(<>

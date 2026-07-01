@@ -197,7 +197,7 @@ const GeneratedForm: React.FC<GeneratedFormProps> = ({
         title="确认生成申报数据"
         centered
         destroyOnHidden
-        visible={modalVisible}
+        open={modalVisible}
         width={CONSTANTS.C_MODAL_WIDTH_X1}
         okButtonProps={{ className: 'dd_btn_focus' }}
         okText="确认"

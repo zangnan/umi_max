@@ -148,7 +148,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   return (
     <Modal
       title={name}
-      visible={modalVisible}
+      open={modalVisible}
       width={CONSTANTS.C_MODAL_WIDTH_X1}
       onCancel={() => close()}
       footer={(<>
