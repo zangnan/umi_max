@@ -168,6 +168,11 @@ cktsUtil.api = {
         '/dict/automatic/exp/bs/saveOrUpdate',
         '/hx/ty/crud/saveOrUpdate',
       );
+    } else if (url.indexOf('/dict/automatic/exp/bs/delete') > -1) {
+      config.url = url.replace(
+        '/dict/automatic/exp/bs/delete',
+        '/hx/ty/crud/delete',
+      );
     }
 
     // 2. ftype 注入（HTS 任意请求都加，包括 OAuth 端点本身）
