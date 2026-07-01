@@ -3,6 +3,7 @@ import React from 'react';
 import { RuntimeConfig, Navigate } from 'umi';
 import RightContent from '@/pages/Layout/rightContent';
 import myUtil from '@/components/DDAssist/util';
+import cktsUtil from '@/pages/hts/cktsUtil';
 import nbglxtUtil from '@/pages/nbglxt/common/nbglxtUtil';
 import { history } from '@umijs/max';
 import { queryCurrentUser, queryAll, getUserAvatarBlob, queryListNs } from '@/services/api';
@@ -178,11 +179,14 @@ export const layout = ({ initialState }: any) => {
           if (menuExample) {
             newMenuInfo = [...newMenuInfo, menuExample];
           }
-          const menuHts = defaultMenuData.find((tmp: any) => tmp.name.indexOf('慧退税') > -1);
-          if (menuHts) {
-            newMenuInfo = [...newMenuInfo, menuHts];
-          }
+          // const menuHts = defaultMenuData.find((tmp: any) => tmp.name.indexOf('慧退税') > -1);
+          // if (menuHts) {
+          //   newMenuInfo = [...newMenuInfo, menuHts];
+          // }
         }
+        // hts菜单
+        const resHtsMenu = await cktsUtil.menu.getHtsMenu();
+        newMenuInfo = [...newMenuInfo, ...resHtsMenu];
 
         return newMenuInfo;
       },

@@ -2,7 +2,7 @@ import { request, history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message } from 'antd';
-import { xj, getOneTimeToken, downloadGet, downloadUrlPost, downloadUrlList, sfczdlzfp } from '@/pages/hts/services/htsApi';
+import { xj, getOneTimeToken, downloadGet, downloadUrlPost, downloadUrlList, sfczdlzfp, fetchMenuData } from '@/pages/hts/services/htsApi';
 
 const cktsUtil: any = {};
 
@@ -408,6 +408,15 @@ cktsUtil.menu = {
     foreachData(usermenu);
     return targetMenuObj;
   },
+  // 获取慧退税菜单
+  getHtsMenu: async () => {
+    const resHts = await fetchMenuData({});
+    let resMenu = []
+    if (resHts.code === '200' && resHts?.body) {
+      resMenu = (resHts.body || []).filter((tmp: any) => tmp.id === 'A01') || [];
+    }
+    return resMenu;
+  }
 }
 
 // 原在线申报系统模块：小计
