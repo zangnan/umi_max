@@ -185,7 +185,7 @@ export const layout = ({ initialState }: any) => {
           // }
         }
         // hts菜单
-        const resHtsMenu = await cktsUtil.menu.getHtsMenu({treeData});
+        const resHtsMenu = await cktsUtil.menu.getHtsMenu();
         newMenuInfo = [...newMenuInfo, ...resHtsMenu];
 
         return newMenuInfo;

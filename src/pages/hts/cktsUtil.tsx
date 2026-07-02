@@ -3,6 +3,7 @@ import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message } from 'antd';
 import { xj, getOneTimeToken, downloadGet, downloadUrlPost, downloadUrlList, sfczdlzfp, fetchMenuData } from '@/pages/hts/services/htsApi';
+import { ICON_MAPPING } from '@/components/DDAssist/util/appIcons';
 
 const cktsUtil: any = {};
 
@@ -413,15 +414,29 @@ cktsUtil.menu = {
     foreachData(usermenu);
     return targetMenuObj;
   },
+  treeDataHts: (data: any) => {
+    data.forEach((item: any) => {
+      if (item.icon) {
+        item.icon = ICON_MAPPING[item.icon];
+      }
+      if (item.parentKeys) {
+        item.parentKeys = [item.parentKeys];
+      }
+      if (item.routes?.length > 0) {
+        cktsUtil.menu.treeDataHts(item.routes);
+      }
+    });
+  },
   // 获取慧退税菜单
-  getHtsMenu: async ({treeData}: any) => {
+  getHtsMenu: async () => {
     const resHts = await fetchMenuData({});
     let resMenu = []
     if (resHts.code === '200' && resHts?.body) {
       resMenu = (resHts.body || []).filter((tmp: any) => (tmp.id === 'A01' || tmp.id === 'A99')) || [];
       if (resMenu?.length > 0) {
         resMenu = resMenu[0].routes || [];
-        treeData(resMenu);
+        cktsUtil.menu.treeDataHts(resMenu);
+        myUtil.sessionStore.setItem('usermenu', resMenu);
       }
     }
     return resMenu;
