@@ -361,6 +361,19 @@
           "new": "ZnfxFunc.intl = intl2;"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/template/template_step2.tsx",
+      "replace": [
+        {
+          "old": "useLocation } from 'umi'",
+          "new": "useLocation, Outlet } from 'umi'"
+        },
+        {
+          "old": "{children}",
+          "new": "<Outlet />"
+        }
+      ]
     }
   ],
   "excludeFiles": [
