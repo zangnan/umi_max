@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Steps, Button, Form, Row, Col, Spin, message, Tabs, Image, Modal } from 'antd';
+import { Input, Steps, Button, Form, Row, Col, Spin, message, Tabs, Image, Modal, Radio, Space } from 'antd';
 import './style.less';
 import { CheckCircleOutlined, CodeOutlined, IdcardOutlined, LeftOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useRequest } from '@umijs/hooks';
-import { queryDjdlzh, saveDjdlzh, simulationLoginBymm, simulationLoginBysm, simulationLoginPhoneNum, simulationLoginPhoneNumGet, simulationLoginSelectRole, simulationLoginProcessQuery, hqJ4RpaToken } from '@/services/hts/api';
+import { queryDjdlzh, saveDjdlzh, simulationLoginBymm, simulationLoginBysm, simulationLoginPhoneNum, simulationLoginPhoneNumGet, simulationLoginSelectRole, simulationLoginProcessQuery, hqJ4RpaToken, simulationLoginByAgency } from '@/services/hts/api';
 import myUtil from '@/pages/common/myUtil';
 import DDAlert from '../DDAlert';
+import baseValidator from '@/pages/common/field/baseValidator';
 
 export type DDAlertContentFormProps = {
   handleOk?: any,
@@ -65,22 +66,62 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
         formStep1.setFieldsValue({
           shxydm: tmpNsrsbh,
           dzsjUserName: res?.body?.yhm,
-        })
+          dzsjPwd: res?.body?.mm
+        });
+        formStep4.setFieldsValue({
+          shxydm: tmpNsrsbh,
+          dzsjUserName: res?.body?.yhm,
+          dzsjPwd: res?.body?.mm,
+          dljgnsrsbh: res?.body?.dljgnsrsbh
+        });
+        const dllxbz = res?.body?.dllxbz;
+        // 企业业务-扫码登陆
+        if (dllxbz === '2') {
+          setActiveKey('1');
+          setLoginType('2');
+          loginDlewm();
+        } else if (dllxbz === '3') {
+          // 代理业务-账号登陆
+          setActiveKey('2');
+          setLoginType('1');
+        } else {
+          // 企业业务-账号登陆
+          setActiveKey('1');
+          setLoginType('1');
+        }
       } else {
         formStep1.setFieldsValue({
           shxydm: tmpNsrsbh,
-        })
+        });
+        formStep4.setFieldsValue({
+          shxydm: tmpNsrsbh,
+        });
+        setActiveKey('1');
+        setLoginType('1');
       }
     });
   }
 
   // 关闭
   const closeModal = async () => {
-    let param = { yhm: "", mm: "", }
-    if (defKey == '1') {
+    // 默认企业业务-扫码登陆
+    let param = { yhm: "", mm: "", dljgnsrsbh : "", dllxbz: "2"};
+    // 企业业务-账号登陆
+    if (activeKey === '1' && loginType === '1') {
       param = {
         yhm: formStep1.getFieldValue('dzsjUserName'),
         mm: formStep1.getFieldValue('dzsjPwd'),
+        dljgnsrsbh: '',
+        dllxbz: '1'
+      }
+    }
+    // 代理业务
+    if (activeKey === '2') {
+      param = {
+        yhm: formStep4.getFieldValue('dzsjUserName'),
+        mm: formStep4.getFieldValue('dzsjPwd'),
+        dljgnsrsbh: formStep4.getFieldValue('dljgnsrsbh'),
+        dllxbz: '3'
       }
     }
     try {
@@ -92,6 +133,7 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
     }
   }
 
+  // 企业业务-二维码登陆，获取轮询结果
   const getDjmndlData = (param: any) => {
     simulationLoginProcessQuery(param, accessToken).then((res: any) => {
       setMasker(true)
@@ -160,6 +202,7 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
     manual: true
   });
 
+  // 企业业务-账号登陆
   const yzStep1 = (step: any) => {
     formStep1.validateFields().then(async values => {
       const obj = {
@@ -231,9 +274,51 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
     })
   }
 
+  const yzStep4 = (step : any) => {
+    formStep4.validateFields().then(async values => {
+      const tokenObj = {
+        czlx: '1',
+        nsrsbh: values.shxydm,
+        yhm: values.dzsjUserName,
+        mm: values.dzsjPwd,
+      }
+      const obj = {
+        dlqybs: values.dljgnsrsbh,
+        yhm: values.dzsjUserName,
+        mm: values.dzsjPwd,
+        force : '340'
+      }
+      setStep1Form(obj)
+      let Token = '';
+      await hqJ4RpaToken(tokenObj).then((res: any) => {
+        const { code, body, msg } = res;
+        if (code == '200') {
+          Token = body.token;
+        } else {
+          message.error(msg);
+          return;
+        }
+      });
+      setAccessToken(Token);
+      setMasker(true)
+      simulationLoginByAgency({ dlqybs: values.dljgnsrsbh, yhm:values.dzsjUserName, mm: values.dzsjPwd, force : '340' }, Token).then((res: any) => {
+        const { code, msg, body } = res;
+        if (code === '200') {
+          setUuid(body.uuid)
+          run(body);
+        } else {
+          setMasker(false)
+          message.error(msg)
+        }
+      })
+    });
+
+  }
+
   // 获得验证码
   const getYzmData = () => {
-    formStep1.validateFields().then(values => {
+    const formStep = activeKey === '1' ? formStep1 : formStep4;
+    formStep.validateFields().then(values => {
       setMasker(true)
       simulationLoginPhoneNumGet({ uuid: uuid }, accessToken).then((res: any) => {
         const { code, msg, body } = res;
@@ -298,38 +383,72 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
       btnDjsTimer = null;
       setYzmNum(0);
     }
+    // 企业务验-二维码
+    if (activeKey === '1' && loginType === '2') {
+      loginDlewm();
+    }
   }
 
+  // 企业业务与代理业务切换
   async function callback(key: any) {
-    setDefKey(key);
+    setActiveKey(key);
+    // 切换到代理业务
     if (key === '2') {
-      let Token = '';
-      try {
-        await hqJ4RpaToken({}).then((res: any) => {
-          const { code, body, msg } = res;
-          if (code == '200') {
-            Token = body.token;
-          } else {
-            message.error(msg);
-          }
-        });
-      } catch (e) {
-
+      // 如果切换前为扫码登陆，取消定时轮询
+      if (loginType === '2') {
+        cancel();
       }
-      setAccessToken(Token)
-      setMasker(true)
-      simulationLoginBysm({}, Token).then((res: any) => {
-        const { code, msg, body } = res;
-        if (code === '200') {
-          // hqyzmBtnDjs();
-          setUuid(body.uuid)
-          run(body);
-        } else {
-          setMasker(false)
-          message.error(msg)
-        }
-      })
     }
+    // 切换到企业业务
+    if (key === '1') {
+      // 如果当前为扫描登陆，启动定时轮询
+      if (loginType === '2') {
+        loginDlewm();
+      }
+    }
+  }
+
+  
+  const [activeKey, setActiveKey] = useState<any>('1'); // 1：企业业务；2:代理业务
+  const [formStep4] = Form.useForm();
+  const [loginType, setLoginType] = useState('1'); // '1': 企业信息登录, '2': 扫码登录
+  const handleLoginTypeChange = (e: any) => {
+    setLoginType(e.target.value);
+    if (e.target.value === '2') {
+      loginDlewm();
+    } else {
+      cancel();
+    }
+  };
+
+  // 获取登陆二维码并启动轮询
+  async function loginDlewm() {
+    let Token = '';
+    try {
+      await hqJ4RpaToken({}).then((res: any) => {
+        const { code, body, msg } = res;
+        if (code == '200') {
+          Token = body.token;
+        } else {
+          message.error(msg);
+        }
+      });
+    } catch (e) {
+
+    }
+    setAccessToken(Token)
+    setMasker(true)
+    simulationLoginBysm({}, Token).then((res: any) => {
+      const { code, msg, body } = res;
+      if (code === '200') {
+        // hqyzmBtnDjs();
+        setUuid(body.uuid)
+        run(body);
+      } else {
+        setMasker(false)
+        message.error(msg)
+      }
+    })
   }
 
   return (
@@ -344,12 +463,57 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
               <Steps.Step title="验证完成" status={current === 3 ? 'finish' : 'wait'} />
             </Steps>
           </div>
-          {current === 0 ? <Tabs defaultActiveKey="1" onChange={callback}>
-            <Tabs.TabPane tab="企业信息登录" key="1">
+          {current === 0 ? <Tabs activeKey={activeKey} onChange={callback}>
+            <Tabs.TabPane tab="企业业务" key="1">
+              <div style={{ textAlign: 'center', marginBottom: 24 }}>
+                <Radio.Group 
+                  value={loginType} 
+                  onChange={handleLoginTypeChange} 
+                  style={{ display: 'inline-block', marginTop: 20, marginBottom: 20 }}
+                  >
+                  <Space  size={24}>
+                    <Radio value="1">账密登录</Radio>
+                    <Radio value="2">扫码登录</Radio>
+                  </Space>
+                </Radio.Group>
+                {loginType === '1' && (
+                  <div className="steps-content">
+                    <Form {...layout} form={formStep1}>
+                      <Form.Item className="form-item" name="shxydm">
+                        <Input className="yz-input" placeholder="统一社会信用代码/纳税人识别号" disabled  prefix={<IdcardOutlined className="site-form-item-icon" />} />
+                      </Form.Item>
+                      <Form.Item className="form-item"  name="dzsjUserName" rules={[{ required: true, message: '请输入居民身份证号/手机号码/用户名' }]}>
+                        <Input className="yz-input" placeholder="居民身份证号/手机号码/用户名" prefix={<UserOutlined className="site-form-item-icon" />}/>
+                      </Form.Item>
+                      <Form.Item className="form-item" name="dzsjPwd" rules={[{ required: true, message: '请输入个人用户密码' }]} >
+                        <Input.Password className="yz-input" type="password" placeholder="个人用户密码" prefix={<LockOutlined className="site-form-item-icon" />}/>
+                      </Form.Item>
+                      <Button type='primary' onClick={() => yzStep1(1)} className="btn-style-01">验证</Button>
+                    </Form>
+                  </div>
+                )}
+                {loginType === '2' && (
+                        <div className="steps-content" style={{ marginTop: 55, width: 550, textAlign: 'center' }}>
+                          <Row justify="center">
+                            <Col span={24}>
+                              <Image width={200} src={imgLink} />
+                            </Col>
+                            <Col span={24}>
+                              {imgLink ? '打开税务APP扫一扫' : ''}
+                            </Col>
+                          </Row>
+                        </div>
+                      )}
+              </div>
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="代理业务" key="2">
               <div className="steps-content">
-                <Form {...layout} form={formStep1}>
+                <Form {...layout} form={formStep4}>
                   <Form.Item className="form-item" name="shxydm">
                     <Input className="yz-input" placeholder="统一社会信用代码/纳税人识别号" disabled prefix={<IdcardOutlined className="site-form-item-icon" />} />
+                  </Form.Item>
+                  <Form.Item className="form-item" name="dljgnsrsbh" rules={[{ required: true, message: '请录入代理机构统一社会信用代码/纳税人识别号' }, baseValidator.english_number()]}>
+                    <Input className="yz-input" placeholder="代理机构统一社会信用代码/纳税人识别号" maxLength={20} prefix={<IdcardOutlined className="site-form-item-icon" />} />
                   </Form.Item>
                   <Form.Item className="form-item" name="dzsjUserName" rules={[{ required: true, message: '请输入居民身份证号/手机号码/用户名' }]}>
                     <Input className="yz-input" placeholder="居民身份证号/手机号码/用户名" prefix={<UserOutlined className="site-form-item-icon" />} />
@@ -357,23 +521,8 @@ const AlertContentForm: React.FC<DDAlertContentFormProps> = ({
                   <Form.Item className="form-item" name="dzsjPwd" rules={[{ required: true, message: '请输入个人用户密码' }]}>
                     <Input.Password className="yz-input" type='password' placeholder="个人用户密码" prefix={<LockOutlined className="site-form-item-icon" />} />
                   </Form.Item>
-                  <Button type='primary' onClick={() => yzStep1(1)} className="btn-style-01">验证</Button>
+                  <Button type='primary' onClick={() => yzStep4(4)} className="btn-style-01">验证</Button>
                 </Form>
-              </div>
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="扫码登录" key="2">
-              <div className="steps-content" style={{ marginTop: "55px", width: "600px", textAlign: 'center' }}>
-                <Row>
-                  <Col span={24}>
-                    <Image
-                      width={200}
-                      src={imgLink}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    {imgLink ? '打开税务APP扫一扫' : ''}
-                  </Col>
-                </Row>
               </div>
             </Tabs.TabPane>
           </Tabs> : <></>}

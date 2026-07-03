@@ -700,7 +700,9 @@ const requestInterceptors = async (url: string, options: RequestOptionsInit) => 
   if (accessToken && url.indexOf('/hx/qx/token/oauth') === -1) {
     authHeader.accessToken = accessToken;
   }
-
+  if (url.indexOf('/gt/khdgjxx') > 0) {
+    options.data.isNewZf = '1';
+  }
   // 金四登录接口
   if (url.indexOf('simulationLoginBymm') > -1 ||
     url.indexOf('simulationLoginBysm') > -1 ||
@@ -708,7 +710,8 @@ const requestInterceptors = async (url: string, options: RequestOptionsInit) => 
     url.indexOf('simulationLoginPhoneNumGet') > -1 ||
     url.indexOf('simulationLoginSelectRole') > -1 ||
     url.indexOf('simulationLoginProcessQuery') > -1 ||
-    url.indexOf('simulationLoginStateQueryDzswjxt') > -1
+    url.indexOf('simulationLoginStateQueryDzswjxt') > -1 ||
+    url.indexOf('simulationLoginByAgency') > -1
   ) {
     authHeader.accessToken = options?.headers?.accessToken;
     authHeader.Accept = 'application/json';

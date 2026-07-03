@@ -9,6 +9,7 @@ import './style.less';
 import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
+import FpDDLogin from '@/components/FpDDLogin';
 
 
 export type ActionType = {
@@ -17,6 +18,7 @@ export type ActionType = {
 
 const Gxfpyt: React.FC<unknown> = () => {
   const refKprz: any = useRef();
+  const refFpRz: any = useRef();
   const [form] = Form.useForm();
 
   //下载按钮是否显示
@@ -110,7 +112,11 @@ const Gxfpyt: React.FC<unknown> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      refKprz.current!.showModal(flag);
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz.current!.showModal(flag);
+      } else {
+        refFpRz.current!.showModal(flag);
+      }
       return;
     }
   };
@@ -237,6 +243,7 @@ const Gxfpyt: React.FC<unknown> = () => {
         </ProCard>
       </ProCard>
       <TabSfyz onRef={refKprz} getdlFlag={save2} />
+      <FpDDLogin onRef={refFpRz} getdlFlag={save2} />
     </Spin>
   );
 };

@@ -372,7 +372,10 @@ export async function plxg(param?: any) {
 export async function checkjwshrmc(param?: any) {
   return request(`${API_URL_HTS}/yw/fpzs/fppz/checkjwshrmc`, { method: 'POST', data: param });
 }
-
+// 保存数电登陆账号
+export async function saveFpfwDzswjzh(param?: any) {
+  return request(`${API_URL_HTS}/yw/ckfpkj/zxkp/sddl/saveDzswjdlzh`, { method: 'POST', data: param });
+}
 
 
 

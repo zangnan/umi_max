@@ -15,6 +15,7 @@ import { queryBgdwksj, queryFpsqdsj, queryQrkpsj, queryQjlskpsj, hqsdpxe, checkD
 import TabSfyz from '../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../pzgl/sdppzgl/djdlpz/tab_kprz';
 import qxUtil from '@/pages/common/qxUtil';
+import FpDDLogin from '@/components/FpDDLogin';
 
 const { RangePicker } = DatePicker;
 
@@ -33,6 +34,7 @@ const Index: React.FC<DDCard> = () => {
   }
   const refSmrz: any = useRef();
   const refKprz: any = useRef();
+  const refFpRz: any = useRef();
   const [visible, setVisible] = useState(false);
   const [bysxed, setBysxed] = useState<any>();
   const [kysyed, setKysyed] = useState<any>();
@@ -814,7 +816,11 @@ const Index: React.FC<DDCard> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      refKprz.current!.showModal(flag);
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz.current!.showModal(flag);
+      } else {
+        refFpRz.current!.showModal(flag);
+      }
       return;
     }
     // 用户发起认证
@@ -861,6 +867,8 @@ const Index: React.FC<DDCard> = () => {
       </Spin>
       <TabSfyz onRef={refKprz} getdlFlag={getdlFlag} />
       <TabKprz onRef={refSmrz} getdlFlag={getdlFlag} />
+      <FpDDLogin onRef={refFpRz} getdlFlag={getdlFlag} />
+
     </>
   );
 };

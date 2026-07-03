@@ -33,6 +33,7 @@ unitConfig.grid_columns = [
   { title: '接入三方API标志', dataIndex: 'apijcdsfbz', width: 130, codeTable: ['code_static_yes_no', '01'] },
   { title: '接入三方集成标志', dataIndex: 'ymjcdsfbz', width: 130, codeTable: ['code_static_yes_no', '01'] },
   { title: '授权API服务到企业', dataIndex: 'apifwaqyjybz', width: 140, codeTable: ['code_static_yes_no', '01'] },
+  { title: '三方服务自动授权标志', dataIndex: 'zdsqbz', width: 160, codeTable: ['code_static_yes_no', '01'] },
 ];
 
 

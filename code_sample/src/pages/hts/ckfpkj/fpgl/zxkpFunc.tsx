@@ -128,6 +128,33 @@ Func.downloadPDF = (param: any, event: any) => {
       const { blob, fileName } = response.body;
       myUtil.file.downloadPdf(blob, fileName);
       message.success('下载成功');
+    } else if (response.code === '900') {
+      const columns = [
+        { title: '序号', dataIndex: 'xh', key: 'xh', width: '30px', ellipsis: true },
+        { title: '发票号码', dataIndex: 'fphm', key: 'fphm', width: '180px', ellipsis: true },
+        { title: '发票代码', dataIndex: 'fpDm', key: 'fpDm', width: '60px', ellipsis: true },
+        { title: '开票日期', dataIndex: 'kprq', key: 'kprq', width: '80px', ellipsis: true },
+      ];
+      DDAlert.open({
+        title: '出口发票文件缺失提醒',
+        isShowcancelText: false,
+        infoType: 'warning',
+        modalType: 'form',
+        closeStatus: false,
+        width: '750px',
+        okText: '去下载文件',
+        isFormContent: false,
+        button: [
+          <Button key={'excelmbxz'} onClick={() => downloadExcel(response?.body)}>导出</Button>,
+        ],
+        isTableContent: true,
+        tableData: response?.body,
+        tableColumns: columns,
+        okCallbackFn: function (thisObj: any) {
+          DDAlert.close();
+          history.push({ pathname: '/02/0202/020208', query: { sjly: 'ckfpkj'} });
+        }
+      })
     } else {
       message.error(response.desc);
     }

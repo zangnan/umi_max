@@ -14,12 +14,15 @@ import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../../pzgl/sdppzgl/djdlpz/tab_kprz';
 import { useAccess } from 'umi';
 import qxUtil from '@/pages/common/qxUtil';
+import FpDDLogin from '@/components/FpDDLogin';
+
 
 const Index: React.FC<unknown> = () => {
 
   const drmbkjInvoiceRef: any = useRef();
   const refSmrz: any = useRef();
-  const refKprz: any = useRef();
+  const refKprz: any = useRef();  // hst2
+  const refFprz: any = useRef();
   const access = useAccess(); // 权限
   const paramLq = {
     qxCode: 'qx_szlq',
@@ -98,8 +101,38 @@ const Index: React.FC<unknown> = () => {
 
 
   const tjTjkp =  (kptj: any, obj: any, unitRef: any) => {
-     unitRef.current!.setMasker(true);
-     djcsjkptj(kptj).then((res1: any) => {
+    if (qxUtil.getQxz(paramLq)) {
+      kp(kptj, obj, unitRef);
+    } else {
+      unitRef.current!.setMasker(true);
+      checkDlt2({}).then( (res: any) => {
+        unitRef.current!.setMasker(false);
+        const { code, body } = res;
+        if (code == "200") {
+          const dlbz = body?.dlbz;
+          const rzbz = body?.rzbz;
+          if (body?.jhbz != 'Y') {
+            message.error('操作失败，请联系管理员!');
+          } else {
+            if (dlbz === 'Y' && rzbz === 'Y') {
+              kp(kptj, obj, unitRef);
+            } else if (dlbz != 'Y') {
+              tz('2004', kptj, obj, unitRef);
+            } else if (dlbz == 'Y' && rzbz != 'Y') {
+              tz('2005', kptj, obj, unitRef);
+            }
+          }
+        } else {
+          message.error(res?.msg);
+        }
+      });
+    }
+  }
+
+
+  const kp = (kptj: any , obj: any, unitRef: any) => {
+    unitRef?.current?.setMasker(true);
+    djcsjkptj(kptj).then((res1: any) => {
       unitRef.current!.setMasker(false);
       if (res1.code != '200') {
         message.info(res1.msg);
@@ -122,64 +155,35 @@ const Index: React.FC<unknown> = () => {
           '税额合计' + myUtil.text.formatNum(res1.body.sehj, '0,0.00') + '元'
         ],
         okCallbackFn:  function () {
-          if (qxUtil.getQxz(paramLq)) {
-            obj.pch = res1.body.pch;
-            kp(obj, unitRef);
-          } else {
-            unitRef.current!.setMasker(true);
-            checkDlt2({}).then( (res: any) => {
-              unitRef.current!.setMasker(false);
-              const { code, body } = res;
-              if (code == "200") {
-                const dlbz = body?.dlbz;
-                const rzbz = body?.rzbz;
-                if (body?.jhbz != 'Y') {
-                  message.error('操作失败，请联系管理员!');
-                } else {
-                  if (dlbz === 'Y' && rzbz === 'Y') {
-                    obj.pch = res1.body.pch;
-                    kp(obj, unitRef);
-                  } else if (dlbz != 'Y') {
-                    obj.pch = res1.body.pch;
-                    tz('2004', kptj, obj, unitRef);
-                  } else if (dlbz == 'Y' && rzbz != 'Y') {
-                    obj.pch = res1.body.pch;
-                    tz('2005', kptj, obj, unitRef);
-                  }
-                }
-              } else {
-                message.error(res?.msg);
-              }
-            });
-          }
+          obj.pch = res1.body.pch;
+          unitRef?.current?.setMasker(true);
+          ddtjkp2(obj).then((res2: any) => {
+            unitRef?.current?.setMasker(false);
+            if (res2.code === '200') {
+              message.success(res2.msg);
+              unitRef?.current?.reload2();
+            } else {
+              message.error(res2.msg);
+            }
+          });
         }
       });
-    });
-  }
-
-
-  const kp = (obj: any, unitRef: any) => {
-    unitRef?.current?.setMasker(true);
-    ddtjkp2(obj).then((res2: any) => {
-      unitRef?.current?.setMasker(false);
-      if (res2.code === '200') {
-        message.success(res2.msg);
-        unitRef?.current?.reload2();
-      } else {
-        message.error(res2.msg);
-      }
     });
   }
 
   const tz = (rtnCode: any, kptj: any, obj: any, unitRef: any) => {
     if (rtnCode === '2004') {
       unitRef?.current?.setMasker(true);
-      refKprz?.current?.showModal();
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz?.current?.showModal();
+      } else {
+        refFprz?.current?.showModal();
+      }
       if (isTimerActive()) {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = refKprz?.current?.getMoVis();
+        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
@@ -196,7 +200,7 @@ const Index: React.FC<unknown> = () => {
                 tz("2005", kptj, obj, unitRef);
               }
               if (dl && rz == 'Y') {
-                kp(obj, unitRef);
+                kp(kptj, obj, unitRef);
               }
               if (dl && rz == 'U') {
                 tz("2005", kptj, obj, unitRef);
@@ -237,7 +241,7 @@ const Index: React.FC<unknown> = () => {
               const rz = body?.rzbz;
               //已登錄
               if (dl && rz != 'N') {
-                kp(obj, unitRef);
+                kp(kptj, obj, unitRef);
               }
             } else {
               message.error(msg);
@@ -306,6 +310,8 @@ const Index: React.FC<unknown> = () => {
         <DDBunit2 config={myConfig} func={func} />
         <TabSfyz onRef={refKprz} getdlFlag={() => { }} />
         <TabKprz onRef={refSmrz} getdlFlag={() => { }} />
+        <FpDDLogin onRef={refFprz} getdlFlag={() => { }} />
+
       </div>
     );
   } else {

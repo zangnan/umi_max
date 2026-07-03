@@ -132,6 +132,7 @@ let routesCommon: any = [
       { name: 'API服务管理', id: '2109', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/api', component: './hts/qxgl/api' },
       { name: '企业配置管理', id: '2109', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qypzgl', component: './hts/qxgl/qypzgl' },
       { name: '菜单分组管理', id: '2111', pid: '21', icon: 'ProfileOutlined', path: '/hts/qxgl/cdfz', component: './hts/qxgl/cdfz' },
+      { name: '三方服务管理', id: '2115', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/sffwgl', component: './hts/qxgl/sffwgl' },
     ]
   },
   // 配置管理

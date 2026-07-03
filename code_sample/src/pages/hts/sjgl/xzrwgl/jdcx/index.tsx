@@ -19,7 +19,9 @@ import JcbgMoadl from './gdhdjcbg_index'
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import { request, useLocation } from 'umi';
 import qs from 'qs';
-import BgdbadzqsjcMxckMoadl from './bgdbadzqsjc_mxck_index'
+import BgdbadzqsjcMxckMoadl from './bgdbadzqsjc_mxck_index';
+import FpDDLogin from '@/components/FpDDLogin';
+
 
 const Jdcx: React.FC<unknown> = () => {
   Func.intl = useIntl();
@@ -29,6 +31,7 @@ const Jdcx: React.FC<unknown> = () => {
   const access = useAccess();
   const refXz: any = useRef(); // 环境检测
   const refFpxz: any = useRef(); //
+  const refXfpxz: any = useRef();
   const jcbbXz: any = useRef();
   const refBgdbadzqsjcMxckRef: any = useRef(); // 环境检测
 
@@ -221,6 +224,8 @@ const Jdcx: React.FC<unknown> = () => {
     otherRef.push(refFpxz);
     otherRef.push(jcbbXz);
     otherRef.push(refBgdbadzqsjcMxckRef);
+    otherRef.push(refXfpxz);
+
     return otherRef;
   };
 
@@ -298,7 +303,11 @@ const Jdcx: React.FC<unknown> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      refFpxz.current!.showModal(flag);
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refFpxz.current!.showModal(flag);
+      } else {
+        refXfpxz.current!.showModal(flag);
+      }
       return;
     }
   }
@@ -359,6 +368,8 @@ const Jdcx: React.FC<unknown> = () => {
     <BgdbadzqsjcMxckMoadl onRef={refBgdbadzqsjcMxckRef}/>
     <TabSfyz onRef={refFpxz} getdlFlag={Func.save2} />
     <JcbgMoadl onRef={jcbbXz} />
+    <FpDDLogin onRef={refXfpxz} getdlFlag={Func.save2} />
+
   </>
 };
 

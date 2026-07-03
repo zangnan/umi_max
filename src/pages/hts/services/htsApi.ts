@@ -1473,6 +1473,14 @@ export async function xzHxgQd(param?: any) {
 export async function scQd(param?: any) {
   return request(`${API_URL_HTS}/yw/dditSaas/qxqd/scQd`, { method: 'POST', data: param });
 }
+// 新增、修改 三方服务
+export async function sffwglSaveOrUpdateSffw(param?: any) {
+  return request(`${API_URL_HTS}/yw/dditSaas/qxgl/sffwgl/saveOrUpdateSffw`, { method: 'POST', data: param });
+}
+// 删除 三方服务
+export async function sffwglDeleteSffw(param?: any) {
+  return request(`${API_URL_HTS}/yw/dditSaas/qxgl/sffwgl/deleteSffw`, { method: 'POST', data: param });
+}
 export async function dcjb(param?: any) {
   return request(`${API_URL_HTS}/yw/dditSaas/qxgl/dcjb`, { method: 'POST', data: param });
 }
@@ -1800,6 +1808,15 @@ export async function yhsq(param: any) {
 export async function qysqForQxqygl(param: any) {
   return request(`${API_URL_HTS}/yw/dditSaas/qxqy/qysqForQxqygl`, { method: 'POST', data: param });
 }
+
+export async function sffwsqForQxqygl(param: any) {
+  return request(`${API_URL_HTS}/yw/dditSaas/qxqy/sffwsqForQxqygl`, { method: 'POST', data: param });
+}
+
+export async function tbsffwsjForQxqygl(param: any) {
+  return request(`${API_URL_HTS}/yw/dditSaas/qxqy/tbsffwsjForQxqygl`, { method: 'POST', data: param });
+}
+
 export async function yhhy(param: any) {
   return request(`${API_URL_HTS}/yw/dditSaas/qxyh/yhhy`, { method: 'POST', data: param });
 }
@@ -1846,6 +1863,10 @@ export async function simulationLoginProcessQuery(param: any, Token: any) {
 // 电局登录服务-
 export async function simulationLoginStateQueryDzswjxt(param: any, Token: any) {
   return request(`${API_URL_DZSWJ}/rpa/login/simulationLoginStateQueryDzswjxt`, { method: 'POST', data: param, headers: { accessToken: Token, accessClientId: '1' } });
+}
+// 电局登录服务-代理企业账号密码登录
+export async function simulationLoginByAgency(param: any, Token: any) {
+  return request(`${API_URL_DZSWJ}/rpa/login/simulationLoginByAgency`, { method: 'POST', data: param, headers: { accessToken: Token, accessClientId: '1' } });
 }
 
 export async function saveDjdlzh(param: any) {

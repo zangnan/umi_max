@@ -8,9 +8,13 @@ import myUtil from '@/pages/common/myUtil';
 import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
+import FpDDLogin from '@/components/FpDDLogin';
+
 
 const Xxfpbswj: React.FC<unknown> = ({ }) => {
   const refKprz: any = useRef();
+  const refFpRz: any = useRef();
+
   const [form] = Form.useForm();
   const [masker, setMasker] = useState(false);
   const intl = useIntl();
@@ -83,7 +87,11 @@ const Xxfpbswj: React.FC<unknown> = ({ }) => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      refKprz.current!.showModal(flag);
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz.current!.showModal(flag);
+      } else {
+        refFpRz.current!.showModal(flag);
+      }
       return;
     }
   };
@@ -109,9 +117,7 @@ const Xxfpbswj: React.FC<unknown> = ({ }) => {
                   rules={[() => ({
                     validator(_, value) {
                       if (value) {
-                        const userInfo = myUtil.sessionStore.getItem('userInfo');
-                        const fpxzfwlxDm = userInfo?.xtCs?.fpxzfwlxDm;
-                        if (value.length === 2 && fpxzfwlxDm == '2') {
+                        if (value?.length === 2 && myUtil.fpfw.xxjyGzByFwlxDm()) {
                           if (value[0].diff(value[1], 'month') > 2 || value[1].diff(value[0], 'month') > 2) {
                             return Promise.reject(new Error('时间范围不能超过3个月'));
                           }
@@ -189,6 +195,8 @@ const Xxfpbswj: React.FC<unknown> = ({ }) => {
         </ProCard>
       </ProCard>
       <TabSfyz onRef={refKprz} getdlFlag={save2} />
+      <FpDDLogin onRef={refFpRz} getdlFlag={save2} />
+
     </Spin>
   );
 };

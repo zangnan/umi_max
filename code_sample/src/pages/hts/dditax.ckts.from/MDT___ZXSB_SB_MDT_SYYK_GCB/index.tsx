@@ -3,16 +3,16 @@
  * author: wx
  */
 import React from 'react';
-import DDBunit2 from '@/pages/hts/commonModule/ddbunit2_ckts/DDBunit2_CKTS';
+import DDBunit2 from '@/components/DDBunit/DDBunit2';
 import config from './auto_config';
 import Func from './f'
 const index: React.FC<unknown> = () => {
 
   const myConfig = { ...config };
-  myConfig.api_form_edit = `/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
-  myConfig.form_api_save_upload = `/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
+  myConfig.form_api_save = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
+  myConfig.form_api_save_upload = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/saveSyyk`; // api 表单更新
 
-  myConfig.api_form_delete = `/yw/bszx/mdt/ysfw/syyk/deleteSyyk`; // api 表单删除
+  myConfig.form_api_delete = `${API_URL_BASE}/yw/bszx/mdt/ysfw/syyk/deleteSyyk`; // api 表单删除
 
   myConfig.toolbar_default.tssb_download = true;
   myConfig.toolbar_default.ckts_download = false;

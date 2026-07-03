@@ -1628,5 +1628,56 @@ myUtil.zxsbPatch = {
   },
 }
 
+/**
+ * 发票服务相关
+*/
+myUtil.fpfw = {
+  // 发票服务链路
+  fpfwlxDm: () => {
+    const userInfo = myUtil.sessionStore.getItem('userInfo');
+    const fpxzfwlxDm =userInfo?.xtCs?.fpxzfwlxDm;
+    return fpxzfwlxDm;
+  },
+  // 发票服务是否需要rpa
+  isRpaFpfw: () => {
+    // 乐企权限组代码
+    const lqQxzDm = ['040001']; // 040001-云合乐企
+    const userInfo = myUtil.sessionStore.getItem('userInfo');
+    const qxzDms = userInfo?.qxzDms;
+    if (qxzDms != null && qxzDms.length > 0) {
+      const islqQxzDm = lqQxzDm.filter(item => qxzDms.indexOf(item) !== -1);
+      if (islqQxzDm != null && islqQxzDm.length > 0) {
+        return false;
+      }
+    }
+    const fRpaFpfwlxDms: any = [];
+    const fpxzfwlxDm =userInfo?.xtCs?.fpxzfwlxDm;
+    if (fRpaFpfwlxDms.indexOf(fpxzfwlxDm)) {
+      return false;
+    }
+    return true;
+  },
+  // 需要维持现行前端校验规则的发票链路,具体作用未知，方便扎口管理
+  xxjyGzByFwlxDm : () => {
+    const userInfo = myUtil.sessionStore.getItem('userInfo');
+    const fpxzfwlxDm =userInfo?.xtCs?.fpxzfwlxDm;
+    // 后续乐企的也可能需要加
+    const zxfpfwlxDms: any = ['2', '5'];
+    if (zxfpfwlxDms.indexOf(fpxzfwlxDm) != -1) {
+      return true;
+    }
+    return false;
+  },
+  // 获取开票二维码失效时间  hst300 bjfpxfw 120
+  hqKpewmSxsj : () => {
+    const userInfo = myUtil.sessionStore.getItem('userInfo');
+    const fpxzfwlxDm =userInfo?.xtCs?.fpxzfwlxDm;
+    if ('2' === fpxzfwlxDm) {
+      return 300;
+    }
+    return 300;
+  }
+}
+
 export default myUtil;
 

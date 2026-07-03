@@ -316,7 +316,7 @@ const Hgsjxzjy: React.FC<Hgsjxzjy> = ({chardIndex, form}) => {
             className={cardStyle.cardForm}
           >
             <Row gutter={[20, 20]}>
-              <Col className='gutter-row' span={8}>
+              <Col className='gutter-row' span={12}>
                 <Card
                   style={{height: 300}}
                   id='a2'
@@ -436,7 +436,7 @@ const Hgsjxzjy: React.FC<Hgsjxzjy> = ({chardIndex, form}) => {
                   </div>
                 </Card>
               </Col>
-              <Col className='gutter-row' span={8}>
+              <Col className='gutter-row' span={12}>
                 <Card
                   style={{height: 300}}
                   id='a3'

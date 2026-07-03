@@ -2,22 +2,24 @@
  * title: 企业管理
  * author: wx
  */
-import React, { useRef } from 'react';
+import React, {useRef} from 'react';
 import DDBunit2 from '@/components/DDBunit/DDBunit2';
 import config from './config';
 import Func from './f'
 import ModalForm from './modal_form';
 import DrawerBdyh from './drawer_bdyh';
 import qxUtil from '@/pages/common/qxUtil';
-import { useAccess } from 'umi';
-import { cloneDeep } from 'lodash';
+import {useAccess} from 'umi';
+import {cloneDeep} from 'lodash';
 import DrawerQyyg from './drawer_qyyg';
 import DrawerApi from './drawer_api';
 import Drawerqyhy from './drawer_qyhy';
 import DrawerCxsc from './drawer_cxsc';
-import { message} from 'antd';
-import { intl as intl2 } from '@/pages/common/myUtil';
+import {message} from 'antd';
+import {intl as intl2} from '@/pages/common/myUtil';
 import ModalForm2 from './modal_sq';
+import ModalSffwsq from './modal_sffwsq';
+import Sfsqxq from './drawer_sfsqxq';
 
 
 const index: React.FC<unknown> = () => {
@@ -51,11 +53,14 @@ const index: React.FC<unknown> = () => {
     myConfig.grid_columns.push({ title: '授权日期起', dataIndex: 'yxqq', width: 140, ellipsis: true , render: { type: 'date', format: 'yyyy-MM-DD' }},);
     myConfig.grid_columns.push({ title: '授权日期止', dataIndex: 'yxqz', width: 140, ellipsis: true , render: { type: 'date', format: 'yyyy-MM-DD' }},);
     myConfig.grid_columns.push({ title: '授权剩余时间', dataIndex: 'sqyxqSyts', width: 140, align:'right', render: { func: 'renderSysj' }},);
-
+    myConfig.grid_columns.push( { title: '操作', dataIndex: 'cz', width: 100, render: { func: 'renderCz' }, align: 'center', fixed: 'right' },);
     // 运营管理员
     myConfig.costomer_toobar = [
       { name: '企业移管', func: 'qyyg' },
       { name: '授权', func: 'yhsq' },
+      { name: '三方授权', func: 'sffwsq' },
+      { name: '同步三方服务时间', func: 'tbsffwsj' },
+      { name: '导出', func: 'sffwxxdc' },
     ];
   } else if (yhlx === '15') {
     myConfig.grid_columns.push({ title: '授权状态', dataIndex: 'sqztDm', width: 140, codeTable :['code_static_yh_sqdm','02'],  filter: {
@@ -139,7 +144,8 @@ const index: React.FC<unknown> = () => {
   const drawerCxscRef: any = useRef();
   const modalFormRef: any = useRef();
   const drawerQyhyRef: any = useRef();
-
+  const SfsqxqRef: any = useRef();
+  const SffwsqRef: any = useRef();
 
   Func.getOtherRef = () => {
     const otherRef = [];
@@ -150,6 +156,8 @@ const index: React.FC<unknown> = () => {
     otherRef.push(drawerCxscRef);
     otherRef.push(modalFormRef);
     otherRef.push(drawerQyhyRef);
+    otherRef.push(SfsqxqRef);
+    otherRef.push(SffwsqRef);
     return otherRef;
   };
 
@@ -162,6 +170,8 @@ const index: React.FC<unknown> = () => {
     <DrawerCxsc onRef={drawerCxscRef} />
     <ModalForm2 onRef={modalFormRef} yhlx={yhlx} />
     <Drawerqyhy onRef={drawerQyhyRef} />
+    <Sfsqxq onRef={SfsqxqRef} />
+    <ModalSffwsq onRef={SffwsqRef} />
   </>
 };
 

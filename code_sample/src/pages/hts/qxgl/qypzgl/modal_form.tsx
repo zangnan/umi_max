@@ -6,6 +6,7 @@ import React, {useImperativeHandle, useState} from 'react';
 import pro from '@/pages/common/proConfig';
 import {Button, Form, Input, message, Modal, Radio, Select, Spin} from 'antd';
 import {getPzxx, savePzxx} from '@/services/hts/api';
+import TextArea from "antd/lib/input/TextArea";
 
 export interface BdjgProps {
   onRef?: any;
@@ -33,8 +34,9 @@ const ModalForm: React.FC<BdjgProps> = ({
       if (code === '200') {
         setModalVisible(true);
         for (let i = 0; i < body.length; i++) {
-          const op = {value: '', label: ''};
+          const op = {value: '', label: '', cssm: ''};
           op.label = body[i].csmc;
+          op.cssm = body[i].csmc;
           op.value = body[i].csbm1;
           css.push(op);
         }
@@ -77,7 +79,7 @@ const ModalForm: React.FC<BdjgProps> = ({
       return item['csbm1'] == e;
     })[0];
     // @ts-ignore
-    form.setFieldsValue({cssz: pzx['cssz'], yxbz: pzx['yxbz']});
+    form.setFieldsValue({cssz: pzx['cssz'], cssm: pzx['cssm'], yxbz: pzx['yxbz']});
   }
 
   return (
@@ -100,6 +102,15 @@ const ModalForm: React.FC<BdjgProps> = ({
           >
             <Form.Item name="csbm1" label="参数" rules={[{required: true, message: '请选择参数!'}]}>
               <Select onChange={onChange} options={xtpzSelect}></Select>
+            </Form.Item>
+            <Form.Item name="cssm" label="参数说明" style={{height: '100px'}}>
+              <TextArea rows={6}
+                        style={{
+                          resize: 'none',
+                          height: '120px',
+                          minHeight: '120px',
+                          maxHeight: '120px'
+                        }} disabled={true}/>
             </Form.Item>
             <Form.Item name="cssz" label="参数值" rules={[{required: true, message: '请录入参数值'}]}>
               <Input placeholder="请录入参数值"/>

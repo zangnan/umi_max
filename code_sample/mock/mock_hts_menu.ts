@@ -1369,6 +1369,7 @@ async function fetchMenuData(req: Request, res: Response) {
         { name: '渠道管理', id: '2106', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/qd', component: './hts/qxgl/qd' },
         { name: '资源管理', id: '2107', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/zy', component: './hts/qxgl/zy' },
         { name: '菜单分组管理', id: '2111', pid: '21', icon: 'ProfileOutlined', path: '/hts/qxgl/cdfz', component: './hts/qxgl/cdfz' },
+        { name: '三方服务管理', id: '2115', pid: '21', icon: 'HomeOutlined', path: '/hts/qxgl/sffwgl', component: './hts/qxgl/sffwgl' },
       ]
     },
     // 配置管理
