@@ -39,7 +39,8 @@ Func.openDrawer = (param: any, unitKey: any, flag: any) => {
     ]
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fjwshrckqk') { // 分境外收货人出口情况
     initSearchModal = [
-      { property: 'jwshrmc', value: record.fzxm, op: 'zdy' },
+      /*{ property: 'jwshrmc', value: record.fzxm, op: 'zdy' },*/
+      { property: 'xzJwshrmc', value: record.fzxm, op: 'zdy' },
     ]
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fspckqk') { // 分商品出口情况
     initSearchModal = [

@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState, useEffect } from 'react';
+import React, { useImperativeHandle, useState, useEffect, useRef} from 'react';
 import { message, Spin, Modal, Button} from 'antd';
 import './tab_style.less';
 import { ExclamationCircleFilled, ReloadOutlined, CheckCircleFilled  } from '@ant-design/icons';
@@ -30,6 +30,16 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
   const [fhbz,setFhbz] = useState<any>(true);
   const [xzbz,setXzbz] = useState<any>(true);
 
+  const timerEwmsxRef: any = useRef(null); // 二维码失效
+  const timerSljgRef: any = useRef(null); // 3s一轮询扫脸
+
+  const isTimerEwmsxActive = () => {
+    return timerEwmsxRef.current !== null;
+  };
+
+  const isTimersljgActive = () => {
+    return timerSljgRef.current !== null;
+  };
 
   useImperativeHandle(onRef, () => {
     return {
@@ -54,6 +64,14 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
     getdlFlag(crFlag);
     setFlag('1');
     setCountNum(1);
+    // 关闭定时器二维码失效
+    if (isTimerEwmsxActive()) {
+      clearInterval(timerEwmsxRef.current);
+    }
+    // 扫脸结果
+    if (isTimersljgActive()) {
+      clearInterval(timerSljgRef.current);
+    }
   }
 
   // 开启
@@ -98,11 +116,17 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
     getCodeImg('1'); // 获得二维码接口
     setCountNum(1);
     setImgLink('');
-    setTimeout(function () {
+    if (isTimerEwmsxActive()) {
+      clearInterval(timerEwmsxRef.current);
+    }
+    timerEwmsxRef.current = setTimeout(function () {
+      if (isTimersljgActive()) {
+        clearInterval(timerSljgRef.current);
+      }
       setErrorIcon(false);
       setOpacity("0.1");
       setFlag('2'); // 二维码失效
-    }, 300000);
+    }, myUtil.fpfw.hqKpewmSxsj() * 1000);
     setOpacity("1.0");
   };
 
@@ -145,20 +169,29 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
       const { code, body, msg } = res;
       if (code === '200') {
         if (body?.slzt == '1') {
+          if (isTimersljgActive()) {
+            clearInterval(timerSljgRef.current);
+          }
           //未扫码
-            setTimeout(function () {
+          timerSljgRef.current = setTimeout(function () {
               ewmZt(body);
             }, 3000);
         } else if (body?.slzt == '2') {
           //已扫码
           setEssIcon(false);
           setOpacity("0.1");
+          if (isTimersljgActive()) {
+            clearInterval(timerSljgRef.current);
+          }
         } else {
           // 扫码失败
           getCodeImg('1');
           setErrorIcon(true);
           setFlag('2'); // 二维码失效
           setOpacity("0.1");
+          if (isTimersljgActive()) {
+            clearInterval(timerSljgRef.current);
+          }
         }
       } else {
         message.error(msg);

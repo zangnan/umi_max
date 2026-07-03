@@ -30,7 +30,7 @@ fpxxConfig.grid_columns = [
     title: '发票种类', dataIndex: 'fplxmc1', width: 200,
     filter: {
       type: 'Select',
-      codeTable: 'CODE_STATIC_DM_FP_FPLX:01',
+      codeTable: 'CODE_DM_FP_FPLX:01',
     }
   },
   {title: '行号', dataIndex: 'hh', width: 90},

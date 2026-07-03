@@ -20,7 +20,7 @@ import qxUtil from '@/pages/hts/common/qxUtil';
 import { cloneDeep } from 'lodash';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../../pzgl/sdppzgl/djdlpz/tab_kprz';
-
+import FpDDLogin from '@/pages/hts/components/FpDDLogin';
 
 export interface BdjgProps {
   onRef?: any;
@@ -32,6 +32,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
   const drmbkjInvoiceRef: any = useRef();
   const refSmrz: any = useRef();
   const refKprz: any = useRef();
+  const refFprz: any = useRef();
 
   const timerRef: any = useRef(null);
 
@@ -116,12 +117,16 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         }
       });
     } else if (code == '2004') {
-      refKprz.current!.showModal();
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz?.current?.showModal();
+      } else {
+        refFprz?.current?.showModal();
+      }
       if (isTimerActive()) {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = refKprz.current!.getMoVis();
+        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
@@ -328,12 +333,16 @@ const Fpkjgl: React.FC<BdjgProps> = ({
   const tz = (rtnCode: any, selectionRowKeys: any, selectionRows: any, unitRef: any) => {
     if (rtnCode === '2004') {
       unitRef?.current?.setMasker(true);
-      refKprz.current!.showModal();
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz?.current?.showModal();
+      } else {
+        refFprz?.current?.showModal();
+      }
       if (isTimerActive()) {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = refKprz.current!.getMoVis();
+        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz.current!.getMoVis() :refFprz.current!.getMoVis() ;
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
@@ -346,8 +355,11 @@ const Fpkjgl: React.FC<BdjgProps> = ({
               const dl = body?.dlbz == 'Y' ? true : false;
               const rz = body?.rzbz == 'Y' ? true : false;
               //已登錄
-              if (dl) {
+              if (dl && !rz) {
                 tz("2005", selectionRowKeys, selectionRows, unitRef);
+              }
+              if (dl && rz) {
+                tz("200", selectionRowKeys, selectionRows, unitRef);
               }
             } else {
               message.error(msg);
@@ -618,6 +630,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
       <DrmbkjInvoice onRef={drmbkjInvoiceRef} />
       <TabSfyz onRef={refKprz} getdlFlag={() => { }} />
       <TabKprz onRef={refSmrz} getdlFlag={() => { }} />
+      <FpDDLogin onRef={refFprz} getdlFlag={() => { }} />
     </Spin>
   </>
 }

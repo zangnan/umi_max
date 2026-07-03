@@ -290,7 +290,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
                   </Space>
                 </Radio.Group>
               </Form.Item>
-              <div style={{position: 'absolute', top:'4px', left:'150px'}}>
+              {/* <div style={{position: 'absolute', top:'4px', left:'150px'}}>
                 {
                   zcFlag != '0' && qdfpDisabled && !kpfsDisabled ?
                     zcFlag === '2' ? 
@@ -309,7 +309,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
                     </>
                   : <></>
                 }
-              </div>
+              </div> */}
             </div>
           </div>
           {/* <div className="fpkjpz_titl">

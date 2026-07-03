@@ -38,6 +38,7 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
   const [ymjcdsfbz, setYmjcdsfbz] = useState<boolean>(false);
   const [ywlxList, setYwlxList] = useState<any>([]);   // 右侧列选择
   const [apifwaqyjybz, setApifwaqyjybz] = useState<boolean>(false);
+  const [zdsqbz, setZdsqbz] = useState<boolean>(false);
 
   const [yssqbz, setYssqbz] = useState<boolean>(false);
   const [sqyxqbz, setSqyxqbz] = useState<boolean>(false);
@@ -90,6 +91,8 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
       setYmjcbzCheck(row.ymjcbz == 'Y');
       setApijcdsfbz(row.apijcdsfbz == 'Y');
       setYmjcdsfbz(row.ymjcdsfbz == 'Y');
+      setApifwaqyjybz(row.apifwaqyjybz == 'Y');
+      setZdsqbz(row.zdsqbz == 'Y');
       if (yhlx == '13') { // 只有运营管理员 才动态切换是否只读
         if (row?.sqfsDm == '1') {
           setSqyxqbz(true);
@@ -162,12 +165,14 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
       "apijcdsfbz": apijcdsfbz ? 'Y' : 'N',
       "ymjcdsfbz": ymjcdsfbz ? 'Y' : 'N',
       "apifwaqyjybz": apifwaqyjybz ? 'Y' : 'N',
+      "zdsqbz": zdsqbz ? 'Y' : 'N',
       "mrQxzDm": formValues.mrQxzDm,
       "sqfsDm": sqfsDm,
       "tjrqqmc": tjrqqmc,
       "tjrqzmc": tjrqzmc,
       "syys": syys,
       "zsys": zsys,
+      "editbz": ediybz ? 'Y' : 'N'
     };
     setMasker(true);
     await xzHxgQd(data).then((response: any) => {
@@ -224,6 +229,9 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
   }
   const onChange3Apifwaqyjybz = (data: any) => {
     setApifwaqyjybz(data);
+  }
+  const onChange3Zdsqbz = (data: any) => {
+    setZdsqbz(data);
   }
 
   // 汇率规则选择
@@ -304,9 +312,18 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false, yhlx}) => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item labelCol={{span: 6}} wrapperCol={{span: 14}} label="授权API服务到企业" name="apifwaqyjybz">
-            <Switch onChange={onChange3Apifwaqyjybz} checked={apifwaqyjybz} disabled={yhlx == '13'}/>
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item labelCol={{span: 12}} wrapperCol={{span: 12}} label="授权API服务到企业" name="apifwaqyjybz">
+                <Switch onChange={onChange3Apifwaqyjybz} checked={apifwaqyjybz} disabled={yhlx == '13'}/>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item labelCol={{span: 12}} wrapperCol={{span: 12}} label="三方服务自动授权标志" name="zdsqbz">
+                <Switch onChange={onChange3Zdsqbz} checked={zdsqbz}/>
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item labelCol={{span: 6}} wrapperCol={{span: 14}} name="sqfsDm" label="授权方式" rules={[ yhlx == '13' ? {required: true, message: '请选择授权方式'} : {},]}>
             <Radio.Group onChange={onSqfsChange} disabled={yhlx != '13'}>
               <Radio value='1'>人工授权</Radio>

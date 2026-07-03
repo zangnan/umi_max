@@ -1,5 +1,5 @@
 /**
- * title: 退税计划-年度
+ * title: 退税计划-月度
  */
 import CONSTANTS from '@/components/DDAssist/constants';
 const yearConfig: any = {};

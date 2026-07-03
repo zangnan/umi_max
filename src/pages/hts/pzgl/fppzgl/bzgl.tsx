@@ -283,32 +283,42 @@ const Bzgl: React.FC<DDBzglProps> = ({
 
   // 根据税控盘、勾选长度、是否换行、字段分割符拼接代码
   const changeHtml = (keyLength: any, value1: any, value2: any, fpbzzdxfgfDmData: any, splx: any) => {
+    // let html: any;
+    // const fpbzzdxfgfDm = form.getFieldValue('fpbzzdxfgfDm');// 字段项分割符
+    // const fpbzzdxfgfDmCheck = fpbzzdxfgfDmData.filter((item: any) => item.fpbzzdxfgfDm === fpbzzdxfgfDm)[0];
+    // const fpbzzdxhhbz = form.getFieldValue('fpbzzdxhhbz');// 字段项换行
+    // if (splx === '2' || splx === '3') {
+    //   if (keyLength > 4) {
+    //     html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
+    //   } else {
+    //     // 字段项换行
+    //     if (fpbzzdxhhbz === 'Y') {
+    //       html = <div key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</div>;
+    //     } else {
+    //       html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
+    //     }
+    //   }
+    // } else {
+    //   if (keyLength > 6) {
+    //     html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
+    //   } else {
+    //     // 字段项换行
+    //     if (fpbzzdxhhbz === 'Y') {
+    //       html = <div key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</div>;
+    //     } else {
+    //       html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
+    //     }
+    //   }
+    // }
+
     let html: any;
     const fpbzzdxfgfDm = form.getFieldValue('fpbzzdxfgfDm');// 字段项分割符
     const fpbzzdxfgfDmCheck = fpbzzdxfgfDmData.filter((item: any) => item.fpbzzdxfgfDm === fpbzzdxfgfDm)[0];
     const fpbzzdxhhbz = form.getFieldValue('fpbzzdxhhbz');// 字段项换行
-    if (splx === '2' || splx === '3') {
-      if (keyLength > 4) {
-        html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
-      } else {
-        // 字段项换行
-        if (fpbzzdxhhbz === 'Y') {
-          html = <div key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</div>;
-        } else {
-          html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
-        }
-      }
+    if (fpbzzdxhhbz === 'Y') {
+      html = <div key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</div>;
     } else {
-      if (keyLength > 6) {
-        html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
-      } else {
-        // 字段项换行
-        if (fpbzzdxhhbz === 'Y') {
-          html = <div key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</div>;
-        } else {
-          html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
-        }
-      }
+      html = <span key={value1}>{value1}{value2}{fpbzzdxfgfDmCheck?.fpbzzdxfgffh}</span>;
     }
     return html;
   }
@@ -515,13 +525,17 @@ const Bzgl: React.FC<DDBzglProps> = ({
 
   // 示例卡片标题tooltip
   const tooltip = <>
-    <div className="bzgl_right_main_content">1.税控盘备注超过4行不换行，在一行显示;</div>
+    {/* <div className="bzgl_right_main_content">1.税控盘备注超过4行不换行，在一行显示;</div>
     <div className="bzgl_right_main_content">2.金税盘备注超过6行不换行，在一行显示;</div>
     <div className="bzgl_right_main_content">3.税控盘普通发票备注栏允许录入138个字符，电子普票130个字符;</div>
     <div className="bzgl_right_main_content">4.金税盘备注栏允许录入230个字符;</div>
     <div className="bzgl_right_main_content">5.税务ukey规则同税控盘规则{qdfp === '5' ? ';' : '。'}</div>
     {qdfp != '5' && <div className="bzgl_right_main_content">6.本平台中，一个汉字占3个字符。</div>}
-    {qdfp === '5' && <><div className="bzgl_right_main_content">6.数电票备注栏允许录入230个字符。</div><div className="bzgl_right_main_content">7.本平台中，一个汉字占3个字符。</div></>}
+    {qdfp === '5' && <><div className="bzgl_right_main_content">6.数电票备注栏允许录入230个字符。</div><div className="bzgl_right_main_content">7.本平台中，一个汉字占3个字符。</div></>} */}
+  
+    <div className="bzgl_right_main_content">1.数电票备注栏允许录入230个字符。</div>
+    <div className="bzgl_right_main_content">2.本平台中，一个汉字占1个字符。</div>
+
   </>;
 
   // 示例卡片

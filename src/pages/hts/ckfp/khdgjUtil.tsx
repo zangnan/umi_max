@@ -52,7 +52,13 @@ khdgjUtil.khdgjJc = async (params: any) => {
   let body: any = [];
   const userInfo = myUtil.sessionStore.getItem('userInfo');
   const hgqyDm = userInfo?.qxQys[0]?.hgqyDm;
-  params['hgqydm'] = hgqyDm;
+  const shxydm = userInfo?.qxQys[0]?.shxydm;
+  if (shxydm) {
+    params['hgqydm'] = '';
+    params['nsrsbh'] = shxydm;
+  } else {
+    params['hgqydm'] = hgqyDm;
+  }
   await request(url + `khdgjservices/bgd/gdhjjc`, { method: 'POST', data: params, errorHandler }).then((response) => {
     if (response.code === '200') {
       code = '200'
@@ -353,7 +359,13 @@ khdgjUtil.gdhjjc = async (params: any) => {
   const res = { msg: '', code: '400', body: {} };
   const userInfo = myUtil.sessionStore.getItem('userInfo');
   const hgqyDm = userInfo?.qxQys[0]?.hgqyDm;
-  params['hgqydm'] = hgqyDm;
+  const shxydm = userInfo?.qxQys[0]?.shxydm;
+  if (shxydm) {
+    params['hgqydm'] = '';
+    params['nsrsbh'] = shxydm;
+  } else {
+    params['hgqydm'] = hgqyDm;
+  }
   await request(url + `khdgjservices/bgd/gdhjjc`, { method: 'POST', data: params }).then((response) => {
     if (response.code === '200') {
       res.code = '200';

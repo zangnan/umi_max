@@ -212,6 +212,10 @@
         "new": "import DDFormList from '@/pages/hts/components/DDForm/DDFormList';"
       },
       {
+        "old": "import FpDDLogin from '@/components/FpDDLogin';",
+        "new": "import FpDDLogin from '@/pages/hts/components/FpDDLogin';"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },

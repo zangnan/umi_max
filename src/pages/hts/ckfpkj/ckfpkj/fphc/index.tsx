@@ -14,10 +14,14 @@ import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../../pzgl/sdppzgl/djdlpz/tab_kprz';
 import { useAccess } from 'umi';
 import qxUtil from '@/pages/hts/common/qxUtil';
+import FpDDLogin from '@/pages/hts/components/FpDDLogin';
+
 
 const Index: React.FC<unknown> = () => {
   const refSmrz: any = useRef();
   const refKprz: any = useRef();
+  const refFprz: any = useRef();
+
 
   const access = useAccess(); // 权限
   const paramLq = {
@@ -223,12 +227,16 @@ const Index: React.FC<unknown> = () => {
         }
       });
     } else if (rtnCode == '2004') {
-      refKprz.current!.showModal();
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz.current!.showModal();
+      } else {
+        refFprz?.current?.showModal();
+      }
       if (isTimerActive()) {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = refKprz.current!.getMoVis();
+        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
@@ -298,6 +306,7 @@ const Index: React.FC<unknown> = () => {
     <DDBunit2 config={myConfig} func={myFunc} />
     <TabSfyz onRef={refKprz} getdlFlag={() => { }} />
     <TabKprz onRef={refSmrz} getdlFlag={() => { }} />
+    <FpDDLogin onRef={refFprz} getdlFlag={() => { }} />
   </>;
 };
 

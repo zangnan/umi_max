@@ -134,6 +134,26 @@ const Index: React.FC<{ data: any }> = ({
           body.gxckfphbz = obj?.gxckfphbz == "Y" ? "01" : "";
           yjform.setFieldsValue(body);
           dsxzForm.setFieldsValue(body);
+          // 时间粒度
+          if (body.sjdwDm == '1') {
+            setDisabled(true);
+            setZdtbjgztpl('每日');
+            if (!body?.xqts) {
+              dsxzForm.setFieldsValue({xqts: 7});
+            }
+          } else if (body.sjdwDm == '2') {
+            setDisabled(true);
+            setZdtbjgztpl('每周');
+            if (!body?.xqts) {
+              dsxzForm.setFieldsValue({xqts: 14});
+            }
+          } else {
+            setDisabled(false);
+            setZdtbjgztpl('每月');
+            if (!body?.xqts) {
+              dsxzForm.setFieldsValue({xqts: 60});
+            }
+          }
           jksForm.setFieldsValue(body);
           if (!body?.zdtbjgzt) {
             jksForm.setFieldsValue({'zdtbjgzt': []});
@@ -423,7 +443,7 @@ const Index: React.FC<{ data: any }> = ({
                     }}>
                       <div>同步频率：结关状态同步将按照【{zdtbjgztpl}】的频率自动执行，与报关单下载任务频率保持一致。</div>
                       <div style={{lineHeight: '32px', wordBreak: 'break-all'}}>
-                        <span>范围计算：在下载报关单数据范围的基础上 → 额外向前追溯 </span>
+                        <span>同步范围：在下载报关单数据范围的基础上 → 额外向前追溯 </span>
                         <Form.Item name='zdtbjgztts' rules={[{required: true, message: '请选择下载范围!'}]} noStyle>
                           <InputNumber min={7} max={120} disabled={zdtbjgzttsDisabled} precision={0} className={cardStyle.inputNum}/>
                         </Form.Item>

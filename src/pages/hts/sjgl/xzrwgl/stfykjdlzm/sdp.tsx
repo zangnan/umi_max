@@ -9,6 +9,7 @@ import './style.less';
 import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
+import FpDDLogin from '@/pages/hts/components/FpDDLogin';
 
 export type SdpProps = {
   jxpcflag?: any;
@@ -18,6 +19,7 @@ const Sdp: React.FC<SdpProps> = ({
   jxpcflag
 }) => {
   const refKprz: any = useRef();
+  const refFpRz: any = useRef();
 
   const [form] = Form.useForm();
   const [fpForm] = Form.useForm();
@@ -199,7 +201,11 @@ const Sdp: React.FC<SdpProps> = ({
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      refKprz.current!.showModal(flag);
+      if (myUtil.fpfw.fpfwlxDm() === '2') {
+        refKprz.current!.showModal(flag);
+      } else {
+        refFpRz.current!.showModal(flag);
+      }
       return;
     }
   };
@@ -243,13 +249,7 @@ const Sdp: React.FC<SdpProps> = ({
                               () => ({
                                 validator(_, value) {
                                   if (value) {
-                                    const userInfo = myUtil.sessionStore.getItem('userInfo');
-                                    const fpxzfwlxDm = userInfo?.xtCs?.fpxzfwlxDm;
-                                    if (
-                                      value.length === 2 &&
-                                      fpxzfwlxDm == '2' &&
-                                      history?.location?.pathname == '/02/0202/020203'
-                                    ) {
+                                    if (value?.length === 2 && myUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203') {
                                       const diffMonths = value[1].diff(value[0], 'months', true);
                                       if (Math.abs(diffMonths) > 3) {
                                         return Promise.reject(new Error('时间范围不能超过3个月'));
@@ -434,6 +434,7 @@ const Sdp: React.FC<SdpProps> = ({
         </ProCard>
       </ProCard>
       <TabSfyz onRef={refKprz} getdlFlag={save2} />
+      <FpDDLogin onRef={refFpRz} getdlFlag={save2} />
     </Spin>
   );
 };
