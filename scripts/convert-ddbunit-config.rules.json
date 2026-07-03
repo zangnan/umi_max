@@ -328,7 +328,22 @@
           "138": "        unitRef?.current?.setSelectionRowKeys([jsDm]);  // 设置SelectionRows"
         }
       ]
-      
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/ckts/scsbsj/scsbsjFun.tsx",
+      "line": [
+        {
+          "307": "    // changeDDB2PageData(obj);"
+        }
+      ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/ckts/scsbsj/scsbsj.tsx",
+      "line": [
+        {
+          "622": "    <GeneratedData onRef={refGeneratedData} ywKey={myYwKey} />"
+        }
+      ]
     }
   ],
   "excludeFiles": [

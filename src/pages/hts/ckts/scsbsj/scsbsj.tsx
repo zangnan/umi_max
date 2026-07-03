@@ -619,7 +619,7 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
     <Sjhz onRef={refSjhz} />
     <ReportGrid onRef={refReportGrid} ywKey={myYwKey} />
     <Zlsc onRef={refAttachmentData} />
-    <GeneratedData onRef={refGeneratedData} tabData={children} />
+    <GeneratedData onRef={refGeneratedData} ywKey={myYwKey} />
     <Ydgl onRef={refYdgl} ywKey={myYwKey} />
     <Ydgl2 onRef={refYdgl2} ywKey={myYwKey} />
     <Tsxx onRef={errorMsgRef} />

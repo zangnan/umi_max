@@ -304,7 +304,7 @@ Func.viewData = (param: any, event: any) => {
       tbrq1: moment(record.tbrq1).format('YYYY-MM-DD')
     }
   }
-  changeDDB2PageData(obj);
+    // changeDDB2PageData(obj);
   if (otherRef && otherRef[5]) {
     otherRef[5].current?.showModal(record);
   }
