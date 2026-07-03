@@ -2,6 +2,7 @@
  * title: 汇率管理
  * author: wxl
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Select, DatePicker, Spin, message, InputNumber, Input } from 'antd';
 import { itemType } from '@/components/DDForm/data.d';
@@ -11,7 +12,6 @@ import ProCard from '@ant-design/pro-card';
 import './style.less';
 import myUtil from '@/components/DDAssist/util';
 import moment from 'moment';
-import { useIntl } from 'umi';
 
 const Index: React.FC<{ data: any }> = ({
   data
@@ -25,7 +25,7 @@ const Index: React.FC<{ data: any }> = ({
 
   const [yhlDisabled, setYhlDisabled] = useState<boolean>(false); // 月汇率文本框选择出口日期时不可编辑
   const [oldHlData, setOldHlData] = useState<any>([]); // 查询时返回的汇率数据，方便保存时能够比较出修改的数据
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
 
   const loadMoreData = () => {

@@ -1,6 +1,7 @@
 /**
  * 发票开具配置  备注管理
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Input, Button, Divider, Form, Select, Tooltip, Space, InputNumber, Table, message, Spin } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -8,7 +9,6 @@ import { UpOutlined, DownOutlined, QuestionCircleOutlined } from '@ant-design/ic
 import './style.less';
 import myUtil from '@/components/DDAssist/util';
 import { bzglcx, bzglwh } from '@/pages/hts/services/htsApi';
-import { useIntl } from 'umi';
 
 const EditableContext = React.createContext(null);
 
@@ -119,7 +119,7 @@ const Bzgl: React.FC<DDBzglProps> = ({
 
   const [fpbzzdxfgfDmList, setFpbzzdxfgfDmList] = useState<any>([]); // 字段项分隔符数据
   const [fpbzdtsjfgfDmList, setFpbzdtsjfgfDmList] = useState<any>([]); // 多条数据分隔符数据
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [gdjqgzDisable, setGdjqgzDisable] = useState<boolean>(false); // 关单截取规则是否可用
   const [qdfp, setQdfp] = useState<any>("");// 数电票
 

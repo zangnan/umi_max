@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Row, Col, Upload, Badge, Card } from 'antd';
 import { QuestionCircleOutlined, UploadOutlined } from '@ant-design/icons';
@@ -7,7 +8,6 @@ import myUtil from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import './style.less';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import IcList from '@/pages/hts/pzgl/icCard/common/icCardTsListGpt';
@@ -24,7 +24,7 @@ export interface Hgsjxzjy {
 const Hgsjxzjy: React.FC<Hgsjxzjy> = ({ chardIndex, form }) => {
   //下载按钮是否显示
   const [masker, setMasker] = useState(false);
-  const intl = useIntl();
+  // const intl = useIntl();
   const [jcbz, setJcbz] = useState('ND');
   const [jcMsg, setJcMsg] = useState('');
   const [bgdsxbz, setBgdsxbz] = useState(true);

@@ -1,10 +1,11 @@
 // 智能配单-手动配单
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useRef, useImperativeHandle } from 'react';
 import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
 import { Spin, Button, Table, Divider, message, Tooltip, Drawer, Radio, Form, Space } from 'antd';
 import sdpdStyle from './style.less';
-import { useModel, useIntl } from 'umi';
+import { useModel } from 'umi';
 import Tzgd from './tzgd';
 import Tjgd from './tjgd';
 import Tzfp from './tzfp';
@@ -36,7 +37,7 @@ const Index: React.FC<ZnpdsdProps> = ({
   const ckbgdTzRef: any = useRef(); // 报关单单位切换页面ref
   const ckfpAddRef: any = useRef(); // 出口发票筛选页面ref
   const ckfpTzRef: any = useRef(); // 出口发票调整页面ref
-  const intl = useIntl();
+  // const intl = useIntl();
   const [formPp] = Form.useForm();
 
   const refZnpdmx: any = useRef();

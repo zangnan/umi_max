@@ -1,6 +1,7 @@
 /**
  * 按报关单开具  立即开票
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useRef } from 'react';
 import { Modal, Button, message, Form, Radio, Tooltip, Select, Alert, Input, Spin } from 'antd';
 import { QuestionCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
@@ -8,7 +9,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import { scfpsqd, xbgdkhxx, tjkpxx, ljkpjy, checkDlt2 } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl, history, useAccess } from 'umi';
+import { history, useAccess } from 'umi';
 import './style.less';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import TabKprz from '../../../pzgl/sdppzgl/djdlpz/tab_kprz';
@@ -43,7 +44,7 @@ const ModalScfp: React.FC<DDModalGridProps> = ({ onRef }) => {
   const refKprz: any = useRef();
   const refSmrz: any = useRef();
 
-  const intl = useIntl();
+  // const intl = useIntl();
   // 开启
   const showModal = (param: any, param1: any, unitRef: any, param2: any) => {
     setModalVisibleK(true);

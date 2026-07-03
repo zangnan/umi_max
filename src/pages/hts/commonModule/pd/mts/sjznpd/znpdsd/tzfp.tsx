@@ -1,9 +1,9 @@
 /**
  * 免退税：商品分类配单 ---- 配比平衡 发票调整
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useImperativeHandle, useContext, useEffect } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 import { message, Modal, Button, Table, Form, Input, InputNumber, Tooltip } from 'antd';
 import myUtil from '@/components/DDAssist/util';
 
@@ -120,7 +120,7 @@ export interface TzfpProps {
 }
 
 const Tzfp: React.FC<TzfpProps> = ({ onRef, visible = false }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   const [mainRef, setMainRef] = useState<any>([]);
   const [gridData, setGridData] = useState<any>([]);

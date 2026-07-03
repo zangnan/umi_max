@@ -1,4 +1,5 @@
 // 已生成数据/申报明细
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useImperativeHandle, useContext } from 'react';
 import { Tabs, Button, Spin, Form, Input, Select, Table, message, Tooltip, DatePicker, Space } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -8,7 +9,6 @@ import { FormInstance } from 'antd/es/form';
 import { queryPager, querySpdmXxCj, confirmTzckspDm, getPlqrkzmCmcode } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import ProCard from '@ant-design/pro-card';
 
 export interface CkxqDataProps {
@@ -119,7 +119,7 @@ const CkxqData: React.FC<CkxqDataProps> = ({
   const [ spmbList, setSpmbList ] = useState<any>([]); // 传递的数据 调整表
   const [otherRef, setOtherRef] = useState<any>(); // 传递的数据 调整表
   const [checkCkspSheet, setCheckCkpSheet] = useState<any>({tzmts: 0, kzmts: 0}); // sheet页是否渲染
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [ saveFlag, setSaveFlag] = useState(true);  // 蒙版
 
   // 确认表

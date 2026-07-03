@@ -1,8 +1,8 @@
+import { intl } from '@/components/DDAssist/util';
 import unitConfig from './config';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './f';
 import React from 'react';
-import { useIntl } from 'umi';
 
 
 const Jdcx: React.FC<unknown> = () => {

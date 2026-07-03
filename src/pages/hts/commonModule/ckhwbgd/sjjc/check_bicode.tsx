@@ -1,10 +1,10 @@
 /**
  * 汇率配置
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useEffect, useContext } from 'react';
 import { Modal, Button, Table, InputNumber, Spin, Tooltip, Form, message } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import { saveMbHl } from '@/pages/hts/services/htsApi';
@@ -48,7 +48,7 @@ export interface DDModalGridProps {
   ywKey?: any;
 }
 const Hlpz: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [mainParam, setMainParam] = useState<any>();
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);

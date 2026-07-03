@@ -1,6 +1,7 @@
 /**
  * 发票生成明细：外贸、生产、证明开具
  */
+import { intl } from '@/components/DDAssist/util';
 import formUtil from '@/components/DDForm/formUtil';
 import React, { useEffect, useImperativeHandle, useState, useRef } from 'react';
 import { Modal, Button, Form, message, Spin, } from 'antd';
@@ -13,7 +14,6 @@ import UnitUtil from '@/components/DDBunit/unit_util';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import moment from 'moment';
-import { useIntl } from 'umi';
 import '@/pages/hts/commonModule/style.less';
 import { queryCjCsh, saveCkznxMx } from '@/pages/hts/services/htsApi';
 import formFunc from './f'
@@ -27,7 +27,7 @@ export interface DDTsort {
 }
 
 const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   const [scmxModalVisible, setScmxModalVisible] = useState<boolean>(false);
   const [form] = Form.useForm();

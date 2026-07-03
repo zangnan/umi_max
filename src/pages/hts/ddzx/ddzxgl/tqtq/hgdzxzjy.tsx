@@ -1,10 +1,10 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState,  } from 'react';
 import { Button, Form, Space, Input, Spin, Row, Col, message} from 'antd';
 import ProCard from '@ant-design/pro-card';
 import { tqdd } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
-import { useIntl } from 'umi';
 
 export type ActionType = {
   reload: (resetPageIndex?: boolean) => void;

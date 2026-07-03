@@ -1,9 +1,10 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Modal, Button, Table, message, Spin } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { shfkdr2, shfkwjdr, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { history, useIntl } from 'umi';
+import { history } from 'umi';
 
 
 
@@ -23,7 +24,7 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
   const [flag, setFlag] = useState<any>();
   const [formData, setFormData] = useState<any>();
   const [type, setType] = useState<any>();
-  const intl = useIntl();
+  // const intl = useIntl();
 
 
 

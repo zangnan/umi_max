@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Spin, DatePicker, Row, Col } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -5,7 +6,6 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import { checkDlt2, cjrwSdbswj } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import FpDDLogin from '@/pages/hts/components/FpDDLogin';
@@ -17,7 +17,7 @@ const Xxfpbswj: React.FC<unknown> = ({ }) => {
 
   const [form] = Form.useForm();
   const [masker, setMasker] = useState(false);
-  const intl = useIntl();
+  // const intl = useIntl();
 
   // 销项发票板式文件下载
   const downloadSj = async () => {

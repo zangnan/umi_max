@@ -1,10 +1,10 @@
 /**
  * 按报关单开具  设置税收分类编码
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useContext, useEffect, useRef } from 'react';
 import { Modal, Button, message, Input, Form, Select, Table, Spin, Tooltip } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import { ssflbmsz } from '@/pages/hts/services/htsApi';
 import Wxspglfm from '@/pages/hts/pzgl/fppzgl/fm/wxspglfm';
@@ -187,7 +187,7 @@ const Modalsphfwssflhbbm: React.FC<DDModalGridProps> = ({ onRef, visible = false
 
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
 
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   const wxspglfmRef: any = useRef();
 

@@ -1,13 +1,13 @@
 /**
  * 发票开具配置  基础开票配置
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useState } from 'react';
 import { Form, Input, message, Radio, Space, Tooltip, Spin, Button } from 'antd';
 import './style.less';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { kppzwh } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 
 const Index: React.FC<{ data?: any }> = ({
@@ -19,7 +19,7 @@ const Index: React.FC<{ data?: any }> = ({
   const [fpsplxDisable, setFpsplxDisable] = useState<boolean>(true); // 根据税盘类型判断分机号是否可填
   const [kpfsDisabled, setKpfsDisabled] = useState<boolean>(true); // 在线开票/导出开票
   const [qdfpDisabled, setQdfpDisabled] = useState<boolean>(true); // 数电票（普通发票）
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   const onChange = (event: any) => {
     const values = form.getFieldsValue(true);

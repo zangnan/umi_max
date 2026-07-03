@@ -1,12 +1,12 @@
 /**
  * 发票开具配置  关单开票配置
  */
+import { intl } from '@/components/DDAssist/util';
 import { Form, message, Radio, Space, Tooltip, Select, Spin } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { kppzwh } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 
 const Index: React.FC<{ data?: any }> = ({
   data
@@ -17,7 +17,7 @@ const Index: React.FC<{ data?: any }> = ({
   const [flag, setFlag] = useState<any>(false); // 汇率规则下拉框是否可选择
   const [btsspDisable, setBtsspDisable] = useState<boolean>(false); // 不退税商品是否可用
 
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   useEffect(() => {
     Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {

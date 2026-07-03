@@ -1,4 +1,5 @@
 import cktsUtil from '@/pages/hts/cktsUtil';
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useImperativeHandle } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Popover, DatePicker, Row, Upload } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -7,7 +8,7 @@ import myUtil from '@/components/DDAssist/util';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import './style.less';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { history, useIntl, useAccess } from 'umi';
+import { history, useAccess } from 'umi';
 import { shfkdr2, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';
@@ -33,7 +34,7 @@ const Hgdzxzjy: React.FC<DDModalGridProps> = ({ onRef }) => {
   const [codeList, setCodeList] = useState([]);
   const [qylx, setQylx] = useState<any>('');
   const [ywlxDm, setYwlxDm] = useState<any>([]);
-  const intl = useIntl();
+  // const intl = useIntl();
   const access = useAccess(); // 权限
   useEffect(() => {
     const qylx = cktsUtil.sys.enterpriseType();

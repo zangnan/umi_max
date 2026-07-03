@@ -1,4 +1,5 @@
 import cktsUtil from '@/pages/hts/cktsUtil';
+import { intl } from '@/components/DDAssist/util';
 import formUtil from '@/components/DDForm/formUtil';
 import React, {useState, useEffect, useImperativeHandle} from 'react';
 import { Badge, Button, Modal, Spin, Form, message } from 'antd';
@@ -8,7 +9,6 @@ import UnitUtil from '@/components/DDBunit/unit_util';
 import { queryJgbForm } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
 import { itemType } from '@/components/DDForm/data.d';
-import { useIntl } from 'umi';
 import { baseEdit, callServiceCheck } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
@@ -31,7 +31,7 @@ const Hwqd: React.FC<HwqdProps> = ({
   const [formName, setFormName] = useState('');
   const [record, setRecord] = useState({});
   const [cs, setCs] = useState({});
-  const intl = useIntl();
+  // const intl = useIntl();
   const [formSaveUrl, setFormSaveUrl] = useState(`/hx/ty/crud/saveOrUpdate`);
   const [formCheckUrl, setFormCheckUrl] = useState('');
   const [formSaveCheck, setFormSaveCheck] = useState('');

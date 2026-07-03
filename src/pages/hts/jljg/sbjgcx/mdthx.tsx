@@ -2,13 +2,13 @@
  * title: 申报结果查询的免抵退核销表
  * creator: zxy
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useRef }  from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import mdthxConfig from './mdthxconfig';
 import Func from './f';
 import { history } from 'umi';
 import ReportGrid from './reportGrid';
-import { useIntl } from 'umi';
 
 
 const Mdthx: React.FC<unknown> = () => {

@@ -2,6 +2,7 @@
  * 备案单证 资料预览
  */
 import cktsUtil from '@/pages/hts/cktsUtil';
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import { Form, message, Modal, Space, Spin, TreeSelect, Button, Dropdown, Menu, Typography, Divider, AutoComplete, Input, Select } from 'antd';
 import { DeleteOutlined, ArrowDownOutlined, EyeOutlined, MoreOutlined, LeftOutlined, RightOutlined, PlusOutlined, HighlightOutlined, ProfileOutlined } from '@ant-design/icons';
@@ -14,7 +15,6 @@ import DzglImport from "@/pages/hts/badz/badzcommon/dzglImport";
 import DzglSmy from "@/pages/hts/badz/badzcommon/dzglSmy";
 import { badzZlgdYl, badzZlgdYlCkxq, getDzmcTree, badzDzbaZlcjJcgljk, dzbadzglxz, xxybc, tzsx, } from "@/pages/hts/services/htsApi";
 import { getGridData } from '@/pages/hts/services/htsApi';
-import { useIntl } from 'umi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import { arrayMove, sortableContainer, sortableElement } from 'react-sortable-hoc';
 import { history } from 'umi';
@@ -43,7 +43,7 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
   const [formDate, setFormDate] = useState<any>("");// 报关单号
   const dzlgImportRef: any = useRef();
   const dzlgSmyRef: any = useRef();
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [dzmcTree, setDzmcTree] = useState<any>([]); // 单证名称树
   const [dzData, setdzData] = useState<any>([]); // 单证数据
 

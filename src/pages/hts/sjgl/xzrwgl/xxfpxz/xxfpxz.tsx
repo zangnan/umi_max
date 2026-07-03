@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef } from 'react';
 import { Button, Form, Space, message, Checkbox, Spin, DatePicker, Row, Col } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -5,7 +6,6 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import { history } from 'umi';
 import { checkDlt2, cjrw } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import FpDDLogin from '@/pages/hts/components/FpDDLogin';
@@ -15,7 +15,7 @@ const Xxfpxz: React.FC<unknown> = () => {
   const refFpRz: any = useRef();
   const [form] = Form.useForm();
   const [masker, setMasker] = useState(false);
-  const intl = useIntl();
+  // const intl = useIntl();
 
   /**
    * 销项发票数据下载

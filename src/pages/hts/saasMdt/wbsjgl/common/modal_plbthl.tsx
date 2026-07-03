@@ -2,10 +2,10 @@
  * 按报关单开具  设置汇率
  */
 
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useContext, useEffect } from 'react';
 import { Drawer, Button, message, Spin, Space, Form, Table, InputNumber } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 import { bgdhlwh, queryPager, bgdhlwhAbz } from '@/pages/hts/services/htsApi';
 import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
@@ -113,7 +113,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   const [selectionRowKeys, setSelectionRowKeys] = useState<any>([]);
   const [hlData, setHlData] = useState<any>([]);
   const [mainRef, setMainRef] = useState<any>(''); // 主表页面ref用于刷新
-  const intl = useIntl();
+  // const intl = useIntl();
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
   const [otherRef, setOtherRef] = useState<any>(); // 主页面
   const [title, setTitle] = useState<any>(''); // 弹窗标题

@@ -15,7 +15,6 @@ import UnitUtil from '@/components/DDBunit/unit_util';
 import myUtil from '@/components/DDAssist/util';
 import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
-import { useIntl } from 'umi';
 import { useModel } from 'umi';
 import { useAccess } from 'umi';
 import { intl as intl2 } from '@/components/DDAssist/util';
@@ -41,7 +40,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   const { TreeNode } = Tree;
   // config 修正
   config = UnitUtil.config.modify(config);
-  const intl = useIntl();
+  // const intl = useIntl();
   // useForm
   const [form] = Form.useForm();
   const [formCommonFilter] = Form.useForm();

@@ -8,7 +8,6 @@ import { PlusOutlined, DeleteOutlined, ArrowDownOutlined, EyeOutlined, MoreOutli
 import update from 'immutability-helper';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useIntl } from 'umi';
 import ProCard from '@ant-design/pro-card';
 import myUtil from '@/components/DDAssist/util';
 import { getDzmcTree2, funcDzglbc, badzZlgdYlCkxq, jzfjToPath, changeJzfjToPath, } from "@/pages/hts/services/htsApi";
@@ -35,7 +34,7 @@ const DzglImport: React.FC<DzglImportProps> = ({ onRef, gnmk, visible = false })
   const [unitRef, setUnitRef] = useState<any>("");// 主列表刷新使用
   const [form1] = Form.useForm(); // 输入框form
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [fileList, setFileList] = useState<any>([]); // 文件数组
   const [scFjs, setScFjs] = useState<any>([]); // 删除文件数组
   const [filetemp, setFiletemp] = useState<any>(); // ****

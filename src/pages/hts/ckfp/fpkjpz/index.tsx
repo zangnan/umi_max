@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Tabs, message } from 'antd';
 import Jckppz from './jckppz';
@@ -11,12 +12,11 @@ import Wxspgl from './wxspgl';
 import Qtspgl from './qtspgl';
 import Myxzpz from './myxzpz';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import { xsfpzcx } from '@/pages/hts/services/htsApi';
 
 const Index: React.FC = () => {
 
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   const [activeKey, setActiveKey] = useState<string>('jckppz'); // 当前活动tab
 

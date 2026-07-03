@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Popover, Image } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -9,7 +10,6 @@ import myUtil from '@/components/DDAssist/util';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import './style.less';
-import { useIntl } from 'umi';
 
 export type ActionType = {
   reload: (resetPageIndex?: boolean) => void;
@@ -19,7 +19,7 @@ const Hgdzxzjy: React.FC<unknown> = () => {
   const [form] = Form.useForm();
   //下载按钮是否显示
   const [masker, setMasker] = useState(false);
-  const intl = useIntl();
+  // const intl = useIntl();
   const [imgSrc, setImgSrc] = useState<any>('error');
   const [txtil, setTxtil] = useState<any>(<span>系统异常</span>);
 

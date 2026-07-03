@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef,useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Popover, DatePicker, Row, Col } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -6,7 +7,6 @@ import { history } from 'umi';
 import { ycsbsjxz, checkDlt2, zxqjy, cjrw } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import FpDDLogin from '@/pages/hts/components/FpDDLogin';
@@ -27,7 +27,7 @@ const Hgdzxzjy: React.FC<HgdzxzjyProps> = ({
   const [masker, setMasker] = useState(false);
   const [rqName, setRqName] = useState('');
   const [param, setParam] = useState({});
-  const intl = useIntl();
+  // const intl = useIntl();
 
   useEffect(() => {
   }, [param]);

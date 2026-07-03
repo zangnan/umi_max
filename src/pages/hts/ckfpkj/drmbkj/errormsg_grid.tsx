@@ -1,12 +1,12 @@
 /**
  * 导入模板开具 导入异常信息
  */
+import { intl } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState } from 'react';
 import { Modal, Button, Table, message } from 'antd';
 import { commonDrwtdc } from '@/pages/hts/services/htsApi';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 
 export interface DDModalGridProps {
   onRef?: any;
@@ -26,7 +26,7 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
   const [modalVisible, setModalVisible] = useState<boolean>(visible);// Modal是否可以显示
   const [modalData, setModalData] = useState<any>(data);// Modal是否可以显示
   const [key, setKey] = useState<any>('');// Modal是否可以显示
-  const intl = useIntl();
+  // const intl = useIntl();
   // 开启
   const showModal = (param: any, param1: any) => {
     setModalVisible(true);

@@ -1,6 +1,7 @@
 /**
  * 按报关单开具  编辑开票
  */
+import { intl } from '@/components/DDAssist/util';
  import React, { useImperativeHandle, useState,useRef } from 'react';
 import { Button, message, Spin, Modal, Form, Select, Alert } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -8,7 +9,6 @@ import CONSTANTS from '@/components/DDAssist/constants';
 import DDAlert from '@/pages/hts/components/DDAlert';
  import { DrawerForm } from '@ant-design/pro-form';
 import myUtil from '@/components/DDAssist/util';
- import { useIntl } from 'umi';
  import './style.less';
  import { scfpsqd, xbgdkhxx, ljkpjy, checkDlt2 } from '@/pages/hts/services/htsApi';
  import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
@@ -26,7 +26,7 @@ import myUtil from '@/components/DDAssist/util';
    const [selectRows, setSelectRows] = useState<any>([]); //选中的行的值
    const [tableData, setTableData] = useState<any>([]); // 主页面传递的主数据
    const [expandedRowKeys, setExpandedRowKeys] = useState<any>([]);
-   const intl = useIntl();
+   // const intl = useIntl();
    const [masker, setMasker] = useState<boolean>(false); // 蒙板
    const [maskerG, setMaskerG] = useState<boolean>(false);
    const [mainRef, setMainRef] = useState<any>({}); //主页面的ref

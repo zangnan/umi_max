@@ -30,7 +30,7 @@ const ReportGrid: React.FC<ReportGridProps> = ({
   const [flag, setFlag] = useState("");
 
   const [selectionRows, setSelectionRows] = useState<any>([]);
-  // const intl = useIntl();
+  // // const intl = useIntl();
 
   // 开启
   const showModal = (params: any, rows: any, flag:any) => {

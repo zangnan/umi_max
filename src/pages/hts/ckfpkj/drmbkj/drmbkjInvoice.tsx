@@ -1,12 +1,12 @@
 /**
  * 导入模板开具 采集和预览
  */
+import { intl } from '@/components/DDAssist/util';
  import React, { useImperativeHandle, useState, useRef } from 'react';
 import { Modal, Button, message, Spin, Tooltip } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
  import Invoice from '@/pages/hts/components/DDdocs/Invoice';
  import { bcfpsqd, queryParams, fpmxbc2 } from '@/pages/hts/services/htsApi';
- import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import DDAlert from '@/pages/hts/components/DDAlert';
  import { WarningOutlined } from '@ant-design/icons';
@@ -31,7 +31,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
    const [gmfList, setGmfList] = useState<any>([]);
    const [fpzlDm1, setFpzlDm1] = useState<any>('');// 发票种类
    const [fpkjfsDm, setFpkjfsDm] = useState<any>('');// 发票种类
-   const intl = useIntl(); // 提示信息
+   // const intl = useIntl(); // 提示信息
    const [sbyy1, setSbyy1] = useState<any>('');// 失败原因
    const [tempCode, setTempCode] = useState<any>({});// 发票配置的码表
    const [isFpsqdFlag, setIsFpsqdFlag] = useState<any>('1'); // 是否为2.0功能  1、发票状态跟踪-修改来源为按报关单开具的，3：发票状态跟踪-修改来源为导入模板开具的 4：导入模板开具修改

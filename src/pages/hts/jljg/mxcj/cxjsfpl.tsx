@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, {useImperativeHandle, useState,useEffect } from 'react';
 import { Space, Input, Button, Spin, Form, Checkbox, List, message, Popover, Select, Badge } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -8,7 +9,6 @@ import './style.less';
 import {cxjsfpl, gxsjfpldc, gxsjfpl } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import fplfbconfig from './cxjsfplconfig';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import cktsUtil from '@/pages/hts/cktsUtil';
 
@@ -32,7 +32,7 @@ const Cxjsfpl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   const [checkAll, setCheckAll] = useState(false); // 是否全选
   const [queryRef, setQueryRef] = useState<any>();
 
-  const intl = useIntl();
+  // const intl = useIntl();
 
   // 开启
   const showModal = (param: any, unitRef: any) => {

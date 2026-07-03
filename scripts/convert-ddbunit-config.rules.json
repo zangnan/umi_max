@@ -216,6 +216,10 @@
         "new": "import FpDDLogin from '@/pages/hts/components/FpDDLogin';"
       },
       {
+        "old": "const intl = useIntl();",
+        "new": "// const intl = useIntl();"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },
@@ -346,6 +350,15 @@
       "line": [
         {
           "622": "    <GeneratedData onRef={refGeneratedData} ywKey={myYwKey} />"
+        }
+      ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/jljg/znfx/index.tsx",
+      "replace": [
+        {
+          "old": "ZnfxFunc.intl = useIntl();",
+          "new": "ZnfxFunc.intl = intl2;"
         }
       ]
     }

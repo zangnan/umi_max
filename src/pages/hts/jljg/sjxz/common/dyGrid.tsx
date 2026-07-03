@@ -6,7 +6,6 @@ import { Modal, message, Button, Divider, Spin, Table } from 'antd';
 import { CloseOutlined, FilePdfOutlined } from '@ant-design/icons';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import DyViewer from './dyViewer';
 import { querySjxzDy, jljghxBbdyCommon, jljghxSjxzPdfPlxz } from '@/pages/hts/services/htsApi';
 import type {PaginationProps }  from '@/components/DDBaseGrid/data.d';
@@ -44,7 +43,7 @@ const ReportGrid: React.FC<ReportGridProps> = ({
   const [selectionRowKeys, setSelectionRowKeys] = useState<any>([]);
   const [selectionRows, setSelectionRows] = useState<any>([]);
   const [masker, setMasker] = useState<boolean>(false);
-  const intl = useIntl();
+  // const intl = useIntl();
   const [myPagination, setPagination] = useState<PaginationProps>();
   const [dataSource, setDataSource] = useState([]);
   const [param, setParam] = useState<any>();

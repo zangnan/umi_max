@@ -11,7 +11,6 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { QuestionCircleOutlined, DownOutlined } from '@ant-design/icons';
 import cktsUtil from '@/pages/hts/cktsUtil';
-import { useIntl } from 'umi';
 import EditModal from './ydclrightContent'
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
@@ -30,7 +29,7 @@ const Ydcl: React.FC<YdclProps> = ({
   visible = false,
   ywKey
 }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [checkedList, setCheckedList] = React.useState<any>([]); // 选中值
   const [indeterminate, setIndeterminate] = React.useState(false); // 全选状态
   const [checkAll, setCheckAll] = useState(false); // 是否全选

@@ -1627,6 +1627,48 @@ function applyImportRewritesToContent(content) {
     },
   );
 
+  // R18: useIntl 移除（umi 4 中改用顶层 intl 对象）
+  // - import { useIntl } from 'umi' → 整行删除（包含 trailing \r\n）
+  // - import { a, useIntl, b } from 'umi' → import { a, b } from 'umi'
+  // 紧跟自动注入：import { intl } from '@/components/DDAssist/util';
+  // 注意：内层用 [^{}]*? 而非 [\s\S]*? —— 避免跨 import 行匹配
+  let useIntlRemoved = 0;
+  text = text.replace(
+    /^[ \t]*import\s*\{[^{}]*?\}\s*from\s*(['"])umi\1\s*;?[ \t]*\r?\n?/gm,
+    (m, quote) => {
+      // 取出 inner（去掉 { } 包裹）
+      const innerMatch = m.match(/\{([^{}]*?)\}/);
+      if (!innerMatch) return m;
+      const inner = innerMatch[1];
+      if (!/\buseIntl\b/.test(inner)) return m;
+      const names = inner
+        .split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+      const filtered = names.filter((s) => s !== 'useIntl');
+      useIntlRemoved += names.length - filtered.length;
+      if (filtered.length === 0) return ''; // 整行删除（带 trailing \r\n）
+      return `import { ${filtered.join(', ')} } from ${quote}umi${quote};\n`;
+    },
+  );
+  if (useIntlRemoved > 0) {
+    const hasIntlImport =
+      /^[ \t]*import\s+\{[^}]*\bintl\b[^}]*\}\s*from\s*['"]@\/components\/DDAssist\/util['"]/m.test(text) ||
+      /^[ \t]*import\s+\w+\s*,\s*\{[^}]*\bintl\b[^}]*\}\s*from\s*['"]@\/components\/DDAssist\/util['"]/m.test(text);
+    if (!hasIntlImport) {
+      const importLine = "import { intl } from '@/components/DDAssist/util';";
+      const firstImportMatch = text.match(/^[ \t]*import\s/m);
+      if (firstImportMatch) {
+        text =
+          text.slice(0, firstImportMatch.index) +
+          importLine + '\n' +
+          text.slice(firstImportMatch.index);
+      } else {
+        text = importLine + '\n' + text;
+      }
+    }
+  }
+
   // 相邻行 default + named 同模块合并（避免 ref 中 `import X from` + `import { y } from X` 两行）
   // 匹配紧邻两行：
   //   import <default> from '<module>';

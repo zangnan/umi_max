@@ -2,11 +2,11 @@
  * 按报关单开具  设置汇率
  */
 
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useContext, useEffect } from 'react';
 import { Modal, Button, message, Tooltip, Spin, Input, Form, Table, InputNumber } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import { hlxxsz } from '@/pages/hts/services/htsApi';
 
@@ -54,7 +54,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   const [hlgz, setHlgz] = useState<any>('');
   const [sbrqHlgz, setSbrqHlgz] = useState<any>('');
   const [mainRef, setMainRef] = useState<any>(''); // 主表页面ref用于刷新
-  const intl = useIntl();
+  // const intl = useIntl();
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
 
   const formList: any = []; // 可编辑表格form集合（一行就是一个form）

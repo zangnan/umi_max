@@ -1,10 +1,10 @@
 /**
  * 免退税：商品分类配单 ---- 出口报关单单位调整
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useImperativeHandle } from 'react';
 import CONSTANTS from '@/components/DDAssist/constants';
 import { message, Modal, Button, Table, Form, Radio, Tooltip, Space, Switch } from 'antd';
-import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 
 const EditableContext = React.createContext(null);
@@ -76,7 +76,7 @@ export interface TzgdProps {
 }
 
 const Tzgd: React.FC<TzgdProps> = ({ onRef, visible = false }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   const [gridData, setGridData] = useState<any>([]);
   const [delGduuid, setDelGduuid] = useState<any>([]); // 已删除关单数据

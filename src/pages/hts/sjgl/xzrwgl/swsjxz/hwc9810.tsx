@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect,} from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Upload} from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -6,7 +7,7 @@ import myUtil from '@/components/DDAssist/util';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import './style.less';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { history, useIntl } from 'umi';
+import { history } from 'umi';
 import { shfkdr2Check } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';
@@ -32,7 +33,7 @@ const Hgdzxzjy: React.FC<DDModalGridProps> = ({ onRef}) => {
   const [masker, setMasker] = useState(false);
   const [codeList, setCodeList] = useState([]);
   const [ywlxDm, setYwlxDm] = useState<any>([]);
-  const intl = useIntl();
+  // const intl = useIntl();
 
 
   useEffect(() => {

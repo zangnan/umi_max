@@ -1,6 +1,7 @@
 /**
  * title: 智能配单
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect, useRef } from 'react';
 import { Spin, Button, Form, Input, Space, DatePicker, Tooltip, Popconfirm, message, InputNumber } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -9,7 +10,7 @@ import myUtil from '@/components/DDAssist/util';
 import ZnpdGrid from './znpdGrid';
 import Zdpp from './zdpp';
 import { SearchOutlined } from '@ant-design/icons';
-import { history, useModel, useIntl } from 'umi';
+import { history, useModel } from 'umi';
 import Znpdsd from '@/pages/hts/commonModule/pd/mts/sjznpd/znpdsd';
 
 const MtsZnpd: React.FC<unknown> = () => {
@@ -29,7 +30,7 @@ const MtsZnpd: React.FC<unknown> = () => {
   const [selectBgdRows, setSelectBgdRows] = useState<any>([]);                        // 选中的行的值
   const [selectFpRowKeys, setSelectFpRowKeys] = useState<any>([]);                  // 选中的行的key
   const [selectFpRows, setSelectFpRows] = useState<any>([]);                        // 选中的行的值
-  const intl = useIntl();
+  // const intl = useIntl();
   const [bgdFpSpmc, setBgdFpSpmc] = useState<any>({}); // 选中名称
   const { searchModel, changeSearchModel, bgdKeys, changeBgdKeys, bgdRows, changeBgdRows, fpKeys, changeFpKeys, fpRows, changeFpRows } = useModel('mtsznpd');
 

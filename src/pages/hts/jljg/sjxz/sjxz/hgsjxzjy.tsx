@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Popover, Image } from 'antd';
 import moment from 'moment';
@@ -10,7 +11,6 @@ import myUtil from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import './style.less';
-import { useIntl } from 'umi';
 
 export type ActionType = {
   reload: (resetPageIndex?: boolean) => void;
@@ -25,7 +25,7 @@ const Hgsjxzjy: React.FC<unknown> = () => {
   // const [hjjcBz, setHjjcBz] = useState(false);
   const [hackValue, setHackValue] = useState<any>();
   const [value, setValue] = useState<any>();
-  const intl = useIntl();
+  // const intl = useIntl();
 
   const [bgdsxbz, setBgdsxbz] = useState(true);
   const [rqsxbz, setRqsxbz] = useState(false);

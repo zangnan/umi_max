@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useRef, Fragment, useState } from 'react';
 import { useRouteData} from 'umi';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
@@ -16,7 +17,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import { shfkdr2, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import importStyle from './importStyle.less';
 import Tsxx from '../../ckts/scsbsj/tsxx';
-import { useAccess,history, useIntl } from 'umi';
+import { useAccess, history } from 'umi';
 import qxUtil from '@/pages/hts/common/qxUtil';
 
 
@@ -59,7 +60,7 @@ const TableList: React.FC<SbsjcxProps> = ({
   const refShsjxz: any = useRef();
   const refShjdcx: any = useRef();
   
-  const intl = useIntl();
+  // const intl = useIntl();
 
 
   // 列表列

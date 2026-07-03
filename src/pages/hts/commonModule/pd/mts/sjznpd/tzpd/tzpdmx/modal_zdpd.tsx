@@ -1,6 +1,7 @@
 /**
  * 台账配单明细-自动配单
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, DatePicker, Spin, Modal, Form, Checkbox, message, } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -8,7 +9,6 @@ import myUtil from '@/components/DDAssist/util';
 import { tssbTzpdZdpd } from '@/pages/hts/services/htsApi';
 import moment from 'moment';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { useIntl } from 'umi';
 import { history } from 'umi';
 
 
@@ -24,7 +24,7 @@ const ModelZdpd: React.FC<AbgdBjProps> = ({
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [formZdpd] = Form.useForm();
   const [masker, setMasker] = useState<boolean>(false); //
-  const intl = useIntl();
+  // const intl = useIntl();
   const [pdBgdts, setPdBgdts] = useState<any>(0); // 参与配单的报关单条数
   const [bgdSxtj, setBgdSxtj] = useState<any>([]);  // 参与配单的台账筛选条件
 

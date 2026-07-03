@@ -1,10 +1,10 @@
 /**
  * 单证管理 上传单证 扫描仪
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState } from 'react';
 import { Modal, Button, message, Form, Input, Space, Spin, TreeSelect, Dropdown, Menu, Image, Select, Popover, Checkbox } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 import ProCard from '@ant-design/pro-card';
 import { getDzmcTree2, jzfjToPath, badzZlgdYlCkxq, funcDzglbc, changeJzfjToPath } from "@/pages/hts/services/htsApi";
 import smyStyles from './smyStyless.less';
@@ -33,7 +33,7 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
   const [unitRef, setUnitRef] = useState<any>("");// 主列表刷新使用
   const [ylModalRef, setYlModalRef] = useState<any>("");//
   const [form1] = Form.useForm(); // 输入框form
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
   const [initData, setInitData] = useState<any>({});// 初始化数据（有选中数据时使用）
   const [dzmcTree, setDzmcTree] = useState<any>([]); // 单证名称树

@@ -1,13 +1,13 @@
 /**
  * 发票开具配置  基础开票配置
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useState } from 'react';
 import { Form, Input, message, Radio, Space, Tooltip, Spin } from 'antd';
 import '../style.less';
 import { QuestionCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { kppzwh, skxxcx } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import cktsUtil from '@/pages/hts/cktsUtil';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import { useAccess, Access } from 'umi';
@@ -25,7 +25,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   const [fpsplxDisable, setFpsplxDisable] = useState<boolean>(true); // 根据税盘类型判断分机号是否可填
   const [kpfsDisabled, setKpfsDisabled] = useState<boolean>(true); // 在线开票/导出开票
   const [qdfpDisabled, setQdfpDisabled] = useState<boolean>(false); // 数电票（普通发票）
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
   const [mxkjmshs, setMxkjmshs] = useState<String>('8'); //明细开具模式 行数显示
   const [zcFlag, setZcFlag] = useState<String>('0'); // 是否注册 0未注册 1注册中 2册成功
  

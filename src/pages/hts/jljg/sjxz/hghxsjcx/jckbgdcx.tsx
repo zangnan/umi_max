@@ -1,10 +1,10 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useRef } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './jckbgdconfig';
 import func from './func'
 import ErrorMsgGrid from '@/pages/hts/ckfp/drmbkj/errormsg_grid';
 import DyGrid from '../common/dyGrid';
-import { useIntl } from 'umi';
 
 
 

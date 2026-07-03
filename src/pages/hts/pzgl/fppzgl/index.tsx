@@ -1,4 +1,5 @@
 // 发票配置管理
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Tabs, message } from 'antd';
 import Jckppz from './jckppz';
@@ -13,14 +14,13 @@ import Qtspgl from './qtspgl';
 import Dyjgl from './dyjgl';
 // import Myxzpz from './myxzpz';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import { xsfpzcx } from '@/pages/hts/services/htsApi';
 import { history } from 'umi';
 import { useAccess, Access } from 'umi';
 import qxUtil from '@/pages/hts/common/qxUtil';
 
 const Index: React.FC = () => {
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   const [activeKey, setActiveKey] = useState<string>('xsfpz'); // 当前活动tab
 

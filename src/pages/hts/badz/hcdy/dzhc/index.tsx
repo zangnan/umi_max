@@ -3,9 +3,9 @@
  * author: mfc
  */
 import cktsUtil from '@/pages/hts/cktsUtil';
+import { intl } from '@/components/DDAssist/util';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import React from 'react';
-import { useIntl } from 'umi';
 import dzhcFunc from './f';
 import config from "./config";
 import { history } from 'umi';

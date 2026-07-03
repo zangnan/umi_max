@@ -6,7 +6,6 @@ import { Button, Col, Drawer, Form, InputNumber, message, Modal, Space, Spin, Ta
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
 import {itemType} from '@/components/DDForm/data.d';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
-import {useIntl} from 'umi';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import UnitUtil from '@/components/DDBunit/unit_util';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -24,7 +23,7 @@ export interface DDModalGridProps {
 }
 
 const Mtspd: React.FC<DDModalGridProps> = ({onRef, visible = false, ywKey}) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [unitRefs, setUnitRefs] = useState<any>();// 主列表
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);

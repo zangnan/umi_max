@@ -15,7 +15,6 @@ import ModalJckze from './jckze';
 import ModalBt from './modal_bt';
 import myUtil from '@/components/DDAssist/util';
 import moment from 'moment';
-import { useIntl } from 'umi';
 import { useRequest } from 'ahooks';
 import { bgdtjmyjjy, queryFxzSjTs } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
@@ -149,7 +148,7 @@ const Znfx: React.FC<unknown> = () => {
     return otherRef;
   };
 
-  ZnfxFunc.intl = useIntl();
+  ZnfxFunc.intl = intl2;
 
   return (
     <>

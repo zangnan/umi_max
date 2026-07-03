@@ -6,7 +6,7 @@ import myUtil from '@/components/DDAssist/util';
 import getStaticTableCode from '@/pages/hts/commonModule/staticTableCode';
 import './style.less';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { history, useIntl } from 'umi';
+import { history } from 'umi';
 import { shfkdr2, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
@@ -34,7 +34,7 @@ const Hgdzxzjy: React.FC<DDModalGridProps> = ({ onRef}) => {
   const [sjgjsjDms, setSjgjsjDms] = useState<any>([]);
   const [sjgjsjDms2, setSjgjsjDms2] = useState<any>([]);
 
-  const intl = useIntl();
+  // const intl = useIntl();
   const [flag, setFlag] = useState(true);
   const [jhpzFlag, setJhpzFlag] = useState(true);
 

@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Select, DatePicker, Row, Col, Radio, } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -6,7 +7,6 @@ import { history } from 'umi';
 import { ycsbsjxz, checkDlt2, zxqjy, cjrwSdbswj } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import TabSfyz from '../../../pzgl/sdppzgl/djdlpz/tab_sfyz';
 import FpDDLogin from '@/pages/hts/components/FpDDLogin';
@@ -37,7 +37,7 @@ const Sdp: React.FC<SdpProps> = ({
   //1：按疑点代码（全部）2：按疑点代码（指定）3：按出口报关单号 4：按出口发票号 5：全部数据
   const [sjfwlx, setSjfwlx] = useState<any>('1');
 
-  const intl = useIntl();
+  // const intl = useIntl();
 
   useEffect(() => {
     const { query } = history.location;

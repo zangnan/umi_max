@@ -1,6 +1,7 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useRef, Fragment, useState, } from 'react';
 import { useRouteData, history } from 'umi';
-import { useAccess, useIntl} from 'umi';
+import { useAccess } from 'umi';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import Func from './scsbsjFun';
 import { Button, Tag, Tooltip, Badge, Space, message, Upload, Form} from 'antd';
@@ -42,7 +43,7 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
   const { Dragger } = Upload;
 
   const [pathname] = [...routeMatch.route.path.split('/')].reverse();
-  const intl = useIntl();
+  // const intl = useIntl();
 
   // 根据路径获取业务key
   const getMyYwKey = () => {
@@ -618,8 +619,8 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
     <GeneratedForm onRef={refGeneratedForm} ywKey={myYwKey} showFlzl={showFlzl} />
     <Sjhz onRef={refSjhz} />
     <ReportGrid onRef={refReportGrid} ywKey={myYwKey} />
-    <Zlsc onRef={refAttachmentData} />
     <GeneratedData onRef={refGeneratedData} ywKey={myYwKey} />
+    <GeneratedData onRef={refGeneratedData} tabData={children} />
     <Ydgl onRef={refYdgl} ywKey={myYwKey} />
     <Ydgl2 onRef={refYdgl2} ywKey={myYwKey} />
     <Tsxx onRef={errorMsgRef} />

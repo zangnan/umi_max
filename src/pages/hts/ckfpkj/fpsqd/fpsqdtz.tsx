@@ -2,13 +2,13 @@
  * title: 发票申请单-发票申请单调整
  * author: yxy
  */
+import { intl } from '@/components/DDAssist/util';
 import React from 'react';
 import { Button, message, Select, Form, Input, Alert, Spin } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { useState, useEffect, useImperativeHandle, useContext } from 'react';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 
 const EditableContext = React.createContext(null);
 
@@ -134,7 +134,7 @@ const Fpsqdtz: React.FC<FpsqdtzProps> = ({
   const [gmfform] = Form.useForm();                                             // 购买方时,下拉框的form
   const [zzDjh, setZzDjh] = useState<any>(1);                                   // 拆分单据号时，自增用
 
-  const intl = useIntl();
+  // const intl = useIntl();
 
   // 处理主表和从表数据成为页面可以展示的数据
   const dealTableData = (model: any) => {

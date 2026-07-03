@@ -1,4 +1,5 @@
 // 生成进货
+import { intl } from '@/components/DDAssist/util';
 import formUtil from '@/components/DDForm/formUtil';
 import React, { useEffect, useRef, useImperativeHandle, useState } from 'react';
 import { Modal, Button, Form, message, Spin, } from 'antd';
@@ -11,7 +12,6 @@ import UnitUtil from '@/components/DDBunit/unit_util';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import { getTsjhByFpxx } from '@/pages/hts/services/htsApi';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
-import { useIntl } from 'umi';
 import Jhmx2 from '@/pages/hts/commonModule/jhmx/jhmx2';
 import '@/pages/hts/commonModule/style.less';
 
@@ -21,7 +21,7 @@ export interface DDTsort {
 }
 
 const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   const [form] = Form.useForm();
   const [myFormItems, setMyFormItems] = useState([]);

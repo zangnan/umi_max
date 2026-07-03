@@ -2,6 +2,7 @@
  * title: 数据汇总
  * author: wxl
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import './sjhzStyle.less';
 import { Spin, Button, message, Space, Input, Form, Select, Modal, InputNumber } from 'antd';
@@ -11,7 +12,6 @@ import myUtil from '@/components/DDAssist/util';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import CONSTANTS from '@/components/DDAssist/constants';
 import DDBaseGrid from '@/components/DDBaseGrid';
-import { useIntl } from 'umi';
 
 const Index: React.FC<unknown> = () => {
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ const Index: React.FC<unknown> = () => {
   const [tjValues, setTjValues] = useState<any>({});
   // 设置千分位
   const inputProps = {};
-  const intl = useIntl();
+  // const intl = useIntl();
   inputProps.formatter = (value: any, info: any) => {
     if (info.userTyping) {
       if (info.input) {

@@ -1,11 +1,11 @@
 /**
  * 按报关单开具  设置税收分类编码
  */
+import { intl } from '@/components/DDAssist/util';
  import React, { useImperativeHandle, useState, useContext, useEffect } from 'react';
 import { Modal, Button, message, Input, Form, Table, DatePicker, InputNumber, Spin } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
  import {queryFp2Ckznx, querySpdmXxCj, saveFp2Ckznx } from '@/pages/hts/services/htsApi';
- import { useIntl } from 'umi';
 import myUtil from '@/components/DDAssist/util';
  import moment from 'moment';
 
@@ -162,7 +162,7 @@ import myUtil from '@/components/DDAssist/util';
    const [type, setType] = useState<any>(''); // 引用的页面
    const [masker, setMasker] = useState<any>(false); // loading
 
-   const intl = useIntl();
+   // const intl = useIntl();
  
  
    // 开启

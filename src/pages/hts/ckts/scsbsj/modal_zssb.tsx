@@ -1,11 +1,11 @@
 /**
  * 台账配单明细-自动配单
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Spin, Modal, Form, message, Input } from 'antd';
 import { queryYcsbZssbDzxx, sendTestMail, ycsbZssbNew } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
-import { useIntl } from 'umi';
 import { history } from 'umi';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 import {QuestionCircleOutlined } from '@ant-design/icons';
@@ -30,7 +30,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
   const [masker, setMasker] = useState<boolean>(false); //
   const [param, setParam] = useState<any>({});
   const [dzxx, setDzxx] = useState<any>('');
-  const intl = useIntl();
+  // const intl = useIntl();
   const [ref, setRef] = useState<any>();
 
   useImperativeHandle(onRef, () => {

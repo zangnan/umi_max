@@ -1,9 +1,9 @@
 /**
  * 异常商品码处理
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, useEffect, useRef } from 'react';
 import { Modal, Button, Table, message, Spin } from 'antd';
-import { useIntl } from 'umi';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import DDAlert from '@/pages/hts/components/DDAlert';
@@ -19,7 +19,7 @@ export interface DDModalGridProps {
   ywKey?: any;
 }
 const Ycspmcl: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) => {
-  const intl = useIntl();
+  // const intl = useIntl();
   const [mainParam, setMainParam] = useState<any>();
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);

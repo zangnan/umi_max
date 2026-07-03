@@ -1,6 +1,7 @@
 /**
  * 批量修改
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useImperativeHandle, useState, memo, useRef } from 'react';
 import { Modal, Button, message, Form, Input, Select, Space, DatePicker, InputNumber, List, Spin } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -9,7 +10,7 @@ import myUtil from '@/components/DDAssist/util';
 import businessValidator from '@/pages/hts/common/field/businessValidator';
 import moment from 'moment';
 import baseValidator from '@/components/DDAssist/field/baseValidator';
-import { useIntl, request } from 'umi';
+import { request } from 'umi';
 import Wxspglfm from '@/pages/hts/ckfp/fpkjpz/fm/wxspglfm';
 import UnitUtil from '@/components/DDBunit/unit_util';
 import DDAlert from '@/pages/hts/components/DDAlert';
@@ -34,7 +35,7 @@ const DDBatchUpdate: React.FC<DDBatchUpdateProps> = ({ onRef, visible = false })
 
   const [masker, setMasker] = useState<boolean>(false);
 
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   const [updateParam, setUpdateParam] = useState<any>({});// 保存时需要传输的参数
 

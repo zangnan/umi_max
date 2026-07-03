@@ -4,7 +4,6 @@
 import React, { useImperativeHandle, useState, useContext ,useEffect} from 'react';
 import { Modal, Button, Form, message, Select, Input, Table, Divider, Spin, Tooltip, Upload, Space, Switch, Checkbox } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
-import { useIntl } from 'umi';
 import { exportgmf, gmfxxsz, importgmf, queryParams, szwxtbz, gmfxxcx, queryPager, downloadTemplate } from '@/pages/hts/services/htsApi';
 import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import { FormInstance } from 'antd/es/form';
@@ -234,7 +233,7 @@ const ModalGmf: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
 
   const [drbgdhs, setDrbgdhs] = useState<any>(''); // 导入用到的key
 
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   // 开启
   const showModal = async (param: any, ref: any, tempParam: any,param2:any) => {

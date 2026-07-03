@@ -2,13 +2,13 @@
  * title: 申报结果查询的已核销调整表
  * creator: zxy
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useRef } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import yhxtzConfig from './yhxtzconfig';
 import Func from './fyhxtz';
 import { history } from 'umi';
 import ReportGrid from './reportGrid';
-import { useIntl } from 'umi';
 
 const Yhxtz: React.FC<unknown> = () => {
   const myConfig = {...yhxtzConfig};

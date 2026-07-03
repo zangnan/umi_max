@@ -5,7 +5,6 @@
 import cktsUtil from '@/pages/hts/cktsUtil';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import React, { useState, useRef } from 'react';
-import { useIntl } from 'umi';
 import hcjlFunc from './f';
 import config from "./config";
 import { Modal, Button, Form, Radio, Space, Input, Upload, Tooltip, message, Select, Spin } from 'antd';

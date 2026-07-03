@@ -1,13 +1,13 @@
 /**
  * 发票开具配置  销售方配置
  */
+import { intl } from '@/components/DDAssist/util';
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Space, message, Spin, Switch } from 'antd';
 import ProCard from '@ant-design/pro-card';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import myUtil from '@/components/DDAssist/util';
 import { xsfpzcx, xsfpzwh } from '@/pages/hts/services/htsApi';
-import { useIntl } from 'umi';
 
 const Xsfpz: React.FC<{ data?: any }> = ({
   data,
@@ -15,7 +15,7 @@ const Xsfpz: React.FC<{ data?: any }> = ({
 
   const [form] = Form.useForm();
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
-  const intl = useIntl(); // 提示信息
+  // const intl = useIntl(); // 提示信息
 
   useEffect(() => {
     setMasker(true);

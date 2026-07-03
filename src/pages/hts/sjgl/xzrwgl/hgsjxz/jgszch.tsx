@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, DatePicker, Radio, Tooltip, Spin, Row, Col, Card } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -6,7 +7,6 @@ import { history } from 'umi';
 import { xzrw, queryKakPassword, saveKakPassword, rwycgx, hgsjxz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
-import { useIntl } from 'umi';
 import moment from 'moment';
 import cardStyle from '../sjxz/cardLess2.less';
 import { QuestionCircleOutlined } from '@ant-design/icons';
@@ -19,7 +19,7 @@ const Hgsjxzjy: React.FC<Hgsjxzjy> = ({ chardIndex, form }) => {
   // const [form] = Form.useForm();
   //下载按钮是否显示
   const [masker, setMasker] = useState(false);
-  const intl = useIntl();
+  // const intl = useIntl();
   const [jcbz, setJcbz] = useState('ND');
   const [jcMsg, setJcMsg] = useState('');
   const [value, setValue] = useState<any>();

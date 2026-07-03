@@ -1,3 +1,4 @@
+import { intl } from '@/components/DDAssist/util';
 import React, { useState } from 'react';
 import { Button, Form, Space, message, DatePicker, Upload, Radio, Spin, Tooltip } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -6,7 +7,6 @@ import { history } from 'umi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import { ycsbsjxz } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
-import { useIntl } from 'umi';
 import { shfkdr2, shfkdr2Check } from '@/pages/hts/services/htsApi';
 import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import importStyle from './importStyle.less';
@@ -26,7 +26,7 @@ const Swfkjsxzjy: React.FC<unknown> = () => {
   const [hackValue, setHackValue] = useState<any>();
   const [value, setValue] = useState<any>();
   const [dates, setDates] = useState<any>();
-  const intl = useIntl();
+  // const intl = useIntl();
 
   // 表单项目测试数据
   const itemList2 = [
