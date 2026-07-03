@@ -3,7 +3,7 @@
 */
 import React, { useEffect } from 'react';
 import { Steps, Row, Col, Typography } from 'antd';
-import { history, useRouteData, useLocation } from 'umi';
+import { history, useRouteData, useLocation, Outlet } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
 import { useAccess } from 'umi';
@@ -119,15 +119,15 @@ const TemplateStep: React.FC<TemplateStepProps> = ({
           </Typography.Paragraph>
         </Col>
         <Col xs={16} sm={16} md={16} lg={16} xl={16}>
-          <Steps type="navigation" onChange={(cur) => onChange(cur)} className="site-navigation-steps" size="small" current={current} >
-            {myStep.map((item: any) => (
-              <Steps.Step key={item.id} title={item.name} />
-            ))}
-          </Steps>
+          <Steps type="navigation"
+            onChange={(cur) => onChange(cur)}
+            className="site-navigation-steps" size="small" current={current}
+            items={myStep.map((item: any) => ({ key: item.id, title: item.name }))}
+          />
         </Col>
       </Row>
       <div className="steps-content">
-        {children}
+        <Outlet />
       </div>
     </>
   );
