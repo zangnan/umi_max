@@ -26,7 +26,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
   const qxQys = userInfo?.qxQys[0];
   if (qxQys?.cktsqylxDm === 'WM') {
     myConfig.grid_columns = myConfig.wm_grid_columns;//设置列表
-    myConfig.unit_key = 'CX_SAAS_MTS_TUISHUIJIHUA'; // 业务单元key，对应后端接口
+    myConfig.module_key = 'CX_SAAS_MTS_TUISHUIJIHUA'; // 业务单元key，对应后端接口
     myConfig.export_key = 'CX_SAAS_MTS_TUISHUIJIHUA_YEAR'; // 业务单元key，对应后端接口
   }
 

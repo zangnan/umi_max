@@ -29,7 +29,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
   if (qxQys?.cktsqylxDm === 'WM') {
     myConfig.customer_toolbar.unshift({ name: '更新数据', func: 'btnGxsj' });
     myConfig.grid_columns = myConfig.wm_grid_columns;//设置列表
-    myConfig.unit_key = 'CX_SAAS_MTS_TUISHUIJIHUA'; // 业务单元key，对应后端接口
+    myConfig.module_key = 'CX_SAAS_MTS_TUISHUIJIHUA'; // 业务单元key，对应后端接口
     myConfig.export_key = 'CX_SAAS_MTS_TUISHUIJIHUA'; // 业务单元key，对应后端接口
     myConfig.toolbar_default.tssb_download = false;
     myConfig.customer_toolbar.push({ name: '导出', key: 'dc', func: 'seasonDownload' });

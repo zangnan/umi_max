@@ -14,21 +14,21 @@ const Yhxtz: React.FC<unknown> = () => {
   const myConfig = {...yhxtzConfig};
   if (history?.location?.pathname.indexOf('CXTJ_') > 0) { // 数据管理进入
     if (history?.location?.pathname === '/02/0207/020708/CXTJ_02070804') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
       myConfig.export_key = 'JLJGHX_HXSBSJGL_YHXSZCHGSJTZB_FKB_DC';                               // 业务单元key，对应后端接口
       myConfig.export_large = true; // tssb_download 配合此导出使用，同步大数据量导出
       myConfig.toolbar_default['ckts_download'] = false;
       myConfig.toolbar_default['tssb_download'] = true;
     } else if (history?.location?.pathname === '/02/0207/020708/CXTJ_02070805') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
     } else {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
     }
     myConfig.layout_type = 'default';
     myConfig.grid_filter_quick = [];
   } else {
     if (history?.location?.pathname === '/hts/jljg/sbjgcxHyhxtzF') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F';
       myConfig.export_key = 'JLJGHX_HXSBSJGL_YHXSZCHGSJTZB_FKB_DC';                               // 业务单元key，对应后端接口
@@ -51,7 +51,7 @@ const Yhxtz: React.FC<unknown> = () => {
         },
       ];
     } else if (history?.location?.pathname === '/hts/jljg/sbjgcxHyhxtzJ') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.export_key = 'JLJGHX_HXSBSJGL_YHXSZCHGSJTZB_JGB_DC';                               // 业务单元key，对应后端接口
@@ -74,7 +74,7 @@ const Yhxtz: React.FC<unknown> = () => {
         },
       ];
     } else {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J';
       myConfig.export_key = 'JLJGHX_HXSBSJGL_YHXSZCHGSJTZB_JGB_DC';                               // 业务单元key，对应后端接口

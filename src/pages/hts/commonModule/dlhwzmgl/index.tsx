@@ -20,7 +20,7 @@ const Index: React.FC = () => {
   let myConfig = {...config};
   if(qxUtil.getQxz(paramDyck)) {
     // 单一窗口
-    myConfig.unit_key = 'CX_SAAS_SJGL_STFYKJDLZMCX_DYCK';
+    myConfig.module_key = 'CX_SAAS_SJGL_STFYKJDLZMCX_DYCK';
     // pageid
     myConfig.page_id = 'stfykjdlckzm_dyck';
     // 导入key
@@ -86,7 +86,7 @@ const Index: React.FC = () => {
     };
   } else {
     // 网报
-    myConfig.unit_key = 'CX_SAAS_SJGL_STFYKJDLZMCX_WB';
+    myConfig.module_key = 'CX_SAAS_SJGL_STFYKJDLZMCX_WB';
     // pageid
     myConfig.page_id = 'stfykjdlckzm_wb';
     // 导出key

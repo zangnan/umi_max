@@ -27,7 +27,7 @@ const Index: React.FC<unknown> = () => {
     }
   }
   myConfig.layout_type = "default";
-  myConfig.unit_key = 'ZXSB_WBSJ_HG_DZKABGD';
+  myConfig.module_key = 'ZXSB_WBSJ_HG_DZKABGD';
   const errorMsgRef: any = useRef();
   const dyGridRef: any = useRef();
   func.initBgd = useIntl();

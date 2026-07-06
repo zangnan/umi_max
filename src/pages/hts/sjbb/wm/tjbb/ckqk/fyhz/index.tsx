@@ -12,12 +12,12 @@ const index: React.FC<unknown> = () => {
   let myConfig = { ...config };
   myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d));
   if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fyhz') { // 分月汇总
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FYHZ';                               // 业务单元key，对应后端接口
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FYHZ';                               // 业务单元key，对应后端接口
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FYHZ';                                // 页面id
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FYHZ_PRINT_REPORT';                             // 导出key
     myConfig.grid_columns[0] = { title: '出口年月', dataIndex: 'ckny', width: 100, fixed: 'left', render: { func: 'renderFzxm' } };
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fgbckqk') { // 分国别出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FGBCKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FGBCKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FGBCKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FGBCKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '最终目的国', dataIndex: 'zzmdgdqszDm', width: 140, fixed: 'left', render: { func: 'renderFzxm' },
@@ -28,7 +28,7 @@ const index: React.FC<unknown> = () => {
       }
     };
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fkackqk') { // 分口岸出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FKACKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FKACKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FKACKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FKACKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '出口口岸', dataIndex: 'hggqkaDm', width: 150, fixed: 'left', render: { func: 'renderFzxm' },};
@@ -38,7 +38,7 @@ const index: React.FC<unknown> = () => {
     ]
     myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d));
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fjgfsckqk') { // 分监管方式出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FJGFSCKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FJGFSCKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FJGFSCKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FJGFSCKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '监管方式', dataIndex: 'jgfsDm', width: 150, fixed: 'left', render: { func: 'renderFzxm' },};
@@ -48,7 +48,7 @@ const index: React.FC<unknown> = () => {
     ]
     myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d));
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fysfsckqk') { // 分运输方式出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FYSFSCKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FYSFSCKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FYSFSCKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FYSFSCKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '运输方式', dataIndex: 'ysfsDm', width: 150, fixed: 'left', render: { func: 'renderFzxm' },
@@ -59,7 +59,7 @@ const index: React.FC<unknown> = () => {
       }
     };
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/htckqk') { // 合同出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_HTCKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_HTCKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_HTCKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_HTCKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '出口合同号', dataIndex: 'ckhth', width: 190, fixed: 'left', render: { func: 'renderFzxm' } };
@@ -69,7 +69,7 @@ const index: React.FC<unknown> = () => {
     ];
     myConfig.grid_filter_quick[0].defaultValue = myUtil.date.getDateYearAgoToNow(1).map((d: string) => dayjs(d));
   } else if (history?.location?.pathname === '/hts/sjbb/wm/tjbb/ckqk/fjwshrckqk') { // 分境外收货人出口情况
-    myConfig.unit_key = 'CX_SJFX_WM_CKQK_FJWSHRCKQK';
+    myConfig.module_key = 'CX_SJFX_WM_CKQK_FJWSHRCKQK';
     myConfig.page_id = 'CX_SJFX_WM_CKQK_FJWSHRCKQK';
     myConfig.export_key = 'CX_SJFX_WM_CKQK_FJWSHRCKQK_PRINT_REPORT';
     myConfig.grid_columns[0] = { title: '境外收货人', dataIndex: 'fzxmmc', width: 190, fixed: 'left', ellipsis: true, render: { func: 'renderFzxm' } };

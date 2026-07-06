@@ -220,7 +220,7 @@ const abgdkjIndx: React.FC<unknown> = () => {
         { title: '合同协议号', dataIndex: 'ckhth', ellipsis: true, width: 180 },
         { title: '监管方式', dataIndex: 'jgfsmc', width: 120, ellipsis: true, },
       ];
-      myConfig.unit_key = 'FPZS_BGDKP_DKP21WBGDCX';
+      myConfig.module_key = 'FPZS_BGDKP_DKP21WBGDCX';
       myConfig.export_key='FPZS_BGDKP_DKP21WBGDCX_EXCLE';
       myConfig.api_grid_query = `/yw/fpzs/bgdkp/dkpbgdfycx`;
       myConfig.grid_row_key = 'ckbgdh';

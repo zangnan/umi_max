@@ -15,15 +15,15 @@ const Mdthx: React.FC<unknown> = () => {
   const myConfig = {...mdthxConfig};
   if (history?.location?.pathname.indexOf('CXTJ_') > 0) { // 数据管理进入
     if (history?.location?.pathname === '/02/0207/020708/CXTJ_02070802') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
     } else if (history?.location?.pathname === '/02/0207/020708/CXTJ_02070803') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
     } else {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
     }
@@ -35,7 +35,7 @@ const Mdthx: React.FC<unknown> = () => {
     ];
   } else {
     if (history?.location?.pathname === '/hts/jljg/sbjgcxHmdthxF') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_F';
       myConfig.grid_filter_quick = [
@@ -57,7 +57,7 @@ const Mdthx: React.FC<unknown> = () => {
         { label: '申报核销手（账）册号', name: 'jljgszch', type: 'Input', width: '3w', searchButton: true },
       ];
     } else if (history?.location?.pathname === '/hts/jljg/sbjgcxHmdthxJ') {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick = [
@@ -79,7 +79,7 @@ const Mdthx: React.FC<unknown> = () => {
         { label: '申报核销手（账）册号', name: 'jljgszch', type: 'Input', width: '3w', searchButton: true },
       ];
     } else {
-      myConfig.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
+      myConfig.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].defaultValue = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick[0].value = 'JLJG_ZXSB_SB_JLJG_MDTHX_J';
       myConfig.grid_filter_quick = [

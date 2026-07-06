@@ -15,7 +15,7 @@ const Index: React.FC = () => {
   // 代办退税
   if (history?.location?.pathname === '/41/4101') {
 
-    myConfig.unit_key = 'QUERY_DDZX_SJCX_DDCX';
+    myConfig.module_key = 'QUERY_DDZX_SJCX_DDCX';
     myConfig.page_id = 'QUERY_DDZX_SJCX_DDCX';
     myConfig.export_key = 'REPORT_DDZX_DDCX_DBTSDDCX';
     myConfig.gridParams = {
@@ -50,7 +50,7 @@ const Index: React.FC = () => {
 
   } else {
     myConfig.export_key = 'REPORT_DDZX_DDCX_DLCKDDCX';
-    myConfig.unit_key = 'QUERY_DDZX_SJCX_DDCX';
+    myConfig.module_key = 'QUERY_DDZX_SJCX_DDCX';
     myConfig.page_id = 'QUERY_DDZX_SJCX_DDCX';
     myConfig.gridParams = {
       initSearchModal: [

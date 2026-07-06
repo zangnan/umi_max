@@ -526,7 +526,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         // 按钮
         myConfig.customer_toolbar = [];
         // // 查询
-        // myConfig.unit_key = 'CX_CKFPKJ_FPGL_DCKP';
+        // myConfig.module_key = 'CX_CKFPKJ_FPGL_DCKP';
         // // 导出
         // myConfig.export_key = 'CX_CKFPKJ_FPGL_DCKP_KPZTGZ_LP_EXCEL';
         // myConfig.grid_columns[11].hidden = true;
@@ -570,7 +570,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
       //   ],
       // }
       // // 查询
-      // myConfig.unit_key = 'CX_CKFPKJ_FPGL_DCKP';
+      // myConfig.module_key = 'CX_CKFPKJ_FPGL_DCKP';
       // // 导出
       // myConfig.export_key = 'CX_CKFPKJ_FPGL_DCKP_KPZTGZ_HP_EXCEL';
       // myConfig?.grid_columns?.forEach((item: any) => {

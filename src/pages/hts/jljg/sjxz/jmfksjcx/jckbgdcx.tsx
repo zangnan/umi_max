@@ -22,7 +22,7 @@ const Index: React.FC<unknown> = () => {
     }
   }
   myConfig.layout_type = "default";
-  myConfig.unit_key = 'ZXSB_SB_HXBGD_FKB';
+  myConfig.module_key = 'ZXSB_SB_HXBGD_FKB';
   const errorMsgRef: any = useRef();
   const dyGridRef: any = useRef();
   func.getOtherRef = () => {

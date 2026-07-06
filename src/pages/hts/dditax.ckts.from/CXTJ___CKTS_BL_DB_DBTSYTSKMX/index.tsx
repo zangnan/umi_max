@@ -9,7 +9,7 @@ import Func from './f'
 const index: React.FC<unknown> = () => {
 
   const myConfig = { ...config };
-  myConfig.unit_key = 'DBTS_ZXSB_SB_DB_DBTSYTSKMX_F'; // 业务单元key，对应后端接口
+  myConfig.module_key = 'DBTS_ZXSB_SB_DB_DBTSYTSKMX_F'; // 业务单元key，对应后端接口
   return <>
     <DDBunit2 config={myConfig} func={Func} />
   </>

@@ -36,13 +36,13 @@ const index: React.FC<HwcjProps> = ({
   ];
 
   if(getKey) {
-    myConfig.unit_key = getKey; // 业务单元key,对应后端接口
+    myConfig.module_key = getKey; // 业务单元key,对应后端接口
   }
 
   Func.closeHwcj = closeHwcj;
   
   if(getKey){
-    myConfig.unit_key = getKey; // 业务单元key，对应后端接口
+    myConfig.module_key = getKey; // 业务单元key，对应后端接口
   }
   return <>
     <DDBunit2 config={myConfig} func={Func} />

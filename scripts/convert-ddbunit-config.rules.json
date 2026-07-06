@@ -232,6 +232,14 @@
         "new": "cktsUtil.text.formatRepalce"
       },
       {
+        "old": "myConfig.unit_key",
+        "new": "myConfig.module_key"
+      },
+      {
+        "old": "dwglConfig.unit_key",
+        "new": "dwglConfig.module_key"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },
