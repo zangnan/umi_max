@@ -274,6 +274,14 @@
       {
         "old": "visible={modalVisible}",
         "new": "open={modalVisible}"
+      },
+      {
+        "old": "myUtil.fpfw.",
+        "new": "cktsUtil.fpfw."
+      },
+      {
+        "old": "UnitUtil.code.initFormItemsCodeTable",
+        "new": "formUtil.initFormItemsCodeTable"
       }
     ],
     "less": [

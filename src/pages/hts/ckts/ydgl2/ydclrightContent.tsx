@@ -151,7 +151,7 @@ const Hwqd: React.FC<HwqdProps> = ({
     }).catch(() => {
       message.error('获取码表失败');
     }).finally(() => {
-      const formItemNew = UnitUtil.code.initFormItemsCodeTable([...(newForm || [])]);
+      const formItemNew = formUtil.initFormItemsCodeTable([...(newForm || [])]);
       setMyFormItems(formItemNew);
     });
   }

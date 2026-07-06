@@ -1,4 +1,5 @@
 // 出口发票开具-出口发票开具-发票红冲（new）
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useState, useRef } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import unitConfig from './zxhcConfig';
@@ -227,7 +228,7 @@ const Index: React.FC<unknown> = () => {
         }
       });
     } else if (rtnCode == '2004') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal();
       } else {
         refFprz?.current?.showModal();
@@ -236,7 +237,7 @@ const Index: React.FC<unknown> = () => {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
+        const bool = cktsUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器

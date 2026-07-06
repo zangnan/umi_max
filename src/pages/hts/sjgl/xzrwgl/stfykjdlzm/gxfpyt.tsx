@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Spin, DatePicker, Row, Radio, Checkbox} from 'antd';
@@ -112,7 +113,7 @@ const Gxfpyt: React.FC<unknown> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal(flag);
       } else {
         refFpRz.current!.showModal(flag);

@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef } from 'react';
 import { Button, Form, Space, message, Checkbox, Spin, DatePicker, Row, Col } from 'antd';
@@ -88,7 +89,7 @@ const Xxfpxz: React.FC<unknown> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal(flag);
       } else {
         refFpRz.current!.showModal(flag);
@@ -109,7 +110,7 @@ const Xxfpxz: React.FC<unknown> = () => {
                 <Form.Item name="ckrq" rules={[{ required: true, message: '请输入开票日期' },
                 () => ({
                   validator(_, value) {
-                    if (value?.length === 2 && myUtil.fpfw.xxjyGzByFwlxDm()) {
+                    if (value?.length === 2 && cktsUtil.fpfw.xxjyGzByFwlxDm()) {
                       if (value[0].diff(value[1], 'month') > 2 || value[1].diff(value[0], 'month') > 2) {
                         return Promise.reject(new Error('时间范围不能超过3个月'));
                       }

@@ -117,7 +117,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         }
       });
     } else if (code == '2004') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz?.current?.showModal();
       } else {
         refFprz?.current?.showModal();
@@ -126,7 +126,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
+        const bool = cktsUtil.fpfw.fpfwlxDm() === '2' ? refKprz?.current?.getMoVis() : refFprz?.current?.getMoVis();
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
@@ -333,7 +333,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
   const tz = (rtnCode: any, selectionRowKeys: any, selectionRows: any, unitRef: any) => {
     if (rtnCode === '2004') {
       unitRef?.current?.setMasker(true);
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz?.current?.showModal();
       } else {
         refFprz?.current?.showModal();
@@ -342,7 +342,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(async function () {
-        const bool = myUtil.fpfw.fpfwlxDm() === '2' ? refKprz.current!.getMoVis() :refFprz.current!.getMoVis() ;
+        const bool = cktsUtil.fpfw.fpfwlxDm() === '2' ? refKprz.current!.getMoVis() :refFprz.current!.getMoVis() ;
         if (!bool) {
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器

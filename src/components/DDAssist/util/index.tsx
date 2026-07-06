@@ -888,6 +888,47 @@ myUtil.date = {
     return date;
   },
   // 原系统移植
+  // 获取当前时间N月前的第一天和最后一天
+  getQZDateYfBeforeCurr(n: any) {
+    const sj = new Date();
+    const nowMonth = sj.getMonth() + 1;
+    let month = nowMonth;
+    const textDay = sj.getDate() < 10 ? '0' + sj.getDate() : sj.getDate();
+    const numCy = n % 12;
+    const numBs = Math.floor(Number(n / 12));
+    let year = sj.getFullYear() - numBs;
+    if (nowMonth === n) {
+      month = 12;
+      year--;
+    } else if (nowMonth < n) {
+      month = 12 - (n - nowMonth);
+      year--;
+    } else {
+      month = nowMonth - numCy;
+    }
+    const textMonth = month < 10 ? '0' + month : month;
+    const newDay = myUtil.date.getMonthLastDay(year + '-' + textMonth);
+    const date = {
+      firstDay: year + '-' + textMonth + '-01',
+      beforeDay: myUtil.date.formatDate(newDay),
+      nowDay: sj.getFullYear() + '-' + textMonth + '-' + textDay // 当天
+    };
+    return date;
+  },
+  // 原系统移植
+  /**
+   * 获取当前月的最后一天 （精确到秒23:59:59）
+   * 入参： 毫秒数
+   * 出参：毫秒数
+   * */
+  getMonthLastDay(mon: any) {
+    const time = new Date(mon);
+    const nowMonth = time.getMonth();
+    const nowYear = time.getFullYear();
+    const monthEndDate = new Date(nowYear, nowMonth + 1, 0);
+    return this.accurateDate(monthEndDate.getTime(), '2');
+  },
+  // 原系统移植
   /**
    * 获取当前月的第一天 （精确到秒）
    * 入参： 毫秒数
@@ -4475,6 +4516,7 @@ myUtil.api = {
     } else if(window.location.href.indexOf('/hts/') > -1 ||
       window.location.href.indexOf('/02') > -1 ||
       window.location.href.indexOf('/26') > -1 ||
+      window.location.href.indexOf('/27') > -1 ||
       window.location.href.indexOf('/40') > -1 ||
       window.location.href.indexOf('/qt/') > -1 ||
       window.location.href.indexOf('/25') > -1) {

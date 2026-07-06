@@ -1,6 +1,7 @@
 /**
  * 代理证明配单
  */
+import formUtil from '@/components/DDForm/formUtil';
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Col, Drawer, Form, InputNumber, message, Modal, Space, Spin, Table, Tooltip } from 'antd';
 import DDBaseForm from '@/components/DDForm/DDBaseForm';
@@ -69,7 +70,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
     }).catch(() => {
       message.info(intl2.formatMessage({ id: 'message_hqmb_error' }));
     }).finally(() => {
-      const tmpItemsNew = UnitUtil.code.initFormItemsCodeTable(tmpItems);
+      const tmpItemsNew = formUtil.initFormItemsCodeTable(tmpItems);
       setFormItems(tmpItemsNew);
     });
   }, []);

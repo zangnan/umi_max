@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Select, DatePicker, Row, Col, Radio, } from 'antd';
@@ -201,7 +202,7 @@ const Sdp: React.FC<SdpProps> = ({
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal(flag);
       } else {
         refFpRz.current!.showModal(flag);
@@ -249,7 +250,7 @@ const Sdp: React.FC<SdpProps> = ({
                               () => ({
                                 validator(_, value) {
                                   if (value) {
-                                    if (value?.length === 2 && myUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203') {
+                                    if (value?.length === 2 && cktsUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203') {
                                       const diffMonths = value[1].diff(value[0], 'months', true);
                                       if (Math.abs(diffMonths) > 3) {
                                         return Promise.reject(new Error('时间范围不能超过3个月'));

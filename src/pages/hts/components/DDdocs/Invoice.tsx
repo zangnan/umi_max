@@ -10,7 +10,7 @@ import myUtil from '@/components/DDAssist/util';
  import EditableCell from './editableCell';
  import './style.less';
  import { EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
- import { useIntl } from 'umi';
+ import { intl } from '@/components/DDAssist/util';
  import { queryParams } from '@/pages/hts/services/htsApi';
  
  
@@ -52,7 +52,6 @@ import myUtil from '@/components/DDAssist/util';
    const [formGmf] = Form.useForm();
    const [formBz] = Form.useForm();
    const [formPerson] = Form.useForm();
-   const intl = useIntl();
  
    const isEditing = (record: any) => {
  

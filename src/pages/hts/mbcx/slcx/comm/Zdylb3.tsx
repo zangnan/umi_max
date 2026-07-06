@@ -2018,8 +2018,8 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
     });
     setMyColumns([...col2]);
     initFilterItems();
-    const formItemNew = UnitUtil.code.initFormItemsCodeTable([...(formItems || [])]);
-    const tmp = UnitUtil.code.initFormItemsCodeTable([...(grid_filter_quick || [])]);
+    const formItemNew = formUtil.initFormItemsCodeTable([...(formItems || [])]);
+    const tmp = formUtil.initFormItemsCodeTable([...(grid_filter_quick || [])]);
     grid_filter_quick.splice(0, grid_filter_quick.length);
     tmp.forEach((item: any) => {
       grid_filter_quick.push(item);

@@ -303,7 +303,7 @@ const Jdcx: React.FC<unknown> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refFpxz.current!.showModal(flag);
       } else {
         refXfpxz.current!.showModal(flag);

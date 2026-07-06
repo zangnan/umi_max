@@ -1,6 +1,7 @@
 /**
  * 发票概览
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useState, useEffect, useRef } from 'react';
 import { Col, Row, DatePicker, Space, Radio, Spin, Empty, Alert, Button, message, } from 'antd';
 import { BarChartOutlined, ExclamationCircleFilled, CheckCircleFilled, BarsOutlined, CloseCircleFilled } from '@ant-design/icons';
@@ -816,7 +817,7 @@ const Index: React.FC<DDCard> = () => {
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal(flag);
       } else {
         refFpRz.current!.showModal(flag);

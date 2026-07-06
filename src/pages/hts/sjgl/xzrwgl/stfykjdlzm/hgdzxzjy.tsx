@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl } from '@/components/DDAssist/util';
 import React, { useState, useRef,useEffect } from 'react';
 import { Button, Form, Space, Input, message, Checkbox, Tooltip, Spin, Popover, DatePicker, Row, Col } from 'antd';
@@ -70,7 +71,7 @@ const Hgdzxzjy: React.FC<HgdzxzjyProps> = ({
     params.czfdm = '08';
     params.csz1 = moment(time1).startOf('day').format('x');
     params.csz2 = moment(time2).startOf('day').format('x');
-    if(history?.location?.pathname =='/02/0202/020203' && myUtil.fpfw.xxjyGzByFwlxDm()){
+    if(history?.location?.pathname =='/02/0202/020203' && cktsUtil.fpfw.xxjyGzByFwlxDm()){
     //增值税发票下载，并且是调用江苏接口.
     setMasker(true);
     await checkDlt2({jxbz :"Y"}).then(async (res: any) => {
@@ -170,7 +171,7 @@ const Hgdzxzjy: React.FC<HgdzxzjyProps> = ({
   const logon = async (flag: any) => {
     // 用户发起登录
     if (flag == '1' || flag == '3' || flag == '5') {
-      if (myUtil.fpfw.fpfwlxDm() === '2') {
+      if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz.current!.showModal(flag);
       } else {
         refFpRz.current!.showModal(flag);
@@ -207,7 +208,7 @@ const Hgdzxzjy: React.FC<HgdzxzjyProps> = ({
               <Form.Item  name="ckrq" rules={[{ required: true, message: '请输入'+rqName+'日期'},
                 () => ({
                   validator(_, value) {
-                    if (value?.length === 2 && myUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203') {
+                    if (value?.length === 2 && cktsUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203') {
                       const diffMonths = value[1].diff(value[0], 'months', true);
                       if (Math.abs(diffMonths) > 3) {
                         return Promise.reject(new Error('时间范围不能超过3个月'));
@@ -218,7 +219,7 @@ const Hgdzxzjy: React.FC<HgdzxzjyProps> = ({
                   },
                 })
             ]}>
-                <DatePicker.RangePicker placeholder={[rqName+'日期起',rqName+'日期止']} disabledDate={current => myUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203' && current && current > moment().endOf('day')}/>
+                <DatePicker.RangePicker placeholder={[rqName+'日期起',rqName+'日期止']} disabledDate={current => cktsUtil.fpfw.xxjyGzByFwlxDm() && history?.location?.pathname =='/02/0202/020203' && current && current > moment().endOf('day')}/>
               </Form.Item>
               {history?.location?.pathname == '/02/0202/020203' && jxpcflag?
                 <Form.Item name="fplxs" rules={[{ required: true, message: '请选择发票类型' }]}>

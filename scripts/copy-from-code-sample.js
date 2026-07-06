@@ -2180,6 +2180,24 @@ function applyCopyRewrites(content, srcFile) {
     }
   }
 
+  // R10b: formUtil 导入（仅当源文件含 UnitUtil.code.initFormItemsCodeTable 时添加）
+  if (!text.includes("from '@/components/DDForm/formUtil'")) {
+    let srcHasInitFormItemsCodeTable = false;
+    if (srcFile) {
+      try {
+        const srcContent = fs.readFileSync(srcFile, 'utf-8');
+        srcHasInitFormItemsCodeTable = /\bUnitUtil\.code\.initFormItemsCodeTable\b/.test(srcContent);
+      } catch (e) { /* 源文件不存在则跳过 */ }
+    }
+    if (srcHasInitFormItemsCodeTable) {
+      const firstImportMatch = text.match(/^[ \t]*import\s/m);
+      if (firstImportMatch) {
+        const pos = firstImportMatch.index;
+        text = text.slice(0, pos) + "import formUtil from '@/components/DDForm/formUtil';\n" + text.slice(pos);
+      }
+    }
+  }
+
   // R11: UnitUtil.code.getCodeTableParam → myUtil.code.getCodeTableParamFromJson
   text = text.replace(
     /\bUnitUtil\.code\.getCodeTableParam\s*\(\s*\{\s*formItems\s*:\s*\w+\s*\}\s*\)/g,

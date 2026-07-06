@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useImperativeHandle, useState, useEffect, useRef} from 'react';
 import { message, Spin, Modal, Button} from 'antd';
 import './tab_style.less';
@@ -126,7 +127,7 @@ const Spmc: React.FC<DDModalGridProps> = ({ onRef, visible = false, handleOtherM
       setErrorIcon(false);
       setOpacity("0.1");
       setFlag('2'); // 二维码失效
-    }, myUtil.fpfw.hqKpewmSxsj() * 1000);
+    }, cktsUtil.fpfw.hqKpewmSxsj() * 1000);
     setOpacity("1.0");
   };
 
