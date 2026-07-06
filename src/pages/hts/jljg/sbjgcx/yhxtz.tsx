@@ -107,7 +107,7 @@ const Yhxtz: React.FC<unknown> = () => {
     return otherRef;
   };
 
-  Func.intl = useIntl();
+  Func.intl = intl;
   return <>
     <DDBunit2 config={myConfig} func={Func}/>
     <ReportGrid onRef={refReportGrid} />

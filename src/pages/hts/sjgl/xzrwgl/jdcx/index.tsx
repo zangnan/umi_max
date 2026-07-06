@@ -24,7 +24,7 @@ import FpDDLogin from '@/pages/hts/components/FpDDLogin';
 
 
 const Jdcx: React.FC<unknown> = () => {
-  Func.intl = useIntl();
+  Func.intl = intl;
   const refICList: any = useRef(); // 环境检测
   const refICListGpt: any = useRef(); // 环境检测
   const refICListYbt: any = useRef(); // YBT 环境检测

@@ -6,7 +6,7 @@ import React from 'react';
 
 
 const Jdcx: React.FC<unknown> = () => {
-  Func.intl = useIntl();
+  Func.intl = intl;
 
   return <DDBunit2 config={unitConfig} func={Func}/>;
 };

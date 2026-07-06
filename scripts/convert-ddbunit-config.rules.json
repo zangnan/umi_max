@@ -220,6 +220,14 @@
         "new": "// const intl = useIntl();"
       },
       {
+        "old": "Func.intl = useIntl();",
+        "new": "Func.intl = intl;"
+      },
+      {
+        "old": "ZnfxFunc.intl = intl",
+        "new": "ZnfxFunc.intl = intl2"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },
