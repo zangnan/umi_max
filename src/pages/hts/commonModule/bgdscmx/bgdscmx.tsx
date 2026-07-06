@@ -225,7 +225,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
       { label: '出口货物报关单/代理出口货物证明号', name: 'ckbgdh', type: 'Input', readOnly: true, rules: [{ type: 'base_type_number_english' }, { type: 'base_required' }, { type: 'base_string', range: [0, 21]}, { func: 'ckbgdh04' }], eventOnChange: 'ckbgdh' },
       { label: '税种', name: 'sz', type: 'Select', disabled: true, allowClear: true, codeTable: 'code_static_tmsjhmxsz_dm:01', rules: [{ type: 'base_required' }, { type: 'base_string', length: '1' }, { type: 'base_string', range: [0, 1]}, { func: 'sz01' }]},
       { label: '业务类型', name: 'tyybswtstylxDm', type: 'Select', allowClear: true, codeTable: 'code_dm_ckts_tyybswtstylx:01', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 1]}], eventOnChange: 'tyybswtstylxDm' },
-      { label: '退（免）税状态', name: 'tmsztbz', type: 'Select', allowClear: true, codeTable: ['code_static_tmsztbz_dm', (qylx == 'WM' ? '02' : '01')], rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 50]}], eventOnChange: 'tmsztbz' },
+      { label: '退（免）税状态', name: 'tmsztbz', type: 'Select', allowClear: true, codeTable: qylx == 'WM' ? 'code_static_tmsztbz_dm:02' : 'code_static_tmsztbz_dm:01', rules: [{ type: 'base_required' }, { type: 'base_string', range: [0, 50]}], eventOnChange: 'tmsztbz' },
       { label: '原退（免）税额', name: 'ysbmdtse', type: 'InputNumber', format: '0,0.00', rules: [{ type: 'base_number', length: 14, decimal: 2}, { type: 'base_number', range: '+-' }, { func: 'ysbmdtse' }]},
       { label: '购进凭证号码', name: 'jhpzh', type: 'Input', rules: [{ type: 'base_string', range: [0, 30]}, { func: 'jhpzh' }, { func: 'jhpzh03' }]},
       { label: '退运信息', name: 'tyxx', type: 'GroupTitle' },

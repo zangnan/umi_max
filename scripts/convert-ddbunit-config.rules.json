@@ -394,6 +394,15 @@
           "new": "<Outlet />"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/commonModule/bgdscmx/bgdscmx.tsx",
+      "replace": [
+        {
+          "old": "codeTable: ['code_static_tmsztbz_dm', (qylx == 'WM' ? '02' : '01')]",
+          "new": "codeTable: qylx == 'WM' ? 'code_static_tmsztbz_dm:02' : 'code_static_tmsztbz_dm:01'"
+        }
+      ]
     }
   ],
   "excludeFiles": [
