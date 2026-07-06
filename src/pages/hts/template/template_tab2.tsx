@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
-import { history, useRouteData, useLocation } from 'umi';
+import { history, useRouteData, useLocation, Outlet } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 import './style.less';
 
@@ -68,34 +68,31 @@ const TemplateTab: React.FC<TemplateTabProps> = ({
   }, [location]);
 
   // 初始化
-  const getTabs = () => {
-    let tabArr: any = [];
-    myTabs && myTabs.length > 0 && myTabs.forEach((item: any, index: any) => {
-      tabArr.push(
-        <Tabs.TabPane tab={item.name} key={item.id} closable={index === 0 ? false : false} className={`template_tab2_header_${item.id}`}>
-          { item.id === activeKey && React.cloneElement(children, {route: item, onHandleRoute: add})}
-        </Tabs.TabPane>
-      );
-    })
-    return tabArr;
-  }
+  // antd v6 items API：每个 item 的 children 是该 tab 的内容（用 <Outlet /> 替代原 React.cloneElement）
+  const tabItems = (myTabs || []).map((item: any, index: number) => ({
+    key: item.id,
+    label: item.name,
+    closable: index === 0 ? false : false,
+    className: `template_tab2_header_${item.id}`,
+    children: item.id === activeKey ? <Outlet /> : <div style={{ display: 'none' }} />,
+  }));
 
   return (
     <div className="template_tab2">
       <Tabs size="small" tabBarGutter={5} type="editable-card" hideAdd={true} activeKey={activeKey}
         onChange={onChange}
         onEdit={onEdit}
+        items={tabItems}
         renderTabBar={(props, DefaultTabBar) => {
-          if (props?.panes?.length === 1) {
-            return <></>
+          if ((myTabs || []).length <= 1) {
+            return <></>;
           } else {
-            return <DefaultTabBar {...props} />
+            return <DefaultTabBar {...props} />;
           }
         }}
-      >
-        { getTabs() }
-      </Tabs>
+      />
     </div>
-  )};
+  );
+};
 
 export default TemplateTab;

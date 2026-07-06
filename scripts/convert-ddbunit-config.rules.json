@@ -403,6 +403,15 @@
           "new": "codeTable: qylx == 'WM' ? 'code_static_tmsztbz_dm:02' : 'code_static_tmsztbz_dm:01'"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/template/template_tab2.tsx",
+      "replace": [
+        {
+          "old": "useLocation } from 'umi'",
+          "new": "useLocation, Outlet } from 'umi'"
+        }
+      ]
     }
   ],
   "excludeFiles": [
