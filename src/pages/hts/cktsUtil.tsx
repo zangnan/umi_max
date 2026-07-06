@@ -230,6 +230,13 @@ cktsUtil.api = {
               item?.property === 'ssbz1' ? { ...item, op: 'zdy' } : item,
             ),
           };
+        } else if (config?.data?.key === 'JLJG_ZXSB_SB_JLJG_ZNFX_GETSZCMX')  {
+          config.data = {
+            ...config.data,
+            searchModel: config.data.searchModel.map((item: any) =>
+              item?.property === 'hxztDm' ? { ...item, op: 'al' } : item,
+            ),
+          };
         } else if (config?.data?.key === 'CX_SJFX_SC_CKQK_FYHZ') {
           // 出口退税分析模块 - 将 searchModel 中每项：
           //   1. op 统一改为 'zdy'（自定义区间）
@@ -1225,6 +1232,21 @@ cktsUtil.code = {
   async getTsbz() {
     const result = await sfczdlzfp({});
     return result;
+  },
+}
+
+cktsUtil.text = {
+  
+  /**
+   * @method replace
+   * @desc 字符窜占位符替换
+   */
+  formatRepalce(ss: any, obj: any) {
+    let tmp = ss;
+    for (let key in obj) {
+      tmp = tmp.replace(new RegExp("\\{\\{" + key + "\\}\\}", "g"), obj[key]);
+    }
+    return tmp;
   },
 }
 

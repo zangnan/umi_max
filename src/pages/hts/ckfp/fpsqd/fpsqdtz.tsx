@@ -2,6 +2,7 @@
  * title: 发票申请单-发票申请单调整
  * author: yxy
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl } from '@/components/DDAssist/util';
 import React from 'react';
 import { Button, message, Select, Form, Input, Alert, Spin } from 'antd';
@@ -685,7 +686,7 @@ const Fpsqdtz: React.FC<FpsqdtzProps> = ({
                 return Promise.reject(new Error(intl.formatMessage({ id: 'message_ckfp_fpsqd_fpsqdtz_hbdjh_mx8' })));
               }
               if (checkJshj(value) && mainData[0]?.fpzlDm1 != '5') {
-                return Promise.reject(new Error(myUtil.text.formatRepalce(intl.formatMessage({ id: 'message_ckfp_fpsqd_kptz_check_jshj' }), { djbh: value })));
+                return Promise.reject(new Error(cktsUtil.text.formatRepalce(intl.formatMessage({ id: 'message_ckfp_fpsqd_kptz_check_jshj' }), { djbh: value })));
               }
             }
             return Promise.resolve();

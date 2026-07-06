@@ -1,6 +1,7 @@
 /**
  * 台账配单明细-自动配单
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, Spin, Modal, Form, Checkbox, message, Input } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -104,7 +105,7 @@ const ModelScmx: React.FC<AbgdBjProps> = ({
                     return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_d_yyyyMM' })));
                   }
                   if (value.length != 6) {
-                    let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 6 });
+                    let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 6 });
                     return Promise.reject(new Error(message));
                   }
                 }
@@ -130,7 +131,7 @@ const ModelScmx: React.FC<AbgdBjProps> = ({
                     return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_number' })));
                   }
                   if (value.length != 3) {
-                    let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
+                    let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
                     return Promise.reject(new Error(message));
                   }
                 }

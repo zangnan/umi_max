@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import { commonInitJbxx, recalculateMdthxfpl, checkSsqPcYsb, mdthxbplsc, queryYwsjBySzc } from '@/pages/hts/services/htsApi';
 import { message, Form, Input, Modal } from 'antd';
@@ -197,7 +198,7 @@ Func.handlePlscMxbData = (param: any) => {
               return Promise.reject(new Error(intl2.formatMessage({id: 'validator_number'})));
             }
             if (value.length != 3) {
-              let message = myUtil.text.formatRepalce(intl2.formatMessage({id: 'validator_v_eq'}), {len: 3});
+              let message = cktsUtil.text.formatRepalce(intl2.formatMessage({id: 'validator_v_eq'}), {len: 3});
               return Promise.reject(new Error(message));
             }
             return Promise.resolve();

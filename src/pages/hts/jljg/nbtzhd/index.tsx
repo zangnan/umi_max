@@ -1,6 +1,7 @@
 /**
  * title: 内部台账核对
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useState, useEffect, useRef } from 'react';
 import { List, Checkbox, Spin, Button, Form, Input, Space, message, Upload, Tooltip, Popover, Badge, Select, Radio } from 'antd';
 import ProCard from '@ant-design/pro-card';
@@ -433,9 +434,9 @@ const Nbtzhd: React.FC<unknown> = () => {
       const titleMessage = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_tzhd_title' });
       const infoMessage = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_tzhd_info' });
       const tmp1Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_tzhd_content_f' });
-      const con1Message = myUtil.text.formatRepalce(tmp1Message, { scTotal: scTotal })
+      const con1Message = cktsUtil.text.formatRepalce(tmp1Message, { scTotal: scTotal })
       const tmp2Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_tzhd_content_s' });
-      const con2Message = myUtil.text.formatRepalce(tmp2Message, { zcTotal: zcTotal })
+      const con2Message = cktsUtil.text.formatRepalce(tmp2Message, { zcTotal: zcTotal })
       DDAlert.open({
         title: titleMessage,
         info: infoMessage,
@@ -526,9 +527,9 @@ const Nbtzhd: React.FC<unknown> = () => {
     //   return;
     // }
     const tmp1Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_content_f' });
-    const scxx = myUtil.text.formatRepalce(tmp1Message, { scTotal: scTotal });
+    const scxx = cktsUtil.text.formatRepalce(tmp1Message, { scTotal: scTotal });
     const tmp2Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_content_s' });
-    const zcxx = myUtil.text.formatRepalce(tmp2Message, { zcTotal: zcTotal });
+    const zcxx = cktsUtil.text.formatRepalce(tmp2Message, { zcTotal: zcTotal });
     const titleMessage = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_title' });
     const vParam = { tableKey: 'JLJG_ZXSB_SB_JLJG_MDTHX_G', cxlx: 'add' };
     commonInitJbxx(vParam).then((response) => {
@@ -735,9 +736,9 @@ const Nbtzhd: React.FC<unknown> = () => {
     const titleMessage = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_success_title' });
     const infoMessage = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_success_info' });
     const tmp1Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_success_content_f' });
-    const con1Message = myUtil.text.formatRepalce(tmp1Message, { mdtTs: params.mdtTs });
+    const con1Message = cktsUtil.text.formatRepalce(tmp1Message, { mdtTs: params.mdtTs });
     const tmp2Message = intl2.formatMessage({ id: 'message_jljghx_nbtzhd_schxmx_success_content_s' });
-    const con2Message = myUtil.text.formatRepalce(tmp2Message, { hxTs: params.hxTs });
+    const con2Message = cktsUtil.text.formatRepalce(tmp2Message, { hxTs: params.hxTs });
     DDAlert.open({
       title: titleMessage,
       info: infoMessage,

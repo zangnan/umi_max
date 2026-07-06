@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { DatePicker, Form, message, Tooltip } from 'antd';
 import React from 'react';
 import { wxspsc, wxspsztmsbz, wxsptqbgdxx, wxspfm } from '@/pages/hts/services/htsApi';
@@ -288,7 +289,7 @@ Func.getSpxx = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             unitRef.current!.reload2();
-            const tempMessage = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_spxxtqcg_success' }), { yxsl: body.yxsl })
+            const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_spxxtqcg_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {
             message.error(desc);

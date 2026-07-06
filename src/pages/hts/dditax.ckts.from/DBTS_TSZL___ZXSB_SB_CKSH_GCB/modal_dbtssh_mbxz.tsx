@@ -1,4 +1,5 @@
 
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useImperativeHandle, useState, useEffect } from 'react';
 import { Button, Spin, Modal, Form, Radio, Space, Input, message, Row, Col} from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -159,7 +160,7 @@ const ModelMbxz: React.FC<AbgdBjProps> = ({
                               } else if (!value.match(/^\d+$/)) {
                                 return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_number' })));// '该项内容只能输入数字！'
                               } else if (value.length != 3) {
-                                let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
+                                let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
                                 return Promise.reject(new Error(message));
                               }
                             }

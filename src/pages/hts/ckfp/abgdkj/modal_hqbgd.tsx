@@ -1,6 +1,7 @@
 /**
  * 按报关单开具  编辑开票
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, DatePicker, Spin, Modal, Form, Radio, Space, Input, message, } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -129,7 +130,7 @@ const ModalBj: React.FC<AbgdBjProps> = ({
 // 弹出统计条数，点击确定后调用接口处理数据
 const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
   const tmpMessage = intl2.formatMessage({ id: access.isNsrsbh ? 'message_ckfp_abgdkj_hqbgd_ackrq_sl_success' : 'message_ckfp_abgdkj_hqbgd_ackrq_success' });
-  const infoMessage = myUtil.text.formatRepalce(tmpMessage, param)
+  const infoMessage = cktsUtil.text.formatRepalce(tmpMessage, param)
   DDAlert.open({
     title: intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_ackrq_title' }),
     info: infoMessage,

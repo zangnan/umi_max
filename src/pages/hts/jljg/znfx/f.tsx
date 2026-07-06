@@ -2,6 +2,7 @@
  * title: 智能分析-功能实现
  * author: yxy
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React from 'react';
 import DDAlert from '@/pages/hts/components/DDAlert';
 import { Badge, Button, Form, Input, message} from 'antd';
@@ -35,7 +36,7 @@ ZnfxFunc.afterReload = (param: any) => {
     const titleMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scjz_title' });
     const infoMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scjz_info' });
     const tmpMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scjz_content_hxzq' });
-    const contentMessage = myUtil.text.formatRepalce(tmpMessage, {hxzqQ: hxzqQ, hxzqZ: hxzqZ});
+    const contentMessage = cktsUtil.text.formatRepalce(tmpMessage, {hxzqQ: hxzqQ, hxzqZ: hxzqZ});
     const content1Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scjz_content_f' });
     const content2Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scjz_content_s' });
     DDAlert.open({
@@ -168,9 +169,9 @@ ZnfxFunc.handleZnfxZnfx = (params: any) => {
           infoMessage = '确定对当前筛选条件下所有分析状态为“待分析”、“分析失败”、“计算成功待分析”的数据进行操作吗？';
         }
         const tmp1Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_znfx_content_f' });
-        const cont1Message = myUtil.text.formatRepalce(tmp1Message, {scTotal: scTotal});
+        const cont1Message = cktsUtil.text.formatRepalce(tmp1Message, {scTotal: scTotal});
         const tmp2Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_znfx_content_s' });
-        const cont2Message = myUtil.text.formatRepalce(tmp2Message, {zcTotal: zcTotal});
+        const cont2Message = cktsUtil.text.formatRepalce(tmp2Message, {zcTotal: zcTotal});
         DDAlert.open({
           title: '差异分析',
           info: infoMessage,
@@ -301,9 +302,9 @@ ZnfxFunc.handleZnfxScmx = (params: any) => {
         return ;
       } else {
         // const tmp1Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_znfx_content_f' });
-        // const scxx = myUtil.text.formatRepalce(tmp1Message, {scTotal: scTotal});
+        // const scxx = cktsUtil.text.formatRepalce(tmp1Message, {scTotal: scTotal});
         // const tmp2Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_znfx_content_s' });
-        // const zcxx = myUtil.text.formatRepalce(tmp2Message, {zcTotal: zcTotal});
+        // const zcxx = cktsUtil.text.formatRepalce(tmp2Message, {zcTotal: zcTotal});
         const vParam = {tableKey : 'JLJG_ZXSB_SB_JLJG_MDTHX_G', cxlx: 'add'};
         commonInitJbxx(vParam).then((response) => {
           const initFormVal: any = {sffg:false};
@@ -380,7 +381,7 @@ ZnfxFunc.handleZnfxScmx = (params: any) => {
                       return Promise.reject(new Error(intl2.formatMessage({id: 'validator_number'})));
                     }
                     if (value.length != 3) {
-                      let message = myUtil.text.formatRepalce(intl2.formatMessage({id: 'validator_v_eq'}), {len: 3});
+                      let message = cktsUtil.text.formatRepalce(intl2.formatMessage({id: 'validator_v_eq'}), {len: 3});
                       return Promise.reject(new Error(message));
                     }
                   }
@@ -514,9 +515,9 @@ const openResult = (params: any) => {
   const titleMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_title' });
   const infoMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_success' });
   const tmp1Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_success_mdt' });
-  const cont1Message = myUtil.text.formatRepalce(tmp1Message, {mdtTs: params.mdtTs});
+  const cont1Message = cktsUtil.text.formatRepalce(tmp1Message, {mdtTs: params.mdtTs});
   const tmp2Message = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_success_hx' });
-  const cont2Message = myUtil.text.formatRepalce(tmp2Message, {hxTs: params.hxTs});
+  const cont2Message = cktsUtil.text.formatRepalce(tmp2Message, {hxTs: params.hxTs});
   DDAlert.open({
     title: titleMessage,
     info: infoMessage,

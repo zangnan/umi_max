@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { intl as intl2 } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
 
@@ -25,7 +26,7 @@ businessValidator.sbpc = (form: any) => {
     } else if (!value.match(/^\d+$/)) {
       return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_number' })));// '该项内容只能输入数字！'
     } else if (value.length != 3) {
-      let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
+      let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
       return Promise.reject(new Error(message));
     }
     return Promise.resolve();

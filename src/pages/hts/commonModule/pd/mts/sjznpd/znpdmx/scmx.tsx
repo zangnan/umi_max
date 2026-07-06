@@ -159,7 +159,7 @@ const ModalScmx: React.FC<ScmxProps> = ({
                     return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_d_yyyyMM' })));
                   }
                   if (value.length != 6) {
-                    let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 6 });
+                    let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 6 });
                     return Promise.reject(new Error(message));
                   }
                 }
@@ -174,7 +174,7 @@ const ModalScmx: React.FC<ScmxProps> = ({
                     return Promise.reject(new Error(intl2.formatMessage({ id: 'validator_number' })));
                   }
                   if (value.length != 3) {
-                    let message = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
+                    let message = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'validator_v_eq' }), { len: 3 });
                     return Promise.reject(new Error(message));
                   }
                 }

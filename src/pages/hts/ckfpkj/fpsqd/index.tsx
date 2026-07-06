@@ -2,6 +2,7 @@
  * title: 发票
  * creator: zn
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useState, useEffect, useRef } from 'react';
 import { List, Skeleton, Tabs, Checkbox, Space, Button, Dropdown, Menu, message, Spin, Popover, Form, Input, Drawer, Tooltip, Select, Upload, Modal} from 'antd';
 import { DownOutlined, FullscreenOutlined, FullscreenExitOutlined, WarningOutlined, InboxOutlined, ClockCircleOutlined } from '@ant-design/icons';
@@ -765,11 +766,11 @@ const Fp: React.FC<unknown> = () => {
         const titleMsg = intl2.formatMessage({ id: 'message_ckfp_fpsqd_del_title' });
         const infoMsg = intl2.formatMessage({ id: 'message_ckfp_fpsqd_del_info' });
         const tmpfMsg = intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_content_f' });
-        const confMsg = myUtil.text.formatRepalce(tmpfMsg, { fpsqdzs: myUtil.text.formatNum(body.fpsqdzs, '0,0') });
+        const confMsg = cktsUtil.text.formatRepalce(tmpfMsg, { fpsqdzs: myUtil.text.formatNum(body.fpsqdzs, '0,0') });
         const tmpsMsg = intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_content_s' });
-        const consMsg = myUtil.text.formatRepalce(tmpsMsg, { kpje: myUtil.text.formatNum(body.kpje, '0,0.00') });
+        const consMsg = cktsUtil.text.formatRepalce(tmpsMsg, { kpje: myUtil.text.formatNum(body.kpje, '0,0.00') });
         const tmptMsg = intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_content_t' });
-        const contMsg = myUtil.text.formatRepalce(tmptMsg, { bgdzs: myUtil.text.formatNum(body.bgdzs, '0,0') });
+        const contMsg = cktsUtil.text.formatRepalce(tmptMsg, { bgdzs: myUtil.text.formatNum(body.bgdzs, '0,0') });
         DDAlert.open({
           title: titleMsg,
           info: infoMsg,

@@ -228,6 +228,10 @@
         "new": "ZnfxFunc.intl = intl2"
       },
       {
+        "old": "myUtil.text.formatRepalce",
+        "new": "cktsUtil.text.formatRepalce"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },

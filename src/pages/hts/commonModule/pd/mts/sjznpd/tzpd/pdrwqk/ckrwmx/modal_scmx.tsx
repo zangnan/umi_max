@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, Spin, Modal, Form, Checkbox, message, Input } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -154,7 +155,7 @@ const ModelScmx: React.FC<AbgdBjProps> = ({
                       );
                     }
                     if (value.length !== 6) {
-                      let message = myUtil.text.formatRepalce(
+                      let message = cktsUtil.text.formatRepalce(
                         intl2.formatMessage({ id: 'validator_v_eq' }),
                         { len: 6 }
                       );
@@ -186,7 +187,7 @@ const ModelScmx: React.FC<AbgdBjProps> = ({
                       );
                     }
                     if (value.length !== 3) {
-                      let message = myUtil.text.formatRepalce(
+                      let message = cktsUtil.text.formatRepalce(
                         intl2.formatMessage({ id: 'validator_v_eq' }),
                         { len: 3 }
                       );

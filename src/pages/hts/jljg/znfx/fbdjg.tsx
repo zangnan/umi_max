@@ -2,6 +2,7 @@
  * title: 智能分析-分析状态功能实现
  * author: yxy
  */
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React from 'react';
 import { message } from 'antd';
 import {znfxszhl } from '@/pages/hts/services/htsApi';
@@ -68,7 +69,7 @@ ZnfxBdjgFunc.handleZnfxBdjgSzhl = (params: any) => {
       unitRef.current?.setSelectionRows([]);
       unitRef.current?.reload2();
       const tmpMessage = intl2.formatMessage({ id: 'message_jljghx_znfx_bdjg_szhl' });
-      const successMessage = myUtil.text.formatRepalce(tmpMessage, body);
+      const successMessage = cktsUtil.text.formatRepalce(tmpMessage, body);
       message.success(successMessage);
     } else {
       message.error(response.desc);
@@ -92,7 +93,7 @@ ZnfxBdjgFunc.handleZnfxBdjgQxhl = (params: any) => {
       unitRef.current?.setSelectionRows([]);
       unitRef.current?.reload2();
       const tmpMessage = intl2.formatMessage({ id: 'message_jljghx_znfx_bdjg_qxhl' });
-      const successMessage = myUtil.text.formatRepalce(tmpMessage, body);
+      const successMessage = cktsUtil.text.formatRepalce(tmpMessage, body);
       message.success(successMessage);
     } else {
       message.error(response.desc);

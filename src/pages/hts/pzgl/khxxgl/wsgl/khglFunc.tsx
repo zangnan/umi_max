@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import { DatePicker, Form, message, Tooltip, Switch } from 'antd';
 import React from 'react';
 import { khglszzt, khglsc, khgltqbgdxx, checkghfnsrmc, qtspwhcheck, checkjwshrmc, queryGhfxx } from '@/pages/hts/services/htsApi';
@@ -40,7 +41,7 @@ Func.handletqjwfhr = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             unitRef.current!.reload2();
-            const tempMessage = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_khtq_success' }), { yxsl: body.yxsl })
+            const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_khtq_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {
             message.error(desc);

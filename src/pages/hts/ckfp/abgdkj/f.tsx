@@ -1,3 +1,4 @@
+import cktsUtil from '@/pages/hts/cktsUtil';
 import React from 'react';
 import { history } from 'umi';
 import { message, Form, Radio, List, Space, DatePicker, Input } from 'antd';
@@ -40,7 +41,7 @@ abgdkjFunc.btnBjkp = (param: any) => {
       return (row.ckfpkjsjztDm != "1" || row.zbkpbz === 'Y');
     })
     if (tempRows.length != 0) {
-      const tempMessage = myUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_scfpscd' }), { gnmc: '编辑开票' })
+      const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_scfpscd' }), { gnmc: '编辑开票' })
       message.info(tempMessage);
       return;
     }
@@ -171,7 +172,7 @@ const onChangeHqbgd = (e: any) => {
 // 弹出统计条数，点击确定后调用接口处理数据
 const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
   const tmpMessage = intl2.formatMessage({ id: access.isNsrsbh ? 'message_ckfp_abgdkj_hqbgd_ackrq_sl_success' : 'message_ckfp_abgdkj_hqbgd_ackrq_success' });
-  const infoMessage = myUtil.text.formatRepalce(tmpMessage, param)
+  const infoMessage = cktsUtil.text.formatRepalce(tmpMessage, param)
   DDAlert.open({
     title: intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_ackrq_title' }),
     info: infoMessage,
