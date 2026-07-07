@@ -914,8 +914,8 @@ cktsUtil.downloadFileCkts = async (url: any, params: any) => {
       aLink.style.display='none';
       const objectUrl = window.URL.createObjectURL(response2.data);
       aLink.href = objectUrl;
-      const { headers } = response2.response;
-      const contentDisposition = headers.get('Content-Disposition');
+      const { headers } = response2;
+      const contentDisposition = headers['content-disposition'];
       let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : 'downloadFile';
       fileName = decodeURI(fileName);
       aLink.download = fileName;
