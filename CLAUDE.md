@@ -1710,3 +1710,39 @@ background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
 **已知限制**（用户决策接受）：
 - 仅处理默认导入 `import DDBunit2 from ...;`（命名导入 / `import *` 不在范围；codebase 无此用法）
 - 不动 ref 源文件 —— 若用户后续希望同步，可单独跑一次性脚本
+
+## 待提交变更（2026-07-07）
+
+### DDAlert 不弹窗修复：antd v6 Modal.visible → .open
+
+**问题**：`src/pages/hts/ckts/sbsjcx/sbsjcx.tsx:212` 的 `Func.shfkdr` 内调用 `DDAlert.open({...})` 后 Modal 不出现（"反馈读入"按钮无反应）。`grep "DDAlert.open"` 找到 **50+ 处调用点全部失效**（sbsjcx 只是其中一个）。
+
+**根因（已确认）**：[src/pages/hts/components/DDAlert/index.tsx:207](src/pages/hts/components/DDAlert/index.tsx#L207) 用 antd v4 风格的 `visible={opts.modalVisible}`，但项目实际是 `antd@6.4.3`：
+- `node_modules/antd/es/modal/interface.d.ts` 中 `ModalProps` 只声明 `open`，`visible` 已删除
+- `node_modules/antd/es/modal/Modal.js:218` 内部强制 `visible: open` 覆盖用户传的 `visible`，导致 `visible=undefined` → 弹窗永远不显示
+
+**改动**（[src/pages/hts/components/DDAlert/index.tsx](src/pages/hts/components/DDAlert/index.tsx) **1 行实质修改**）：
+
+```diff
+ <Modal
+   title={opts.title}
+-  visible={opts.modalVisible}
++  open={opts.modalVisible}
+```
+
+**关键设计点**：
+- **只改 DDAlert 本身，50+ 调用方零修改**：所有 `DDAlert.open/close/getForms()` 调用点不需改动
+- **contentForm.tsx 不动**：`Form.useForm()` 已兼容 v6
+- **`destroyOnHidden={true}` 不动**：v5+ 新 prop 与 `open` 配合工作正常
+- **不引入 `App.useApp()`**：当前 `ConfigProvider.config({ holderRender })` 已支持静态 message API，与本 bug 无关
+- **保留 `ReactDOM.render`**（不升级 `createRoot`）：`ReactDOM.render` 同步返回实例，导出时 `DDAlert` 已挂载 `open/close/getForms`；`createRoot.render` 的 `ref` 回调是异步 commit，**首次点击按钮时 `DDAlert` 仍是 undefined**（用户实际验证：`Cannot read properties of undefined (reading 'open')`）。React 18 下 `ReactDOM.render` 仍可工作（仅触发废弃 warning，与本 bug 无关）
+
+**验证**：
+- 启动 `npm run dev`，浏览器打开 sbsjcx 业务页面（如 ZMKJ_DLJK / QTYW_HWCHS 路径）
+- 点击"反馈读入"按钮 → Modal 弹窗应出现，含文件上传 Dragger 区域，标题"反馈读入"
+- TypeScript 检查：`npx tsc --noEmit`
+
+**已知限制**（用户决策接受）：
+- `ReactDOM.render` 仍触发 React 18 废弃 warning —— 不影响功能，未来若需彻底消除 warning 需配合 class component 转 function component（不在本 bug 范围）
+- 不引入 `App.useApp()`（涉及大范围重构）
+- 不在本次回归范围内但理论应同时恢复的 49+ 处其它 DDAlert.open 调用点（如 `workplace/index.tsx` / `sjgl/xzrwgl/sjxz/index.tsx` / `ckts/scsbsj/scsbsj.tsx` 等），建议用户自然浏览过程中留意验证

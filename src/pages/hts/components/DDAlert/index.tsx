@@ -204,7 +204,7 @@ class Alert extends Component {
     return (
       <Modal
         title={opts.title}
-        visible={opts.modalVisible}
+        open={opts.modalVisible}
         width={width == '' ? CONSTANTS.C_MODAL_WIDTH_X1 : width}
         wrapClassName={`${isTableContent? 'standard-modal-1': '' }`} 
         footer={this.getFooter()}
@@ -243,5 +243,7 @@ class Alert extends Component {
 
 const div = document.createElement('div');
 document.body.appendChild(div);
+// 保留 ReactDOM.render（同步返回实例）以保证导出时 DDAlert 已挂载 open/close/getForms 等方法
+// createRoot.render 的 ref 回调是异步 commit，会导致首次点击 DDAlert.open 报 undefined
 const DDAlert: any = ReactDOM.render(<Alert />, div);
 export default DDAlert;
