@@ -4,9 +4,7 @@ import { Modal, Tabs } from 'antd';
 import CONSTANTS from '@/components/DDAssist/constants';
 import myUtil from '@/components/DDAssist/util';
 import { history, useRouteData } from 'umi';
-// 静态 import routes 配置（umi 运行时用的就是这份，保留 component / ywKey 字符串）
-// 路径深度：sbmxcx/sbmxcx.tsx → ../../../.../../config/routes（6 级回到项目根）
-import menuData from '../../../../../../config/routes';
+// 注：tab 元数据（parent + children）从 sessionStore 的 usermenu 取（动态加载，含 SaaS 节点）
 
 // === 静态 import 13 个 dditax.ckts.from 子模块 ===
 // 来源：config/routes/routes.ckts.ts line 930-943（SBMXCX_25* 路由）
@@ -69,8 +67,8 @@ export interface GeneratedDataProps {
   activeKeyId?: string;   // 外部强行指定激活 tab
 }
 
-// 在静态 routes 配置中按 ywKey 找 scsbsj 父节点 → 取其 children 元数据
-const findTabsByYwKey = (ywKey: string, allRoutes: any[]): any[] => {
+// 在 usermenu（sessionStore 动态菜单）中按 ywKey 找 scsbsj 父节点 → 取其 children 元数据
+const findTabsByYwKey = (ywKey: string, userMenu: any[]): any[] => {
   const findParent = (nodes: any[]): any => {
     for (const n of nodes) {
       if (n.component === './hts/ckts/scsbsj/scsbsj' && n.ywKey === ywKey) {
@@ -83,7 +81,7 @@ const findTabsByYwKey = (ywKey: string, allRoutes: any[]): any[] => {
     }
     return null;
   };
-  const parent = findParent(allRoutes);
+  const parent = findParent(userMenu || []);
   if (!parent?.routes) return [];
   return parent.routes.filter(
     (r: any) => !r.redirect && r.component && r.component !== './404',
@@ -123,9 +121,11 @@ const GeneratedData: React.FC<GeneratedDataProps> = ({
     };
   });
 
-  // initMyTab：从静态 routes 配置按 ywKey 反查父节点下的 children
+  // initMyTab：从 usermenu（sessionStore）按 ywKey 反查父节点下的 children
+  // usermenu 由 app.tsx 异步加载；若首次调用时为空，modal 打开时会自动重试
   const initMyTab = () => {
-    const nextTabs = ywKey ? findTabsByYwKey(ywKey, menuData || []) : [];
+    const userMenu = myUtil.sessionStore.getItem('usermenu') || [];
+    const nextTabs = ywKey ? findTabsByYwKey(ywKey, userMenu) : [];
     setMyTabs(nextTabs);
     // 默认激活第一个非 redirect 的 tab（若 activeKey 尚未设置）
     if (nextTabs.length > 0 && !activeKey) {
@@ -137,6 +137,14 @@ const GeneratedData: React.FC<GeneratedDataProps> = ({
     initMyTab();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ywKey]);
+
+  // modal 打开时若 myTabs 仍为空，兜底重试（处理 usermenu 异步加载晚于 mount 的场景）
+  useEffect(() => {
+    if (modalVisible && myTabs.length === 0 && ywKey) {
+      initMyTab();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modalVisible]);
 
   // modal 打开时若 activeKey 为空，兜底用第一个 tab
   useEffect(() => {

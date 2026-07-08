@@ -46,6 +46,28 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
   // const intl = useIntl();
 
   // 根据路径获取业务key
+  // 在 usermenu（sessionStore 动态菜单）中找 scsbsj 父节点的 ywKey
+  // 匹配条件：节点 component === './hts/ckts/scsbsj/scsbsj' 且 currentPath 是其子路由或自身
+  const findScsbsjYwKey = (currentPath: string, userMenu: any[]): string => {
+    const findParent = (nodes: any[]): any => {
+      for (const n of nodes) {
+        if (n.component === './hts/ckts/scsbsj/scsbsj' && n.ywKey) {
+          // 场景 A：currentPath 就是 scsbsj 父节点本身（如 /25/2505）
+          if (n.path === currentPath) return n;
+          // 场景 B：currentPath 是其子路由（如 /25/2505/SBMXCX_250501）
+          if (n.routes?.some((r: any) => r.path === currentPath)) return n;
+        }
+        if (n.routes?.length) {
+          const r = findParent(n.routes);
+          if (r) return r;
+        }
+      }
+      return null;
+    };
+    const parent = findParent(userMenu || []);
+    return parent?.ywKey || '';
+  };
+
   const getMyYwKey = () => {
     // yeKey 是父组件传递
     if (ywKey) {
@@ -55,6 +77,15 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
     // yeKey 是根据固定的URL格式获取 /ckts/scsbsj/
     if (routeMatch.route.path.indexOf('/ckts/scsbsj/') > -1) {
       return pathname;
+    }
+    // SaaS 路由 fallback：在 usermenu（sessionStore）中找 scsbsj 父节点的 ywKey
+    // 场景：访问 /25/2505 或 /25/2505/SBMXCX_250501
+    // 优先用 usermenu（动态菜单，包含 SaaS 节点）；老菜单走 myUtil.menu.getMenuObjByName
+    const userMenu = myUtil.sessionStore.getItem('usermenu') || [];
+    const saasKey = findScsbsjYwKey(routeMatch.route.path, userMenu);
+    if (saasKey) {
+      myUtil.sessionStore.setItem('scsbsjYwKey', saasKey);
+      return saasKey;
     }
     // yeKey 从菜单树获取
     const menuObj = myUtil.menu.getMenuObjByName(pathname);
@@ -620,7 +651,6 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
     <Sjhz onRef={refSjhz} />
     <ReportGrid onRef={refReportGrid} ywKey={myYwKey} />
     <GeneratedData onRef={refGeneratedData} ywKey={myYwKey} />
-    <GeneratedData onRef={refGeneratedData} tabData={children} />
     <Ydgl onRef={refYdgl} ywKey={myYwKey} />
     <Ydgl2 onRef={refYdgl2} ywKey={myYwKey} />
     <Tsxx onRef={errorMsgRef} />
