@@ -395,6 +395,15 @@
       ]
     },
     {
+      "fileName": "code_sample/src/pages/hts/jljg/sjxz/hghxsjcx/jckhzqdcx.tsx",
+      "replace": [
+        {
+          "old": "func.initHzqd = useIntl();",
+          "new": "func.initHzqd = intl;"
+        }
+      ]
+    },
+    {
       "fileName": "code_sample/src/pages/hts/template/template_step2.tsx",
       "replace": [
         {
