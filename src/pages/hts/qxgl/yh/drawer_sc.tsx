@@ -82,12 +82,12 @@ const DrawerForm: React.FC<BdjgProps> = ({
   };
 
   const f: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   //  确认还原
   f.qrhy=(param :any)=>{
-    const {selectionRowKeys,otherRef,unitRef} = param;
+    const {selectionRowKeys,otherRef,refUnit} = param;
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -95,9 +95,9 @@ const DrawerForm: React.FC<BdjgProps> = ({
     const params = {
       yhuuid1Dqlb:selectionRowKeys
     }
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     retrieveYh(params).then((res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, msg } = res;
       if (code == '200') {
         close();

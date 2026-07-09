@@ -23,7 +23,7 @@ const Zmxcj: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   const [form] = Form.useForm();
   const [selectionRows, setSelectionRows] = useState<any>();
   const [ywType, setywType] = useState<any>();
-  const [unitRef, setunitRef] = useState<any>();
+  const [refUnit, setrefUnit] = useState<any>();
   
   
   //绑定组件
@@ -34,13 +34,13 @@ const Zmxcj: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   });
 
   // 开启页面，并设置参数
-  const showModal = (param: any, selectionRows: any,ywType: any,unitRef:any) => {
+  const showModal = (param: any, selectionRows: any,ywType: any,refUnit:any) => {
     setModalVisible(true);
      //初始化参数
     initFuncByJcxx(param);
     setSelectionRows(selectionRows);
     setywType(ywType)
-    setunitRef(unitRef);
+    setrefUnit(refUnit);
   };
 
   
@@ -84,7 +84,7 @@ const Zmxcj: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
       byblzzmcjByIds(params).then((response) => {
         const { code, msg,body } = response;
         if (code === '200') {
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success(body);
           setMasker(false);
           setModalVisible(false);

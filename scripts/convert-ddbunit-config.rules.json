@@ -282,6 +282,10 @@
       {
         "old": "UnitUtil.code.initFormItemsCodeTable",
         "new": "formUtil.initFormItemsCodeTable"
+      },
+      {
+        "old": "unitRef",
+        "new": "refUnit"
       }
     ],
     "less": [

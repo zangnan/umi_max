@@ -5,12 +5,12 @@ import React from 'react';
 import { intl, intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.produceDetailsReport = (param: any) => {
-  const { unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -26,7 +26,7 @@ Func.produceDetailsReport = (param: any) => {
     modalType: 'confirm',
     infoType: 'warning',
     okCallbackFn: function () {
-      const otherRef = param.unitRef.current?.getOtherRefs();
+      const otherRef = param.refUnit.current?.getOtherRefs();
       if (otherRef) {
         otherRef[1].current?.showModal(param,'7');
       }
@@ -55,10 +55,10 @@ Func.openCkbgdh = (param: any, ckbgd: any) => {
 };
 
 Func.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {

@@ -5,18 +5,18 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import CkbgdFunc from "../../common/CkbgdFunc";
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 批量补填
 ckfpFunc.btnPlbtHl = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '3', op: 'zdy' });
@@ -39,7 +39,7 @@ ckfpFunc.btnPlbtHl = (param: any) => {
           searchModel: removedArr,
           key: 'WBSJ_CKBGD_DBTHL_QUERY_PAGER',
         }
-        otherRef[1].current?.showModal(unitRef, uuids, otherRef[2], obj2);
+        otherRef[1].current?.showModal(refUnit, uuids, otherRef[2], obj2);
       } else {
         message.info(msg);
       }
@@ -51,7 +51,7 @@ ckfpFunc.btnPlbtHl = (param: any) => {
       searchModel: removedArr,
       key: 'WBSJ_CKBGD_DBTHL_QUERY_PAGER',
     }
-    otherRef[1].current?.showModal(unitRef, selectionRowKeys, otherRef[2], obj2);
+    otherRef[1].current?.showModal(refUnit, selectionRowKeys, otherRef[2], obj2);
   }
 }
 
@@ -75,10 +75,10 @@ ckfpFunc.openCkbgdh = (param: any, ckbgd: any) => {
 }
 
 ckfpFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -90,7 +90,7 @@ ckfpFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
 ckfpFunc.btnZbts = (param: any) => {
   const { otherRef } = param;
   CkbgdFunc.btnZbts(param, otherRef[2].current);
-  /*const { unitRef, selectionRowKeys, otherRef } = param;
+  /*const { refUnit, selectionRowKeys, otherRef } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -110,7 +110,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[2].current!.getDclsjBttj();
           setTimeout(() => {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             close();
             thisObj.setState({ masker: false });
           },300)

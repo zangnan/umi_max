@@ -18,16 +18,16 @@ const ModalForm: React.FC<BdjgProps> = ({
   const [masker, setMasker] = useState(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [initParam, setInitParam] = useState<any>({});
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   const [xtpzList, setXtpzList] = useState<[]>();
   const [xtpzSelect, setXtpzSelect] = useState<[]>();
 
   const [form] = Form.useForm();
 
   // 开启
-  const showModal = async (param: any, unitRef: any) => {
+  const showModal = async (param: any, refUnit: any) => {
     setInitParam(param);
-    setUnitRef(unitRef);
+    setUnitRef(refUnit);
     const css: any = [];
     await getPzxx({sbqyuuid: param.sbqyuuidDqlb}).then((response: any) => {
       const {code, msg, body} = response;
@@ -66,7 +66,7 @@ const ModalForm: React.FC<BdjgProps> = ({
       setMasker(false);
       if (response.code === '200') {
         close();
-        unitRef?.current?.reload2();
+        refUnit?.current?.reload2();
         message.success('保存成功！');
       } else {
         message.error(response.msg);

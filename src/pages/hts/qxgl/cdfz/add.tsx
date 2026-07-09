@@ -68,7 +68,7 @@ const Add: React.FC<DDTsort> = ({onRef, visible = false}) => {
       setMasker(false);
       if (response.code === '200') {
         message.success('保存成功！');
-        mainRef?.unitRef.current!.reload2();
+        mainRef?.refUnit.current!.reload2();
         close();
       } else {
         message.error(response.msg);

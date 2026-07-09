@@ -13,7 +13,7 @@ import CkbgdFunc from "../../common/CkbgdFunc";
 const { Dragger } = Upload;
 
 const bgdKsyFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 关单信息状态标志
@@ -37,10 +37,10 @@ bgdKsyFunc.openCkbgdh = (param: any, ckbgd: any) => {
 };
 
 bgdKsyFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -51,13 +51,13 @@ bgdKsyFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
 
 // 生成明细报表
 bgdKsyFunc.produceDetailsReport = (param: any) => {
-  const { unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[2].current?.showModal(param, '6');
   }
@@ -65,13 +65,13 @@ bgdKsyFunc.produceDetailsReport = (param: any) => {
 
 // 批量修改出口发票号
 bgdKsyFunc.ckfphPlxg = (param: any) => {
-  const {unitRef, selectionRowKeys, gridRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const {refUnit, selectionRowKeys, gridRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({id: 'message_common_type_no_griddata'}));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({property: 'cxlx', value: '6', op: 'zdy'});
@@ -109,7 +109,7 @@ bgdKsyFunc.ckfphPlxg = (param: any) => {
                   ywlx: 'ckbgd',
                   ckfph: values.ckfph
                 }
-                plxgckfphApi(obj2, unitRef)
+                plxgckfphApi(obj2, refUnit)
               } else {
                 message.error(msg)
               }
@@ -121,7 +121,7 @@ bgdKsyFunc.ckfphPlxg = (param: any) => {
               ywlx: 'ckbgd',
               ckfph: values.ckfph
             }
-            plxgckfphApi(obj2, unitRef)
+            plxgckfphApi(obj2, refUnit)
           }
         }
       })
@@ -130,14 +130,14 @@ bgdKsyFunc.ckfphPlxg = (param: any) => {
 }
 
 // 批量修改出口发票号接口
-const plxgckfphApi = (params: any, unitRef: any) => {
+const plxgckfphApi = (params: any, refUnit: any) => {
   plxgckfph(params).then((res: any) => {
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
       DDAlert.close();
     } else {
       message.error(msg)
@@ -147,7 +147,7 @@ const plxgckfphApi = (params: any, unitRef: any) => {
 
 // 批量修改出口商品代码
 bgdKsyFunc.ckspdmPlxg = (param: any) => {
-  const { unitRef, selectionRowKeys } = param;
+  const { refUnit, selectionRowKeys } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -177,15 +177,15 @@ bgdKsyFunc.ckspdmPlxg = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(body)
-            unitRef.current!.reload2();
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
           } else if (code === '900') {
             if (body === '' || body === null) {
               message.error(msg);
             } else {
               //#region  失败展示页面
-              const otherRef = param.unitRef.current?.getOtherRefs();
+              const otherRef = param.refUnit.current?.getOtherRefs();
               if (otherRef) {
                 otherRef[3].current?.showModal(body, 'ckspDm', '批量修改');
               }
@@ -201,13 +201,13 @@ bgdKsyFunc.ckspdmPlxg = (param: any) => {
 
 // 批量修改运费折算数量
 bgdKsyFunc.yfzsslPlxg = (param: any) => {
-  const {unitRef, selectionRowKeys, gridRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const {refUnit, selectionRowKeys, gridRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({id: 'message_common_type_no_griddata'}));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({property: 'cxlx', value: '6', op: 'zdy'});
@@ -245,7 +245,7 @@ bgdKsyFunc.yfzsslPlxg = (param: any) => {
                   uuids,
                   yfzssl: values.yfzssl
                 }
-                plxgyfzsslApi(obj2, unitRef, thisObj)
+                plxgyfzsslApi(obj2, refUnit, thisObj)
               } else {
                 message.error(msg)
               }
@@ -257,7 +257,7 @@ bgdKsyFunc.yfzsslPlxg = (param: any) => {
               uuids,
               yfzssl: values.yfzssl
             }
-            plxgyfzsslApi(obj2, unitRef, thisObj)
+            plxgyfzsslApi(obj2, refUnit, thisObj)
           }
         }
       })
@@ -266,16 +266,16 @@ bgdKsyFunc.yfzsslPlxg = (param: any) => {
 }
 
 // 批量修改运费折算数量接口
-const plxgyfzsslApi = (params: any, unitRef: any, thisObj: any) => {
+const plxgyfzsslApi = (params: any, refUnit: any, thisObj: any) => {
   thisObj.setState({ masker: true });
   plxgYfzssl(params).then((res: any) => {
     thisObj.setState({ masker: false });
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
       DDAlert.close();
     } else {
       message.error(msg)
@@ -285,7 +285,7 @@ const plxgyfzsslApi = (params: any, unitRef: any, thisObj: any) => {
 
 // 批量修改汇率
 bgdKsyFunc.btnPlXgHl = (param: any) => {
-  const { unitRef, selectionRowKeys, otherRef } = param;
+  const { refUnit, selectionRowKeys, otherRef } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -297,13 +297,13 @@ bgdKsyFunc.btnPlXgHl = (param: any) => {
     ],
     key: 'WBSJ_CKBGD_PLXGHLABZ_QUERY_PAGER'
   }
-  otherRef[1].current?.showModal(unitRef, selectionRowKeys, null, obj2);
+  otherRef[1].current?.showModal(refUnit, selectionRowKeys, null, obj2);
 };
 
 // 转不退税
 bgdKsyFunc.btnZbts = (param: any) => {
   CkbgdFunc.btnZbts(param, null);
-  /*const { unitRef, selectionRowKeys } = param;
+  /*const { refUnit, selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -322,7 +322,7 @@ bgdKsyFunc.btnZbts = (param: any) => {
         if (code === '200') {
           message.success('转不退税成功！');
           close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(msg);
         }
@@ -334,7 +334,7 @@ bgdKsyFunc.btnZbts = (param: any) => {
 
 // 台账筛选
 bgdKsyFunc.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if(isLt2M > 10485760) {
@@ -409,7 +409,7 @@ bgdKsyFunc.importTzsx = async (param: any) => {
             const { code, msg, body} = response;
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if(body?.sbzs != 0) {
                 // 业务校验
                const sbyyList = body?.sbmx || [];

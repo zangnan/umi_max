@@ -6,7 +6,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -36,8 +36,8 @@ Func.columnsRender = {
 
 //任务刷新
 Func.handleShppRwReload = (param: any) => {
-  const { unitRef } = param;
-  unitRef?.current?.reload2();
+  const { refUnit } = param;
+  refUnit?.current?.reload2();
 }
 
 
@@ -52,8 +52,8 @@ Func.handleShppRwCkmx = async (param: any, e: any) => {
 
 // 删除
 Func.handlerDel = (param: any) => {
-  const {selectionRows, unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const {selectionRows, refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -83,12 +83,12 @@ Func.handlerDel = (param: any) => {
       const obj: any = {
         uuids: rwuuid1s
       };
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       shglDelSdpprw(obj).then((res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, msg } = res;
         if (code === '200') {
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('删除成功！');
         } else {
           message.error(msg);

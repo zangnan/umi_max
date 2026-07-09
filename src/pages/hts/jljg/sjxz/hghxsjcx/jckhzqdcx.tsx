@@ -23,7 +23,7 @@ const Index: React.FC<unknown> = () => {
   myConfig.module_key = 'ZXSB_WBSJ_DY_SZCHZQDMX';
   const errorMsgRef: any = useRef();
   const dyGridRef: any = useRef();
-  func.initHzqd = useIntl();
+  func.initHzqd = intl;
   func.getOtherRef = () => {
     const otherRef = [];
     // 导入模板数据异常页面

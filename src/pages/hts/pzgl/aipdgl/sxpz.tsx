@@ -18,7 +18,7 @@ const Index: React.FC<{ data?: any, funcRef?: any ,setActiveKey:any}> = ({
   const [masker, setMasker] = useState<any>(false); 
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
   const dwglConfig: any = {};
 
@@ -45,20 +45,20 @@ const Index: React.FC<{ data?: any, funcRef?: any ,setActiveKey:any}> = ({
   //开关值改变
   const onChangeSwitch = (param:any ,_record: any,) => {
     const {  checked } = _record;
-    const {  record, unitRef, } = param;
+    const {  record, refUnit, } = param;
     const obj = {
       aipdsxzdDm: record?.aipdsxzdDm,
       xzbz2: checked ? 'Y' : 'N',
     }
-    unitRef.current!?.setMasker(true);
+    refUnit.current!?.setMasker(true);
     gxsxpzYxbz(obj).then((res2: any) => {
-      unitRef.current!?.setMasker(false);
+      refUnit.current!?.setMasker(false);
       if (res2.code === '200') {
         message.success('保存成功！');
-        unitRef?.current?.reload2();
+        refUnit?.current?.reload2();
       } else {
         message.error(res2.msg);
-        unitRef?.current?.reload2();
+        refUnit?.current?.reload2();
       }
     });
   }

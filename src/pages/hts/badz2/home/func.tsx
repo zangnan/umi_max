@@ -3,7 +3,7 @@ import 'moment/locale/zh-cn';
 import { message, Button } from "antd";
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 选择备案方式弹窗

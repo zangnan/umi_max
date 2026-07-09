@@ -262,7 +262,7 @@ const ReportGrid: React.FC<ReportGridProps> = ({
   // 关闭
   const closeModal = () => {
     setModalVisible(false);
-    param?.unitRef?.current?.reload2();
+    param?.refUnit?.current?.reload2();
   };
   
   return (

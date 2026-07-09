@@ -5,7 +5,7 @@ import { history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 
 const fpxxFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 fpxxFunc.filterValidate = (param: any) => {
@@ -53,10 +53,10 @@ fpxxFunc.columnsRender = {
 };
 
 fpxxFunc.openfp = async (param: any) => {
-  const { record, unitRef, otherRef } = param;
-  unitRef.current?.setMasker(true);
+  const { record, refUnit, otherRef } = param;
+  refUnit.current?.setMasker(true);
   await fpyl({ sjgjsjDm: '020101', uuid: record?.uuid, jhpzh: record?.jhpzh, exportKey: 'PDF_REPORT_SJGLSAAS_XXFPCCX_FP' }).then(async (response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code == '200') {
       otherRef[0].current?.showModal(response.body);
     } else {

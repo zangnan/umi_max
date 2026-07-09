@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 下钻
@@ -16,7 +16,7 @@ Func.openDrawer = (param: any, unitKey: any,flag:any) => {
     { property: 'xfnsrsbh', value: param.record.xfnsrsbh, op: 'zdy' },
     { property: "xzbz", value: flag, op: "zdy"}
   ];
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, initSearchModal,searchModel);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -25,8 +25,8 @@ Func.openDrawer = (param: any, unitKey: any,flag:any) => {
 }
 
 Func.afterReload = (param: any) => {
-  const searchModel = param.unitRef?.current?.getGridParams().searchModel;
-  const key = param.unitRef?.current?.getGridParams().key;
+  const searchModel = param.refUnit?.current?.getGridParams().searchModel;
+  const key = param.refUnit?.current?.getGridParams().key;
   if (searchModel?.length > 0) {
     myUtil.localStore.setItem(key, searchModel);
   }
@@ -36,7 +36,7 @@ Func.afterReload = (param: any) => {
 Func.columnsRender = {
    // 发票
    rendersjbbscBgdFpgys: (param: any) => {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     if(param.text == 0 || param.text == '0'){
       return param.text;
     }
@@ -48,7 +48,7 @@ Func.columnsRender = {
   },
   // 未申报退税情况
   rendersjbbscBgdWsbgys: (param: any) => {
-      const key = param.unitRef?.current?.getGridParams().key;
+      const key = param.refUnit?.current?.getGridParams().key;
       if(param.text == 0 || param.text == '0'){
         return param.text;
       }
@@ -60,7 +60,7 @@ Func.columnsRender = {
     },
   // 转内销发票
   rendersjbbscZnxgys: (param: any) => {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     if(param.text == 0 || param.text == '0'){
       return param.text;
     }

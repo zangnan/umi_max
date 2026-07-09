@@ -158,8 +158,8 @@ const Index: React.FC = () => {
 
       //信息监测
       Func.handleBgdXxjc = (param: any) => {
-        const { selectionRowKeys, selectionRows, unitRef, otherRef } = param;
-        const pagination = unitRef.current.getPagination().total;
+        const { selectionRowKeys, selectionRows, refUnit, otherRef } = param;
+        const pagination = refUnit.current.getPagination().total;
         if (pagination == 0) {
           message.info('当前无可操作的数据。');
           return;
@@ -175,7 +175,7 @@ const Index: React.FC = () => {
         if (selectionRowKeys.length == 0) {
           info = `确定对当前筛选条件下的${selectionRowKeys.length}条数据进行信息检测的操作吗？`;
         }
-        otherRef[8].current?.showModal(unitRef, info);
+        otherRef[8].current?.showModal(refUnit, info);
       }
     }
 

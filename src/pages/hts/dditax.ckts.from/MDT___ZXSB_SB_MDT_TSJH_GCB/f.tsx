@@ -11,7 +11,7 @@ import moment from 'moment';
 import {history} from 'umi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.tszbcs = (param: any) => {
@@ -266,12 +266,12 @@ const setCkspxx = (form: any, obj: any, eleName?: any) => {
 
 // 设置商品信息
 const queryMdtGlhBySsqFunc = (param: any, param02: any, flag?: any) => {
-  const {form, unitRef, myFormItems, myItems, setMyFormItems, setMyItems} = param;
+  const {form, refUnit, myFormItems, myItems, setMyFormItems, setMyItems} = param;
   queryMdtGlhBySsq({
     ssq: param02.ssq
   }).then((response) => {
     const {code, body} = response;
-    unitRef?.current?.setMasker(false);
+    refUnit?.current?.setMasker(false);
     if (code === '200') {
       form.setFieldsValue(body);
       let dataarr = [];
@@ -442,7 +442,7 @@ Func.jhmx = (param: any) => {
   DditCktsFormCommonFunc.jhmx(param);
 }
 
-Func.check = (selectionRows: any, unitRef: any, otherRef: any) => {
+Func.check = (selectionRows: any, refUnit: any, otherRef: any) => {
   const ckrqNd = myUtil.grid.formatDate(selectionRows[0].ckrq1, 'YYYY-MM-DD').substr(0, 4);
   let i = 0;
   let flag = false;
@@ -465,7 +465,7 @@ Func.check = (selectionRows: any, unitRef: any, otherRef: any) => {
   } else {
     queryCjCsh({tableKey: "MTS_ZXSB_SB_MTS_TSSB_G"}).then((response) => {
       const {code, body} = response;
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (code === '200') {
         const obj = {
           sbpc: body.sbpc,
@@ -475,7 +475,7 @@ Func.check = (selectionRows: any, unitRef: any, otherRef: any) => {
           if (res.code === '200') {
             const para = body;
             para.glh = res.body.glh
-            otherRef[2].current!.showModal(para, selectionRows, "MDT", unitRef);
+            otherRef[2].current!.showModal(para, selectionRows, "MDT", refUnit);
           }
         })
       }

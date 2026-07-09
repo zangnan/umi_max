@@ -5,12 +5,12 @@ import {Form, message, Radio} from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const CkbgdFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 转不退税
 CkbgdFunc.btnZbts = (param: any, refCurrent: any, cdly:any) => {
-  const {unitRef, selectionRowKeys} = param;
+  const {refUnit, selectionRowKeys} = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({id: 'message_handle_unselected'}));
     return;
@@ -42,11 +42,11 @@ CkbgdFunc.btnZbts = (param: any, refCurrent: any, cdly:any) => {
               // 刷新头部条数
               refCurrent!.getDclsjBttj();
               setTimeout(() => {
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
                 DDAlert.close();
               }, 300)
             } else {
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               DDAlert.close();
             }
           } else {

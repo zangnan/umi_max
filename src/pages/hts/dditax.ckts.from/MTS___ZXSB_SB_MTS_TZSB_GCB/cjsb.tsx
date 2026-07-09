@@ -23,7 +23,7 @@ const Hgdzxzjy: React.FC<DDInvoiceProps> = ({
   const [inputText, setInputText] = useState<string>('请输入冲减发票号，多条数据以英文逗号隔开');
   const [selectionRowKeys, setSelectionRowKeys] = useState<any>([]);
   const [queryParam, setQueryParam] = useState<any>([]);
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   const [ywlxList, setYwlxList] = useState<any>(myUtil.code.getCode('code_dm_ckts_cktmsywlx:08'));
   const [hzcjyyList, setHzcjyyList] = useState<any>(myUtil.code.getCode('code_dm_ckts_hzcjyy:01'));
   //下载按钮是否显示
@@ -73,7 +73,7 @@ const Hgdzxzjy: React.FC<DDInvoiceProps> = ({
           const {code, msg} = response;
           if (code === '200') {
             close();
-            unitRef.current.reload2();
+            refUnit.current.reload2();
           }else{
             message.error(msg);
           }

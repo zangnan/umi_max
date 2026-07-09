@@ -19,7 +19,7 @@ import { queryCjCsh, saveCkznxMx } from '@/pages/hts/services/htsApi';
 import formFunc from './f'
 
 const Func: any = {
-  unitRef: React.createRef()
+  refUnit: React.createRef()
 }
 export interface DDTsort {
   onRef?: any;
@@ -120,15 +120,15 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   Func.reload = () => {
     currentData?.current?.reload2();
-    initData?.unitRef?.current?.reload2();
+    initData?.refUnit?.current?.reload2();
   }
   Func.scmx = (param: any) => {
-    const { record, unitRef } = param;
+    const { record, refUnit } = param;
     const apiParam: any = {
       lcswsxDm: '',
       tableKey: 'ZMKJ_ZXSB_ZM_CKHWZNX_G',
     };
-    setCurrentData(unitRef);
+    setCurrentData(refUnit);
     queryCjCsh(apiParam).then((response) => {
       const { code, body } = response;
       if (code === '200') {

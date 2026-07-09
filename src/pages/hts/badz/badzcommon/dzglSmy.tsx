@@ -30,7 +30,7 @@ export interface DzglSmyProps {
 
 const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
-  const [unitRef, setUnitRef] = useState<any>("");// 主列表刷新使用
+  const [refUnit, setUnitRef] = useState<any>("");// 主列表刷新使用
   const [ylModalRef, setYlModalRef] = useState<any>("");//
   const [form1] = Form.useForm(); // 输入框form
   // const intl = useIntl(); // 提示信息
@@ -337,7 +337,7 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
         fzcclj: value.fzcclj,
       }
       changeJzfjToPath(obj).then((response) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (response.code === '200') {
           const { blob, fileName } = response.body;
           myUtil.file.downloadPdf(blob, fileName);
@@ -610,7 +610,7 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
           initData.ywbh = '';
           form1.setFieldsValue({ badzbh: '', badzsm: '', ywbh: '' });
         }
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         setMasker(false);
         setDate([]);
         // 将最新的报关单号，所属期，批次返回上一层执行查询

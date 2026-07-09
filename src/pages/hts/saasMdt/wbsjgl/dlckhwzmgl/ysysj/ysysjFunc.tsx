@@ -4,12 +4,12 @@ import { message } from 'antd';
 import React from 'react';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.produceDetailsReport = (param: any) => {
-  const { unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -25,7 +25,7 @@ Func.produceDetailsReport = (param: any) => {
     modalType: 'confirm',
     infoType: 'warning',
     okCallbackFn: function () {
-      const otherRef = param.unitRef.current?.getOtherRefs();
+      const otherRef = param.refUnit.current?.getOtherRefs();
       if (otherRef) {
         otherRef[0].current?.showModal(param,'4');
       }

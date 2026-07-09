@@ -5,11 +5,11 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.handleBatchDelete = (param: any) => {
-  const { gridRef, selectionRows, unitRef } = param;
+  const { gridRef, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const unSelectedMessage = Func.intl.formatMessage({ id: 'message_delete_unselected' });
     message.info(unSelectedMessage);
@@ -42,13 +42,13 @@ Func.handleBatchDelete = (param: any) => {
         const data = {
           xzdyuuids: xzdyuuids
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         sjxzDelrw(data).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, desc } = response;
           if (code === '200') {
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             const successMessage = Func.intl.formatMessage({ id: 'message_delete_success' });
             message.success(successMessage);
@@ -64,7 +64,7 @@ Func.handleBatchDelete = (param: any) => {
 
 // 下载开票文件
 Func.handleDownLoadKpwj = (param: any) => {
-  const { gridRef, selectionRows, unitRef } = param;
+  const { gridRef, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const unSelectedMessage = Func.intl.formatMessage({ id: 'message_jljghx_jdcx_cxxz_unSelected' });
     message.info(unSelectedMessage);
@@ -94,7 +94,7 @@ Func.handleDownLoadKpwj = (param: any) => {
       content: '',
       isFormContent: false,
       okCallbackFn: function () {
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         sjxzCxxz({ xzdyuuids }).then(async (response: any) => {
           const { code, body, desc } = response;
           if (code === '200') {
@@ -108,14 +108,14 @@ Func.handleDownLoadKpwj = (param: any) => {
                 taskIds.forEach((element: any) => {
                   khdgjUtil.khdgjGdxz({ taskId: element, yhjq: yhjq })
                 });
-                unitRef.current!.setMasker(false);
+                refUnit.current!.setMasker(false);
               } else {
                 message.info(msg);
-                unitRef.current!.setMasker(false);
+                refUnit.current!.setMasker(false);
               }
             }
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             message.success(Func.intl.formatMessage({ id: 'message_jljghx_jdcx_cxxz_success' }));
           } else {

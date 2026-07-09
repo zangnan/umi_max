@@ -102,7 +102,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     form.resetFields();
     setModalVisible(false);
     setMainRef({});
-    mainRef.unitRef.current!.reload2();
+    mainRef.refUnit.current!.reload2();
   }
 
   const handleChange = async (param :any) => {

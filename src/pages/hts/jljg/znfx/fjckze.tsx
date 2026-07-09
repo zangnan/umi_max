@@ -5,7 +5,7 @@
 import React from 'react';
 
 const ZnfxJckzeFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 export default ZnfxJckzeFunc;

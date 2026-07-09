@@ -41,15 +41,15 @@ const Index: React.FC = () => {
 
   // 提交开票（登录态验证）
   func.handleTjkp = (param: any) => {
-    const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+    const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
     const fpsqduuids: any = [];
     if (selectionRowKeys && selectionRowKeys.length > 0) {
       selectionRows.forEach((row: any) => {
         fpsqduuids.push(row.fpsqduuid);
       });
     }
-    const gridData = unitRef.current?.getGridData()
-    const searchModel = unitRef.current.getGridParams().searchModel || [];
+    const gridData = refUnit.current?.getGridData()
+    const searchModel = refUnit.current.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if (gridData.length === 0) {
@@ -69,9 +69,9 @@ const Index: React.FC = () => {
       fpsqduuids: fpsqduuids,
       cxlx:'2',
     };
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     djcsjkptj(kptj).then((res1: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res1.code != '200') {
         message.info(res1.msg);
         return;
@@ -89,13 +89,13 @@ const Index: React.FC = () => {
           '税额合计' + myUtil.text.formatNum(res1.body.sehj, '0,0.00') + '元'
         ],
         okCallbackFn: function () {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           obj.pch = res1.body.pch;
           ddtjkp2(obj).then((res2: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (res2.code === '200') {
               message.success(res2.msg);
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(res2.msg);
             }
@@ -109,7 +109,7 @@ const Index: React.FC = () => {
 
   // // 上传检查
   // func.handleScjc = (param: any) => {
-  //   const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+  //   const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
   //   if (!selectionRowKeys || selectionRowKeys.length === 0) {
   //     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
   //     return;
@@ -120,9 +120,9 @@ const Index: React.FC = () => {
   //       fpsqduuids.push(row.fpsqduuid);
   //     });
   //   }
-  //   unitRef.current!.setMasker(true);
+  //   refUnit.current!.setMasker(true);
   //   djcsjkptj({ fpsqduuids }).then((res1: any) => {
-  //     unitRef.current!.setMasker(false);
+  //     refUnit.current!.setMasker(false);
   //     if (res1.code != '200') {
   //       message.info(res1.msg);
   //       return;

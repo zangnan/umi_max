@@ -9,12 +9,12 @@ import { ExclamationCircleOutlined, } from '@ant-design/icons';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 
 Func.afterReload = (param: any) => {
-  // const gridParams =param?.unitRef?.current?.getGridParams();
+  // const gridParams =param?.refUnit?.current?.getGridParams();
   // myUtil.sessionStore.setItem('zbpz-gridParams', gridParams);
   // // 获取表格的 th 元素
   // const thElements = document.querySelectorAll('tr th')[6];
@@ -35,7 +35,7 @@ Func.afterReload = (param: any) => {
 Func.hh = (p: any) => {
   const ck = p.target.checked;
   const obj = { tycs: 'All', qybz: ck ? 'Y' : 'N', };
-  const searchModel = Func.unitRef?.current.getGridParams()?.searchModel;
+  const searchModel = Func.refUnit?.current.getGridParams()?.searchModel;
   searchModel?.forEach((element: any) => {
     obj[element.property] = element.value;
   });
@@ -45,13 +45,13 @@ Func.hh = (p: any) => {
     infoType: 'warning',
     closeStatus: true,
     okCallbackFn: function () {
-      Func.unitRef.current!?.setMasker(true);
+      Func.refUnit.current!?.setMasker(true);
       gxQybz(obj).then((res: any) => {
-        Func.unitRef.current!?.setMasker(false);
+        Func.refUnit.current!?.setMasker(false);
         if (res.code === '200') {
           message.success(ck ? '启用成功！' : '关闭成功！');
           DDAlert.close();
-          Func.unitRef?.current!.reload2();
+          Func.refUnit?.current!.reload2();
         } else {
           message.error(res?.msg);
         }
@@ -90,18 +90,18 @@ Func.columnsRender = {
 
 //开关值改变
 const onChangeSwitch = (_record: any,) => {
-  const { record, unitRef, checked } = _record;
+  const { record, refUnit, checked } = _record;
   const obj = {
     ydbh: record?.ydbh,
     lcswsxDm: record?.lcswsxDm,
     qybz: checked ? 'Y' : 'N',
   }
-  unitRef.current!?.setMasker(true);
+  refUnit.current!?.setMasker(true);
   gxQybz(obj).then((res: any) => {
-    unitRef.current!?.setMasker(false);
+    refUnit.current!?.setMasker(false);
     if (res.code === '200') {
       message.success(checked ? '启用成功！' : '关闭成功！');
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
     } else {
       message.error(res?.msg);
     }
@@ -112,7 +112,7 @@ const onChangeSwitch = (_record: any,) => {
 
 
 Func.qybz = (p: any,) => {
-  const { selectionRowKeys, unitRef, selectionRows } = p;
+  const { selectionRowKeys, refUnit, selectionRows } = p;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -144,7 +144,7 @@ Func.qybz = (p: any,) => {
           thisObj.setState({ masker: false });
           if (res.code === '200') {
             message.success(values.qybz=='Y'? '指标启用成功！':'指标停用成功');
-            unitRef.current?.reload2();
+            refUnit.current?.reload2();
             DDAlert.close();
           } else {
             message.error(res?.msg);

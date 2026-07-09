@@ -22,15 +22,15 @@ const Scmx: React.FC<DDModalGridProps> = ({
   const [masker, setMasker] = useState<boolean>(false);
   const [num, setNum] = useState<number>(0);
   const [status, setStatus] = useState<any>('');
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   const [none, setNone] = useState<any>();
   const [flag, setFlag] = useState<any>();
 
   
 
   // 开启
-  const showModal = (unitRef: any, info: any) => {
-    setUnitRef(unitRef);
+  const showModal = (refUnit: any, info: any) => {
+    setUnitRef(refUnit);
     setNone('none');
     setInfo(info);
     setModalVisible(true);
@@ -74,7 +74,7 @@ const Scmx: React.FC<DDModalGridProps> = ({
     setNum(0);
     setStatus('');
     setNone('none');
-    unitRef?.current?.reload2();
+    refUnit?.current?.reload2();
   }
 
   return (

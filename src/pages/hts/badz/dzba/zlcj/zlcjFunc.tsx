@@ -8,12 +8,12 @@ import { completeFiling, dzbaZlcjXz } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const zlcjFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 关联单证
 zlcjFunc.relatedDocuments = (param: any, event: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -24,17 +24,17 @@ zlcjFunc.relatedDocuments = (param: any, event: any) => {
     return;
   }
   // 打开单证信息弹窗
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
-    otherRef[1].current?.showModal(param, unitRef, 'gldz');
+    otherRef[1].current?.showModal(param, refUnit, 'gldz');
   } else if (param.otherRef && param.otherRef[1]) {
-    param.otherRef[1].current?.showModal(param, unitRef, 'gldz');
+    param.otherRef[1].current?.showModal(param, refUnit, 'gldz');
   }
 }
 
 // 解除关联
 zlcjFunc.disassociate = (param: any, event: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -49,17 +49,17 @@ zlcjFunc.disassociate = (param: any, event: any) => {
     return;
   }
   // 打开单证信息弹窗
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
-    otherRef[1].current?.showModal(param, unitRef, 'jcgl');
+    otherRef[1].current?.showModal(param, refUnit, 'jcgl');
   } else if (param.otherRef && param.otherRef[1]) {
-    param.otherRef[1].current?.showModal(param, unitRef, 'jcgl');
+    param.otherRef[1].current?.showModal(param, refUnit, 'jcgl');
   }
 }
 // 完成备案
 zlcjFunc.completeFiling = (param: any, event: any) => {
-  const { selectionRows, unitRef, selectionRowKeys, gridRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { selectionRows, refUnit, selectionRowKeys, gridRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info('当前页面无可完成备案的数据！');
     return;
@@ -75,9 +75,9 @@ zlcjFunc.completeFiling = (param: any, event: any) => {
   } else {
     title = '确认对当前筛选条件下所有数据进行完成备案操作？';
     infoType = 'question';
-    const searchModel: any = [...unitRef?.current?.getGridParams()?.initSearchModal];
+    const searchModel: any = [...refUnit?.current?.getGridParams()?.initSearchModal];
 
-    const gridValues = unitRef.current?.getGridParams();
+    const gridValues = refUnit.current?.getGridParams();
     gridValues.searchModel.forEach((item: any) => {
       searchModel.push(item);
     });
@@ -112,7 +112,7 @@ zlcjFunc.completeFiling = (param: any, event: any) => {
         DDAlert.close();
         if (res.code == '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_complete_filing_success' }));
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(res.desc)
         }
@@ -123,13 +123,13 @@ zlcjFunc.completeFiling = (param: any, event: any) => {
 // 下载
 zlcjFunc.dzbaZlcjXz = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const badzbgduuid = record.badzbgduuid;
   const model = { badzbgduuids: [badzbgduuid] }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   // 备案单证 - 单证备案 - 资料查询 - 下载
   dzbaZlcjXz(model).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
       const { blob, fileName } = response.body;
       myUtil.file.downloadZip(blob, fileName);
@@ -143,7 +143,7 @@ zlcjFunc.dzbaZlcjXz = (param: any, event: any) => {
 
 // 上传单证：导入
 zlcjFunc.dzbaZlcjImport = (param: any) => {
-  const { unitRef, selectionRows } = param;
+  const { refUnit, selectionRows } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -154,17 +154,17 @@ zlcjFunc.dzbaZlcjImport = (param: any) => {
     return;
   }
   // 打开弹窗
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
-    otherRef[0].current?.showModal(selectionRows[0], unitRef, 'dr');
+    otherRef[0].current?.showModal(selectionRows[0], refUnit, 'dr');
   } else if (param.otherRef && param.otherRef[0]) {
-    param.otherRef[0].current?.showModal(selectionRows[0], unitRef, 'dr');
+    param.otherRef[0].current?.showModal(selectionRows[0], refUnit, 'dr');
   }
 }
 
 // 上传单证：扫描
 zlcjFunc.dzbaZlcjSm = async (param: any) => {
-  const { unitRef, selectionRows, } = param;
+  const { refUnit, selectionRows, } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -175,11 +175,11 @@ zlcjFunc.dzbaZlcjSm = async (param: any) => {
     return;
   }
   // 打开弹窗
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
-    otherRef[0].current?.showModal(selectionRows[0], unitRef, 'sm');
+    otherRef[0].current?.showModal(selectionRows[0], refUnit, 'sm');
   } else if (param.otherRef && param.otherRef[0]) {
-    param.otherRef[0].current?.showModal(selectionRows[0], unitRef, 'sm');
+    param.otherRef[0].current?.showModal(selectionRows[0], refUnit, 'sm');
   }
 }
 

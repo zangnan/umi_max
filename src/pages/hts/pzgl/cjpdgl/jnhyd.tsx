@@ -33,7 +33,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
 
   Func.sjtq = (param: any) => {
-    const {unitRef} = param;
+    const {refUnit} = param;
     DDAlert.open({
       title: '数据提取',
       infoType: 'info',
@@ -56,7 +56,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
           getJnhydsj(param).then((res2: any) => {
             thisObj.setState({ masker: false });
             if (res2.code === '200') {
-              unitRef?.current?.reload2();
+              refUnit?.current?.reload2();
               message.success(res2.body);
               DDAlert.close();
             } else {
@@ -69,7 +69,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
   }
   Func.add = (param: any) => {
-    const {unitRef} =param;
+    const {refUnit} =param;
     DDAlert.open({
       title: '新建',
       infoType: 'info',
@@ -101,7 +101,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
             if (res2.code === '200') {
               message.success('保存成功！');
               DDAlert.close();
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(res2.msg);
             }
@@ -113,7 +113,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   }
 
   Func.edit = (param: any) => {
-    const {unitRef,selectionRows,selectionRowKeys} =param;
+    const {refUnit,selectionRows,selectionRowKeys} =param;
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -152,7 +152,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
               if (res2.code === '200') {
                 message.success('保存成功！');
                 DDAlert.close();
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
               } else {
                 message.error(res2.msg);
               }
@@ -165,7 +165,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
 
   Func.del = (param: any) => {
-    const {unitRef,selectionRowKeys} =param;
+    const {refUnit,selectionRowKeys} =param;
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -175,7 +175,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
       setMasker(false);
       if (res2.code === '200') {
         message.success('删除成功！');
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
       } else {
         message.error(res2.msg);
       }

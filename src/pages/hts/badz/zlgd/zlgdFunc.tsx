@@ -8,12 +8,12 @@ import { cancellationOfFiling, dataArchiving, dzbaZlgdXz } from '@/pages/hts/ser
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const zlgdFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 资料归档
 zlgdFunc.dataArchiving = (param: any, event: any) => {
-  const { selectionRows, unitRef, gridRef } = param;
+  const { selectionRows, refUnit, gridRef } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const pagination  = gridRef.current.getPagination().total;
     DDAlert.open({
@@ -23,10 +23,10 @@ zlgdFunc.dataArchiving = (param: any, event: any) => {
       infoType: 'question',
       isFormContent: false,
       okCallbackFn: function (thisObj: any) {
-        const searchModel = param.unitRef.current.getGridParams().searchModel;
-        unitRef.current!.setMasker(true);
+        const searchModel = param.refUnit.current.getGridParams().searchModel;
+        refUnit.current!.setMasker(true);
         dataArchiving({adQuery:searchModel}).then((res: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res.code == '200') {
             message.success(intl2.formatMessage({ id: 'message_badz_zlgd_success' }));
             gridRef.current?.reload();
@@ -41,9 +41,9 @@ zlgdFunc.dataArchiving = (param: any, event: any) => {
     for (let i = 0; i < selectionRows.length; i++) {
       uuids.push(selectionRows[i].badzbgduuid);
     }
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     dataArchiving({ badzbgduuids: uuids }).then((res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res.code == '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_zlgd_success' }));
         gridRef.current?.reload();
@@ -51,12 +51,12 @@ zlgdFunc.dataArchiving = (param: any, event: any) => {
         message.error(res.desc)
       }
     })
-    //unitRef.current!.reload2();
+    //refUnit.current!.reload2();
   }
 }
 // 撤销备案
 zlgdFunc.cancellationOfFiling = (param: any, event: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -84,7 +84,7 @@ zlgdFunc.cancellationOfFiling = (param: any, event: any) => {
           } else {
             message.error(res.desc)
           }
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         })
       },
     });
@@ -93,32 +93,32 @@ zlgdFunc.cancellationOfFiling = (param: any, event: any) => {
 // 预览
 zlgdFunc.dzbaZlgdPreview = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   // 打开弹窗
-  const otherRef = param.unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const otherRef = param.refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   if (otherRef && otherRef[0]) {
-    otherRef[0].current?.showModal(record, unitRef, 'zlgd');
-    unitRef.current!.setMasker(false);
+    otherRef[0].current?.showModal(record, refUnit, 'zlgd');
+    refUnit.current!.setMasker(false);
   } else if (param.otherRef && param.otherRef[0]) {
-    param.otherRef[0].current?.showModal(record, unitRef, 'zlgd');
-    unitRef.current!.setMasker(false);
+    param.otherRef[0].current?.showModal(record, refUnit, 'zlgd');
+    refUnit.current!.setMasker(false);
   }
 }
 
 // 下载
 zlgdFunc.dzbaZlgdXz = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const arry: any = [];
   arry.push(record.badzbgduuid);
   const model = {
     badzbgduuids: arry
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   // 备案单证 - 资料归档 - 下载
   dzbaZlgdXz(model).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
       const { blob, fileName } = response.body;
       myUtil.file.downloadZip(blob, fileName);

@@ -10,7 +10,7 @@ const Fplmx: React.FC<FplmxProps> = ({
 }) => {
   return (
     <>
-      <DDBunit2 config={param} func={{unitRef: React.createRef()}}/>
+      <DDBunit2 config={param} func={{refUnit: React.createRef()}}/>
     </>
   );
 };

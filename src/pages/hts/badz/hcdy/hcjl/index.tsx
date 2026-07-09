@@ -96,8 +96,8 @@ const Index: React.FC<ScsbsjProps> = ({
           return;
         }
       }
-      const { unitRef } = param;
-      unitRef.current?.setMasker(true);
+      const { refUnit } = param;
+      refUnit.current?.setMasker(true);
       setMasker(true)
       const data = new FormData();
       let obj;
@@ -115,7 +115,7 @@ const Index: React.FC<ScsbsjProps> = ({
           const { code } = response;
           if (code === '200') {
             setModalVisible(false);
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(intl2.formatMessage({ id: 'message_badz_hcdy_hcrw_success' }));
           } else if (code === '900') {
             message.info(response.desc);
@@ -140,7 +140,7 @@ const Index: React.FC<ScsbsjProps> = ({
           const { code, desc } = response;
           if (code === '200') {
             setModalVisible(false);
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(intl2.formatMessage({ id: 'message_badz_hcdy_hcrw_success' }));
           } else if (code === '900') {
             const html: any = [];
@@ -157,7 +157,7 @@ const Index: React.FC<ScsbsjProps> = ({
           setMasker(false);
         });
       }
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
     });
   }
   // 模板下载

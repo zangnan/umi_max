@@ -18,7 +18,7 @@ import tableStyle from './style.less';
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.tszbcs =(param: any) =>{
@@ -522,14 +522,14 @@ Func.bgdscmx = (param: any) => {
 
 // 不予办理转证明采集
 Func.byblzzmcj = (param:any) => {
-  const { selectionRowKeys, selectionRows, unitRef,otherRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit,otherRef } = param;
   if (selectionRowKeys?.length === 0 || selectionRowKeys?.length === 0) {
-    const gridData = unitRef.current?.getGridData();
+    const gridData = refUnit.current?.getGridData();
     if (!gridData || gridData.length <= 0) {
       message.info(intl2.formatMessage({ id: 'message_common_nodata_export' }));
       return;
     }
-    const gridParams = unitRef.current?.getGridParams();
+    const gridParams = refUnit.current?.getGridParams();
 
     const model: any = [];
     gridParams.searchModel.forEach((item: any, index: number) => {
@@ -538,15 +538,15 @@ Func.byblzzmcj = (param:any) => {
     gridParams.initSearchModal.forEach((item: any, index: number) => {
       model.push(item);
     });
-    Func.check(gridData,unitRef,otherRef);
+    Func.check(gridData,refUnit,otherRef);
   } else {
-    Func.check(selectionRows,unitRef,otherRef);
+    Func.check(selectionRows,refUnit,otherRef);
   }
 
 
 }
 
-Func.check=(selectionRows:any,unitRef:any,otherRef:any)=>{
+Func.check=(selectionRows:any,refUnit:any,otherRef:any)=>{
   const ckrqNd = myUtil.grid.formatDate(selectionRows[0].ckrq1 , 'YYYY-MM-DD').substr(0,4);
     let i = 0;
     let flag = false;
@@ -570,7 +570,7 @@ Func.check=(selectionRows:any,unitRef:any,otherRef:any)=>{
     } else {
       queryCjCsh({tableKey: "MTS_ZXSB_SB_MTS_TSSB_G"}).then((response) => {
         const { code, body } = response;
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (code === '200') {
           const obj = {
             sbpc: body.sbpc,
@@ -580,7 +580,7 @@ Func.check=(selectionRows:any,unitRef:any,otherRef:any)=>{
             if(res.code === '200') {
               const para = body;
               para.glh = res.body.glh
-              otherRef[2].current!.showModal(para,selectionRows,"MTS",unitRef);
+              otherRef[2].current!.showModal(para,selectionRows,"MTS",refUnit);
             }
           })
         }
@@ -590,7 +590,7 @@ Func.check=(selectionRows:any,unitRef:any,otherRef:any)=>{
 
 // 台账筛选
 Func.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -665,7 +665,7 @@ Func.importTzsx = async (param: any) => {
             const { code, msg, body } = response;
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];
@@ -740,7 +740,7 @@ Func.downloadExcel = (param: string) => {
 
 // 导入修改
 Func.importUpdate = async (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -826,7 +826,7 @@ Func.importUpdate = async (param: any) => {
             DDAlert.close();
             if (code === '200') {
               message.success(body);
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else if (code === '900') {
               otherRef[3].current!.showModal(body, "MTS_TSSB_IMPORT_UPDATE_DRWTDC");
             } else {

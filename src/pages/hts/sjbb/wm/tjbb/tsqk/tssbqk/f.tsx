@@ -4,12 +4,12 @@ import myUtil from '@/components/DDAssist/util';
 import moment from 'moment';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 开启自定义Drawer
 Func.renderSbbqd = (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[0]) {

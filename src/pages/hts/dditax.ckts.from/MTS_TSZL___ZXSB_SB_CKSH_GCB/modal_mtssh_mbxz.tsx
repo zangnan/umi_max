@@ -34,7 +34,7 @@ const ModelMbxz: React.FC<AbgdBjProps> = ({
   });
 
    //开启
-  const showModal = (unitRef: any) => {
+  const showModal = (refUnit: any) => {
     formMbxz.setFieldsValue({xzlx: '1', ssq: '', sbpc: ''});
     setKybz(false);
     setModalVisible(true);

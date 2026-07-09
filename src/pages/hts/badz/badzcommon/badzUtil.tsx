@@ -8,7 +8,7 @@ const badzUtil: any = {};
 badzUtil.common = {
   // 下载资料（下载zip）
   xzzl(param: any, flag: any) {
-    const { selectionRows, unitRef } = param;
+    const { selectionRows, refUnit } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     } else {
@@ -23,15 +23,15 @@ badzUtil.common = {
           badzbgduuids: rwbhs,
         };
         if (rwbhs.length > 0) {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           dzbaZlgdXz(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               myUtil.file.downloadZip(blob, fileName);
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
               //message.success({ content: `下载资料成功` });
             } else {
               message.error(response.desc);
@@ -51,15 +51,15 @@ badzUtil.common = {
           badzssquuids: rwbhs,
         };
         if (rwbhs.length > 0) {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           dzbaZlcjSqq(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               myUtil.file.downloadZip(blob, fileName);
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
               //message.success({ content: `下载资料成功` });
             } else {
               message.error(response.desc);
@@ -79,15 +79,15 @@ badzUtil.common = {
           rwbhs: rwbhs,
         };
         if (rwbhs.length > 0) {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           badzAbgdxzfj(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               myUtil.file.downloadZip(blob, fileName);
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
               //message.success({ content: `下载资料成功` });
             } else {
               message.error(response.desc);
@@ -107,15 +107,15 @@ badzUtil.common = {
           badzbgduuids: rwbhs,
         };
         if (rwbhs.length > 0) {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           dzbaZlgdXz(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               myUtil.file.downloadZip(blob, fileName);
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
               //message.success({ content: `下载资料成功` });
             } else {
               message.error(response.desc);
@@ -131,7 +131,7 @@ badzUtil.common = {
   },
   // 打印成册（下载PDF）
   dycc(param: any, flag: any) {
-    const { selectionRows, unitRef } = param;
+    const { selectionRows, refUnit } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     } else {
@@ -148,9 +148,9 @@ badzUtil.common = {
             rzlx: 'badzbgduuid',
             badzczlxDm: '1'
           };
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           abgdDyccDataDT(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               if (rwbhs.length > 1) {
@@ -159,9 +159,9 @@ badzUtil.common = {
                 myUtil.file.downloadPdf(blob, fileName);
               }
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
-              unitRef.current!.reload2();
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
+              refUnit.current!.reload2();
               //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
             } else {
               message.error(response.desc);
@@ -175,18 +175,18 @@ badzUtil.common = {
             rzlx: 'badzbgduuid',
             badzczlxDm: '1'
           };
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           abgdDyccData(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const wjlj = response.body.wjlj;
               changeJzfjToPath({ fzcclj: wjlj }).then((res: any) => {
                 const { blob } = res.body;
                 myUtil.file.downloadPdf(blob, response.body.bgwjm);
                 // 清空选中并设置按钮可用状态
-                unitRef.current?.setSelectionRowKeys([]);
-                unitRef.current?.setSelectionRows([]);
-                unitRef.current!.reload2();
+                refUnit.current?.setSelectionRowKeys([]);
+                refUnit.current?.setSelectionRows([]);
+                refUnit.current!.reload2();
                 //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
               })
             } else {
@@ -208,9 +208,9 @@ badzUtil.common = {
           badzczlxDm: '1'
         };
         if (rwbhs.length == selectionRows.length) {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           assqDyccData(qqbw).then((response: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (response.code === '200') {
               const { blob, fileName } = response.body;
               if (rwbhs.length > 1) {
@@ -219,9 +219,9 @@ badzUtil.common = {
                 myUtil.file.downloadPdf(blob, fileName);
               }
               // 清空选中并设置按钮可用状态
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
-              unitRef.current!.reload2();
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
+              refUnit.current!.reload2();
               //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
             } else {
               message.error(response.desc);
@@ -240,9 +240,9 @@ badzUtil.common = {
           rzlx: 'rwbh',
           badzczlxDm: '1'
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         hcdyHcrwDycc(qqbw).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (response.code === '200') {
             const { blob, fileName } = response.body;
             if (rwbhs.length > 1) {
@@ -251,9 +251,9 @@ badzUtil.common = {
               myUtil.file.downloadPdf(blob, fileName);
             }
             // 清空选中并设置按钮可用状态
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
-            unitRef.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
             //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
           } else {
             message.error(response.desc);

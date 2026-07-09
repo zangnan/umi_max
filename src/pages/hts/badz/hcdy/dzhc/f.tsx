@@ -15,7 +15,7 @@ import myUtil from '@/components/DDAssist/util';
 
 const dzhcFunc: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 根据路由获取业务key
@@ -40,7 +40,7 @@ dzhcFunc.dycc = (param: any) => {
 };
 // 核查报送
 dzhcFunc.hcbs = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -52,15 +52,15 @@ dzhcFunc.hcbs = (param: any) => {
       modalType: 'confirm',
       closeStatus: true,
       okCallbackFn: function (thisObj: any) {
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         badzHcdyHcbs().then((response) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (response.code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
             // 清空选中并设置按钮可用状态
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
-            unitRef.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
           } else {
             message.error(intl2.formatMessage({ id: 'message_delete_error' }));
             return;
@@ -72,7 +72,7 @@ dzhcFunc.hcbs = (param: any) => {
 };
 // 导入核查清单
 dzhcFunc.drHcqd = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   DDAlert.open({
     title: '导入Excel文件',
     infoType: 'warning',
@@ -119,7 +119,7 @@ dzhcFunc.drHcqd = (param: any) => {
         DDAlert.close();
         const { code } = response;
         if (code === '200') {
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           // DDAlert.open({
           //   title: '导入Excel模板',
           //   info: '成功导入Excel模板文件',
@@ -143,7 +143,7 @@ dzhcFunc.drHcqd = (param: any) => {
 };
 // 填写核查说明
 dzhcFunc.txhcsm = (param: any, event: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -176,7 +176,7 @@ dzhcFunc.txhcsm = (param: any, event: any) => {
           DDAlert.close();
           const { code } = response;
           if (code === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success('填写核查说明成功！');
           } else {
             message.error(response.desc);

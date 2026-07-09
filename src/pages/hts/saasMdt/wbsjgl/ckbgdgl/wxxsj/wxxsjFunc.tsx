@@ -11,18 +11,18 @@ import { history } from 'umi';
 import CkbgdFunc from "../../common/CkbgdFunc";
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 更新信息状态
 Func.updateInfoState = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '5', op: 'zdy' });
@@ -55,14 +55,14 @@ Func.updateInfoState = (param: any) => {
           const { code, body, msg } = res;
           if (code === '200') {
             uuids = body.rows
-            updateBgdCzbzApi(uuids, unitRef);
+            updateBgdCzbzApi(uuids, refUnit);
           } else {
             message.error(msg)
           }
         })
       } else {
         uuids = selectionRowKeys;
-        updateBgdCzbzApi(uuids, unitRef);
+        updateBgdCzbzApi(uuids, refUnit);
       }
     }
   });
@@ -70,7 +70,7 @@ Func.updateInfoState = (param: any) => {
 
 // 批量更新 - 出口发票号
 Func.btnPlxgCkfph = (param: any) => {
-  const { unitRef, selectionRowKeys, selectionRows } = param;
+  const { refUnit, selectionRowKeys, selectionRows } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -99,9 +99,9 @@ Func.btnPlxgCkfph = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success("批量更新出口发票成功，共更新" + selectionRowKeys.length + "条数据")
-              unitRef.current!.reload2();
-              unitRef.current?.setSelectionRowKeys([]);
-              unitRef.current?.setSelectionRows([]);
+              refUnit.current!.reload2();
+              refUnit.current?.setSelectionRowKeys([]);
+              refUnit.current?.setSelectionRows([]);
             } else {
               message.error(msg)
             }
@@ -114,7 +114,7 @@ Func.btnPlxgCkfph = (param: any) => {
 
 // 批量更新 - 出口商品代码
 Func.btnPlxgCkspdm = (param: any) => {
-  const { unitRef, selectionRowKeys, selectionRows } = param;
+  const { refUnit, selectionRowKeys, selectionRows } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -143,9 +143,9 @@ Func.btnPlxgCkspdm = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(body)
-            unitRef.current!.reload2();
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
           } else if (code === '0') {
             message.error(msg);
           } else if (code === '900') {
@@ -153,7 +153,7 @@ Func.btnPlxgCkspdm = (param: any) => {
               message.error(msg);
             } else {
               //#region  失败展示页面
-              const otherRef = param.unitRef.current?.getOtherRefs();
+              const otherRef = param.refUnit.current?.getOtherRefs();
               if (otherRef) {
                 otherRef[3].current?.showModal(body, 'ckspDm', '批量修改');
               }
@@ -167,7 +167,7 @@ Func.btnPlxgCkspdm = (param: any) => {
 
 // 批量更新 - 汇率
 Func.btnPlxgHl = (param: any) => {
-  const { unitRef, selectionRowKeys, otherRef, selectionRows } = param;
+  const { refUnit, selectionRowKeys, otherRef, selectionRows } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -183,12 +183,12 @@ Func.btnPlxgHl = (param: any) => {
     ],
     key: 'WBSJ_CKBGD_PLXGHLABZ_QUERY_PAGER'
   }
-  otherRef[2].current?.showModal(unitRef, selectionRowKeys, null, obj);
+  otherRef[2].current?.showModal(refUnit, selectionRowKeys, null, obj);
 }
 
 // 批量更新 - 运费折算数量
 Func.btnPlxgYfzssl = (param: any) => {
-  const { unitRef, selectionRowKeys, selectionRows } = param;
+  const { refUnit, selectionRowKeys, selectionRows } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -219,9 +219,9 @@ Func.btnPlxgYfzssl = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-            unitRef.current!.reload2();
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
           } else {
             message.error(msg)
           }
@@ -233,13 +233,13 @@ Func.btnPlxgYfzssl = (param: any) => {
 
 // 生成信息查询
 Func.produceInfoQuery = (param: any) => {
-  const { unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[4].current?.showModal(param);
   }
@@ -247,8 +247,8 @@ Func.produceInfoQuery = (param: any) => {
 
 // 生成明细报表
 Func.produceDetailsReport = (param: any) => {
-  const { unitRef, selectionRows } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRows } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -257,7 +257,7 @@ Func.produceDetailsReport = (param: any) => {
     message.error(intl.formatMessage({ id: 'message_sjsb_wfsc_bgdsj_info' }));
     return;
   }
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[1].current?.showModal(param, '5');
   }
@@ -284,10 +284,10 @@ Func.openCkbgdh = (param: any, ckbgd: any) => {
 }
 
 Func.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -297,15 +297,15 @@ Func.openCkbgdh2 = (param: any, ckbgd: any) => {
 }
 
 // 更新信息状态接口
-const updateBgdCzbzApi = (param: any, unitRef: any) => {
-  unitRef.current!.setMasker(true);
+const updateBgdCzbzApi = (param: any, refUnit: any) => {
+  refUnit.current!.setMasker(true);
   updateBgdCzbz({ uuids: param }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg ,body} = res;
     if (code === '200') {
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
       DDAlert.open({
         title: intl.formatMessage({ id: 'message_jljghx_sjxz_sjxz_title' }),
         info: intl.formatMessage({ id: 'message_jljghx_sjxz_sjxz_info' }),
@@ -360,7 +360,7 @@ const validatorFlag = {
 // 转不退税
 Func.btnZbts = (param: any) => {
   CkbgdFunc.btnZbts(param, null);
-  /*const { unitRef, selectionRowKeys } = param;
+  /*const { refUnit, selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -379,7 +379,7 @@ Func.btnZbts = (param: any) => {
         if (code === '200') {
           message.success('转不退税成功！');
           close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(msg);
         }
@@ -390,15 +390,15 @@ Func.btnZbts = (param: any) => {
 
 // 重新发往税务总局（报关单）
 Func.sendWxxbgdToSwzj = async (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   // 判断是否勾选数据
   if (gridData.length === 0) {
     message.info(intl.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
   // 获取筛选条件
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   // 设置固定条件
@@ -421,7 +421,7 @@ Func.sendWxxbgdToSwzj = async (param: any) => {
       if (code === '200') {
         uuids = body.rows
         // 调用环境检测
-        openKhdgjHjjc(uuids, unitRef, otherRef, modalTitle);
+        openKhdgjHjjc(uuids, refUnit, otherRef, modalTitle);
       } else {
         message.error(msg);
       }
@@ -429,7 +429,7 @@ Func.sendWxxbgdToSwzj = async (param: any) => {
   } else {
     uuids = selectionRowKeys;
     // 调用环境检测
-    openKhdgjHjjc(uuids, unitRef, otherRef, modalTitle);
+    openKhdgjHjjc(uuids, refUnit, otherRef, modalTitle);
   }
 }
 

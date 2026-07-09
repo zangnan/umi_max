@@ -10,7 +10,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import qxUtil from '@/pages/hts/common/qxUtil';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -56,12 +56,12 @@ Func.columnsRender = {
 
 // 绑定角色
 Func.bdjs = (param: any) => {
-  const { unitRef, selectionRowKeys } = param;
+  const { refUnit, selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
     otherRef[1].current?.showModal(param, selectionRowKeys);
   } else if (param.otherRef && param.otherRef[1]) {
@@ -100,8 +100,8 @@ Func.del2 = (param: any) => {
 }
 // 打开弹窗-新建用户
 Func.addYh = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param,[], '新建');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -110,7 +110,7 @@ Func.addYh = (param: any) => {
 };
 
 Func.yhsq = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -120,7 +120,7 @@ Func.yhsq = (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, selectionRows[0], '授权');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -129,7 +129,7 @@ Func.yhsq = (param: any) => {
 }
 // 打开弹窗-修改用户
 Func.editYh = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -143,7 +143,7 @@ Func.editYh = (param: any) => {
     message.info('渠道用户不可修改！');
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, selectionRows[0], '修改');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -152,7 +152,7 @@ Func.editYh = (param: any) => {
 };
 
 Func.del = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -188,7 +188,7 @@ Func.del = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(msg);
           }
@@ -217,7 +217,7 @@ Func.qyyg = (param: any) => {
 
 //开关值改变
 const onChangeSwitch = (param: any) => {
-  const { record, unitRef ,checked} = param;
+  const { record, refUnit ,checked} = param;
   let bz = "N";
   if(checked){
     bz = "Y";
@@ -226,12 +226,12 @@ const onChangeSwitch = (param: any) => {
     yhuuid1Dqlb: record.yhuuid1Dqlb,
     yxbz: bz,
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   enableOrDisableYh(params).then((res: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg } = res;
     if (code == '200') {
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
       message.success("修改用户状态成功！");
     } else {
       message.error(msg)
@@ -241,14 +241,14 @@ const onChangeSwitch = (param: any) => {
 
 
 Func.bdyh = (param: any,flag :any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
     otherRef[4].current?.showModal(param,[], flag);
 }
 
 Func.yhhy = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   otherRef[6].current?.showModal(param,[]);
 }
 export default Func;

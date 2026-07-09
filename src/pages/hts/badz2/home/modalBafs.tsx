@@ -50,7 +50,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
 
   // 备案方式保存
   const bafsSave = () => {
-    const { record, unitRef } = mainParams;
+    const { record, refUnit } = mainParams;
     const formValue = form.getFieldsValue();
     if (formValue.bafs === '2') { // 电子化备案
       const params = { ...record, bafs: formValue.bafs, ppgzDm: formValue.ppgzDm }
@@ -58,7 +58,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
         const { code, desc } = response;
         if (code === '200') {
           closeModalVisible();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('已切换为电子备案');
         } else {
           message.error(desc);

@@ -11,12 +11,12 @@ import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 import tableStyle from './style.less';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配置项：自定义工具栏 冲减出口
 Func.cjck = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info('请选择要操作的数据！');
     return;
@@ -58,11 +58,11 @@ Func.cjck = (param: any) => {
           mdtYsbToCj(apiParam).then((response: any) => {
             thisObj.setState({ masker: false });
             const { code, body, desc } = response;
-            unitRef.current?.setMasker(false);
+            refUnit.current?.setMasker(false);
             if (code === '200') {
               DDAlert.close();
               message.info(body);
-              // unitRef.current?.reload2(); // 刷新并清空SelectionRows、SelectionRowKeys
+              // refUnit.current?.reload2(); // 刷新并清空SelectionRows、SelectionRowKeys
               if (Func.closeHwcj) {
                 Func.closeHwcj();
               }
@@ -78,7 +78,7 @@ Func.cjck = (param: any) => {
 
 // 台账筛选
 Func.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -153,7 +153,7 @@ Func.importTzsx = async (param: any) => {
             const { code, msg, body } = response;
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];

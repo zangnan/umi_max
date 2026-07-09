@@ -3,11 +3,11 @@ import wxspFunc from '../wxspglFunc';
 import qtspglFunc from '../qtspglFunc';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.handleFpsqdTzSave = (param: any) => {
-  const { record, otherRef, unitRef } = param;
+  const { record, otherRef, refUnit } = param;
   // 主页面的ref
   const mainRef = otherRef[0].mainRef;
   // 侧滑赋码主页面
@@ -22,7 +22,7 @@ Func.handleFpsqdTzSave = (param: any) => {
     wxspFunc.setFormValues({ form: otherRef[0].form, record, fmMainRef });
   } else if (zslx === 'wxspGrid') {
     // 外销商品列展示
-    wxspFunc.setGridWxspfm({ selectRows: otherRef[0].data, fmUnitRef: unitRef, wxspGridRef: mainRef, record, fmMainRef });
+    wxspFunc.setGridWxspfm({ selectRows: otherRef[0].data, fmUnitRef: refUnit, wxspGridRef: mainRef, record, fmMainRef });
   } else if (zslx === 'abgdkj') {
     // 按报关开具 设置税收分类编码
     mainRef.current!.CallbackFmFunc({ record, fmMainRef, data: otherRef[0].data });

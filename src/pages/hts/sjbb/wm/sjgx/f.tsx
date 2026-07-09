@@ -5,12 +5,12 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 更新报表
 Func.updateDataSjbb = (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param);
   }
@@ -18,7 +18,7 @@ Func.updateDataSjbb = (param: any) => {
 
 // 删除
 Func.deleteDataSjbb = (param: any) => {
-  const { selectionRows, selectionRowKeys, gridRef, unitRef } = param;
+  const { selectionRows, selectionRowKeys, gridRef, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info('请选择要操作的数据！');
     return;
@@ -42,13 +42,13 @@ Func.deleteDataSjbb = (param: any) => {
           rwuuids: selectionRowKeys,
           key: 'ZXSB_TZ_RW_DEL',
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         deleteTzData(data).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, desc } = response;
           if (code === '200') {
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             message.success(intl2.formatMessage({ id: 'message_delete_success' }),);
           } else {

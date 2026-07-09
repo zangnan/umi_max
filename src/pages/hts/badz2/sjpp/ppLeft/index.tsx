@@ -26,7 +26,7 @@ const Index: React.FC<leftProps> = ({
     }
   }
   func.afterReload = (param: any) => {
-    const { gridRef,unitRef } = param;
+    const { gridRef,refUnit } = param;
     const gridData = gridRef?.current?.getSource();
     if (gridData && gridData.length > 0) {
       gridLeftClick({ ...param, record: gridData[0] }, gridData[0]?.ppgzDm === '01' ? 'bgd' : 'sbpc');
@@ -37,13 +37,13 @@ const Index: React.FC<leftProps> = ({
 
   // 自动匹配
   func.badzZdpp = (param: any) => {
-    const { record, unitRef } = param;
+    const { record, refUnit } = param;
     if ("Y" === record.sfzdcc) {
       message.error("选定数据已完成备案，无法匹配");
     } else {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       zdppBadz(record).then((response) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, desc } = response;
         if (code === '200') {
           zdppBgdRef.current?.showModal(param, record, "ZDPP");
@@ -58,7 +58,7 @@ const Index: React.FC<leftProps> = ({
   // 解除匹配
   func.badzJcpp = (param: any) => {
     console.log(param);
-    const { record, unitRef } = param;
+    const { record, refUnit } = param;
     console.log(record);
     let jcppParam:any = {};
     let text = '将该单证解除匹配，是否确认？';
@@ -93,13 +93,13 @@ const Index: React.FC<leftProps> = ({
         jcppParam.jcppfwDm = contentFormData.jcppfwDm;
         // 再组装备案情况主键
         jcppParam.baqkUuid = record.uuid;
-       // unitRef.current!.reload2(param);
-        unitRef.current!.setMasker(true);
+       // refUnit.current!.reload2(param);
+        refUnit.current!.setMasker(true);
         badzJcpp(jcppParam).then((response) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             const { code, desc } = response;
             if (code === '200') {
-              unitRef.current!.reload2(param);
+              refUnit.current!.reload2(param);
               message.success('解除匹配成功');
             } else {
               message.error(desc);

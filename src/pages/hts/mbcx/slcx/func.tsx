@@ -3,7 +3,7 @@ import 'moment/locale/zh-cn';
 import {Button} from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 Func.columnsRender = {
   renderCkspDm: (param: any) => {
@@ -23,8 +23,8 @@ Func.columnsRender = {
 }
 
 Func.openCkspDm = (param: any) => {
-  const {unitRef, record} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit, record} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[0]) {
     otherRef[0].current?.showModal(param);
   }

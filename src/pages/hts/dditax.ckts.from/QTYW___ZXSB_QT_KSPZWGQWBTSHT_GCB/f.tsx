@@ -9,7 +9,7 @@ import { queryFpWzxx } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化

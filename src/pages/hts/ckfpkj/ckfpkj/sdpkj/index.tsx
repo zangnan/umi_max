@@ -69,15 +69,15 @@ const Index: React.FC<unknown> = () => {
 
   // 提交开票（登录态验证）
   func.handleTjkp = async (param: any) => {
-    const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+    const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
     const fpsqduuids: any = [];
     if (selectionRowKeys && selectionRowKeys.length > 0) {
       selectionRows.forEach((row: any) => {
         fpsqduuids.push(row.fpsqduuid);
       });
     }
-    const gridData = unitRef.current?.getGridData();
-    const searchModel = unitRef.current.getGridParams().searchModel || [];
+    const gridData = refUnit.current?.getGridData();
+    const searchModel = refUnit.current.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if (gridData.length === 0) {
@@ -96,18 +96,18 @@ const Index: React.FC<unknown> = () => {
       cxtj: allSearchModel,
       fpsqduuids: fpsqduuids,
     };
-    tjTjkp(kptj, obj, unitRef);
+    tjTjkp(kptj, obj, refUnit);
   }
 
 
 
-  const tjTjkp =  (kptj: any, obj: any, unitRef: any) => {
+  const tjTjkp =  (kptj: any, obj: any, refUnit: any) => {
     if (qxUtil.getQxz(paramLq)) {
-      kp(kptj, obj, unitRef);
+      kp(kptj, obj, refUnit);
     } else {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       checkDlt2({}).then( (res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, body } = res;
         if (code == "200") {
           const dlbz = body?.dlbz;
@@ -116,11 +116,11 @@ const Index: React.FC<unknown> = () => {
             message.error('操作失败，请联系管理员!');
           } else {
             if (dlbz === 'Y' && rzbz === 'Y') {
-              kp(kptj, obj, unitRef);
+              kp(kptj, obj, refUnit);
             } else if (dlbz != 'Y') {
-              tz('2004', kptj, obj, unitRef);
+              tz('2004', kptj, obj, refUnit);
             } else if (dlbz == 'Y' && rzbz != 'Y') {
-              tz('2005', kptj, obj, unitRef);
+              tz('2005', kptj, obj, refUnit);
             }
           }
         } else {
@@ -131,10 +131,10 @@ const Index: React.FC<unknown> = () => {
   }
 
 
-  const kp = (kptj: any , obj: any, unitRef: any) => {
-    unitRef?.current?.setMasker(true);
+  const kp = (kptj: any , obj: any, refUnit: any) => {
+    refUnit?.current?.setMasker(true);
     djcsjkptj(kptj).then((res1: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res1.code != '200') {
         message.info(res1.msg);
         return;
@@ -157,12 +157,12 @@ const Index: React.FC<unknown> = () => {
         ],
         okCallbackFn:  function () {
           obj.pch = res1.body.pch;
-          unitRef?.current?.setMasker(true);
+          refUnit?.current?.setMasker(true);
           ddtjkp2(obj).then((res2: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             if (res2.code === '200') {
               message.success(res2.msg);
-              unitRef?.current?.reload2();
+              refUnit?.current?.reload2();
             } else {
               message.error(res2.msg);
             }
@@ -172,9 +172,9 @@ const Index: React.FC<unknown> = () => {
     });
   }
 
-  const tz = (rtnCode: any, kptj: any, obj: any, unitRef: any) => {
+  const tz = (rtnCode: any, kptj: any, obj: any, refUnit: any) => {
     if (rtnCode === '2004') {
-      unitRef?.current?.setMasker(true);
+      refUnit?.current?.setMasker(true);
       if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz?.current?.showModal();
       } else {
@@ -191,20 +191,20 @@ const Index: React.FC<unknown> = () => {
           }
           // 刷新页面
           await checkDlt2({}).then(async (res: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             const { code, body, msg } = res;
             if (code == '200') {
               const dl = body?.dlbz == 'Y' ? true : false;
               const rz = body?.rzbz;
               //已登錄
               if (dl && rz == 'N') {
-                tz("2005", kptj, obj, unitRef);
+                tz("2005", kptj, obj, refUnit);
               }
               if (dl && rz == 'Y') {
-                kp(kptj, obj, unitRef);
+                kp(kptj, obj, refUnit);
               }
               if (dl && rz == 'U') {
-                tz("2005", kptj, obj, unitRef);
+                tz("2005", kptj, obj, refUnit);
               }
             } else {
               message.error(msg);
@@ -213,7 +213,7 @@ const Index: React.FC<unknown> = () => {
         }
       }, 1000);
     } else {
-      unitRef?.current?.setMasker(true);
+      refUnit?.current?.setMasker(true);
       refSmrz?.current?.showModal();
       if (isTimerActive()) {
         clearInterval(timerRef.current);
@@ -222,7 +222,7 @@ const Index: React.FC<unknown> = () => {
         const gbbz = refSmrz?.current?.getXzbz();
         const bool = refSmrz?.current?.getMoVis();
         if (!gbbz) {
-          unitRef?.current?.setMasker(false);
+          refUnit?.current?.setMasker(false);
           if (bool) {
             if (isTimerActive()) {
               clearInterval(timerRef.current);
@@ -233,16 +233,16 @@ const Index: React.FC<unknown> = () => {
           if (isTimerActive()) {
             clearInterval(timerRef.current);
           }
-          unitRef?.current?.setMasker(true);
+          refUnit?.current?.setMasker(true);
           await checkDlt2({}).then(async (res: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             const { code, body, msg } = res;
             if (code == '200') {
               const dl = body?.dlbz == 'Y' ? true : false;
               const rz = body?.rzbz;
               //已登錄
               if (dl && rz != 'N') {
-                kp(kptj, obj, unitRef);
+                kp(kptj, obj, refUnit);
               }
             } else {
               message.error(msg);
@@ -261,7 +261,7 @@ const Index: React.FC<unknown> = () => {
 
   // 上传检查
   func.handleScjc = (param: any) => {
-    const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+    const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -272,9 +272,9 @@ const Index: React.FC<unknown> = () => {
         fpsqduuids.push(row.fpsqduuid);
       });
     }
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     djcsjkptj({ fpsqduuids }).then((res1: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res1.code != '200') {
         message.info(res1.msg);
         return;

@@ -28,7 +28,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
 
 
   const close = async () => {
-    initParam?.unitRef?.current?.reload2();
+    initParam?.refUnit?.current?.reload2();
     setModalVisible(false);
   }
 
@@ -87,23 +87,23 @@ const DrawerForm: React.FC<BdjgProps> = ({
   };
 
   const f: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   //  确认还原
   f.qrhy=(param :any)=>{
-    const {selectionRowKeys,otherRef,unitRef} = param;
-    unitRef.current!.setMasker(true);
+    const {selectionRowKeys,otherRef,refUnit} = param;
+    refUnit.current!.setMasker(true);
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       return;
     }
     const params = {
       yhuuid1s:selectionRowKeys
     }
     yhhy(params).then((res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, msg } = res;
       if (code == '200') {
         close();

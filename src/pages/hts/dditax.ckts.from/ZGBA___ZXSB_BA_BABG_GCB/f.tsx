@@ -8,7 +8,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化
@@ -31,7 +31,7 @@ Func.eventOnChange = {
 
 // 打开新建
 Func.handleCostomerAdd  = (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -50,7 +50,7 @@ Func.handleCostomerEdit  = (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal({...param, ...{ record: selectionRows[0] }});
   } else if (param.otherRef && param.otherRef[0]) {

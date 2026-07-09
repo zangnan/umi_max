@@ -26,7 +26,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   });
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   // 开启
@@ -80,7 +80,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   }
 
   Func.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if (dataSource && dataSource.length > 0) {
@@ -91,14 +91,14 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
 
   Func.save= async (param: any) => {
     const { selectionRowKeys, } = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     const data = {
       "qxzDm": qxzdms,
       "fffwuuids": selectionRowKeys,

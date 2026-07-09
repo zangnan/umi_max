@@ -22,10 +22,10 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     const [exportKey, setExportKey] = useState<any>(""); // 导出key
 
     // 开启
-    const showModal = (unitRef: any, param: any) => {
-        setMainUnitRef(unitRef)
+    const showModal = (refUnit: any, param: any) => {
+        setMainUnitRef(refUnit)
         setParamValue(param)
-        getCxss(param, unitRef,'1')
+        getCxss(param, refUnit,'1')
         setExportKey(param?.uuids);
     };
 

@@ -9,13 +9,13 @@ import { message } from 'antd'
 import moment from 'moment';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化
 Func.initAddForm = (param: any) => {
   // DditCktsFormCommonFunc.initAddForm(param);
-  const { form, handleModalVisible, unitKey, unitRef, doSuccess, setMasker } = param;
+  const { form, handleModalVisible, unitKey, refUnit, doSuccess, setMasker } = param;
   let apiParam: any = {
     lcswsxDm: '',
     tableKey: unitKey,
@@ -52,7 +52,7 @@ Func.initAddForm = (param: any) => {
     if (setMasker) {
       setMasker(false);  // 按报关单生成明细：外贸、生产、证明开具
     } else {
-      unitRef.current?.setMasker(false); // 通用页面
+      refUnit.current?.setMasker(false); // 通用页面
     }
     if (handleModalVisible) {
       handleModalVisible(true); // 通用页面

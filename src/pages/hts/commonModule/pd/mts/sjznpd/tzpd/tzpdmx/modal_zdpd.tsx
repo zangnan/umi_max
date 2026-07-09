@@ -35,7 +35,7 @@ const ModelZdpd: React.FC<AbgdBjProps> = ({
   });
 
    //开启
-  const showModal = (unitRef: any, params: any) => {
+  const showModal = (refUnit: any, params: any) => {
     setPdBgdts(params.bgdts);
     setBgdSxtj(params.sxtj);
     formZdpd.setFieldsValue({ckrq1: [],pdgz:['SPMC', 'DW', 'SL'], jhxfzzszyfpbz: 'N'});

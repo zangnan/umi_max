@@ -96,19 +96,19 @@ const ModalForm: React.FC<BdjgProps> = ({
 
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   Func.add = (param: any) => {
-    const { unitRef} = param;
-    setParam2(unitRef?.current);
+    const { refUnit} = param;
+    setParam2(refUnit?.current);
     form.setFieldsValue({"fwDm":fwdm})
     setModalVisible2(true);
   };
 
   Func.edit = (param: any) => {
-    const {unitRef,selectionRowKeys,selectionRows} = param;
-    setParam2(unitRef?.current);
+    const {refUnit,selectionRowKeys,selectionRows} = param;
+    setParam2(refUnit?.current);
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -124,7 +124,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   
 
   Func.del33 = (param: any) => {
-    const {selectionRowKeys,unitRef} = param;
+    const {selectionRowKeys,refUnit} = param;
     setMasker(true);
     deleteFffw({"fffwuuids": selectionRowKeys}).then((res: any) => {
       setMasker(false);
@@ -166,7 +166,7 @@ const ModalForm: React.FC<BdjgProps> = ({
     setModalVisible(false)  ;
     setFwdm('');
     form.resetFields();
-    initParam.unitRef.current!.reload2();
+    initParam.refUnit.current!.reload2();
   }
   return (
     <>

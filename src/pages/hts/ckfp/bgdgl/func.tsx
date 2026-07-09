@@ -10,12 +10,12 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 打开弹窗
 Func.openBgdxzModal = (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -102,7 +102,7 @@ Func.sjxz = async (parma: any) => {
 }
 
 Func.handleBgdTbjgzt = async (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   const bgdsjly = cktsUtil.sys.bgdsjlyType();
   let params = {
     sjgjsjDms: ['070000'],
@@ -250,7 +250,7 @@ Func.handleBgdTbjgzt = async (param: any) => {
   //   isFormContent: true,
   //   modalType: 'confirm',
   //   okCallbackFn: async function (thisObj: any) {
-  //     unitRef.current!.setMasker(true);
+  //     refUnit.current!.setMasker(true);
   //     //口岸卡密码查询
   //     const result = await queryKakPassword({});
   //     const { code, body } = result;
@@ -280,7 +280,7 @@ Func.handleBgdTbjgzt = async (param: any) => {
   //                   }
 
   //                 }
-  //                 unitRef.current!.setMasker(false);
+  //                 refUnit.current!.setMasker(false);
   //                 const titleMessage = "下载任务";
   //                 const infoMessage = "启动下载任务成功";
   //                 const contMessage = "可在进度查询菜单里查询下载情况";
@@ -299,16 +299,16 @@ Func.handleBgdTbjgzt = async (param: any) => {
 
 
   //               }else{
-  //                 unitRef.current!.setMasker(false);
+  //                 refUnit.current!.setMasker(false);
   //                 message.error({content: response.msg});
   //               }
   //             });
   //           }else{
-  //             unitRef.current!.setMasker(false);
+  //             refUnit.current!.setMasker(false);
   //             message.error({content: msg});
   //           }
   //       } else {
-  //         unitRef.current!.setMasker(false);
+  //         refUnit.current!.setMasker(false);
   //         DDAlert.close();
   //         message.error('口岸卡密码查询失败！');
   //       }

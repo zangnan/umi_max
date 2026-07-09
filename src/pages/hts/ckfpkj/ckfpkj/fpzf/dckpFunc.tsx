@@ -11,12 +11,12 @@ import myUtil from '@/components/DDAssist/util';
 import { CheckOutlined, TransactionOutlined, DeleteOutlined, CoffeeOutlined, CloudDownloadOutlined} from '@ant-design/icons';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 设置作废标志
 Func.handleSzzfbz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -31,9 +31,9 @@ Func.handleSzzfbz = (param: any) => {
     const tempArr = selectionRows.map((row: any) => {
       return (row.fpsqduuid)
     })
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     dckphczftj({'fpsqduuids':tempArr}).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, body, desc ,msg} = response;
       if (code === '200') {
         DDAlert.open({
@@ -49,12 +49,12 @@ Func.handleSzzfbz = (param: any) => {
           ],
           closeStatus: true,
           okCallbackFn: function (thisObj: any) {
-            unitRef.current?.setMasker(true);
+            refUnit.current?.setMasker(true);
             fpzfDckp({ szzflx: '1', fpsqduuids: tempArr }).then((response) => {
-              unitRef.current?.setMasker(false);
+              refUnit.current?.setMasker(false);
               const { code, desc } = response;
               if (code === '200') {
-                unitRef.current?.reload2();
+                refUnit.current?.reload2();
                 message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_setzfbz_success' }));
               } else {
                 message.error(desc)
@@ -76,8 +76,8 @@ Func.handleSzzfbz = (param: any) => {
 
 // 自定义工具栏：导出开票结果
 Func.exportKpjg = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef,gridRef } = param;
-  const gridData  = param.unitRef.current.getGridData();
+  const { selectionRowKeys, selectionRows, refUnit,gridRef } = param;
+  const gridData  = param.refUnit.current.getGridData();
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
     return;
@@ -95,9 +95,9 @@ Func.exportKpjg = (param: any) => {
   }
   key = 'SAAS_CKFPKJ_FPGL_DCKPJG_DCKP_DC';
 
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
-  const initSearchModel = unitRef.current.getGridParams().initSearchModal || [];
+  const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'uuids', values: selectionRowKeys, op: 'ain' },...initSearchModel]);

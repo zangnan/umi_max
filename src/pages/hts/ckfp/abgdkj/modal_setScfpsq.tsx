@@ -48,7 +48,7 @@ const ModalScfp: React.FC<DDModalGridProps> = ({ onRef }) => {
 
   // const intl = useIntl();
   // 开启
-  const showModal = (param: any, param1: any, unitRef: any, param2: any) => {
+  const showModal = (param: any, param1: any, refUnit: any, param2: any) => {
     setModalVisibleK(true);
     const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
     setSearchModel(param2)
@@ -56,7 +56,7 @@ const ModalScfp: React.FC<DDModalGridProps> = ({ onRef }) => {
     formkpsqd.setFieldsValue({ scfpspd: '1' });
     setSelectedRows(param);
     seFpxxData(param1);
-    setMainRef(unitRef);
+    setMainRef(refUnit);
     // if(temp && temp[0].fpzlDm1 == '5') {
     //   setMxspfkscDisable(true);
     // } else {

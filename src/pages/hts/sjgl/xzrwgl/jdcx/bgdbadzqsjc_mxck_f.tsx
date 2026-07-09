@@ -7,7 +7,7 @@ import {history} from "@@/core/history";
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -21,11 +21,11 @@ Func.columnsRender = {
 }
 
 Func.bgdbadzqsjcMxckSjxz = async (param: any) => {
-  const {unitRef, gridRef} = param;
+  const {refUnit, gridRef} = param;
   const gdfs = gridRef?.current?.getPagination()?.total;
   const zrwuuid = Func.getZrwuuid();
   const badzlxYrw = Func.getBadzlx();
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   checkSjglRwglBgdbadzqsjcMxckSjxz({zrwuuid: zrwuuid}).then(async (res) => {
     const {code, msg} = res;
     if ('200' == code) {
@@ -48,7 +48,7 @@ Func.bgdbadzqsjcMxckSjxz = async (param: any) => {
       });
       const kakxx: any = [];
       queryKak({}).then((res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const {code, msg, body} = res;
         if (code === '200') {
           for (let i = 0; i < body.length; i++) {
@@ -97,7 +97,7 @@ Func.bgdbadzqsjcMxckSjxz = async (param: any) => {
                       thisObj.setState({masker: false});
                       const {code, msg} = res;
                       if ('200' == code) {
-                        const otherRef = unitRef.current?.getOtherRefs();
+                        const otherRef = refUnit.current?.getOtherRefs();
                         if (otherRef) {
                           DDAlert.close();
                           otherRef[0].current?.showModal(cs, kakuuid);
@@ -144,7 +144,7 @@ Func.bgdbadzqsjcMxckSjxz = async (param: any) => {
         }
       });
     } else {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       message.error(msg);
     }
   });

@@ -20,7 +20,7 @@ const ZdppBgd: React.FC<ZdppBgd> = ({ onRef, visible = false }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   const [masker, setMasker] = useState<boolean>(false);
   // 主列表刷新使用
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   // 报关单匹配规则标志
   const [bgdPpbz, setBgdPpbz] = useState<boolean>(false);
   // 点击数据局
@@ -40,7 +40,7 @@ const ZdppBgd: React.FC<ZdppBgd> = ({ onRef, visible = false }) => {
     setBgdPpbz(ppbgz);
     setRecord(record);
     setOpenType(openType);
-    setUnitRef(param.unitRef);
+    setUnitRef(param.refUnit);
     if (ppbgz) {
       // 执行右侧全部关单详情、单证不齐关单，匹配条数3个接口
       setMasker(true);
@@ -125,7 +125,7 @@ const ZdppBgd: React.FC<ZdppBgd> = ({ onRef, visible = false }) => {
             if (code === '200') {
               message.success('操作成功');
               close();
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(desc);
             }

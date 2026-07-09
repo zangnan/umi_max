@@ -163,7 +163,7 @@ const Tzpd: React.FC<PdrwProps> = ({
   ];
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
 
@@ -203,7 +203,7 @@ const Tzpd: React.FC<PdrwProps> = ({
 
   const close =()=>{
     setModalVisible(false);
-    record?.unitRef?.current?.reload2();
+    record?.refUnit?.current?.reload2();
 
   }
 

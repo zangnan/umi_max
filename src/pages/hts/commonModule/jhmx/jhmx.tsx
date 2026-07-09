@@ -60,7 +60,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   // 共同方法集合 包括出口报关单信息列表选择、基础信息输入框事件
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     columnsRender: {
       fpzt: (param: any) => {
         const record = param?.record;
@@ -109,8 +109,8 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   const save = async () => {
     // initData.gridRef.current?.reload();
     const current2 = initData.gridRef.current;
-    const current = Func.unitRef.current;
-    // const reload2 = Func.unitRef.current!.reload2;
+    const current = Func.refUnit.current;
+    // const reload2 = Func.refUnit.current!.reload2;
     form.validateFields().then((formValues: any) => {
       if (selectRows.length === 0) {
         message.info(intl.formatMessage({ id: 'message_handle_unselected' }));

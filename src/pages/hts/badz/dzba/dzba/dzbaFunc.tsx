@@ -11,7 +11,7 @@ import moment from 'moment';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import { EditOutlined, WarningOutlined } from '@ant-design/icons';
 const dzbaFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 根据路由获取业务key
@@ -28,13 +28,13 @@ dzbaFunc.getYwKey = () => {
 
 // 获取申报数据
 dzbaFunc.obtainDeclarationData = (param: any, event: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   otherRef[0].current?.showModal(param);
 }
 
 //删除
 dzbaFunc.del = (param: any) => {
-  const { selectionRowKeys, selectionRows, gridRef, unitRef, formQuickFilter } = param;
+  const { selectionRowKeys, selectionRows, gridRef, refUnit, formQuickFilter } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -52,18 +52,18 @@ dzbaFunc.del = (param: any) => {
     modalType: 'confirm',
     closeStatus: true,
     okCallbackFn: function (thisObj: any) {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       const data = { uuids: selectionRowKeys };
       sbsjsc(data).then((response) => {
         const { code, desc } = response;
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
           close();
-          unitRef.current!.reload2();
-          unitRef.current!.setMasker(false);
+          refUnit.current!.reload2();
+          refUnit.current!.setMasker(false);
         } else {
           message.error(desc);
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
         }
       })
     }
@@ -89,7 +89,7 @@ dzbaFunc.dzbaHandle = (param: any, event: any) => {
 // 修改受理日期
 dzbaFunc.modifySlrq = (param: any) => {
   // record原始数据的所有数据信息
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   DDAlert.open({
     title: '修改受理日期',
     infoType: 'info',
@@ -113,7 +113,7 @@ dzbaFunc.modifySlrq = (param: any) => {
         DDAlert.close();
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_xgslrq_success' }))
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(desc);
         }

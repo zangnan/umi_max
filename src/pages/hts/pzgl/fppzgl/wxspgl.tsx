@@ -68,7 +68,7 @@ const Index: React.FC<{ data?: any }> = ({
 
  // 导入
  func.btnPldr  = async (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '导入Excel文件',
     infoType: 'warning',
@@ -117,7 +117,7 @@ const Index: React.FC<{ data?: any }> = ({
     </>,
     okCallbackFn: function (thisObj: any) {
       DDAlert.getForms().validateFields().then((values: any) => {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           const formData = new FormData();
           formData.append('fileName', values.file[0].name);
           formData.append('sfyggxh',sfyggxh );
@@ -128,7 +128,7 @@ const Index: React.FC<{ data?: any }> = ({
             DDAlert.close();
             if (code === '200') {
               message.success('导入成功');
-              unitRef.current!.handleReset();
+              refUnit.current!.handleReset();
               otherRef[2].current!.getDclsjBttj(); // 刷新头部条数
             } else if (code === '900') {
               const obj: any = {
@@ -141,7 +141,7 @@ const Index: React.FC<{ data?: any }> = ({
           }).catch(() => {
            // message.error('导入失败，请重新上传文件。');
           }).finally(() => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           });
       });
     },
@@ -151,7 +151,7 @@ const Index: React.FC<{ data?: any }> = ({
 
   // 导入
   func.btnPldr2 = (param: any) => {
-    const { unitRef, otherRef } = param;
+    const { refUnit, otherRef } = param;
     const beforeUpload = (file: any) => {
       const isLt2M = file.size;
       if (isLt2M > 10485760) {
@@ -196,7 +196,7 @@ const Index: React.FC<{ data?: any }> = ({
               DDAlert.close();
               if (code === '200') {
                 message.success('导入成功');
-                unitRef.current!.handleReset();
+                refUnit.current!.handleReset();
                 otherRef[2].current!.getDclsjBttj(); // 刷新头部条数
               } else if (code === '900') {
                 const obj: any = {

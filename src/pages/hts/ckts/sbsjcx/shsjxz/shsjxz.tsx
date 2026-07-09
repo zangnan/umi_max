@@ -138,8 +138,8 @@ const Shsjxz: React.FC<BdjgProps> = ({
       setMasker(false);
       const { code } = res;
       if (code === '200') {
-        const unitRef = Func.unitRef;
-        unitRef.current!.reload2();
+        const refUnit = Func.refUnit;
+        refUnit.current!.reload2();
       } else if (code === '900') {
         message.info(res.msg);
       } else {
@@ -170,8 +170,8 @@ const Shsjxz: React.FC<BdjgProps> = ({
       setMasker(false);
       const { code, msg } = res;
       if (code === '200') {
-        const unitRef = Func.unitRef;
-        unitRef.current!.reload2();
+        const refUnit = Func.refUnit;
+        refUnit.current!.reload2();
       } else {
         message.info(msg);
       }
@@ -192,8 +192,8 @@ const Shsjxz: React.FC<BdjgProps> = ({
       const { code, msg, desc } = res;
       if (code === '200') {
         message.success(desc);
-        const unitRef = Func.unitRef;
-        unitRef.current!.reload2();
+        const refUnit = Func.refUnit;
+        refUnit.current!.reload2();
       } else {
         message.info(msg);
       }

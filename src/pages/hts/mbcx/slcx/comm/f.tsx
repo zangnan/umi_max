@@ -37,14 +37,14 @@ Func.cktsCommonSum = (param: any) => {
 
 // 原在线申报系统模块：序号重排
 Func.cktsCommonOrder = (param: any) => {
-  const { refCktsOrder, unit_key, unit_lcswsx_dm, gridData = [], type, unitRef, order_key } = param;
+  const { refCktsOrder, unit_key, unit_lcswsx_dm, gridData = [], type, refUnit, order_key } = param;
   let ssq: any = gridData[0]?.ssq || '';
   let sbpc: any = gridData[0]?.sbpc || '';
   const params = {
     lcswsxDm: unit_lcswsx_dm,
     ywCxBz: order_key ? order_key : 'XHCP_' + unit_key,
     type,
-    unitRef,
+    refUnit,
     ssq,
     sbpc,
   }

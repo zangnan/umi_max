@@ -2,7 +2,7 @@ import { Badge, Tooltip } from 'antd';
 import React from 'react';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {

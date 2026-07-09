@@ -73,7 +73,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
 
   // 开票
   const kpSuccess = async (obj: any, ref: any, flag: any) => {
-    const unitRef = ref ? ref : hcUnitRef;
+    const refUnit = ref ? ref : hcUnitRef;
     if (flag === '1') {
       setMasker(true);
       await checkDlt2({}).then(async (res: any) => {
@@ -83,11 +83,11 @@ const Fpkjgl: React.FC<BdjgProps> = ({
           const dl = body?.dlbz;
           const rz = body?.rzbz;
           if (dl == 'Y' && rz == 'Y') {
-            tzHc("200", obj, unitRef);
+            tzHc("200", obj, refUnit);
           } else if (dl != 'Y') {
-            tzHc("2004", obj, unitRef);
+            tzHc("2004", obj, refUnit);
           } else if (dl == "Y" && rz != 'Y') {
-            tzHc("2005", obj, unitRef);
+            tzHc("2005", obj, refUnit);
           }
         } else {
           message.error(res?.msg);
@@ -96,16 +96,16 @@ const Fpkjgl: React.FC<BdjgProps> = ({
     }
   }
 
-  const tzHc = (code: any, obj: any, unitRef: any) => {
+  const tzHc = (code: any, obj: any, refUnit: any) => {
     if (code == '200') {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       sdpfphc2(obj ? obj : paramSdp).then((res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         setMasker(false);
         const { code, body, desc, msg } = res;
         if (code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票红冲申请成功!');
         } else if (code === '900') {
           // 业务校验
@@ -138,13 +138,13 @@ const Fpkjgl: React.FC<BdjgProps> = ({
               const dl = body?.dlbz == 'Y' ? true : false;
               //已登錄
               if (dl && body?.rzbz == "Y") {
-                tzHc("200", obj, unitRef);
+                tzHc("200", obj, refUnit);
               }
               if (dl && body?.rzbz == "U") {
-                tzHc("2005", obj, unitRef);
+                tzHc("2005", obj, refUnit);
               }
               if (dl && body?.rzbz == "N") {
-                tzHc("2005", obj, unitRef);
+                tzHc("2005", obj, refUnit);
               }
             } else {
               message.error(msg);
@@ -169,7 +169,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
               const dl = body?.dlbz == 'Y' ? true : false;
               //已登錄
               if (dl && body?.rzbz != "N") {
-                tzHc("200", obj, unitRef);
+                tzHc("200", obj, refUnit);
               }
             } else {
               message.error(msg);
@@ -186,7 +186,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
 
   // 发票红冲
   zxkpFunc.handleFphc = (param: any) => {
-    const { selectionRowKeys, selectionRows, unitRef } = param;
+    const { selectionRowKeys, selectionRows, refUnit } = param;
     if (selectionRowKeys.length > 1) {
       message.info(intl2.formatMessage({ id: 'message_one_selected' }));
       return;
@@ -226,14 +226,14 @@ const Fpkjgl: React.FC<BdjgProps> = ({
             if (selectionRows[0]?.kpfsDm === '2' && selectionRows[0].fpzlDm1 === '5') {
               // 数电票和在线开票
               // 校验登录状态
-              setUnitRef(unitRef);
+              setUnitRef(refUnit);
               DDAlert.close();
               setParamSdp({ fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy })
               setCheckBtn('hc')
               if(qxUtil.getQxz(paramLq)){
-                tzHc("200", { fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy }, unitRef);
+                tzHc("200", { fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy }, refUnit);
               }
-              kpSuccess({ fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy }, unitRef, '1');
+              kpSuccess({ fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy }, refUnit, '1');
             } else {
               thisObj.setState({ masker: true });
               fphc({ fpsqduuid: selectionRows[0].lzfpsqduuid, hdid: selectionRows[0].xxfhuuid, hcyy }).then((response) => {
@@ -241,7 +241,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  unitRef.current!.reload2();
+                  refUnit.current!.reload2();
                   message.success('重新开票申请成功！');
                 } else if (response.code === '900') {
                   message.error(response.msg);
@@ -259,17 +259,17 @@ const Fpkjgl: React.FC<BdjgProps> = ({
 
   // 蓝票 重新开票 （数电票）
   zxkpFunc.handleCxkpLz =  (param: any) => {
-    const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
-    unitRef.current!.setMasker(true);
+    const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
+    refUnit.current!.setMasker(true);
     if (!selectionRowKeys || selectionRowKeys.length === 0) {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
     }
     let flag = false;
     for (let i = 0; i < selectionRows.length; i++) {
       if (selectionRows[i].fpkjztDm != '2') {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         message.info('请选择发票状态为“开票失败”的数据进行操作!');
         return;
       }
@@ -278,25 +278,25 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         flag = true;
       }
     }
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (qxUtil.getQxz(paramLq)) {
-      tz('200', selectionRowKeys, selectionRows, unitRef);
+      tz('200', selectionRowKeys, selectionRows, refUnit);
     } else {
       if (flag) {
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         checkDlt2({}).then(async (res: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, body } = res;
           if (code == "200") {
             // const rtnCode = body.rtnCode;
             const dlbz = body?.dlbz;
             const rzbz = body?.rzbz;
             if (dlbz === 'Y' && rzbz === 'Y') {
-              tz('200', selectionRowKeys, selectionRows, unitRef);
+              tz('200', selectionRowKeys, selectionRows, refUnit);
             } else if (dlbz != 'Y') {
-              tz('2004', selectionRowKeys, selectionRows, unitRef);
+              tz('2004', selectionRowKeys, selectionRows, refUnit);
             } else if (dlbz == 'Y' && rzbz != 'Y') {
-              tz('2005', selectionRowKeys, selectionRows, unitRef);
+              tz('2005', selectionRowKeys, selectionRows, refUnit);
             }
           } else {
             message.error(res?.msg);
@@ -319,8 +319,8 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         };
         setTjParam(obj);
         setKptj(kptj2);
-        setUnitRef(unitRef);
-        zxkpFunc.open(obj, kptj2, unitRef);
+        setUnitRef(refUnit);
+        zxkpFunc.open(obj, kptj2, refUnit);
       }
     }
   }
@@ -330,9 +330,9 @@ const Fpkjgl: React.FC<BdjgProps> = ({
 
 
 
-  const tz = (rtnCode: any, selectionRowKeys: any, selectionRows: any, unitRef: any) => {
+  const tz = (rtnCode: any, selectionRowKeys: any, selectionRows: any, refUnit: any) => {
     if (rtnCode === '2004') {
-      unitRef?.current?.setMasker(true);
+      refUnit?.current?.setMasker(true);
       if (cktsUtil.fpfw.fpfwlxDm() === '2') {
         refKprz?.current?.showModal();
       } else {
@@ -349,17 +349,17 @@ const Fpkjgl: React.FC<BdjgProps> = ({
           }
           // 刷新页面
           await checkDlt2({}).then(async (res: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             const { code, body, msg } = res;
             if (code == '200') {
               const dl = body?.dlbz == 'Y' ? true : false;
               const rz = body?.rzbz == 'Y' ? true : false;
               //已登錄
               if (dl && !rz) {
-                tz("2005", selectionRowKeys, selectionRows, unitRef);
+                tz("2005", selectionRowKeys, selectionRows, refUnit);
               }
               if (dl && rz) {
-                tz("200", selectionRowKeys, selectionRows, unitRef);
+                tz("200", selectionRowKeys, selectionRows, refUnit);
               }
             } else {
               message.error(msg);
@@ -368,7 +368,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         }
       }, 1000);
     } else if (rtnCode === '2005') {
-      unitRef?.current?.setMasker(true);
+      refUnit?.current?.setMasker(true);
       refSmrz.current!.showModal();
       if (isTimerActive()) {
         clearInterval(timerRef.current);
@@ -377,7 +377,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         const bool = refSmrz.current!.getMoVis();
         const xzbz = refSmrz?.current?.getXzbz();
         if (!xzbz) {
-          unitRef?.current?.setMasker(false);
+          refUnit?.current?.setMasker(false);
           if (bool) {
             if (isTimerActive()) {
               clearInterval(timerRef.current);// 停止定时器
@@ -388,16 +388,16 @@ const Fpkjgl: React.FC<BdjgProps> = ({
           if (isTimerActive()) {
             clearInterval(timerRef.current);// 停止定时器
           }
-          unitRef?.current?.setMasker(true);
+          refUnit?.current?.setMasker(true);
           await checkDlt2({}).then(async (res: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             const { code, body, msg } = res;
             if (code == '200') {
               const dl = body?.dlbz == 'Y' ? true : false;
               const rz = body?.rzbz == 'Y' ? true : false;
               //已登錄
               if (dl && body?.rzbz != "N") {
-                tz("200", selectionRowKeys, selectionRows, unitRef);
+                tz("200", selectionRowKeys, selectionRows, refUnit);
               }
             } else {
               message.error(msg);
@@ -422,15 +422,15 @@ const Fpkjgl: React.FC<BdjgProps> = ({
       };
       setTjParam(obj);
       setKptj(kptj2);
-      setUnitRef(unitRef);
-      zxkpFunc.open(obj, kptj2, unitRef);
+      setUnitRef(refUnit);
+      zxkpFunc.open(obj, kptj2, refUnit);
     }
   }
 
-  zxkpFunc.open = (obj: any, kptj: any, unitRef: any) => {
-    unitRef?.current?.setMasker(true);
+  zxkpFunc.open = (obj: any, kptj: any, refUnit: any) => {
+    refUnit?.current?.setMasker(true);
     djcsjkptj(kptj).then((res1: any) => {
-      unitRef?.current?.setMasker(false);
+      refUnit?.current?.setMasker(false);
       if (res1.code != '200') {
         message.info(res1.msg);
         return;
@@ -448,15 +448,15 @@ const Fpkjgl: React.FC<BdjgProps> = ({
           '税额合计' + myUtil.text.formatNum(res1.body.sehj, '0,0.00') + '元'
         ],
         okCallbackFn: function () {
-          unitRef?.current?.setMasker(true);
+          refUnit?.current?.setMasker(true);
           if (res1.body.pch) {
             obj.pch = res1.body.pch;
           }
           ddtjkp2(obj).then((res2: any) => {
-            unitRef?.current?.setMasker(false);
+            refUnit?.current?.setMasker(false);
             if (res2.code === '200') {
               message.success('重新开票申请成功！');
-              unitRef?.current?.reload2();
+              refUnit?.current?.reload2();
             } else {
               message.error(res2.msg);
             }
@@ -469,7 +469,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
 
   // 红票 重新开票 (旧)
   zxkpFunc.handleFpkjHz = (param: any) => {
-    const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+    const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
     if (selectionRowKeys.length > 1) {
       message.info(intl2.formatMessage({ id: 'message_one_selected' }));
       return;
@@ -482,12 +482,12 @@ const Fpkjgl: React.FC<BdjgProps> = ({
       message.info('请选择“开票失败”的数据进行操作！');
       return;
     }
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     fphc({ fpsqduuid: selectionRows[0].lzfpsqduuid, hcyy: selectionRows[0].hcyy }).then((response) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (response.code === '200') {
         // 清空选中并设置按钮可用状态
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         DDAlert.open({
           title: '发票红冲',
           info: '发票红冲申请成功',

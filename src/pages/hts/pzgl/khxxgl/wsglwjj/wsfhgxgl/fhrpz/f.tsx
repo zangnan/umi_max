@@ -10,7 +10,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import qxUtil from '@/pages/hts/common/qxUtil';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -29,8 +29,8 @@ Func.columnsRender = {
 
 // 打开弹窗-新建付汇人
 Func.addFhr = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param,[], '付汇人采集');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -39,7 +39,7 @@ Func.addFhr = (param: any) => {
 };
 // 打开弹窗-修改付汇人
 Func.editFhr = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -49,7 +49,7 @@ Func.editFhr = (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, selectionRows[0], '付汇人修改');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -59,7 +59,7 @@ Func.editFhr = (param: any) => {
 
 // 删除付汇人
 Func.del = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -82,7 +82,7 @@ Func.del = (param: any) => {
         const { code, msg } = response;
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(msg);
         }

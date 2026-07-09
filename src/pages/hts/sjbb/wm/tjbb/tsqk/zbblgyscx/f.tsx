@@ -3,11 +3,11 @@ import myUtil from '@/components/DDAssist/util';
 import Button from 'antd/es/button';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.openMxzs = (param: any, flag: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, flag);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -16,7 +16,7 @@ Func.openMxzs = (param: any, flag: any) => {
 };
 
 Func.openWfkMxzs = (param: any, flag: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
     otherRef[1].current?.showModal(param, flag);
   } else if (param.otherRef && param.otherRef[1]) {

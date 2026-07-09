@@ -37,7 +37,7 @@ const Zlsc: React.FC<ZlscProps> = ({
   const [masker, setMasker] = useState<boolean>(false); // 打开明细
   const [checkList ,setCheckList]= useState<any>([]);  
   // 开启
-  const showModal = (record: any,unitRef:any) => {
+  const showModal = (record: any,refUnit:any) => {
     setDbzsl(record.dbzsl);
     setRecordPar(record);
     initPage(record);

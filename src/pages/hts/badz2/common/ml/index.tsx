@@ -185,7 +185,7 @@ const DyViewer: React.FC<DyViewerProps> = ({
   };
   // 装订成册备案
   const zdccba = () => {
-    const { record, unitRef } = mainParams;
+    const { record, refUnit } = mainParams;
     const formValue = dzmlForm.getFieldsValue();
     if (ckqygxhtfs === 0 && ckhwysdj === 0 && ckqywtqtdwbgdj === 0 && !formValue.qtdzfs) {
       message.warning('至少要有一份任意单证');
@@ -200,7 +200,7 @@ const DyViewer: React.FC<DyViewerProps> = ({
       const { code, desc, body } = response;
       if (code === '200') {
         closeModalVisible();
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         message.success(body.msg);
       } else {
         message.error(desc);

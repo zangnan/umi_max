@@ -28,7 +28,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   const [yhConfig, setYhConfig] = useState<any>();
 
   const yhFunc: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   // 开启
@@ -84,7 +84,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
 
 
   const close = async () => {
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 

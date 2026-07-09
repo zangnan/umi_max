@@ -12,12 +12,12 @@ import { history } from 'umi';
 import { WarningOutlined } from '@ant-design/icons';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 重新开票
 // Func.handleFpkj = (param: any) => {
-//   const { selectionRowKeys, selectionRows, unitRef, gridRef } = param;
+//   const { selectionRowKeys, selectionRows, refUnit, gridRef } = param;
 //   // 如果不勾选获得全部数据（没做）
 //   const uuids = selectionRowKeys
 //   for (let i = 0; i < selectionRows.length; i++) {
@@ -30,7 +30,7 @@ const Func: any = {
 //   if (selectionRowKeys.length === 0) {
 //     title = '确定对当前筛选条件下所有“待开票”的数据进行重新开票的操作吗？';
 //   }
-//   const searchModel = unitRef.current?.getGridParams().searchModel || [];
+//   const searchModel = refUnit.current?.getGridParams().searchModel || [];
 //   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
 //   const allSearchModel: any = searchModel.concat(headerSearchModel);
 //   for (let i = 0; i < allSearchModel.length; i++) {
@@ -53,7 +53,7 @@ const Func: any = {
 //         DDAlert.close();
 //         if (response.code === '200') {
 //           // 清空选中并设置按钮可用状态
-//           unitRef.current!.reload2();
+//           refUnit.current!.reload2();
 //           DDAlert.open({
 //             title: '重新开票',
 //             info: '重新开票申请成功！',
@@ -76,7 +76,7 @@ const Func: any = {
 
 // 发票撤回
 Func.handleFpch = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -105,7 +105,7 @@ Func.handleFpch = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票撤回成功! 数据已转到“发票申请单”或“导入模板开具”页面。');
         } else {
           message.error(response.desc);
@@ -116,19 +116,19 @@ Func.handleFpch = (param: any) => {
 }
 // 更新状态
 Func.handleUpdateLz = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
 
   // 刷新发票状态（看后端设计
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   const params = {
     fpsqduuids: [],
     cxtj: [],
   }
   fpztsx(params).then((response: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success(response.body);
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response.desc);
     }
@@ -137,7 +137,7 @@ Func.handleUpdateLz = (param: any) => {
 
 // 发票作废
 Func.handleFpzf = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info('请选择一条“开票成功”或“作废失败”的数据进行操作。');
     return;
@@ -170,7 +170,7 @@ Func.handleFpzf = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           DDAlert.open({
             title: '发票作废',
             info: '发票作废申请成功！',
@@ -196,10 +196,10 @@ Func.handleFpzf = (param: any) => {
 // 下载发票PDF
 Func.downloadPDF = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit, record } = param;
+  refUnit.current?.setMasker(true);
   fpxz({ fpsqduuid: record.fpsqduuid }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       const { blob, fileName } = response.body;
       myUtil.file.downloadPdf(blob, fileName);
@@ -213,7 +213,7 @@ Func.downloadPDF = (param: any, event: any) => {
 // 打印发票
 Func.printInvoice = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   dyjcx({}).then((res) => {
     const { code, desc, body } = res;
     if (code === '200') {
@@ -244,7 +244,7 @@ Func.printInvoice = (param: any, event: any) => {
                 thisObj.setState({ masker: false });
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  unitRef.current!.reload2();
+                  refUnit.current!.reload2();
                   message.success('操作成功');
                   DDAlert.close();
                 } else {
@@ -287,8 +287,8 @@ Func.printInvoice = (param: any, event: any) => {
 
 // 自定义工具栏：导出开票结果
 Func.exportKpjg = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef, gridRef } = param;
-  const gridData  = param.unitRef.current.getGridData();
+  const { selectionRowKeys, selectionRows, refUnit, gridRef } = param;
+  const gridData  = param.refUnit.current.getGridData();
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
     return;
@@ -330,7 +330,7 @@ Func.exportKpjg = (param: any) => {
     key = 'SAAS_CKFPKJ_FPGL_DCKPJG_ZXKP_ZFFP_DC';
   }
 
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {

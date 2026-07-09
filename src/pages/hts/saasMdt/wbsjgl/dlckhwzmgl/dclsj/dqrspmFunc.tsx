@@ -4,18 +4,18 @@ import { message } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 批量补填
 ckfpFunc.btnPlbt = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '2', op: 'zdy' });
@@ -58,7 +58,7 @@ ckfpFunc.btnPlbt = (param: any) => {
 }
 
 const apiCheckCkspSheet = (param: any, obj: any, allSearchModel: any, obj3: any) => {
-  const {otherRef, unitRef} = param;
+  const {otherRef, refUnit} = param;
   checkCkspSheet(obj).then((res:any)=> {
     const {code, body, msg} = res;
     if(code === '200') {
@@ -70,7 +70,7 @@ const apiCheckCkspSheet = (param: any, obj: any, allSearchModel: any, obj3: any)
         message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
         return;
       }
-      otherRef[0].current?.showModal(unitRef, param, otherRef[1], obj3, body);
+      otherRef[0].current?.showModal(refUnit, param, otherRef[1], obj3, body);
     } else {
       message.error(msg);
     }

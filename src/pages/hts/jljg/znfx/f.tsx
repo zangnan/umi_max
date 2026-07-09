@@ -12,7 +12,7 @@ import {commonInitJbxx, exportPager, queryFxzSjTs, queryZnfxPager, znfxCyfx, znf
 import myUtil, {intl as intl2 } from '@/components/DDAssist/util';
 
 const ZnfxFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表数据加载后执行
@@ -85,7 +85,7 @@ ZnfxFunc.afterReload = (param: any) => {
 
 // 智能分析-差异分析
 ZnfxFunc.handleZnfxZnfx = (params: any) => {
-  const { selectionRows, unitRef, gridRef, formQuickFilter} = params;
+  const { selectionRows, refUnit, gridRef, formQuickFilter} = params;
   const uuids: any[] = [];
   let num = 0;
   if (selectionRows && selectionRows.length > 0) {
@@ -191,8 +191,8 @@ ZnfxFunc.handleZnfxZnfx = (params: any) => {
               if (response1.code === '200') {
                 const successMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_znfx_success' });
                 message.success(successMessage);
-                unitRef.current?.setSelectionRowKeys([]);
-                unitRef.current?.setSelectionRows([]);
+                refUnit.current?.setSelectionRowKeys([]);
+                refUnit.current?.setSelectionRows([]);
                 gridRef.current?.reload();
                 // const timer = setInterval(() => {
                 //   const promiseArr = [];
@@ -235,7 +235,7 @@ const queryZnfxFxzZt = async () => {
 
 // 生成明细
 ZnfxFunc.handleZnfxScmx = (params: any) => {
-  const { selectionRows,unitRef,gridRef, formQuickFilter} = params;
+  const { selectionRows,refUnit,gridRef, formQuickFilter} = params;
   const uuids: any[] = [];
   let num = 0;
   if (selectionRows && selectionRows.length > 0) {
@@ -339,15 +339,15 @@ ZnfxFunc.handleZnfxScmx = (params: any) => {
                   // thisObj.setState({ masker: false });
                   if (qrresponse.code === '200') {
                     DDAlert.close();
-                    unitRef.current?.setSelectionRowKeys([]);
-                    unitRef.current?.setSelectionRows([]);
+                    refUnit.current?.setSelectionRowKeys([]);
+                    refUnit.current?.setSelectionRows([]);
                     openResult({
                       mdtTs:qrresponse.body.mdtTs ,
                       hxTs: qrresponse.body.hxTs
                     });
                   } else if (qrresponse.code === '902') {
                     // qrData.zdyModel.cxscbz = 'Y';
-                    // znfxScmxFgSsq(qrData, unitRef);
+                    // znfxScmxFgSsq(qrData, refUnit);
                     thisObj.setState({ masker: false });
                     message.error(qrresponse.desc);
                     return
@@ -418,8 +418,8 @@ ZnfxFunc.handleZnfxScmx = (params: any) => {
 
 // 数据导出
 ZnfxFunc.handleZnfxSjdc = (params: any) => {
-  const { selectionRows, unitRef, gridRef} = params;
-  const gridData = unitRef.current?.getGridData();
+  const { selectionRows, refUnit, gridRef} = params;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length  <= 0 ) {
     message.info(ZnfxFunc.intl.formatMessage({ id: 'message_common_nodata_export' }));
     return ;
@@ -433,7 +433,7 @@ ZnfxFunc.handleZnfxSjdc = (params: any) => {
   const data: any = {
     key: 'JLJG_ZXSB_SB_JLJG_ZNFX_GETSZCMX',
   };
-  const commonValue = unitRef.current?.getGridParams();
+  const commonValue = refUnit.current?.getGridParams();
   const val = commonValue.searchModel;
   const headerVal = gridRef.current?.getHeaderFilter();
   const model: any = [];
@@ -449,10 +449,10 @@ ZnfxFunc.handleZnfxSjdc = (params: any) => {
   }
   data.searchModel = model;
   data.orderModel = commonValue.orderModel;
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   //{property: "ywKey", values: ["QD513121I0000029611"], op: "ain"}
   exportPager(data).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, body, desc } = response;
     if (code === '200') {
       const { blob, fileName } = body;
@@ -479,7 +479,7 @@ ZnfxFunc.handleOnChangeHxzq = (params: any) => {
 }
 
 // 生成明细覆盖所属期
-const znfxScmxFgSsq = (params: any, unitRef: any) => {
+const znfxScmxFgSsq = (params: any, refUnit: any) => {
   const titleMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_fg_title' });
   const infoMessage = ZnfxFunc.intl.formatMessage({ id: 'message_jljghx_znfx_scmx_fg_info' });
   DDAlert.open({
@@ -495,8 +495,8 @@ const znfxScmxFgSsq = (params: any, unitRef: any) => {
       znfxscmx(params).then((response) => {
         DDAlert.close();
         if (response.code === '200') {
-          unitRef.current?.setSelectionRowKeys([]);
-          unitRef.current?.setSelectionRows([]);
+          refUnit.current?.setSelectionRowKeys([]);
+          refUnit.current?.setSelectionRows([]);
           openResult({
             mdtTs:response.body.mdtTs ,
             hxTs: response.body.hxTs
@@ -543,8 +543,8 @@ const openResult = (params: any) => {
 
 // 分析状态为有差异时，打开
 ZnfxFunc.openBdjgYcy = (rows: any, param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[0]) {
     otherRef[0].current?.showModal(rows);
   }
@@ -552,8 +552,8 @@ ZnfxFunc.openBdjgYcy = (rows: any, param: any) => {
 
 // 税务数据，打开
 ZnfxFunc.openJckgd = (jckbz: any, hgsjbz: any, rows: any, param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[1]) {
     otherRef[1].current?.showModal(jckbz, hgsjbz, rows);
   }
@@ -561,8 +561,8 @@ ZnfxFunc.openJckgd = (jckbz: any, hgsjbz: any, rows: any, param: any) => {
 
 // 海关数据，打开
 ZnfxFunc.openJckhzqd = (titleKey: any, rows: any, param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[2]) {
     otherRef[2].current?.showModal(titleKey,rows);
   }
@@ -570,8 +570,8 @@ ZnfxFunc.openJckhzqd = (titleKey: any, rows: any, param: any) => {
 
 // 税务数据数据，已申报出口额
 ZnfxFunc.openYsbcke = (rows: any, param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[3]) {
     otherRef[3].current?.showModal(rows);
   }
@@ -579,8 +579,8 @@ ZnfxFunc.openYsbcke = (rows: any, param: any) => {
 
 // 进（出）口总额
 ZnfxFunc.openJckze = (jckbz: any, hgsjbz: any, rows: any, param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[4]) {
     otherRef[4].current?.showModal(jckbz, hgsjbz, rows);
   }

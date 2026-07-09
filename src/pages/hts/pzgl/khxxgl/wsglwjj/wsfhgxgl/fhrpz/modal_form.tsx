@@ -74,7 +74,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   const close = () => {
     setModalVisible(false);
     form.resetFields();
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
   };
 
   useImperativeHandle(onRef, () => {

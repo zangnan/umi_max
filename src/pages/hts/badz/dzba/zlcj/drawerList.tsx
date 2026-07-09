@@ -29,7 +29,7 @@ const DrawerList: React.FC<DzxxProps> = ({
   const [masker, setMasker] = useState(false);  // 蒙版
 
   // 开启
-  const showModal = (param: any, zunitRef: any, flag: any) => {
+  const showModal = (param: any, zrefUnit: any, flag: any) => {
     let gridParams = {}
     setZlcjSelectedRowKeys(param.selectionRowKeys);
     const config = { ...myConfig };
@@ -62,7 +62,7 @@ const DrawerList: React.FC<DzxxProps> = ({
     }
     config.gridParams = gridParams;
     setModalVisible(true);
-    setMainUnitRef(zunitRef);
+    setMainUnitRef(zrefUnit);
     setMyconfig(config);
   };
 

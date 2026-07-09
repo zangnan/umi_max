@@ -294,7 +294,7 @@ const Hwqd: React.FC<HwqdProps> = ({
           form,
           page_id,
           unit_key,
-          unitRef: myFunc.unitRef,
+          refUnit: myFunc.refUnit,
           handleModalVisible,
           myFormItems,
           setMyFormItems,

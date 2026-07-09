@@ -43,7 +43,7 @@ const Znfx: React.FC<unknown> = () => {
 
   // 重新计算美元额
   ZnfxFunc.handleZnfxMye = (param: any) => {
-    const {selectionRows, unitRef, gridRef} = param;
+    const {selectionRows, refUnit, gridRef} = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -71,9 +71,9 @@ const Znfx: React.FC<unknown> = () => {
     bgdtjmyjjy(params).then((res: any) => {
       const { code, body, msg } = res;
       if (code === '900') {
-        const otherRef = unitRef.current?.getOtherRefs();
+        const otherRef = refUnit.current?.getOtherRefs();
         if (otherRef[5]) {
-          otherRef[5].current?.showModal(unitRef, params, body, startLx);
+          otherRef[5].current?.showModal(refUnit, params, body, startLx);
         }
       } else if(code === '200') {
         // 弹窗关闭
@@ -93,7 +93,7 @@ const Znfx: React.FC<unknown> = () => {
         if(!startLx){
           run();
         } else {
-          unitRef.current!.reload2(); // 刷新页面
+          refUnit.current!.reload2(); // 刷新页面
         }
       }else if(code === '901'){
         message.info(msg)
@@ -112,11 +112,11 @@ const Znfx: React.FC<unknown> = () => {
       if(res01.code === '200') {
         if(res01?.body === 'Y') {
           setStartLx(true);
-          ZnfxFunc?.unitRef.current?.reload2();
+          ZnfxFunc?.refUnit.current?.reload2();
         } else if(res01?.body === 'S') {
           cancel();
           setStartLx(false);
-          ZnfxFunc?.unitRef.current?.reload2();
+          ZnfxFunc?.refUnit.current?.reload2();
         } else {
           setStartLx(true);
         }

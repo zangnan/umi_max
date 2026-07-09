@@ -46,7 +46,7 @@ const Index: React.FC<DDModalGridProps> = ({
     setModalVisible(true);
     form.setFieldsValue({ dylx: 'bgdhs', ckrq1: '', ssq: '', ssqpc: '', dyfs: '01', pxgz: 'ckrq', bgdhs: '', dcmmgz: getMrDcmmgz() });
     setFlag(flag)
-    const { unitRef, gridRef } = param;
+    const { refUnit, gridRef } = param;
     const rows = param?.selectionRows;
     if (rows.length > 0) {
       var arr = new Array();
@@ -60,10 +60,10 @@ const Index: React.FC<DDModalGridProps> = ({
       form.setFieldsValue({ 'bgdhs': arr.toString() });
     }
 
-    // const gridData = unitRef.current?.getGridData()
+    // const gridData = refUnit.current?.getGridData()
     // 列表筛选条件
     const obj: any = {}
-    const searchModel = unitRef.current.getGridParams().searchModel || []; // 筛选
+    const searchModel = refUnit.current.getGridParams().searchModel || []; // 筛选
     setListSearchModel(searchModel);
     const headerSearchModel = gridRef.current?.getHeaderFilter() || []; // 列头筛选
     setListHeaderSearchModel(headerSearchModel);

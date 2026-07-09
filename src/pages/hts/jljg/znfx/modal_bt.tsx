@@ -169,7 +169,7 @@ const EditableCellQr = ({
 };
 
   // 开启 初始化
-  const showModal = (unitRef:any, params: any, dataBody: any, startLx: any) => {
+  const showModal = (refUnit:any, params: any, dataBody: any, startLx: any) => {
     setStartLxFlay(startLx);
     setSelectionRowKeys(params.zbuuids);  // 主键集合
     const bthl = dataBody?.bthl || [];
@@ -188,7 +188,7 @@ const EditableCellQr = ({
       const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
       setHlgz(temp[0].fphlxqgzDm);
       setModalDataTz(btzssl);
-      setPageRef(unitRef);
+      setPageRef(refUnit);
       setModalVisible(true);
     });
   };

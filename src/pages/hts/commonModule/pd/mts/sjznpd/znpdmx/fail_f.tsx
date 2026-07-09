@@ -2,7 +2,7 @@ import React from 'react';
 import myUtil from '@/components/DDAssist/util';
 
 const failFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 failFunc.columnsRender= {
   renderZnpdSdFd: (param: any) => {

@@ -8,13 +8,13 @@ import { message,Form, DatePicker } from 'antd';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配单
 Func.handPdColumns = (param: any) => {
-  const { unitRef, record, otherRef } = param;
-  unitRef.current!.setMasker(true);
+  const { refUnit, record, otherRef } = param;
+  refUnit.current!.setMasker(true);
   const uuid = record.uuid;
   let tableKey;
   // 可用值替换原始值 确保以前的方法不需要调整
@@ -32,7 +32,7 @@ Func.handPdColumns = (param: any) => {
   }
   request(`/yw/bszx/ggfw/sbcs/ywcsxx/queryCjCsh`, { method: 'POST', data: { tableKey: tableKey } }).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const obj = {
         sbpc: body.sbpc,
@@ -44,7 +44,7 @@ Func.handPdColumns = (param: any) => {
           const para = body;
           para.glh = res.body.glh
           para.sbxh = sbxh;
-          otherRef[0].current!.showModal(para, unitRef, record);
+          otherRef[0].current!.showModal(para, refUnit, record);
         }
       })
     }
@@ -54,7 +54,7 @@ Func.handPdColumns = (param: any) => {
 
 // 自动配单
 Func.abgdZdpd = (param: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   DDAlert.open({
     title: '自动配单',
     infoType: 'warning',
@@ -89,7 +89,7 @@ Func.abgdZdpd = (param: any) => {
           thisObj.setState({ masker: false });
           if (code === '200') {
             DDAlert.close();
-            unitRef?.current?.reload2();
+            refUnit?.current?.reload2();
             otherRef[1].current?.showModal({ ...param, zdpdResult: body });
           } else {
             message.error(desc);

@@ -9,7 +9,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import config from './auto_config';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 编辑表单初始化

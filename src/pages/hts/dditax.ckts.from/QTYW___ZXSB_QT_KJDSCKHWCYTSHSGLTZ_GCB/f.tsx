@@ -11,7 +11,7 @@ import {  Access } from 'umi';
 import { QuestionCircleOutlined} from '@ant-design/icons';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 Func.setGridTitle = () => {
   const [title, setTitle] = React.useState('');
@@ -60,7 +60,7 @@ Func.setGridTitle = () => {
 
 // 转入确认表
 Func.zrqrb = (param: any) => {
-  const { unitRef, unit_key,selectionRows,selectionRowKeys,form } = param;
+  const { refUnit, unit_key,selectionRows,selectionRowKeys,form } = param;
   if (!selectionRows || selectionRows.length <= 0) {
     message.info("请选择要操作的数据");
     return;
@@ -143,9 +143,9 @@ Func.zrqrb = (param: any) => {
               if (code === '200') {
                 DDAlert.close();
                 message.info('转入确认表成功');
-                unitRef.current?.setSelectionRowKeys([]);  // 设置SelectionRows
-                unitRef.current?.setSelectionRows([]);     // 设置SelectionRowKeys
-                unitRef.current?.reload2();
+                refUnit.current?.setSelectionRowKeys([]);  // 设置SelectionRows
+                refUnit.current?.setSelectionRows([]);     // 设置SelectionRowKeys
+                refUnit.current?.reload2();
               } else {
                 message.error(desc);
               }

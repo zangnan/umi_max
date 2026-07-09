@@ -6,7 +6,7 @@ import {deleteCdfz } from '@/pages/hts/services/htsApi';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.add = (param: any) => {
@@ -28,12 +28,12 @@ Func.edit = (param: any) => {
 }
 
 Func.del = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  // unitRef.current!.setMasker(true);
+  // refUnit.current!.setMasker(true);
   DDAlert.open({
     title: '删除',
     info: '确定对勾选数据进行删除的操作吗？',
@@ -48,7 +48,7 @@ Func.del = async (param: any) => {
           // 清空选中并设置按钮可用状态
           message.success('删除成功！');
           DDAlert.close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(response.msg);
         }

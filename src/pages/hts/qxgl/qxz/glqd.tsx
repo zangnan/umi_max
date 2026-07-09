@@ -52,7 +52,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   };
 
   qdFunc.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if (dataSource && dataSource.length > 0) {
@@ -63,14 +63,14 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
 
   qdFunc.save = async (param: any) => {
     const { selectionRowKeys, } = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     const data = {
       "qxzDm": rowKeys[0],
       "qdDms": selectionRowKeys,
@@ -113,7 +113,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   const close = async () => {
     setModalVisible(false);
-    // mainRef.unitRef.current.reload2();
+    // mainRef.refUnit.current.reload2();
   }
 
 

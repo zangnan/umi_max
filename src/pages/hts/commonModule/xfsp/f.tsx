@@ -10,7 +10,7 @@ import tableStyle from './style.less';
 
 const { Dragger } = Upload;
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -22,10 +22,10 @@ Func.columnsRender = {
 }
 
 Func.openJkshmYl = (param: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   xfsfppdfyl({ uuid: record?.uuid, ssjkshm: record?.ssjkshm }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body);
     } else {
@@ -36,7 +36,7 @@ Func.openJkshmYl = (param: any) => {
 
 // 台账筛选
 Func.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -113,7 +113,7 @@ Func.importTzsx = async (param: any) => {
             thisObj.setState({ masker: false });
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];
@@ -187,8 +187,8 @@ Func.downloadExcel = (param: string) => {
 }
 
 Func.xfsfpFuncDy = (param: any) => {
-  const {otherRef,unitRef} = param;
-  otherRef[1].current?.showModal(param,unitRef);
+  const {otherRef,refUnit} = param;
+  otherRef[1].current?.showModal(param,refUnit);
 }
 export default Func;
 

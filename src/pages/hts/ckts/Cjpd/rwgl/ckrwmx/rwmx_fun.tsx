@@ -3,15 +3,15 @@ import { tssbTzpdInitScmx } from '@/pages/hts/services/htsApi';
 import { CloseOutlined, CheckOutlined} from '@ant-design/icons';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.scmx = (params: any) => {
-  const {otherRef, unitRef} = params;
+  const {otherRef, refUnit} = params;
   if (otherRef && otherRef[0]) {
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     tssbTzpdInitScmx({}).then(async (response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, body } = response;
       if (code === '200') {
         body.hhcblebal = '换汇成本（'+ body?.hhcbhlxx + '-'+  body?.hhcbhlsx+ '）';

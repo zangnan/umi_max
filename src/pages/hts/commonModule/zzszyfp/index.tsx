@@ -75,8 +75,8 @@ const Index: React.FC = () => {
 
 
   Func.fpdyFuncDy = (param: any) => {
-    const {otherRef,unitRef} = param;
-    otherRef[7].current?.showModal(param,unitRef);
+    const {otherRef,refUnit} = param;
+    otherRef[7].current?.showModal(param,refUnit);
   }
 
   return (

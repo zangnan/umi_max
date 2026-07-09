@@ -25,7 +25,7 @@ export interface DDModalGridProps {
 
 const Mtspd: React.FC<DDModalGridProps> = ({onRef, visible = false, ywKey}) => {
   // const intl = useIntl();
-  const [unitRefs, setUnitRefs] = useState<any>();// 主列表
+  const [refUnits, setUnitRefs] = useState<any>();// 主列表
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   //Form
@@ -434,9 +434,9 @@ const Mtspd: React.FC<DDModalGridProps> = ({onRef, visible = false, ywKey}) => {
     setModalVisible(false);
     setGridData([]);
     setValue(1);
-    unitRefs.current!.reload2();
-    unitRefs.current!.setSelectionRowKeys([]);
-    unitRefs.current!.setSelectionRows([]);
+    refUnits.current!.reload2();
+    refUnits.current!.setSelectionRowKeys([]);
+    refUnits.current!.setSelectionRows([]);
   }
 
   const inputNumperFormatter = (value: any, info: any, format: any) => {
@@ -462,21 +462,21 @@ const Mtspd: React.FC<DDModalGridProps> = ({onRef, visible = false, ywKey}) => {
 
     // 筛选发票（商品）
   const funSp: any = {
-      unitRef: React.createRef(),
+      refUnit: React.createRef(),
       //添加发票
       fptianjia: (param: any) => {
-        const {selectionRows, unitRef} = param;
+        const {selectionRows, refUnit} = param;
         //添加发票
         const newArray = pdFun.bgdpd(gridData, selectionRows, value);
         setGridData(newArray);
-        unitRef?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
+        refUnit?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
         setSpVisible(false);
       },
       // 发票品名查询
       gdpmcx: (param: any) => {
-        const {unitRef} = param;
+        const {refUnit} = param;
         spConfig.filter_items[2].defaultValue = records?.hwhyslwmc
-        unitRef.current?.addQueryModel(records?.hwhyslwmc, 'hgspmc');
+        refUnit.current?.addQueryModel(records?.hwhyslwmc, 'hgspmc');
       },
     };
 

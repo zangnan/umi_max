@@ -6,7 +6,7 @@ import badzUtil from "@/pages/hts/badz/badzcommon/badzUtil";
 import { badzScssqsj, dzbaZlcdSsq, assqDyData } from '@/pages/hts/services/htsApi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 //打印成册
@@ -19,7 +19,7 @@ Func.xzzl = (param: any) => {
 }
 //资料撤档
 Func.zlcd = (param: any) => {
-  const { unitRef, gridRef, selectionRows } = param;
+  const { refUnit, gridRef, selectionRows } = param;
   const keys = param.selectionRowKeys;
   if (keys.length == 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -44,8 +44,8 @@ Func.zlcd = (param: any) => {
         thisObj.setState({ masker: false });
         if (res.code == '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_zlcd_success' }));
-          unitRef.current!.setSelectionRowKeys([]);
-          unitRef.current!.setSelectionRows([]);
+          refUnit.current!.setSelectionRowKeys([]);
+          refUnit.current!.setSelectionRows([]);
           gridRef.current?.reload();
         } else {
           message.error(res.desc)
@@ -57,7 +57,7 @@ Func.zlcd = (param: any) => {
 //资料调阅
 Func.zldy = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   if(record.bswjscztDm != 3){
     message.info('暂无报告！请先生成PDF报告！');
     return ;
@@ -69,16 +69,16 @@ Func.zldy = (param: any, event: any) => {
     rzlx: 'badzssquuid',
     badzczlxDm: '2'
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   assqDyData(qqbw).then((response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
-      const otherRef = param.unitRef.current?.getOtherRefs();
+      const otherRef = param.refUnit.current?.getOtherRefs();
       const listData = response.body.wjljs;
       if (otherRef && otherRef[0]) {
-        otherRef[0].current?.showModal(listData, param.unitRef);
+        otherRef[0].current?.showModal(listData, param.refUnit);
       } else if (param.otherRef && param.otherRef[0]) {
-        param.otherRef[0].current?.showModal(listData, param.unitRef);
+        param.otherRef[0].current?.showModal(listData, param.refUnit);
       }
     } else {
       message.error(response.msg);
@@ -90,7 +90,7 @@ Func.zldy = (param: any, event: any) => {
 
 // 生成所属期数据
 Func.scssqsj = (param: any) => {
-  const { unitRef, selectionRows } = param;
+  const { refUnit, selectionRows } = param;
   if (selectionRows.length == 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -112,15 +112,15 @@ Func.scssqsj = (param: any) => {
       modalType: 'confirm',
       closeStatus: true,
       okCallbackFn: async function () {
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         const obj = {
           badzssquuids: uuids,
         }
         badzScssqsj(obj).then((res: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res.code == '200') {
             message.success(intl2.formatMessage({ id: 'message_badz_scssqsj_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(res.desc)
           }
@@ -133,10 +133,10 @@ Func.scssqsj = (param: any) => {
       badzssquuids: uuids,
     }
     badzScssqsj(obj).then((res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res.code == '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_scssqsj_success' }));
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
       } else {
         message.error(res.desc)
       }

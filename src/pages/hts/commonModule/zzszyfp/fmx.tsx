@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const ckbgdFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 export default ckbgdFunc;

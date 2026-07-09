@@ -88,7 +88,7 @@ const CreateData: React.FC<CreateDataProps> = ({
       // }
       setModalVisible(false);
       message.success('数据生成成功');
-      initParam.unitRef.current?.reload2();
+      initParam.refUnit.current?.reload2();
     })
   };
 

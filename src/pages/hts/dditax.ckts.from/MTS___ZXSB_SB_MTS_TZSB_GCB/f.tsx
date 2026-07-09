@@ -13,7 +13,7 @@ import myUtil from '@/components/DDAssist/util';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化
@@ -37,8 +37,8 @@ Func.initEditForm = (param: any) => {
 }
 
 Func.handleCjsb = (param: any) => {
-  const {otherRef,unitRef} = param;
-  otherRef[0].current?.showModal(unitRef);
+  const {otherRef,refUnit} = param;
+  otherRef[0].current?.showModal(refUnit);
 }
 
 // 表单校验
@@ -156,7 +156,7 @@ const columnsSucc = [
 ];
 // 还原申报情况
 Func.hysbqk = (param:any) =>  {
-  const { selectionRows,selectionRowKeys,unitRef,otherRef} = param;
+  const { selectionRows,selectionRowKeys,refUnit,otherRef} = param;
   if (selectionRowKeys?.length === 0 || selectionRowKeys?.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
   } else {
@@ -167,7 +167,7 @@ Func.hysbqk = (param:any) =>  {
     hysbqkByIds({ glhs: yglhArr, uuids:selectionRowKeys }).then((response) => {
       const { code, msg,body,desc } = response;
       if (code === '200') {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         DDAlert.open({
           title: '系统提示',
           isShowcancelText: false,
@@ -186,7 +186,7 @@ Func.hysbqk = (param:any) =>  {
           </>
         })
       } else if(code === '900'){
-        otherRef[1].current?.showModal(unitRef,body);
+        otherRef[1].current?.showModal(refUnit,body);
       } else {
         message.error(msg);
       }
@@ -196,8 +196,8 @@ Func.hysbqk = (param:any) =>  {
 
 // 配置项：自定义工具栏 海外仓冲击爱你
 Func.hwccj = (param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   otherRef[2].current!.showModal(param);
 }
 export default Func;

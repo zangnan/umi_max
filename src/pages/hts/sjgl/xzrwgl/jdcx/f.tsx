@@ -8,13 +8,13 @@ import khdgjUtil from '@/pages/hts/ckfp/khdgjUtil';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.param = {};
 
 Func.handleBatchDelete = (param: any) => {
-  const { gridRef, selectionRows, unitRef } = param;
+  const { gridRef, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const unSelectedMessage = Func.intl.formatMessage({ id: 'message_delete_unselected' });
     message.info(unSelectedMessage);
@@ -47,13 +47,13 @@ Func.handleBatchDelete = (param: any) => {
         const data = {
           xzdyuuids: xzdyuuids
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         sjxzDelrw(data).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, desc } = response;
           if (code === '200') {
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             const successMessage = Func.intl.formatMessage({ id: 'message_delete_success' });
             message.success(successMessage);
@@ -69,7 +69,7 @@ Func.handleBatchDelete = (param: any) => {
 
 // 下载开票文件
 Func.handleDownLoadKpwj = async (param: any) => {
-  const { gridRef, selectionRows, unitRef } = param;
+  const { gridRef, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const unSelectedMessage = Func.intl.formatMessage({ id: 'message_jljghx_jdcx_cxxz_unSelected' });
     message.info(unSelectedMessage);
@@ -100,9 +100,9 @@ Func.handleDownLoadKpwj = async (param: any) => {
   const infoMessage = Func.intl.formatMessage({ id: 'message_jljghx_jdcx_cxxz_info' });
   const result = await queryKakPassword({});
   if (result?.code == '200') {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     const { jcbz, msg } = await khdgjUtil.khdgjJc({ icCardPsw: result.body.kakmm, yhjq: result.body.yhjq });
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (jcbz != 'Y') {
       message.info(msg);
       return;
@@ -120,7 +120,7 @@ Func.handleDownLoadKpwj = async (param: any) => {
     content: '',
     isFormContent: false,
     okCallbackFn: function () {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       rwjdcxxz({ xzdyuuids }).then(async (response: any) => {
         const { code, body, desc } = response;
         if (code === '200') {
@@ -140,19 +140,19 @@ Func.handleDownLoadKpwj = async (param: any) => {
                 p.csz2 = flag.msg;
                 await rwycgx(p).then(async (res4) => {
                 })
-                unitRef.current!.setMasker(false);
+                refUnit.current!.setMasker(false);
                 DDAlert.close;
                 return;
               }
             }
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           }
-          unitRef.current?.setSelectionRowKeys([]);
-          unitRef.current?.setSelectionRows([]);
+          refUnit.current?.setSelectionRowKeys([]);
+          refUnit.current?.setSelectionRows([]);
           gridRef.current?.reload();
           message.success(Func.intl.formatMessage({ id: 'message_jljghx_jdcx_cxxz_success' }));
         } else {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           message.error(response?.msg);
           return;
         }
@@ -162,9 +162,9 @@ Func.handleDownLoadKpwj = async (param: any) => {
 }
 
 Func.handleCkmx = (param: any, e: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   e.stopPropagation();
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[0].current?.showModal(param);
   }
@@ -172,9 +172,9 @@ Func.handleCkmx = (param: any, e: any) => {
 
 // 报关单备案单证缺失检查任务-查看详情
 Func.handleBgddzqsjcCkxq = (param: any, e: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   e.stopPropagation();
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[3].current?.showModal(param);
   }
@@ -182,9 +182,9 @@ Func.handleBgddzqsjcCkxq = (param: any, e: any) => {
 
 
 Func.gdhdjcbg = async (param: any, e: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   e.stopPropagation();
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[2].current?.showModal(param);
   }
@@ -847,8 +847,8 @@ Func.displayReload = (record: any) => {
 
 
 Func.fpReload = (param: any) => {
-  const { unitRef } = param;
-  unitRef?.current?.reload2();
+  const { refUnit } = param;
+  refUnit?.current?.reload2();
 }
 
 Func.dcsjxz = (param: any) => {
@@ -861,18 +861,18 @@ Func.dcsjxz = (param: any) => {
 // 海关数据下载-刷新
 Func.handleGptreload = async (param: any, e: any) => {
   e.stopPropagation();
-  const { unitRef, index } = param;
+  const { refUnit, index } = param;
   const params = {
     zrwuuid: param?.record?.zrwuuid,
     xzztDm: param?.record?.xzztDm,
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await rwsxForGpt(params).then(async (response: any) => {
     const { code, desc, msg } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      unitRef?.current?.reload2();
+      refUnit?.current?.reload2();
       // const num = index + 2;
       // const elemsBadge:any = document.querySelectorAll('.ant-table-tbody .ant-table-row:nth-child('+ num +') .ant-table-cell:nth-child(7) .ant-badge-status-dot');
       // const elems:any = document.querySelectorAll('.ant-table-tbody .ant-table-row:nth-child('+ num +') .ant-table-cell:nth-child(7) .zxzt-text');
@@ -882,7 +882,7 @@ Func.handleGptreload = async (param: any, e: any) => {
     } else if (code === '900') {
       message.error(msg);
     } else if (code === '901') {
-      unitRef?.current?.reload2();
+      refUnit?.current?.reload2();
     } else {
       message.error(desc);
       return;
@@ -891,7 +891,7 @@ Func.handleGptreload = async (param: any, e: any) => {
 }
 
 Func.handleFpsqdTzreload = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const params = {
     xzdyuuid: param?.record?.xzdyuuid,
     sjgjsjDm: param?.record?.sjgjsjDm,
@@ -899,14 +899,14 @@ Func.handleFpsqdTzreload = async (param: any) => {
     csz1: param?.record?.csz1,
     csz2: param?.record?.csz2,
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await rwjdsx(params).then(async (response: any) => {
     const { code, body, desc } = response;
     if (code === '200') {
-      unitRef?.current?.reload2();
-      unitRef.current!.setMasker(false);
+      refUnit?.current?.reload2();
+      refUnit.current!.setMasker(false);
     } else {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       message.error(desc);
       return;
     }
@@ -914,7 +914,7 @@ Func.handleFpsqdTzreload = async (param: any) => {
 }
 
 Func.zyzx = async (param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   DDAlert.open({
     title: '提示信息',
     info: '确定暂停执行？',
@@ -933,12 +933,12 @@ Func.zyzx = async (param: any) => {
             csz2: "任务暂停执行",
             xzdyuuid: record.xzdyuuid,
           }
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           await rwycgx(params).then(async (res) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (res.code === '200') {
               message.success('操作成功!')
-              unitRef?.current?.reload2();
+              refUnit?.current?.reload2();
             } else {
               message.error(res.msg);
             }
@@ -955,7 +955,7 @@ Func.zyzx = async (param: any) => {
 
 // 取消执行
 Func.qxzx = async (param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   DDAlert.open({
     title: '提示信息',
     info: '确定取消执行？',
@@ -967,12 +967,12 @@ Func.qxzx = async (param: any) => {
     okCallbackFn: async function () {
       if ('6' === record?.bgdsjlyDm) {
         await qxzxForYbt({ zrwuuid: record?.zrwuuid }).then(async (res) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res.code === '200') {
             message.success('操作成功!');
-            unitRef?.current?.reload2();
+            refUnit?.current?.reload2();
           } else if (res.code === '901') {
-            unitRef?.current?.reload2();
+            refUnit?.current?.reload2();
           } else {
             message.error(res.msg);
           }
@@ -982,12 +982,12 @@ Func.qxzx = async (param: any) => {
         if(result?.code == '200'){
           const obj = await khdgjUtil.khdZtzx(result.body);
           if(obj.code === '200'){
-            unitRef.current!.setMasker(true);
+            refUnit.current!.setMasker(true);
             await qxzxForLtkhdgj({zrwuuid: record?.zrwuuid, taskIds: result?.body.taskIds}).then(async (res) => {
-              unitRef.current!.setMasker(false);
+              refUnit.current!.setMasker(false);
               if(res.code === '200') {
                 message.success('操作成功!')
-                unitRef?.current?.reload2();
+                refUnit?.current?.reload2();
               } else {
                 message.error(res.msg);
               }
@@ -1011,9 +1011,9 @@ Func.qxzx = async (param: any) => {
               { property: "zrwuuid", value: record.xzdyuuid, op: "zdy" }
             ]
           }
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           const resultQ = await queryPager(paramQ);
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (resultQ?.code == '200') {
             const bodyRows = resultQ?.body?.rows || [];
             if (bodyRows || bodyRows.length > 0) {
@@ -1029,12 +1029,12 @@ Func.qxzx = async (param: any) => {
                     zrwuuid: record.xzdyuuid,
                   }
                   // 新加接口
-                  unitRef.current!.setMasker(true);
+                  refUnit.current!.setMasker(true);
                   await qxzxForGpt(params).then(async (res) => {
-                    unitRef.current!.setMasker(false);
+                    refUnit.current!.setMasker(false);
                     if (res.code === '200') {
                       message.success('操作成功!')
-                      unitRef?.current?.reload2();
+                      refUnit?.current?.reload2();
                     } else {
                       message.error(res.msg);
                     }
@@ -1059,17 +1059,17 @@ Func.qxzx = async (param: any) => {
 
 // 更新报关单信息状态刷新
 Func.handleJ4RpaSx = async (param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const params = {
     sjgjsjDm: record?.sjgjsjDm,
     zrwuuid: record?.zrwuuid
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await gxBgdCzbzSx(params).then(async (response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      unitRef?.current?.reload2();
+      refUnit?.current?.reload2();
     } else {
       message.error(msg);
       return;
@@ -1079,36 +1079,36 @@ Func.handleJ4RpaSx = async (param: any) => {
 
 // 报关单核对任务 取消执行
 Func.gdhdrwqxzx = async (param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const params = {
     zrwuuid: record?.zrwuuid
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await gdhdrwqxzxcheck(params).then(async (response: any) => {
     const { code, msg, body } = response;
     if (code === '200') {
       const gjqxzx = await khdgjUtil.gdhdrwqxzx(body);
       if (gjqxzx['code'] == '200' || (gjqxzx['code'] == '300' && gjqxzx['msg'] == '没有正在执行的任务')) {
         await gdhdrwqxzx(body).then(async (qxzxRes: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, msg } = qxzxRes;
           if (code === '200') {
-            unitRef.current!.setMasker(false);
-            unitRef?.current?.reload2();
+            refUnit.current!.setMasker(false);
+            refUnit?.current?.reload2();
           } else {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             message.error(msg);
           }
         })
       } else {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         message.error(gjqxzx['msg']);
       }
     } else if (code === '901') {
-      unitRef.current!.setMasker(false);
-      unitRef?.current?.reload2();
+      refUnit.current!.setMasker(false);
+      refUnit?.current?.reload2();
     } else {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       message.error(msg);
     }
   })
@@ -1116,7 +1116,7 @@ Func.gdhdrwqxzx = async (param: any) => {
 
 Func.qxzxJshst = (param: any, e: any) => {
   const { gridRef, record } = param;
-  // unitRef.current!.setMasker(true);
+  // refUnit.current!.setMasker(true);
   DDAlert.open({
     title: '提示信息',
     info: '确定取消执行？',

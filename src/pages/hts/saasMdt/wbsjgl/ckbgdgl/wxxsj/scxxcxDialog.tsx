@@ -101,7 +101,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         form.validateFields().then(values => {
             
             if (paramValue.selectionRowKeys.length === 0) {
-                const searchModel = paramValue.unitRef.current?.getGridParams().searchModel || [];
+                const searchModel = paramValue.refUnit.current?.getGridParams().searchModel || [];
                 const headerSearchModel = paramValue.gridRef.current?.getHeaderFilter() || [];
                 const allSearchModel: any = searchModel.concat(headerSearchModel);
                 allSearchModel.push({ property: 'cxlx', value: '5', op: 'zdy' });
@@ -118,20 +118,20 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
                     setMasker(false);
                     const { code, body, msg } = res;
                     if (code === '200') {
-                        bgdToCkxxcxApi(body.rows, paramValue.unitRef);
+                        bgdToCkxxcxApi(body.rows, paramValue.refUnit);
                     } else {
                         message.error(msg)
                     }
                 })
             } else {
-                bgdToCkxxcxApi(paramValue.selectionRowKeys, paramValue.unitRef);
+                bgdToCkxxcxApi(paramValue.selectionRowKeys, paramValue.refUnit);
             }
         })
     }
 
 
     // 生成信息查询接口
-    const bgdToCkxxcxApi = (param: any, unitRef: any) => {
+    const bgdToCkxxcxApi = (param: any, refUnit: any) => {
         const obj = {
             sbpc: form.getFieldValue("sbpc"),
             ssq: form.getFieldValue("ssq"),
@@ -154,9 +154,9 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
                     if (code === '200') {
                         setModalVisible(false);
                         message.success(body)
-                        unitRef.current!.reload2();
-                        unitRef.current?.setSelectionRowKeys([]);
-                        unitRef.current?.setSelectionRows([]);
+                        refUnit.current!.reload2();
+                        refUnit.current?.setSelectionRowKeys([]);
+                        refUnit.current?.setSelectionRows([]);
                     } else if(code === '900') {
                         message.error(body);
                     } else {

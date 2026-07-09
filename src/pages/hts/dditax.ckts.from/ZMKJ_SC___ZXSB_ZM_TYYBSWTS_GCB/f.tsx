@@ -10,7 +10,7 @@ import { queryJldwXxBySpdm, queryBgdByBgdNo21, queryDlzmByDlckhwzmhm, checkYwlxF
 import {message} from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 编辑表单初始化

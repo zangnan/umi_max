@@ -46,7 +46,7 @@ const Fpkjgl: React.FC<unknown> = () => {
   }
   // 开票
   const kpSuccess = (obj:any, ref:any, flag: any) => {
-    const unitRef = ref?ref:hcUnitRef;
+    const refUnit = ref?ref:hcUnitRef;
     if(flag === '1') {
       setMasker(true);
       sdpfphc(obj?obj:paramSdp).then((res: any) => {
@@ -56,7 +56,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -93,7 +93,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -123,7 +123,7 @@ const Fpkjgl: React.FC<unknown> = () => {
 
   // 发票红冲
   zxkpFunc.handleFphc = (param: any) => {
-    const { selectionRowKeys, selectionRows, unitRef } = param;
+    const { selectionRowKeys, selectionRows, refUnit } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info('请选择一条“开票成功”或“作废失败”的数据进行操作。');
       return;
@@ -178,11 +178,11 @@ const Fpkjgl: React.FC<unknown> = () => {
             const hcyy = values.hcyy
             if(tempXx && tempXx[0]?.fpkjfsDm === '2' && tempXx[0].fpzlDm1 === '5') {
               // 数电票和在线开票
-              setUnitRef(unitRef);
+              setUnitRef(refUnit);
               DDAlert.close();
               setParamSdp({fpsqduuid: selectionRowKeys[0], hcyy})
               setCheckBtn('hc')
-              kpSuccess({fpsqduuid: selectionRowKeys[0], hcyy}, unitRef, '1');
+              kpSuccess({fpsqduuid: selectionRowKeys[0], hcyy}, refUnit, '1');
             } else {
               thisObj.setState({ masker: true });
               fphc({ fpsqduuid: selectionRowKeys[0], hcyy }).then((response) => {
@@ -190,7 +190,7 @@ const Fpkjgl: React.FC<unknown> = () => {
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  unitRef.current!.reload2();
+                  refUnit.current!.reload2();
                   DDAlert.open({
                     title: '发票红冲',
                     info: '发票红冲申请成功',
@@ -216,23 +216,23 @@ const Fpkjgl: React.FC<unknown> = () => {
 
   // 蓝字 更新状态
   zxkpFunc.handleUpdate = (param: any) => {
-    const { unitRef } = param;
+    const { refUnit } = param;
     setCheckBtn('gx')
-    setGxUnitRef(unitRef)
-    lzkpSuccess(unitRef, '1');         // 判断电子税务局 是否要登录
+    setGxUnitRef(refUnit)
+    lzkpSuccess(refUnit, '1');         // 判断电子税务局 是否要登录
   }
 
   const lzkpSuccess = (ref:any, flag: any) => {
-    const unitRef = ref?ref:gxUnitRef;
-    unitRef.current?.setMasker(true);
+    const refUnit = ref?ref:gxUnitRef;
+    refUnit.current?.setMasker(true);
     if(flag === '1') {
       fpztsxZx({}).then((res01:any)=>{
-        unitRef.current?.setMasker(false);
+        refUnit.current?.setMasker(false);
         if(res01.code === '200') {
           const rtnCode = res01?.body?.rtnCode;
           const rtnData = res01?.body;
           if(rtnCode === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(res01?.desc)
           } else if(rtnCode === '2004'){
             const param = {
@@ -260,14 +260,14 @@ const Fpkjgl: React.FC<unknown> = () => {
         }
       })
     } else {
-      unitRef.current?.setMasker(true);
+      refUnit.current?.setMasker(true);
       sdpZtsxtb(paramhzkp).then((res02:any)=> {
-        unitRef.current?.setMasker(false);
+        refUnit.current?.setMasker(false);
         if(res02.code === '200') {
           const rtnCode = res02?.body?.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(res02?.msg)
           } else if(rtnCode === '2004'){
             refSfyz.current!.showModal(); // 打开电子税务局身份验证

@@ -6,7 +6,7 @@ import 'moment/locale/zh-cn';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.initEditForm = (param: any) => {
@@ -133,7 +133,7 @@ Func.validator = {
 
 // 其他商品管理页面:删除
 Func.deleteQtspgl = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -154,7 +154,7 @@ Func.deleteQtspgl = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }

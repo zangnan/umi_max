@@ -29,7 +29,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   const [yhConfig, setYhConfig] = useState<any>();
 
   const apiFunc: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   // 开启
@@ -58,7 +58,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
 
 
   apiFunc.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if (dataSource && dataSource.length > 0) {
@@ -69,18 +69,18 @@ const DrawerForm: React.FC<BdjgProps> = ({
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   const close = async () => {
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 
   apiFunc.glApiFw = async (param: any) => {
-    const { selectionRowKeys, unitRef } = param;
-    const searchModel = unitRef?.current?.getGridParams().searchModel;
+    const { selectionRowKeys, refUnit } = param;
+    const searchModel = refUnit?.current?.getGridParams().searchModel;
     const data = {
       "apifwDms": selectionRowKeys,
       "sbqyuuidDqlb": mainSelectionRowKeys[0]

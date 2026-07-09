@@ -90,7 +90,7 @@ const ShsdsjPp: React.FC<ShsdsjPpProps> = ({
     setWppBgdDataSource([]);
     setSelectWppBgdRowKeys([]);
     setSelectWppBgdRows([]);
-    // param?.unitRef?.current?.setMasker(false);
+    // param?.refUnit?.current?.setMasker(false);
     setDqPpbzDm(param?.record?.ppbzDm);
     topForm.setFieldsValue({ppbzDm:param?.record?.ppbzDm });
     setDrawerVisible(true);
@@ -804,7 +804,7 @@ const ShsdsjPp: React.FC<ShsdsjPpProps> = ({
         // 关闭弹窗
         setDrawerVisible(false);
         // 刷新主列表
-        params?.unitRef?.current?.reload2();
+        params?.refUnit?.current?.reload2();
       } else if (code === '900') {
         refPpjg?.current?.showModal(body);
       } else {

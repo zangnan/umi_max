@@ -11,13 +11,13 @@ import importStyle from './importStyle.less';
 const { Dragger } = Upload;
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 导入
 ckfpFunc.btnPldr= (param: any) => {
-  const { unitRef, otherRef  } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, otherRef  } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -94,7 +94,7 @@ ckfpFunc.btnPldr= (param: any) => {
               // 刷新头部条数
               otherRef[1].current!.getDclsjBttj()
               setTimeout(() => {
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
                 thisObj.setState({ masker: false });
               },300)
             } else if (code === '900') {
@@ -136,13 +136,13 @@ ckfpFunc.downloadExcelMb = (key: any) => {
 
 // 批量补录
 ckfpFunc.btnPlbl = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '1', op: 'zdy' });
@@ -180,7 +180,7 @@ ckfpFunc.btnPlbl = (param: any) => {
                   ywlx: 'dlckhwzm',
                   ckfph: values.ckfph
                 }
-                plxgckfphApi(obj2, unitRef, otherRef, thisObj)
+                plxgckfphApi(obj2, refUnit, otherRef, thisObj)
               } else {
                 message.error(msg)
               }
@@ -192,7 +192,7 @@ ckfpFunc.btnPlbl = (param: any) => {
               ywlx: 'dlckhwzm',
               ckfph: values.ckfph
             }
-            plxgckfphApi(obj2, unitRef, otherRef, thisObj)
+            plxgckfphApi(obj2, refUnit, otherRef, thisObj)
           }
         }
       })
@@ -201,17 +201,17 @@ ckfpFunc.btnPlbl = (param: any) => {
 }
 
 // 批量补录接口
-const plxgckfphApi = (params: any, unitRef: any, otherRef: any, thisObj: any) => {
+const plxgckfphApi = (params: any, refUnit: any, otherRef: any, thisObj: any) => {
   thisObj.setState({ masker: true });
   plxgckfph(params).then((res: any)=> {
     const {code, msg} = res;
     if(code === '200') {
       message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-      // unitRef.current!.handleReset();
+      // refUnit.current!.handleReset();
       // 刷新头部条数
       otherRef[1].current!.getDclsjBttj()
       setTimeout(() => {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         thisObj.setState({ masker: false });
         DDAlert.close();
       },300)

@@ -40,9 +40,9 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
   });
 
    //开启
-  const showModal = (params: any, unitRef: any) => {
+  const showModal = (params: any, refUnit: any) => {
     setParam(params);
-    setRef(unitRef);
+    setRef(refUnit);
     initDzxx();
     setModalVisible(true);
   };
@@ -117,7 +117,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
     });
   }
 
-  const successTzNew =(param :any,unitRef:any)=>{
+  const successTzNew =(param :any,refUnit:any)=>{
     DDAlert.open({
       title: '系统提示',
       info: '数据正式申报成功，请跳转至申报结果查询，尝试刷新操作，更新审核状态',
@@ -127,7 +127,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
       okText: '转申报结果查询',
       okCallbackFn: function (thisObj: any) {
         history.push(param);
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         // message.success('数据申报成功');
       },
     });

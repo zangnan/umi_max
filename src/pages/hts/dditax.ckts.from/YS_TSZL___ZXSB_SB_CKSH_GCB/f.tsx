@@ -10,7 +10,7 @@ import { queryCkxxByCondition } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.validator = {

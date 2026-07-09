@@ -60,15 +60,15 @@ const DrawerList: React.FC<BdjgProps> = ({
 
 
   const close = async () => {
-    param?.unitRef.current?.reload2();
+    param?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 
 
   Func.handleCkmxtj = (param: any) => {
     const {otherRef} = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
-    // const initSearchModal = param.unitRef.current.getGridParams().initSearchModal;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
+    // const initSearchModal = param.refUnit.current.getGridParams().initSearchModal;
     const initSearchModal = myconfig.gridParams.initSearchModal;
     const headerFilter = param.gridRef.current.getHeaderFilter();
     otherRef[3].current?.showModal(param, title, searchModel, initSearchModal, headerFilter);

@@ -6,7 +6,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import businessValidator from "../common/businessValidator";
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 申报结果查询的免抵退核销数据导出方法
@@ -77,8 +77,8 @@ Func.yhxtzSjbsOnChange = (param: any) => {
 
 // 进料加工业务免抵退税核销表报表打印
 Func.handleMdthxHgsjtzCxBbdy = (param: any) => {
-  const { formQuickFilter, otherRef, unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { formQuickFilter, otherRef, refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info(Func.intl.formatMessage({ id: 'message_common_nodata_print' }));
     return ;

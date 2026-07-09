@@ -35,12 +35,12 @@ const Cxjsfpl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   // const intl = useIntl();
 
   // 开启
-  const showModal = (param: any, unitRef: any) => {
+  const showModal = (param: any, refUnit: any) => {
     // 保存主表传递参数
     setZycs(param);
     // 查询左侧列表数据
     initLeftData(param);
-    setQueryRef(unitRef);
+    setQueryRef(refUnit);
     setModalVisible(true);
   };
 

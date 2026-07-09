@@ -5,18 +5,18 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import CkbgdFunc from "../../common/CkbgdFunc";
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 批量补填
 ckfpFunc.btnPlbt = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '2', op: 'zdy' });
@@ -58,7 +58,7 @@ ckfpFunc.btnPlbt = (param: any) => {
 }
 
 const apiCheckCkspSheet = (param: any, obj: any, allSearchModel: any, obj3: any) => {
-  const {otherRef, unitRef} = param;
+  const {otherRef, refUnit} = param;
   checkCkspSheet(obj).then((res:any)=> {
     const {code, msg, body} = res;
     if(code === '200') {
@@ -66,7 +66,7 @@ const apiCheckCkspSheet = (param: any, obj: any, allSearchModel: any, obj3: any)
         keys: obj.uuids,
         ywlx: obj.ywlx,
       }
-      otherRef[1].current?.showModal(unitRef, param, otherRef[2], obj3, body);
+      otherRef[1].current?.showModal(refUnit, param, otherRef[2], obj3, body);
     } else {
       message.error(msg);
     }
@@ -94,10 +94,10 @@ ckfpFunc.openCkbgdh = (param: any, ckbgd: any) => {
 }
 
 ckfpFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -110,7 +110,7 @@ ckfpFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
 ckfpFunc.btnZbts = (param: any) => {
   const { otherRef } = param;
   CkbgdFunc.btnZbts(param, otherRef[2].current);
-  /*const { unitRef, selectionRowKeys, otherRef } = param;
+  /*const { refUnit, selectionRowKeys, otherRef } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -130,7 +130,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[2].current!.getDclsjBttj();
           setTimeout(() => {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             close();
             thisObj.setState({ masker: false });
           },300)

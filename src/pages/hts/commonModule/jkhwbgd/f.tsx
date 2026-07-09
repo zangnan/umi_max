@@ -5,18 +5,18 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const jkbgdFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 打印
 jkbgdFunc.dyFunc= (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   otherRef[0].current?.showModal(param);
 }
 
 // 删除
 jkbgdFunc.btnDelete = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -33,7 +33,7 @@ jkbgdFunc.btnDelete = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }

@@ -6,20 +6,20 @@ import { message } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 海关核注清单-打印
 Func.handleHghzqdDy = (param: any) => {
-  const { selectionRows, unitRef, gridRef, otherRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const { selectionRows, refUnit, gridRef, otherRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info(Func.initHzqd.formatMessage({ id: 'message_common_nodata_print' }));
     return;
   }
-  const searchModel: any = [...param?.unitRef?.current?.getGridParams()?.initSearchModal];
+  const searchModel: any = [...param?.refUnit?.current?.getGridParams()?.initSearchModal];
 
-  const gridValues = unitRef.current?.getGridParams();
+  const gridValues = refUnit.current?.getGridParams();
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
@@ -54,14 +54,14 @@ Func.handleHghzqdDy = (param: any) => {
 }
 
 Func.handleHgbgdDy = (param: any) => {
-  const { selectionRows, unitRef, gridRef, otherRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const { selectionRows, refUnit, gridRef, otherRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info(Func.initBgd.formatMessage({ id: 'message_common_nodata_print' }));
     return;
   }
-  const searchModel: any = [...param?.unitRef?.current?.getGridParams()?.initSearchModal];
-  const gridValues = unitRef.current?.getGridParams();
+  const searchModel: any = [...param?.refUnit?.current?.getGridParams()?.initSearchModal];
+  const gridValues = refUnit.current?.getGridParams();
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
@@ -87,9 +87,9 @@ Func.handleHgbgdDy = (param: any) => {
 
 // 重新计算统计美元价.
 Func.handleBgdJstjmyj = (param: any) => {
-  const { selectionRows, unitRef, gridRef, otherRef} = param;
+  const { selectionRows, refUnit, gridRef, otherRef} = param;
   const searchModel: any = [];
-  const gridValues = unitRef.current?.getGridParams();
+  const gridValues = refUnit.current?.getGridParams();
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
@@ -137,9 +137,9 @@ Func.handleBgdJstjmyj = (param: any) => {
 
 // 重新计算统计美元价.
 Func.handleHzqdJstjmyj = (param: any) => {
-  const { selectionRows, unitRef, gridRef, otherRef} = param;
+  const { selectionRows, refUnit, gridRef, otherRef} = param;
   const searchModel: any = [];
-  const gridValues = unitRef.current?.getGridParams();
+  const gridValues = refUnit.current?.getGridParams();
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });

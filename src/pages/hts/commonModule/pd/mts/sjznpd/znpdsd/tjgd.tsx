@@ -60,7 +60,7 @@ const Tjgd: React.FC<TjgdProps> = ({ onRef, visible = false }) => {
   };
 
   const Func = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     columnsRender: {
       renderZnpdSdFd: (param: any) => {
         const record = param?.record;
@@ -113,7 +113,7 @@ const Tjgd: React.FC<TjgdProps> = ({ onRef, visible = false }) => {
     },
     // 选中
     onSelect: (param: any) => {
-      const { record, selected, unitRef } = param;
+      const { record, selected, refUnit } = param;
       const tmpRowKeys = [...selectKeys];
       const tmpRows = [...selectRows];
       if (selected) {
@@ -127,13 +127,13 @@ const Tjgd: React.FC<TjgdProps> = ({ onRef, visible = false }) => {
       }
       setSelectKeys(tmpRowKeys);
       setSelectRows(tmpRows);
-      unitRef.current!.setSelectionRowKeys(tmpRowKeys);
-      unitRef.current!.setSelectionRows(tmpRows);
+      refUnit.current!.setSelectionRowKeys(tmpRowKeys);
+      refUnit.current!.setSelectionRows(tmpRows);
       const addNum = tmpRows.length;
-      unitRef?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
+      refUnit?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
     },
     onSelectAll: (param: any) => {
-      const { selected, changeRows, unitRef } = param;
+      const { selected, changeRows, refUnit } = param;
       const tmpRowKeys = [...selectKeys];
       const tmpRows = [...selectRows];
       if (selected) {
@@ -152,16 +152,16 @@ const Tjgd: React.FC<TjgdProps> = ({ onRef, visible = false }) => {
       setSelectKeys(tmpRowKeys);
       setSelectRows(tmpRows);
       // 设置选中数据
-      unitRef.current!.setSelectionRowKeys(tmpRowKeys);
-      unitRef.current!.setSelectionRows(tmpRows);
+      refUnit.current!.setSelectionRowKeys(tmpRowKeys);
+      refUnit.current!.setSelectionRows(tmpRows);
       // 修改页头选中数据提示
       const addNum = tmpRows.length;
-      unitRef?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
+      refUnit?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
     },
     afterReload: (param: any) => {
-      const { unitRef } = param;
-      unitRef.current?.setSelectionRowKeys(selectKeys);
-      unitRef.current?.setSelectionRows(selectRows);
+      const { refUnit } = param;
+      refUnit.current?.setSelectionRowKeys(selectKeys);
+      refUnit.current?.setSelectionRows(selectRows);
     },
     addCkbgd: (param: any) => {
       if (selectRows.length === 0) {

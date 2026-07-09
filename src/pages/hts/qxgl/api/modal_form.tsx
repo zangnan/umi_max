@@ -79,11 +79,11 @@ const ModalForm: React.FC<BdjgProps> = ({
 
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   Func.add = (param: any) => {
-    const { unitRef } = param;
+    const { refUnit } = param;
     setModalVisible2(true);
   };
   

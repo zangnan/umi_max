@@ -161,7 +161,7 @@ const Index: React.FC = () => {
     initSm({ ny: myUtil.date.getCurrentYearMonth(), smid: smid, smztDm1: smztDm1 }).then((res2: any) => {
       setMasker(false);
       if (res2.code === '200') {
-        Func.unitRef.current!.reload2();
+        Func.refUnit.current!.reload2();
         getsmzt();
       } else {
         message.error(res2.msg);

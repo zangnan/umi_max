@@ -129,7 +129,7 @@ const index: React.FC<unknown> = () => {
 
   // 加载列表后查询菜单树
   Func.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     let jsDm = '';
     if (dataSource && dataSource.length > 0) {
       jsDm = dataSource[0].jsDm;
@@ -153,7 +153,7 @@ const index: React.FC<unknown> = () => {
   // 打开弹窗-删除角色
   Func.deleteJs = (param: any, event: any) => {
     event.stopPropagation();
-    const { unitRef, record } = param;
+    const { refUnit, record } = param;
     if (record.glyhs > 0) {
       message.info('该角色已关联用户，无法删除。如确需删除，请先将已关联的用户取消关联后，再进行删除的操作。');
     } else {
@@ -173,7 +173,7 @@ const index: React.FC<unknown> = () => {
             const { code, msg } = res;
             if (code == '200') {
               message.success("数据删除成功！");
-              unitRef?.current!.reload2();
+              refUnit?.current!.reload2();
             } else {
               message.error(msg)
             }

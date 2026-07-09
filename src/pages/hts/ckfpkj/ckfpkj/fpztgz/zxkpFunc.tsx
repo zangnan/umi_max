@@ -11,13 +11,13 @@ import myUtil from '@/components/DDAssist/util';
 import { history } from 'umi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 蓝票发票撤回-仅蓝票有
 // 其他走原来接口
 Func.handleFpchLz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -42,7 +42,7 @@ Func.handleFpchLz = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票撤回成功! 数据已转到“发票申请单”或“导入模板开具”页面。');
         } else {
           message.error(response.msg);
@@ -54,13 +54,13 @@ Func.handleFpchLz = (param: any) => {
 
 // 蓝字 更新状态
 Func.handleUpdateLzLp = (param: any) => {
-  const { unitRef } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit } = param;
+  refUnit.current?.setMasker(true);
   lzorzfGxzt({fpkjztDm:'1'}).then((response: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response.msg);
     }
@@ -69,13 +69,13 @@ Func.handleUpdateLzLp = (param: any) => {
 
 // 作废更新状态
 Func.handleUpdateLz = (param: any) => {
-  const { unitRef } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit } = param;
+  refUnit.current?.setMasker(true);
   lzorzfGxzt({fpkjztDm:'4'}).then((response: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response.msg);
     }
@@ -84,13 +84,13 @@ Func.handleUpdateLz = (param: any) => {
 
 // 红字 更新状态（新接口加完)
 Func.handleUpdateHz = (param: any) => {
-  const { unitRef } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit } = param;
+  refUnit.current?.setMasker(true);
   gxhpfpzt({}).then((response: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response.msg);
     }
@@ -99,7 +99,7 @@ Func.handleUpdateHz = (param: any) => {
 
 // 发票作废
 Func.handleFpzf = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -138,7 +138,7 @@ Func.handleFpzf = (param: any) => {
             DDAlert.close();
             if (response.code === '200') {
               // 清空选中并设置按钮可用状态
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               message.success('重新作废申请成功！')
             } else if (response.code === '900') {
               message.info(response.msg);
@@ -156,7 +156,7 @@ Func.handleFpzf = (param: any) => {
 
 // 红票 删除 （新) 完成
 Func.deleteHz = (param: any) => {
-  const { selectionRows, unitRef, selectionRowKeys } = param;
+  const { selectionRows, refUnit, selectionRowKeys } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -181,7 +181,7 @@ Func.deleteHz = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('删除成功！');
         } else {
           message.error(response.msg);
@@ -194,7 +194,7 @@ Func.deleteHz = (param: any) => {
 
 // 作废 删除 （新) 完成
 Func.deleteZf = (param: any) => {
-  const { selectionRows, unitRef, selectionRowKeys } = param;
+  const { selectionRows, refUnit, selectionRowKeys } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -219,7 +219,7 @@ Func.deleteZf = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('删除成功！');
         } else {
           message.error(response.msg);
@@ -274,9 +274,9 @@ Func.gridBadzDzhc23Cz2 = (param: any) => {
 
 Func.columnUpdate = (param: any,event:any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const { refUnit, record } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   const obj = {
     djbh: record?.djbh,
     fpsqduuid: record?.fpsqduuid,
@@ -285,7 +285,7 @@ Func.columnUpdate = (param: any,event:any) => {
   }
   fpmxcx2(obj).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
@@ -302,7 +302,7 @@ Func.columnUpdate = (param: any,event:any) => {
         isFpsqd = '3';
       }
       body.fpsqdxx.fpkjfsDm = record?.fpkjfsDm;
-      otherRef[0].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, false, unitRef, isFpsqd);
+      otherRef[0].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, false, refUnit, isFpsqd);
       otherRef[0].current!.setDjh(record?.djbh);
     } else{
       message.error(body?.msg);
@@ -313,10 +313,10 @@ Func.columnUpdate = (param: any,event:any) => {
 
 Func.printInvoice = (param: any,event:any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit, record } = param;
+  refUnit.current?.setMasker(true);
   fpxz({ fpsqduuid: record.fpsqduuid }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       const { blob, fileName } = response.body;
       myUtil.file.downloadPdf(blob, fileName);

@@ -51,7 +51,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   };
 
   zyFunc.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if (dataSource && dataSource.length > 0) {
@@ -62,14 +62,14 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
 
   zyFunc.save = async (param: any) => {
     const { selectionRowKeys, } = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     const data = {
       "qxzDm": rowKeys[0],
       "zyDm2s": selectionRowKeys,
@@ -111,7 +111,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     setModalVisible(false);
     // 配置项：自定义工具栏
     zyconfig.customer_toolbar = [];
-    // mainRef.unitRef.current.reload2();
+    // mainRef.refUnit.current.reload2();
 
   }
 

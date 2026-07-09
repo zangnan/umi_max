@@ -67,7 +67,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
 
   const closeScmx=()=>{
     setModalVisible(false)
-    param2?.unitRef.current?.reload2();
+    param2?.refUnit.current?.reload2();
 
   }
 

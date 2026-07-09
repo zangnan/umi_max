@@ -6,7 +6,7 @@ import { queryTjfs, updateBawcbz, cxZdcc } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 查看详情
@@ -17,7 +17,7 @@ Func.handleColumnsCkxq = (param: any) => {
 
 // 装订成册备案
 // Func.costomerToobarZdccba = async (param: any) => {
-//   const { unitRef, selectionRowKeys, selectionRows } = param;
+//   const { refUnit, selectionRowKeys, selectionRows } = param;
 //   if (selectionRowKeys.length > 1) {
 //     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
 //     return;
@@ -54,7 +54,7 @@ Func.handleColumnsCkxq = (param: any) => {
 //             const { code, desc } = response;
 //             if (code === '200') {
 //               message.success('操作成功');
-//               unitRef.current!.reload2();
+//               refUnit.current!.reload2();
 //             } else {
 //               message.error(desc);
 //             }
@@ -89,7 +89,7 @@ Func.costomerToobarZdccba = async (param: any) => {
 
 // 备案撤销
 Func.costomerToobarCxba = async (param: any) => {
-  const { unitRef, selectionRowKeys, selectionRows } = param;
+  const { refUnit, selectionRowKeys, selectionRows } = param;
   if (selectionRowKeys.length > 1) {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
@@ -119,7 +119,7 @@ Func.costomerToobarCxba = async (param: any) => {
         const { code, desc } = response;
         if (code === '200') {
           message.success('撤销备案成功');
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(desc);
         }

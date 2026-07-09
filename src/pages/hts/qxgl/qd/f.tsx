@@ -9,7 +9,7 @@ import locale from 'antd/es/date-picker/locale/zh_CN';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.add = (param: any) => {
@@ -27,15 +27,15 @@ Func.columnsRender = {
 
 //开关值改变
 const onChangeSwitch = (param: any) => {
-  const { record, unitRef, checked } = param;
+  const { record, refUnit, checked } = param;
   const par = { ...record };
   par.yxbz = checked ? "Y" : "N";
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   xzHxgQd(par).then((res: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg } = res;
     if (code == '200') {
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
     } else {
       message.error(msg)
     }
@@ -59,14 +59,14 @@ Func.edit = (param: any) => {
 
 
 Func.del = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await scjy({ qxlx: '2', qdDms: selectionRowKeys }).then((response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
       DDAlert.open({
         title: '删除',
@@ -82,7 +82,7 @@ Func.del = async (param: any) => {
               // 清空选中并设置按钮可用状态
               message.success('删除成功！');
               DDAlert.close();
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(response.msg);
             }
@@ -138,7 +138,7 @@ Func.glcd = (param: any) => {
 }
 
 Func.exportZd = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -147,9 +147,9 @@ Func.exportZd = (param: any) => {
     message.info('只能选择一条数据进行操作!');
     return;
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   cdDcsjzd({ qdDm: selectionRowKeys[0] }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, body, msg } = res;
     if (code === '200') {
       const { blob, fileName } = body;

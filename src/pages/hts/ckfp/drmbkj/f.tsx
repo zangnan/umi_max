@@ -12,7 +12,7 @@ const { Dragger } = Upload;
 
 const drmbkjFunc: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 const beforeUpload = (file: any) => {
@@ -26,7 +26,7 @@ const beforeUpload = (file: any) => {
 
 // 导入Excel模板
 drmbkjFunc.excelImport = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '导入Excel文件',
     infoType: 'warning',
@@ -89,7 +89,7 @@ drmbkjFunc.excelImport = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success(desc);
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else if (code === '900') {
             otherRef[0].current!.showModal(body, 'ZXSB_SB_DRMBKJ');
           } else {
@@ -120,7 +120,7 @@ drmbkjFunc.downloadExcel = (param: string) => {
 
 // 确认开票数据
 drmbkjFunc.qrdrsj = (param: any) => {
-  const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+  const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
   // 在线开票新增必勾选。最多5条
   Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
   }).catch(() => {
@@ -148,8 +148,8 @@ drmbkjFunc.qrdrsj = (param: any) => {
         djbhs.push(row.djbh);
       });
     }
-    const gridData = unitRef.current?.getGridData()
-    const searchModel = unitRef.current?.getGridParams().searchModel || [];
+    const gridData = refUnit.current?.getGridData()
+    const searchModel = refUnit.current?.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if (gridData.length === 0) {
@@ -173,17 +173,17 @@ drmbkjFunc.qrdrsj = (param: any) => {
         isFormContent: false,
         okCallbackFn: function (thisObj: any) {
           DDAlert.close();
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           qrkpjy(obj).then((res: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             const { code, desc, msg } = res;
             if (code === '200') {
               if (temp[0].fpzlDm1 === '5') {
-                unitRef.current!.setMasker(true);
+                refUnit.current!.setMasker(true);
                 skxxcx().then((res1: any) => {
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.setMasker(false);
                   if (res1.code === '200') {
-                    unitRef.current!.reload2();
+                    refUnit.current!.reload2();
                     const zcbz = res1.body.zcbz;
                     if (zcbz === '2') {
                       // 查询是否完成注册 若未成功 尚未注册页
@@ -194,7 +194,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                         qbxzbz: zbuuids.length > 0 ? 'N' : 'Y'
                       };
                       const chFlag = {
-                        unitRef,
+                        refUnit,
                         kpParams
                       }
                       drmbkjFunc.qrkpModal(chFlag);
@@ -207,24 +207,24 @@ drmbkjFunc.qrdrsj = (param: any) => {
                 })
               } else {
                 // 开票订单新增
-                unitRef.current!.setMasker(true);
+                refUnit.current!.setMasker(true);
                 kpddxz(obj).then((response: any) => {
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.setMasker(false);
                   const { code, body, desc, msg } = response;
                   if (code === '200') {
                     // 确认开票
-                    unitRef.current!.setMasker(true);
+                    refUnit.current!.setMasker(true);
                     ddtjkp(obj).then((resddtjkp: any) => {
-                      unitRef.current!.setMasker(false);
+                      refUnit.current!.setMasker(false);
                       const { code, desc } = resddtjkp;
                       if (code === '200') {
                         // 将数据转到“发票管理”界面
-                        unitRef.current!.setMasker(true);
+                        refUnit.current!.setMasker(true);
                         fpsqdqrkp(obj).then((responseKp) => {
-                          unitRef.current!.setMasker(false);
+                          refUnit.current!.setMasker(false);
                           const { code, body, desc } = responseKp;
                           if (code === '200') {
-                            unitRef.current!.reload2();
+                            refUnit.current!.reload2();
                             DDAlert.open({
                               title: '确认开票数据',
                               info: '成功确认开票数据',
@@ -239,19 +239,19 @@ drmbkjFunc.qrdrsj = (param: any) => {
                               }
                             });
                           } else if (code === '300') {
-                            unitRef.current!.setMasker(false);
+                            refUnit.current!.setMasker(false);
                             message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
                           } else if (code === '900') {
-                            unitRef.current!.setMasker(false);
+                            refUnit.current!.setMasker(false);
                             message.info(desc);
                           } else {
-                            unitRef.current!.setMasker(false);
+                            refUnit.current!.setMasker(false);
                             message.error(desc);
                             return;
                           }
                         })
                       } else if (code === '900') {
-                        unitRef.current!.reload2();
+                        refUnit.current!.reload2();
                         if (Array.isArray(resddtjkp?.msg)) {
                           openYwjyModal(resddtjkp?.msg, '', false);
                         } else {
@@ -262,8 +262,8 @@ drmbkjFunc.qrdrsj = (param: any) => {
                       }
                     })
                   } else if (code === '900') {
-                    unitRef.current!.setMasker(false);
-                    unitRef.current!.reload2();
+                    refUnit.current!.setMasker(false);
+                    refUnit.current!.reload2();
                     const sbyyList = msg;
                     const textAreaValues: any = []
                     sbyyList.forEach((item: any, index: any) => {
@@ -282,9 +282,9 @@ drmbkjFunc.qrdrsj = (param: any) => {
                     // 导出
                     const handleDownload = (id: any) => {
                       const params = { key: id };
-                      unitRef.current!.setMasker(true);
+                      refUnit.current!.setMasker(true);
                       commonDrwtdc(params).then((response) => {
-                        unitRef.current!.setMasker(false);
+                        refUnit.current!.setMasker(false);
                         if (response.code === '200') {
                           const { blob, fileName } = response.body;
                           myUtil.file.downloadExcel(blob, fileName);
@@ -316,13 +316,13 @@ drmbkjFunc.qrdrsj = (param: any) => {
                       },
                     });
                   } else {
-                    unitRef.current!.setMasker(false);
+                    refUnit.current!.setMasker(false);
                     message.error(desc)
                   }
                 })
               }
             } else if (code === '900') {
-              unitRef.current!.setMasker(false);
+              refUnit.current!.setMasker(false);
               const cwxx = msg?.jyxx?.cwxx;
               const dm = msg?.jyxx?.dm;
               DDAlert.open({
@@ -343,7 +343,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                 }
               });
             } else {
-              unitRef.current!.setMasker(false);
+              refUnit.current!.setMasker(false);
               message.error(desc);
             }
           })
@@ -362,7 +362,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
             const { code, body, desc } = response;
             if (code === '200') {
               DDAlert.close();
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               DDAlert.open({
                 title: '确认开票数据',
                 info: '成功确认开票数据',
@@ -438,8 +438,8 @@ const openYwjyModal = (data: any, ts: any, isDc: any) => {
 
 // 手动采集开具
 drmbkjFunc.sdcjkj = (param: any) => {
-  const { otherRef, unitRef } = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, refUnit } = param;
+  refUnit.current!.setMasker(true);
   xsfpzcx({}).then((response) => {
     const { code, body } = response;
     if (code === '200') {
@@ -449,10 +449,10 @@ drmbkjFunc.sdcjkj = (param: any) => {
       const fpsqdxx = Object.assign(temp, { xhfkhhjzh: zhpzList[0]?.yhzhmc + zhpzList[0]?.yhzh });
       queryDjbh({}).then((response) => {
         const { code, body } = response;
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (code === '200') {
           otherRef[1].current!.setDjh(body);
-          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.text.uuid(32) }] }, false, unitRef);
+          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.text.uuid(32) }] }, false, refUnit);
         }
       })
     }
@@ -461,12 +461,12 @@ drmbkjFunc.sdcjkj = (param: any) => {
 
 // 根据单据号打开详情
 drmbkjFunc.openFp = (djh: any, param: any) => {
-  const { unitRef, record } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const { refUnit, record } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   fpsqdmxcx({ zbuuid: record.zbuuid }).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
@@ -478,7 +478,7 @@ drmbkjFunc.openFp = (djh: any, param: any) => {
         item.je = item.jshj;
         item.dj = item.hsdj;
       })
-      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, unitRef);
+      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, refUnit);
       otherRef[1].current!.setDjh(djh);
     }
   })
@@ -486,7 +486,7 @@ drmbkjFunc.openFp = (djh: any, param: any) => {
 
 // 删除
 drmbkjFunc.deleteFpsqd = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -507,7 +507,7 @@ drmbkjFunc.deleteFpsqd = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }

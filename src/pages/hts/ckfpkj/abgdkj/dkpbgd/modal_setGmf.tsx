@@ -21,7 +21,7 @@ const formList = new Set();
 
 const gmfFunc: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 const beforeUpload = (file: any) => {
@@ -513,7 +513,7 @@ const ModalGmf: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
 
   // 导入
   const importModal = async (param: any) => {
-    const { unitRef, otherRef } = param;
+    const { refUnit, otherRef } = param;
     DDAlert.open({
       title: '导入Excel文件',
       infoType: 'warning',

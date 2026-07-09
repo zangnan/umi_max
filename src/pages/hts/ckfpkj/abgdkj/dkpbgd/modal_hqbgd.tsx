@@ -29,7 +29,7 @@ const ModalBj: React.FC<AbgdBjProps> = ({
   const [masker, setMasker] = useState<boolean>(false); // 蒙板
   const [disFlag, setDisFlag] = useState('1'); // 蒙板
   const [access, setAccess] = useState(); // 蒙板
-  const [unitRef, setUnitRef] = useState(); // 蒙板
+  const [refUnit, setUnitRef] = useState(); // 蒙板
 
   useImperativeHandle(onRef, () => {
     return {
@@ -38,11 +38,11 @@ const ModalBj: React.FC<AbgdBjProps> = ({
   });
 
   // 开启
-  const showModal = (sbrqFlag: any,unitRef: any,access: any) => {
+  const showModal = (sbrqFlag: any,refUnit: any,access: any) => {
     setSbrqFlag(sbrqFlag);
     setModalVisible(true);
     setAccess(access);
-    setUnitRef(unitRef);
+    setUnitRef(refUnit);
     form.setFieldsValue({ tblx: '1',ckrq: [], hgckhwbgdsbrq: [], ckbgdxzrq: [] });
 
   };
@@ -113,7 +113,7 @@ const ModalBj: React.FC<AbgdBjProps> = ({
           const { code, body, desc ,msg} = response;
           if (code === '200') {
             setMasker(false);
-            openAckrqhq(body, param, unitRef, access);
+            openAckrqhq(body, param, refUnit, access);
           } else {
             setMasker(false);
             if (code === '300' && body.gdykpbz === 'Y') {
@@ -128,7 +128,7 @@ const ModalBj: React.FC<AbgdBjProps> = ({
   }
   
 // 弹出统计条数，点击确定后调用接口处理数据
-const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
+const openAckrqhq = (param: any, param1: any, refUnit: any, access: any) => {
   const tmpMessage = intl2.formatMessage({ id: access.isNsrsbh ? 'message_ckfp_abgdkj_hqbgd_ackrq_sl_success' : 'message_ckfp_abgdkj_hqbgd_ackrq_success' });
   const infoMessage = cktsUtil.text.formatRepalce(tmpMessage, param)
   DDAlert.open({
@@ -156,7 +156,7 @@ const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
                 temp.push(Object.assign(item, { code: item.khuuid, name: item.ghfnsrmc }));
               })
               myUtil.code.saveCodeToLocalTable('CODE_CKFP_ABGDKJ_GMFMC',temp,'01');
-              unitRef.current?.reload2();
+              refUnit.current?.reload2();
               message.success(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_success' }));
             }
           });

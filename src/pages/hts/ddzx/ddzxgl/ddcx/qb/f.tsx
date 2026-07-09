@@ -8,18 +8,18 @@ import {zdyxj } from '@/pages/hts/services/htsApi';
 
 const Func: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.xj = (param:any) =>{
-  const {unitRef,otherRef,selectionRowKeys} = param;
-  if (unitRef?.current?.getGridData().length === 0) {
+  const {refUnit,otherRef,selectionRowKeys} = param;
+  if (refUnit?.current?.getGridData().length === 0) {
     message.info(intl2.formatMessage({ id: 'message_no_data_common_sum' }));
     return;
   }
-  unitRef.current.setMasker(true);
-  const initSearchModal = unitRef.current.getGridParams().initSearchModal || [];
-  let searchModel = unitRef.current.getGridParams().searchModel || [];
+  refUnit.current.setMasker(true);
+  const initSearchModal = refUnit.current.getGridParams().initSearchModal || [];
+  let searchModel = refUnit.current.getGridParams().searchModel || [];
   searchModel = [...searchModel,...initSearchModal];
   if(selectionRowKeys && selectionRowKeys.length > 0){
     searchModel?.push({ "type": 1,"property": "ddbhs","values": selectionRowKeys,"op": "zdy"});
@@ -27,7 +27,7 @@ Func.xj = (param:any) =>{
 
   zdyxj({searchModel}).then((response) => {
     const { code, body } = response;
-    unitRef.current.setMasker(false);
+    refUnit.current.setMasker(false);
     if (code === '200') {
       otherRef[0].current?.showModal({
         gridData: body.rows

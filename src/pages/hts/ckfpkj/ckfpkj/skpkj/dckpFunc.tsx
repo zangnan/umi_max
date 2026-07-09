@@ -16,13 +16,13 @@ import tableStyle from './style.less';
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 下载开票文件
 Func.handleDownLoadKpwj = (param: any) => {
-  const { selectionRows, unitRef, gridRef, unit_key } = param;
-  const gridData = unitRef.current?.getGridData()
+  const { selectionRows, refUnit, gridRef, unit_key } = param;
+  const gridData = refUnit.current?.getGridData()
   if (gridData && gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -33,9 +33,9 @@ Func.handleDownLoadKpwj = (param: any) => {
       fpsqduuids.push(row.fpsqduuid);
     })
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
-  const initSearchModel = unitRef.current.getGridParams().initSearchModal || [];
+  const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel = searchModel.concat(initSearchModel);
   const obj = {
@@ -45,18 +45,18 @@ Func.handleDownLoadKpwj = (param: any) => {
     cxtj: allSearchModel
   }
   if (fpsqduuids.length > 0) {
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     xzkpwj(obj).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, body } = response;
       if (code === '200') {
         if (JSON.stringify(body) != "{}") {
           const { blob, fileName } = response.body;
           myUtil.file.downloadExcel(blob, fileName);
           // 清空选中并设置按钮可用状态
-          unitRef.current?.setSelectionRowKeys([]);
-          unitRef.current?.setSelectionRows([]);
-          unitRef.current!.reload2();
+          refUnit.current?.setSelectionRowKeys([]);
+          refUnit.current?.setSelectionRows([]);
+          refUnit.current!.reload2();
         } else {
           message.info('下载失败！');
         }
@@ -71,7 +71,7 @@ Func.handleDownLoadKpwj = (param: any) => {
   } else {
     xzkpwjCheck(obj).then((res: any) => {
       if (res.code === '200') {
-        openXz(unitRef, obj);
+        openXz(refUnit, obj);
       } else if (res.code === '300') {
         message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
       } else {
@@ -81,7 +81,7 @@ Func.handleDownLoadKpwj = (param: any) => {
   }
 }
 
-const openXz = (unitRef: any, obj: any) => {
+const openXz = (refUnit: any, obj: any) => {
   DDAlert.open({
     title: '下载开票文件',
     info: '确定下载当前未回填且未下载过的开票文件吗?',
@@ -98,9 +98,9 @@ const openXz = (unitRef: any, obj: any) => {
             const { blob, fileName } = response.body;
             myUtil.file.downloadExcel(blob, fileName);
             // 清空选中并设置按钮可用状态
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
-            unitRef.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
           } else {
             message.info('下载失败！');
           }
@@ -118,8 +118,8 @@ const openXz = (unitRef: any, obj: any) => {
 
 // 下载开票文件到发票配置的导出路径
 Func.handleDownLoadKpwjToExportPath = async (param: any) => {
-  const { selectionRows, unitRef ,gridRef} = param;
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const { selectionRows, refUnit ,gridRef} = param;
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   if (!selectionRows || selectionRows.length === 0) {
@@ -136,7 +136,7 @@ Func.handleDownLoadKpwjToExportPath = async (param: any) => {
         // 不勾选导出校验
         zdkpcx(param3).then((response) => {
           if (response.code === '200') {
-            SaveToExportPath(unitRef, response.body);
+            SaveToExportPath(refUnit, response.body);
           } else {
             message.error(response.msg);
           }
@@ -173,28 +173,28 @@ Func.handleDownLoadKpwjToExportPath = async (param: any) => {
           const fpsqduuids = selectionRows.map((row: any) => {
             return (row.fpsqduuid);
           })
-          SaveToExportPath(unitRef, fpsqduuids);
+          SaveToExportPath(refUnit, fpsqduuids);
         },
       });
     } else {
       const fpsqduuids = selectionRows.map((row: any) => {
         return (row.fpsqduuid);
       })
-      SaveToExportPath(unitRef, fpsqduuids);
+      SaveToExportPath(refUnit, fpsqduuids);
     }
   }
 
 }
 
-const SaveToExportPath = (unitRef: any, fpsqduuids: any) => {
-  unitRef.current?.setMasker(true);
+const SaveToExportPath = (refUnit: any, fpsqduuids: any) => {
+  refUnit.current?.setMasker(true);
   // 获取发票设置路径
   fpljhq({}).then((response) => {
     if (response.code === '200') {
       // 调用客户端上传相关路径设置、出口发票下载调用
-      khdgjUtil.khdgjFpXgljSet({ ...response.body, uuids: fpsqduuids, unitRef });
+      khdgjUtil.khdgjFpXgljSet({ ...response.body, uuids: fpsqduuids, refUnit });
     } else {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       message.error(response.msg);
       DDAlert.close();
     }
@@ -203,18 +203,18 @@ const SaveToExportPath = (unitRef: any, fpsqduuids: any) => {
 
 // 下载点击的开票文件
 Func.handleDownLoadClickKpwj = (param: any) => {
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   const fpsqduuids: any = [record.fpsqduuid];
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   xzkpwj({ xzlx: 'single', fpsqduuids }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
       const { blob, fileName } = response.body;
       myUtil.file.downloadExcel(blob, fileName);
       // 清空选中并设置按钮可用状态
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
     } else {
       message.error(response.desc);
     }
@@ -223,7 +223,7 @@ Func.handleDownLoadClickKpwj = (param: any) => {
 
 // 打开发票开具回填
 Func.handleFpkjht = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
   }).catch(() => {
     message.error('获取码表失败');
@@ -252,7 +252,7 @@ Func.handleFpkjht = (param: any) => {
             DDAlert.close();
             const { code, body, desc } = response;
             if (code === '200') {
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               const successInfo = body[0].htxq;
               if(body[0].tsxxbz === 'Y') {
                  // 业务校验
@@ -382,7 +382,7 @@ const beforeUpload = (file: any) => {
 } */}
 // 退回至未开票状态
 Func.handleThzwkpzt = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -405,7 +405,7 @@ Func.handleThzwkpzt = (param: any) => {
           DDAlert.close();
           const { code, desc } = response;
           if (code === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_qxfp_success' }))
           } else {
             message.error(desc)
@@ -419,7 +419,7 @@ Func.handleThzwkpzt = (param: any) => {
 
 // 设置红冲标志
 Func.handleSzhcbz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -434,12 +434,12 @@ Func.handleSzhcbz = (param: any) => {
     const tempArr = selectionRows.map((row: any) => {
       return (row.fpsqduuid)
     })
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     fpch({ szchlx: '1', fpsqduuids: tempArr }).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_sethbbz_success' }))
       } else {
         message.error(desc)
@@ -450,7 +450,7 @@ Func.handleSzhcbz = (param: any) => {
 
 // 取消红冲标志
 Func.handleQxhcbz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -465,12 +465,12 @@ Func.handleQxhcbz = (param: any) => {
     const tempArr = selectionRows.map((row: any) => {
       return (row.fpsqduuid)
     })
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     fpch({ szchlx: '2', fpsqduuids: tempArr }).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_cancelhcbz_successr' }));
       } else {
         message.error(desc)
@@ -481,7 +481,7 @@ Func.handleQxhcbz = (param: any) => {
 
 // 设置作废标志
 Func.handleSzzfbz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -496,12 +496,12 @@ Func.handleSzzfbz = (param: any) => {
     const tempArr = selectionRows.map((row: any) => {
       return (row.fpsqduuid)
     })
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     fpzfDckp({ szzflx: '1', fpsqduuids: tempArr }).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_setzfbz_success' }));
       } else {
         message.error(desc)
@@ -512,7 +512,7 @@ Func.handleSzzfbz = (param: any) => {
 
 // 取消作废标志
 Func.handleQxzfbz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -527,12 +527,12 @@ Func.handleQxzfbz = (param: any) => {
     const tempArr = selectionRows.map((row: any) => {
       return (row.fpsqduuid)
     })
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     fpzfDckp({ szzflx: '2', fpsqduuids: tempArr }).then((response) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_cancelzfbz_success' }));
       } else {
         message.error(desc)
@@ -543,8 +543,8 @@ Func.handleQxzfbz = (param: any) => {
 
 // 自定义工具栏：导出开票结果
 Func.exportKpjg = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef, gridRef } = param;
-  const gridData  = param.unitRef.current.getGridData();
+  const { selectionRowKeys, selectionRows, refUnit, gridRef } = param;
+  const gridData  = param.refUnit.current.getGridData();
 
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
@@ -563,7 +563,7 @@ Func.exportKpjg = (param: any) => {
   }
   key = 'SAAS_CKFPKJ_FPGL_DCKPJG_DCKP_DC';
 
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {

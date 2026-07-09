@@ -7,13 +7,13 @@ import myUtil, { intl as intl2 } from '@/components/DDAssist/util';
 import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 免抵退核销配置项：自定义工具栏
 // 免抵退核销重新计算分配率方法
 Func.handleMdthxCxjsfpl = (param: any) => {
-  const {selectionRows, unitRef,gridRef } = param;
+  const {selectionRows, refUnit,gridRef } = param;
   if (gridRef.current.getPagination().total === 0) {
     message.info(intl2.formatMessage({ id: 'validator_jhfpl_01' }));
     return;
@@ -22,7 +22,7 @@ Func.handleMdthxCxjsfpl = (param: any) => {
   let info = '';
   let model: any = [];
   if (!selectionRows || selectionRows.length === 0) {
-    unitRef.current?.getGridParams().searchModel.forEach((item:any) => {
+    refUnit.current?.getGridParams().searchModel.forEach((item:any) => {
       model.push(item);
     });
     if (gridRef.current?.getHeaderFilter()) {
@@ -51,7 +51,7 @@ Func.handleMdthxCxjsfpl = (param: any) => {
       content,
      ],
     okCallbackFn: function () {
-      const otherRefs = unitRef.current?.getOtherRefs();
+      const otherRefs = refUnit.current?.getOtherRefs();
       if (otherRefs[0]) {
         otherRefs[0].current?.showModal({searchModel: model}, gridRef);
       }
@@ -62,8 +62,8 @@ Func.handleMdthxCxjsfpl = (param: any) => {
 // 已核销调整配置项：自定义工具栏
 // 已核销调整重新计算分配率方法
 Func.handleYhxtzCxjsfpl = (param: any) => {
-  const { selectionRowKeys, gridRef, unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { selectionRowKeys, gridRef, refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_jljghx_jhfpl_sjcj_check' }));
     return;
@@ -75,9 +75,9 @@ Func.handleYhxtzCxjsfpl = (param: any) => {
       cancelText: '取消',
       onOk() {
         // 确认调用接口,
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         recalculateMdthxfpl({ id: 1 }).then((response) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (response.code === '200') {
             DDAlert.open({
               title: intl2.formatMessage({ id: 'message_jljghx_jhfpl_cxjssj_check' }),
@@ -105,9 +105,9 @@ Func.handleYhxtzCxjsfpl = (param: any) => {
       cancelText: '取消',
       onOk() {
         // 确认调用接口,
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         recalculateMdthxfpl({ id: 1 }).then((response) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (response.code === '200') {
             DDAlert.open({
               title: intl2.formatMessage({ id: 'message_jljghx_jhfpl_cxjssj_check' }),

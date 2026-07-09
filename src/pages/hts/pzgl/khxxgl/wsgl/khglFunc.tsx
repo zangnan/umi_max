@@ -11,12 +11,12 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 客户管理:提取境外发货人
 Func.handletqjwfhr = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   DDAlert.open({
     title: '提取客户',
     infoType: 'warning',
@@ -40,7 +40,7 @@ Func.handletqjwfhr = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_khtq_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {
@@ -54,7 +54,7 @@ Func.handletqjwfhr = (param: any) => {
 
 // 客户管理:删除
 Func.deleteKhgl = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -71,7 +71,7 @@ Func.deleteKhgl = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }
@@ -83,17 +83,17 @@ Func.deleteKhgl = (param: any) => {
 
 // 客户管理:设置客户状态
 Func.setKhzt = (checked: any, param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   let khzt = 'N';
   if (checked) {
     khzt = 'Y'
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   khglszzt({ tybz: khzt, khuuid: record.khuuid }).then((response) => {
     const { code, desc } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
       message.success(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_setkhzt_success' }));
       return true;
     } else {

@@ -90,7 +90,7 @@ const ModalScmx: React.FC<ModalScmxProps> = ({
         if (response.code == '200') {
           message.success('生成明细成功！');
           mainParams?.otherRef[1].current?.closeModalVisible();
-          mainParams?.unitRef.current!.reload2();
+          mainParams?.refUnit.current!.reload2();
           setModalVisible(false);
         } else {
           message.error(msg);

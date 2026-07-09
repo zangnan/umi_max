@@ -33,11 +33,11 @@ const LoginCompany: React.FC<LoginCompanyProps> = ({
   // 开启
   const showModal = (param: any) => {
     myUtil.sessionStore.setItem('numTimeJxfp', 0);
-    const { unitRef, gridRef} = param;
+    const { refUnit, gridRef} = param;
 
-    const searchModel = unitRef.current?.getGridParams().searchModel || [];
+    const searchModel = refUnit.current?.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
-    const initSearchModel = unitRef.current.getGridParams().initSearchModal || [];
+    const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
     let allSearchModel: any = searchModel.concat([...headerSearchModel,...initSearchModel]);
     setSearchModel(allSearchModel);
 

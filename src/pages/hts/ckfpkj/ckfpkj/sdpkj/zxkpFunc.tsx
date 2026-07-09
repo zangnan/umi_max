@@ -6,14 +6,14 @@ import { fpmxcx2, qxkp } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 ckfpFunc.columnUpdate = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const { refUnit, record } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   const obj = {
     djbh: record?.djbh,
     fpsqduuid: record?.fpsqduuid,
@@ -21,7 +21,7 @@ ckfpFunc.columnUpdate = (param: any, event: any) => {
   }
   fpmxcx2(obj).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
@@ -37,7 +37,7 @@ ckfpFunc.columnUpdate = (param: any, event: any) => {
       if(record?.fpkjfsDm === '3') {
         isFpsqd = '3';
       }
-      otherRef[0].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, unitRef, isFpsqd);
+      otherRef[0].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, refUnit, isFpsqd);
       otherRef[0].current!.setDjh(record?.djbh);
     }
   })
@@ -45,7 +45,7 @@ ckfpFunc.columnUpdate = (param: any, event: any) => {
 
 // 发票撤回
 ckfpFunc.handleFpch = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -63,7 +63,7 @@ ckfpFunc.handleFpch = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票撤回成功! 数据已转到“发票申请单”或“导入模板开具”页面。');
         } else {
           message.error(response.msg);

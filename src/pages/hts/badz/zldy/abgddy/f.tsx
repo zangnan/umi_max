@@ -7,7 +7,7 @@ import { dzbaZlcdBgd, abgdDyData } from "@/pages/hts/services/htsApi";
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 //打印成册
@@ -20,7 +20,7 @@ Func.xzzl = (param: any) => {
 }
 //资料撤档
 Func.zlcd = (param: any) => {
-  const { unitRef, gridRef, selectionRows } = param;
+  const { refUnit, gridRef, selectionRows } = param;
   const keys = param.selectionRowKeys;
   if (keys.length == 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -45,8 +45,8 @@ Func.zlcd = (param: any) => {
         thisObj.setState({ masker: false });
         if (res.code == '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_zlcd_success' }));
-          unitRef.current!.setSelectionRowKeys([]);
-          unitRef.current!.setSelectionRows([]);
+          refUnit.current!.setSelectionRowKeys([]);
+          refUnit.current!.setSelectionRows([]);
           gridRef.current?.reload();
         } else {
           message.error(res.desc)
@@ -58,7 +58,7 @@ Func.zlcd = (param: any) => {
 //资料调阅
 Func.zldy = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   if(record.dycs == 0){
     message.info('暂无报告！请先打印成册！');
     return ;
@@ -68,11 +68,11 @@ Func.zldy = (param: any, event: any) => {
     rzlx: 'badzbgduuid',
     badzczlxDm: '2'
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   abgdDyData(qqbw).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
-      const otherRef = param.unitRef.current?.getOtherRefs();
+      const otherRef = param.refUnit.current?.getOtherRefs();
       const listData = [];
       const wjljs = {
         wjlj: response.body.wjlj,
@@ -80,9 +80,9 @@ Func.zldy = (param: any, event: any) => {
       }
       listData.push(wjljs)
       if (otherRef && otherRef[0]) {
-        otherRef[0].current?.showModal(listData, param.unitRef);
+        otherRef[0].current?.showModal(listData, param.refUnit);
       } else if (param.otherRef && param.otherRef[0]) {
-        param.otherRef[0].current?.showModal(listData, param.unitRef);
+        param.otherRef[0].current?.showModal(listData, param.refUnit);
       }
     } else {
       message.error(response.msg);
@@ -94,16 +94,16 @@ Func.zldy = (param: any, event: any) => {
 // 预览
 Func.dzbaZlgdPreview = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   // 打开弹窗
-  const otherRef = param.unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const otherRef = param.refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   if (otherRef && otherRef[1]) {
-    otherRef[1].current?.showModal(record, unitRef, 'zlgd');
-    unitRef.current!.setMasker(false);
+    otherRef[1].current?.showModal(record, refUnit, 'zlgd');
+    refUnit.current!.setMasker(false);
   } else if (param.otherRef && param.otherRef[1]) {
-    param.otherRef[1].current?.showModal(record, unitRef, 'zlgd');
-    unitRef.current!.setMasker(false);
+    param.otherRef[1].current?.showModal(record, refUnit, 'zlgd');
+    refUnit.current!.setMasker(false);
   }
 }
 

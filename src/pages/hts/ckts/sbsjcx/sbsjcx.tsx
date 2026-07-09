@@ -363,8 +363,8 @@ Func.shfkdr = (param: any) => {
 
   // 刷新数据审核结果
   const reloadGrid = () => {
-    const unitRef = Func.unitRef;
-    unitRef.current!.reload2();
+    const refUnit = Func.refUnit;
+    refUnit.current!.reload2();
   };
 
   // 配置项：自定义操作列

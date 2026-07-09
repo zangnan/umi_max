@@ -4,7 +4,7 @@ import { history } from 'umi';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 下钻
@@ -51,7 +51,7 @@ Func.openDrawer = (param: any, unitKey: any) => {
     ]
   }
 
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, initSearchModal, unitKey);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -60,8 +60,8 @@ Func.openDrawer = (param: any, unitKey: any) => {
 }
 
 Func.afterReload = (param: any) => {
-  const searchModel = param.unitRef?.current?.getGridParams().searchModel;
-  const key = param.unitRef?.current?.getGridParams().key;
+  const searchModel = param.refUnit?.current?.getGridParams().searchModel;
+  const key = param.refUnit?.current?.getGridParams().key;
   if (searchModel?.length > 0) {
     myUtil.localStore.setItem(key, searchModel);
   }
@@ -71,7 +71,7 @@ Func.afterReload = (param: any) => {
 Func.columnsRender = {
   // 分组项目
   renderFzxm: (param: any) => {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     const fzxmmc = param.record?.fzxmmc;
     return (
       <Tooltip title={fzxmmc}>
@@ -83,7 +83,7 @@ Func.columnsRender = {
   },
   // 商品代码
   renderFzxmQt: (param: any) => {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Tooltip title={param.text}>
         <Button type="link" onClick={() => { Func.openDrawer(param, key) }}>
@@ -94,7 +94,7 @@ Func.columnsRender = {
   },
   // 美元离岸价本期
   renderMylajbq: (param: any) => {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     if(param.text && param.text != "0"){
       return (
         <Button type="link" onClick={() => { Func.openDrawer(param, key) }}>

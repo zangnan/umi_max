@@ -57,7 +57,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   const refDDGridViewSetting: any = useRef();
   const refDDExport: any = useRef();
   const refDDImport: any = useRef();
-  const unitRef = func.unitRef;
+  const refUnit = func.refUnit;
   const refCktsSum: any = useRef();              // 原在线申报系统模块 小计
   const refCktsOrder: any = useRef();              // 原在线申报系统模块 序号重排
   const refDybbxz: any = useRef();              // 查询统计-打印报表下载
@@ -180,7 +180,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   const { DDB2PageData, changeDDB2PageData } = useModel('ddb2');
 
   // useImperativeHandle
-  useImperativeHandle(unitRef, () => {
+  useImperativeHandle(refUnit, () => {
     return {
       // setGlobalLoading,
       setMasker,
@@ -277,7 +277,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
           } else {
             if (func.afterDeletionFailure) {
               func.afterDeletionFailure({
-                unitRef,
+                refUnit,
                 gridRef: refDDBaseGrid,
                 body
               });
@@ -302,7 +302,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       const beforeResult = func.beforeDelete({
         page_id,
         unit_key,
-        unitRef,
+        refUnit,
         unit_lcswsx_dm,
         selectionRowKeys,
         selectionRows
@@ -342,7 +342,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
           } else {
             if (func.afterDeletionFailure) {
               func.afterDeletionFailure({
-                unitRef,
+                refUnit,
                 gridRef: refDDBaseGrid,
                 body
               });
@@ -369,7 +369,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             selectedRowKeys,
             selectedRows,
             gridRef: refDDBaseGrid,
-            unitRef,
+            refUnit,
           });
         }
       },
@@ -381,7 +381,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             selectedRows,
             nativeEvent,
             gridRef: refDDBaseGrid,
-            unitRef,
+            refUnit,
           });
         }
       },
@@ -392,7 +392,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             selectedRows,
             changeRows,
             gridRef: refDDBaseGrid,
-            unitRef,
+            refUnit,
           });
         }
       }
@@ -609,7 +609,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             form,
             page_id,
             unit_key,
-            unitRef,
+            refUnit,
             handleModalVisible,
             myFormItems,
             setMyFormItems,
@@ -635,7 +635,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
         handleModalVisible,
         page_id,
         unit_key,
-        unitRef,
+        refUnit,
         myFormItems,
         setMyFormItems,
         unit_lcswsx_dm,
@@ -652,7 +652,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       message.info('本次导出的数据条数已超过上限（5万条），无法导出。');
       return;
     }
-    const gridData = unitRef.current?.getGridData();
+    const gridData = refUnit.current?.getGridData();
     if (!gridData || gridData.length <= 0) {
       message.info(intl.formatMessage({ id: 'message_common_nodata_export' }));
       return;
@@ -693,9 +693,9 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
           searchModel: model,
         }
         thisObj.setState({ masker: true });
-        // unitRef.current?.setMasker(true);
+        // refUnit.current?.setMasker(true);
         exportPager(data).then((response) => {
-          // unitRef.current?.setMasker(false);
+          // refUnit.current?.setMasker(false);
           thisObj.setState({ masker: false });
           const { code, body, desc } = response;
           DDAlert.close();
@@ -710,7 +710,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
     })
     // 新版导出bak
     // exportPager(data).then((response) => {
-    //   unitRef.current?.setMasker(false);
+    //   refUnit.current?.setMasker(false);
     //   const { code, body, desc } = response;
     //   if (code === '200') {
     //     const { filePath } = body;
@@ -746,7 +746,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       const menuObj = cktsUtil.menu.getMenuObjByPath(cdPath);
       cdDm = menuObj?.id;
     }
-    const gridData = unitRef.current?.getGridData();
+    const gridData = refUnit.current?.getGridData();
     if (!gridData || gridData.length <= 0) {
       message.info(intl.formatMessage({ id: 'message_common_nodata_export' }));
       return;
@@ -824,7 +824,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
     })
     // 新版导出bak
     // exportPager(data).then((response) => {
-    //   unitRef.current?.setMasker(false);
+    //   refUnit.current?.setMasker(false);
     //   const { code, body, desc } = response;
     //   if (code === '200') {
     //     const { filePath } = body;
@@ -855,7 +855,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   //   const key = export_key;
   //   const tmp = getGridParams();
   //   const model: any = [];
-  //   unitRef.current?.setMasker(true);
+  //   refUnit.current?.setMasker(true);
   //   const searchModel3: any = refDDBaseGrid.current?.getHeaderFilter() || [];
   //   tmp.searchModel.forEach((item: any, index: number) => {
   //     model.push(item);
@@ -874,7 +874,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   //     }
   //     exportTzPagerDc(data).then((response) => {
   //       const { code, body, desc } = response;
-  //       unitRef.current?.setMasker(false);
+  //       refUnit.current?.setMasker(false);
   //       if (code === '200') {
   //         const { blob, fileName } = body;
   //         myUtil.file.downloadExcel(blob, fileName);
@@ -895,7 +895,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   //     }
   //     exportTzPager(data).then((response) => {
   //       const { code, body, desc } = response;
-  //       unitRef.current?.setMasker(false);
+  //       refUnit.current?.setMasker(false);
   //       if (code === '200') {
   //         const { blob, fileName } = body;
   //         myUtil.file.downloadExcel(blob, fileName);
@@ -941,7 +941,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       unit_key,
       unit_lcswsx_dm,
       type: config?.toolbar_default?.ckts_order,
-      unitRef,
+      refUnit,
       gridData: getGridData(),
       order_key,
     }
@@ -979,7 +979,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   //   const data = {
   //     key: `${unit_key}`,
   //     gridRef: refDDBaseGrid,
-  //     unitRef: unitRef,
+  //     refUnit: refUnit,
   //   }
   //   if (type === '2') {
   //     // 导入排序
@@ -997,7 +997,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       return;
     }
     let param = (func.getBatchEditParam && func.getBatchEditParam({
-      unitRef,
+      refUnit,
       gridRef: refDDBaseGrid,
       selectionRows,
       selectionRowKeys,
@@ -1008,7 +1008,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
     refBatchUpdate.current?.showModal({
       data: batch_update_items || [],
       url: batchUpdateUrl,
-      ref: unitRef,
+      ref: refUnit,
       apiParams: param,
       gridParams: getGridParams(),
     })
@@ -1068,7 +1068,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
         };
         const param: any = {
           gridRef: refDDBaseGrid,
-          unitRef: unitRef,
+          refUnit: refUnit,
           formQuickFilter: formQuickFilter,
         }
         // tooltips
@@ -1402,7 +1402,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
         selectionRowKeys,
         selectionRows,
         gridRef: refDDBaseGrid,
-        unitRef: unitRef,
+        refUnit: refUnit,
         formQuickFilter: formQuickFilter,
         unit_key,
         access,
@@ -1449,7 +1449,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       selectionRowKeys,
       selectionRows,
       gridRef: refDDBaseGrid,
-      unitRef: unitRef,
+      refUnit: refUnit,
       formQuickFilter: formQuickFilter,
     };
     const itemsSelect = [];                       // 显示在...更多图标下的按钮
@@ -1731,7 +1731,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
           form,
           page_id,
           unit_key,
-          unitRef,
+          refUnit,
           handleModalVisible,
           myFormItems,
           setMyFormItems,
@@ -1833,7 +1833,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
   // 列表数据加载后执行
   const afterReloadGridData = (param: any) => {
     const { gridTotalNum } = param;
-    param.unitRef = unitRef;
+    param.refUnit = refUnit;
     param.gridRef = refDDBaseGrid;
     param.formQuickFilter = formQuickFilter;
     setGridTotal(gridTotalNum);
@@ -1881,7 +1881,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
         record,
         event,
         gridRef: refDDBaseGrid,
-        unitRef: unitRef,
+        refUnit: refUnit,
         formQuickFilter: formQuickFilter,
       });
     }
@@ -1898,7 +1898,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
         record,
         event,
         gridRef: refDDBaseGrid,
-        unitRef: unitRef,
+        refUnit: refUnit,
         formQuickFilter: formQuickFilter,
       });
     }
@@ -2007,7 +2007,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       columns: cols,
       otherRef: getOtherRefs(),
       gridRef: refDDBaseGrid,
-      unitRef: unitRef,
+      refUnit: refUnit,
       handleColumnsDefault,
       handleColumns,
       func,
@@ -2032,7 +2032,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
     if (func.useEffectEnd) {
       const useEffectParam: any = {
         gridRef: refDDBaseGrid,
-        unitRef: unitRef,
+        refUnit: refUnit,
       };
       return func.useEffectEnd(useEffectParam);
     }
@@ -2265,7 +2265,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
                   {...setGridBorder()}
                   {...setGridLayout()}
                   {...rowSelection}
-                  {...unitRef}
+                  {...refUnit}
                   pagination2={pagination2}
                   onRow={(record: any) => {
                     return {

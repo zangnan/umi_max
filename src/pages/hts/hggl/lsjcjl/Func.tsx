@@ -7,7 +7,7 @@ import myUtil from '@/components/DDAssist/util';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -27,10 +27,10 @@ Func.columnsRender = {
 }
 
 Func.fxbg = (param: any) => {
-  const { unitRef, record } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit, record } = param;
+  refUnit.current?.setMasker(true);
   getXzbg({ ny: record?.ny }).then((res2: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg, body } = res2;
     if (!"200" == code) {
       message.error(msg);
@@ -46,15 +46,15 @@ Func.fxbg = (param: any) => {
 }
 
 Func.ydqc = (param: any) => {
-  const { unitRef, record } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit, record } = param;
+  refUnit.current?.setMasker(true);
   const data = { "sfBhsj": "Y", "sfScsm": "Y", "key": "CX_HGGL_TSQK_YDLBQUERY_DC", "orderModel": [], "searchModel": [{ "type": 1, "property": "ny", "value": record?.ny, "op": "zdy" }] };
   if(myUtil.sessionStore.getItem('userInfo')?.qxQys[0].cktsqylxDm == 'SC'){
     data.key = "CX_HGGL_TSQK_YDLBQUERY_SC_DC";
    
   }
   downloadTemplate(data).then((response: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, body, msg } = response;
     if (code === '200') {
       const { blob, fileName } = body;

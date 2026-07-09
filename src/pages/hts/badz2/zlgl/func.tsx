@@ -2,7 +2,7 @@ import React from 'react';
 import 'moment/locale/zh-cn';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 资料下载

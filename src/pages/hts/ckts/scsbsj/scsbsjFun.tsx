@@ -8,7 +8,7 @@ import { history } from 'umi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配置项：生成申报数据
@@ -21,7 +21,7 @@ Func.dataCreate = (param: any) => {
 
 // 配置项：撤销申报数据 1.检查
 Func.dataRecall = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -39,9 +39,9 @@ Func.dataRecall = (param: any) => {
   Modal.confirm({
     title: '执行撤销操作将会删除此条申报记录，是否继续？',
     onOk() {
-      unitRef.current?.setMasker(true);
+      refUnit.current?.setMasker(true);
       chsbCheck({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
-        unitRef.current?.setMasker(false);
+        refUnit.current?.setMasker(false);
         const { code, body } = response;
         if (code === '200') {
           if (body.msgInfo) {
@@ -64,14 +64,14 @@ Func.dataRecall = (param: any) => {
 
 // 配置项：撤销申报数据 2.撤销
 Func.dataRecallS2 = (param: any) => {
-  const { selectionRows, unitRef } = param;
-  unitRef.current?.setMasker(true);
+  const { selectionRows, refUnit } = param;
+  refUnit.current?.setMasker(true);
   chsb({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
       Func.dataRecallChBadzSJ(param)
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
     } else {
       message.error(msg);
     }
@@ -80,14 +80,14 @@ Func.dataRecallS2 = (param: any) => {
 
 // 撤销申备案单证数据
 Func.dataRecallChBadzSJ = (param: any) => {
-  const { selectionRows, unitRef } = param;
-  unitRef.current?.setMasker(true);
+  const { selectionRows, refUnit } = param;
+  refUnit.current?.setMasker(true);
   chBadzSJ({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg } = response;
-    unitRef.current?.reload2();
+    refUnit.current?.reload2();
     if (code === '200') {
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
       message.success('数据撤销成功');
     } else {
       message.error(msg);
@@ -97,18 +97,18 @@ Func.dataRecallChBadzSJ = (param: any) => {
 
 // 配置项：数据汇总
 Func.dataGather = (param: any) => {
-  const { selectionRows, unitRef, otherRef } = param;
+  const { selectionRows, refUnit, otherRef } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   const params = {
     ssq: selectionRows[0].ssq,
     sbpc: selectionRows[0].sbpc
   };
   queryJgbHzsj(params).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, body, msg } = response;
     if (code === '200') {
       body.ssq = params.ssq;
@@ -124,7 +124,7 @@ Func.dataGather = (param: any) => {
 
 // 配置项：数据自检
 Func.dataCheck = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -136,12 +136,12 @@ Func.dataCheck = (param: any) => {
   Modal.confirm({
     title: '确定要执行数据自检功能么？',
     onOk() {
-      unitRef.current?.setMasker(true);
+      refUnit.current?.setMasker(true);
       ycsbSjzjSq({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
-        unitRef.current?.setMasker(false);
+        refUnit.current?.setMasker(false);
         const { code, msg } = response;
         if (code === '200') {
-          unitRef.current?.reload2();
+          refUnit.current?.reload2();
           message.success('数据自检成功');
         } else {
           message.error(msg);
@@ -153,7 +153,7 @@ Func.dataCheck = (param: any) => {
 
 // 配置项：证明申请正式申报
 Func.proveApply = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 检查: 1.数据未选择
   if (!selectionRows || selectionRows.length === 0) {
     message.info('请选择要操作的数据！');
@@ -190,24 +190,24 @@ Func.proveApply = (param: any) => {
   Modal.confirm({
     title: '确定要正式申报么？',
     onOk() {
-      unitRef.current?.setMasker(true);
+      refUnit.current?.setMasker(true);
       //flzlCheck(selectionRows[0]).then((res) => {
         //if(res.code === '200') {
           ycsbZssbNew({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
-            unitRef.current?.setMasker(false);
+            refUnit.current?.setMasker(false);
             const { code, msg } = response;
             if (code === '200') {
               if(history.location.pathname.indexOf('/25/2505') > -1){
-                Func.successTz('/25/2506',unitRef);
+                Func.successTz('/25/2506',refUnit);
               }
               if(history.location.pathname.indexOf('/26/2605') > -1){
-                Func.successTz('/26/2606',unitRef);
+                Func.successTz('/26/2606',refUnit);
               }
               if(history.location.pathname.indexOf('/27/2705') > -1){
-                Func.successTz('/27/2706',unitRef);
+                Func.successTz('/27/2706',refUnit);
               }
               if(history.location.pathname.indexOf('/hts/jljg/ckts/scsbsj/JLJG_MDTHX') > -1){
-                Func.successTz('/hts/jljg/ckts/sbsjcx/JLJG_MDTHX',unitRef);
+                Func.successTz('/hts/jljg/ckts/sbsjcx/JLJG_MDTHX',refUnit);
               }
             } else {
               message.error(msg);
@@ -219,7 +219,7 @@ Func.proveApply = (param: any) => {
 }
 
 
-  Func.successTz=(param :any,unitRef:any)=>{
+  Func.successTz=(param :any,refUnit:any)=>{
     DDAlert.open({
       title: '系统提示',
       info: '数据正式申报成功，请跳转至申报结果查询，尝试刷新操作，更新审核状态',
@@ -229,7 +229,7 @@ Func.proveApply = (param: any) => {
       okText: '转申报结果查询',
       okCallbackFn: function (thisObj: any) {
         history.push(param);
-        unitRef.current?.reload2();
+        refUnit.current?.reload2();
         // message.success('数据申报成功');
       },
     });
@@ -269,7 +269,7 @@ Func.reportPrint = (param1: any) => {
 
 // 配置项 下载申报文件
 Func.downloadFileBtn = async (param: any) => {
-  const { selectionRows, otherRef, unitRef } = param;
+  const { selectionRows, otherRef, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -285,9 +285,9 @@ Func.downloadFileBtn = async (param: any) => {
     sbwjuuid: selectionRows[0].sbwjuuid,
     ywKey: myYwKey
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   await cktsUtil.downloadFileCkts(url, params);
-  unitRef.current?.setMasker(false);
+  refUnit.current?.setMasker(false);
 };
 
 
@@ -325,7 +325,7 @@ Func.tszlxz = (param: any, event: any) => {
 
 // 配置项：自定义操作列 刷新数据审核结果
 Func.reloadColumn = async (param: any, event: any) => {
-  const { unitRef, record, otherRef } = param;
+  const { refUnit, record, otherRef } = param;
   const params = {
     ssq: record.ssq,
     sbwjuuid: record.sbwjuuid,
@@ -354,7 +354,7 @@ Func.reloadColumn = async (param: any, event: any) => {
     msg: ''
   };
   event.stopPropagation();
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   if (isSjzj) {
     const sjzjjg = await ycsbSjzjztCx(params);
     sjzj.code = sjzjjg.code;
@@ -367,10 +367,10 @@ Func.reloadColumn = async (param: any, event: any) => {
     zssb.desc = zssbjg.desc;
     zssb.msg = zssbjg.msg;
   }
-  unitRef.current?.setMasker(false);
+  refUnit.current?.setMasker(false);
   if (sjzj.code === '200') {
     if (zssb?.code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else if (zssb?.code === '900'){
       message.info(zssb?.msg || zssb?.desc);
     } else {
@@ -402,7 +402,7 @@ Func.displayYdzncl = (record: any) => {
 }
 
 Func.proveApplyNew = (param: any) => {
-  const { selectionRows, unitRef, otherRef } = param;
+  const { selectionRows, refUnit, otherRef } = param;
   // 检查: 1.数据未选择
   if (!selectionRows || selectionRows.length === 0) {
     message.info('请选择要操作的数据！');
@@ -442,7 +442,7 @@ Func.proveApplyNew = (param: any) => {
   }
   const obj = selectionRows[0];
   obj.ywKey = otherRef[3];
-  otherRef[7].current?.showModal(obj, unitRef);
+  otherRef[7].current?.showModal(obj, refUnit);
 }
 
 

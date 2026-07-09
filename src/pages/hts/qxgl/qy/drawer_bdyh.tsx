@@ -85,7 +85,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   };
 
   Func.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if(dataSource && dataSource.length > 0 ) {
@@ -96,14 +96,14 @@ const DrawerForm: React.FC<BdjgProps> = ({
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   // 保存
   Func.save = (param: any) => {
-    const { selectionRowKeys, unitRef } = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const { selectionRowKeys, refUnit } = param;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     setMasker(true);
     const params = {
       yhuuid1s: selectionRowKeys,
@@ -120,9 +120,9 @@ const DrawerForm: React.FC<BdjgProps> = ({
       setMasker(false);
       const { code, msg } = res;
       if (code == '200') {
-        initParam?.unitRef.current!.reload2();
-        unitRef.current?.setSelectionRowKeys([]);
-        unitRef.current?.setSelectionRows([]);
+        initParam?.refUnit.current!.reload2();
+        refUnit.current?.setSelectionRowKeys([]);
+        refUnit.current?.setSelectionRows([]);
         message.success("绑定用户成功！");
         setModalVisible(false);
       } else {

@@ -5,7 +5,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 import { deleteBaqkAndDzRelation, saveBaqkAndDzRelation } from '@/pages/hts/services/htsApi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -41,7 +41,7 @@ Func.columnsRender = {
 
 // 保存
 Func.costomerToobarSave = async (param: any) => {
-  const { otherRef, unitRef, selectionRowKeys, selectionRows } = param;
+  const { otherRef, refUnit, selectionRowKeys, selectionRows } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -63,8 +63,8 @@ Func.costomerToobarSave = async (param: any) => {
   saveBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
-      otherRef[4]?.unitRef?.current!.reload2();
+      refUnit.current!.reload2();
+      otherRef[4]?.refUnit?.current!.reload2();
       message.success('单证匹配成功');
     } else {
       message.error(desc);

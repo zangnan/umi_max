@@ -169,7 +169,7 @@ const EditableCellQr = ({
 };
 
   // 开启 初始化
-  const showModal = (unitRef:any, record: any, otherRefFun: any, search: any, sheet: any) => {
+  const showModal = (refUnit:any, record: any, otherRefFun: any, search: any, sheet: any) => {
     setOtherRef(otherRefFun);
     setSelectionRowKeys(record.keys);  // 主键集合
     setCheckCkpSheet(sheet);
@@ -180,7 +180,7 @@ const EditableCellQr = ({
     if(Number(sheet.tzmts) > 0) {
       getQueryPagerTz(record, search); // 调整表
     }
-    setPageRef(unitRef);
+    setPageRef(refUnit);
     setModalVisible(true);
   };
 

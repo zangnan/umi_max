@@ -14,7 +14,7 @@ const Hysbqk: React.FC<DDInvoiceProps> = ({
   onRef, visible = false
 }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   const [body, setbody] = useState<any>();
 
   //下载按钮是否显示

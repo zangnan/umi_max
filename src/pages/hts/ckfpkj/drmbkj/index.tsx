@@ -88,22 +88,22 @@ const DrmbkjIndex: React.FC<unknown> = () => {
   }
 
   drmbkjFunc.qrkpModal = (params: any) => {
-    const { unitRef, kpParams} = params;
-    setKpUnitRef(unitRef);
-    kpSuccess(kpParams, unitRef, 'qr');
+    const { refUnit, kpParams} = params;
+    setKpUnitRef(refUnit);
+    kpSuccess(kpParams, refUnit, 'qr');
   }
 
   const kpSuccess = (obj:any, ref: any, flag: any) => {
-    const unitRef = ref;
+    const refUnit = ref;
     if(flag === 'tj') {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       sdpddtjkp(tjkpParams).then((res2:any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const {code, body, desc, msg} = res2;
         if(code === '200') {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_success' }));
           } else if(rtnCode === '2004'){
             refSfyz.current!.showModal(); // 打开电子税务局身份验证
@@ -113,7 +113,7 @@ const DrmbkjIndex: React.FC<unknown> = () => {
         } else if(code === '900') {
           const sbyyList = body?.drycxx;
           const ts = body.cgts;
-          openYwjyModal(sbyyList, unitRef, ts);
+          openYwjyModal(sbyyList, refUnit, ts);
           message.info(msg)
         } else if(code === '0'){
           message.error('系统异常，请联系技术支持。');
@@ -122,9 +122,9 @@ const DrmbkjIndex: React.FC<unknown> = () => {
         }
       })
     } else {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       sdpqrkpDrmb(obj).then((res1:any)=> {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if(res1.code === '200') {
           const body = res1.body;
           if(body.rtnCode === '2004') {
@@ -138,13 +138,13 @@ const DrmbkjIndex: React.FC<unknown> = () => {
             // 二次认证
             refKprz.current!.showModal();
           } else if(body.rtnCode === '200') {       
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_success' }));
           }
         } else if(res1.code === '900'){
           // 业务校验
           const sbyyList = res1?.body?.drycxx || [];
-          openYwjyModal(sbyyList, unitRef, '');
+          openYwjyModal(sbyyList, refUnit, '');
         } else if(res1.code === '0'){
           message.error('系统异常，请联系技术支持。');
         } else {
@@ -155,7 +155,7 @@ const DrmbkjIndex: React.FC<unknown> = () => {
   }
 
   // 业务校验900
-  const openYwjyModal = (data:any, unitRef:any, ts: any) => {
+  const openYwjyModal = (data:any, refUnit:any, ts: any) => {
     const textAreaValues: any = []
     data.forEach((item: any, index: any) => {
       textAreaValues.push(
@@ -178,7 +178,7 @@ const DrmbkjIndex: React.FC<unknown> = () => {
       info: infoText,
       width: '600px',
       button: [
-        <Button key={"dc"} onClick={() => handleDownload('DC_HX_DC_DRWTDC', unitRef)}>导出</Button>,
+        <Button key={"dc"} onClick={() => handleDownload('DC_HX_DC_DRWTDC', refUnit)}>导出</Button>,
       ],
       content:
         <table className="fpsqd_qrkp_kpsb">
@@ -196,11 +196,11 @@ const DrmbkjIndex: React.FC<unknown> = () => {
   }
 
   // 导出
-  const handleDownload = (id: any, unitRef: any) => {
+  const handleDownload = (id: any, refUnit: any) => {
     const params = {key: id};
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     commonDrwtdc(params).then((response: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (response.code === '200') {
         const {blob, fileName} = response.body;
         myUtil.file.downloadExcel(blob, fileName);

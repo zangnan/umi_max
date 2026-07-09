@@ -101,7 +101,7 @@ const ModalHtpp: React.FC<ModalHtppProps> = ({
   const close = () => {
     setModalVisible(false);
     gb(false);
-    mainXx?.unitRef?.current!.reload2();
+    mainXx?.refUnit?.current!.reload2();
   }
 
 

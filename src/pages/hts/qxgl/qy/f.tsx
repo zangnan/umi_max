@@ -9,7 +9,7 @@ import {deleteQy, downloadTemplate, qyHtyQy, tbsffwsjForQxqygl } from '@/pages/h
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -62,7 +62,7 @@ Func.cksfsqxq = async (param: any, e: any) => {
 
 // 同步三方服务时间
 Func.tbsffwsj = async (param: any, e: any) => {
-  const {selectionRowKeys, unitRef, gridRef} = param;
+  const {selectionRowKeys, refUnit, gridRef} = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({id: 'message_handle_unselected'}));
     return;
@@ -74,7 +74,7 @@ Func.tbsffwsj = async (param: any, e: any) => {
   const data = {
     sbqyuuids: selectionRowKeys
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   tbsffwsjForQxqygl(data).then((response: any) => {
     const {code, msg, body} = response;
     if (code === '200') {
@@ -87,14 +87,14 @@ Func.tbsffwsj = async (param: any, e: any) => {
   }).catch(() => {
     message.error('同步三方服务时间失败');
   }).finally(() => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
   });
 }
 
 // 企业信息及三方服务授权信息导出
 Func.sffwxxdc = async (param: any, e: any) => {
-  const {unitRef, gridRef, selectionRowKeys} = param;
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const {refUnit, gridRef, selectionRowKeys} = param;
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
@@ -111,7 +111,7 @@ Func.sffwxxdc = async (param: any, e: any) => {
     key: 'SAAS_QXGL_QYGL_SFFWXX_DC',
     searchModel: allSearchModel
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   downloadTemplate(obj).then((response: any) => {
     DDAlert.close();
     if (response.code === '200') {
@@ -123,7 +123,7 @@ Func.sffwxxdc = async (param: any, e: any) => {
   }).catch(() => {
     message.error('操作失败');
   }).finally(() => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
   });
 }
 
@@ -147,7 +147,7 @@ Func.bdyh = (param: any, flag: any) => {
 };
 
 Func.yhsq = (param: any) => {
-  const {selectionRows, unitRef} = param;
+  const {selectionRows, refUnit} = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({id: 'message_handle_unselected'}));
@@ -157,7 +157,7 @@ Func.yhsq = (param: any) => {
     message.info(intl2.formatMessage({id: 'message_one_selected'}));
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[5]) {
     otherRef[5].current?.showModal(param, selectionRows[0], '授权');
   } else if (param.otherRef && param.otherRef[5]) {
@@ -167,7 +167,7 @@ Func.yhsq = (param: any) => {
 
 
 Func.sffwsq = (param: any) => {
-  const {selectionRows, unitRef} = param;
+  const {selectionRows, refUnit} = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({id: 'message_handle_unselected'}));
@@ -177,14 +177,14 @@ Func.sffwsq = (param: any) => {
     message.info(intl2.formatMessage({id: 'message_one_selected'}));
     return;
   }
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[8]) {
     otherRef[8].current?.showModal(param, selectionRows[0]);
   }
 }
 
 Func.deleteQy = (param: any) => {
-  const {gridRef, selectionRows, unitRef, selectionRowKeys} = param;
+  const {gridRef, selectionRows, refUnit, selectionRowKeys} = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({id: 'message_delete_unselected'}));
     return;
@@ -211,13 +211,13 @@ Func.deleteQy = (param: any) => {
         const data = {
           sbqyuuids: selectionRowKeys
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         deleteQy(data).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const {code, msg} = response;
           if (code === '200') {
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             message.success('删除成功！');
           } else {
@@ -233,17 +233,17 @@ Func.deleteQy = (param: any) => {
 
 //开关值改变
 const onChangeSwitch = (param: any) => {
-  const {record, unitRef} = param;
+  const {record, refUnit} = param;
   const params = {
     sbqyuuids: [record.sbqyuuidDqlb],
     yxbz: param?.checked ? "Y" : "N"
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   qyHtyQy(params).then((res: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const {code, msg} = res;
     if (code == '200') {
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
       message.success("修改用户状态成功！");
     } else {
       message.error(msg)
@@ -273,8 +273,8 @@ Func.qyhf = (param: any) => {
 }
 
 Func.qyhy = (param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   otherRef[6].current?.showModal(param, []);
 }
 export default Func;

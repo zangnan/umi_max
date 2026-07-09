@@ -14,14 +14,14 @@ import { history } from 'umi';
 const { Dragger } = Upload;
 
 const ckbgdFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 ckbgdFunc.openfp=async (param:any)=>{
-  const {record,unitRef,otherRef}  = param;
-  unitRef.current?.setMasker(true);
+  const {record,refUnit,otherRef}  = param;
+  refUnit.current?.setMasker(true);
   await fpyl({uuid:record?.uuid,jhpzh: record?.jhpzh}).then(async (response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if(response.code == '200'){
       otherRef[5].current?.showModal(response.body);
     }else{
@@ -112,21 +112,21 @@ ckbgdFunc.columnsRender = {
 
 // 操作列配单
 ckbgdFunc.handleColumnCkfp = (param: any, event: any) => {
-  const { unitRef, record, otherRef } = param;
+  const { refUnit, record, otherRef } = param;
   event.stopPropagation();
-  otherRef[0].current?.showModal(unitRef, record);
+  otherRef[0].current?.showModal(refUnit, record);
 }
 
 ckbgdFunc.xj = (param: any) => {
-  const { otherRef ,gridRef,unitRef,selectionRowKeys} = param;
-  const gridData  = param.unitRef.current.getGridData();
+  const { otherRef ,gridRef,refUnit,selectionRowKeys} = param;
+  const gridData  = param.refUnit.current.getGridData();
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
-  const initSearchModel = unitRef.current.getGridParams().initSearchModal || [];
+  const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat([...headerSearchModel,...initSearchModel]);
   const obj = {searchModel:allSearchModel};
   const xjlx = param?.unit_key === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX' ? 'FPXX' : 'SPXX'
@@ -144,9 +144,9 @@ ckbgdFunc.xj = (param: any) => {
     "value": xjlx,
     "op": "zdy"
 })
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   cxxj2(obj).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[6].current?.showModal({gridData:res?.body?.rows});
     }else{
@@ -195,7 +195,7 @@ ckbgdFunc.fphq = (param: any) => {
 
 // 配置项：更新信息
 ckbgdFunc.gxxx = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   let params: any = {};
   if (selectionRows.length > 0) { // 如果有选择数据就 更新选择数据
     let uuidList: any = [];
@@ -206,17 +206,17 @@ ckbgdFunc.gxxx = (param: any) => {
     });
     params.uuidList = uuidList;
   } else { // 没有选择数据按照筛选条件检查数据
-    const searchModel = unitRef.current?.getGridParams().searchModel;
+    const searchModel = refUnit.current?.getGridParams().searchModel;
     searchModel.forEach((item: any) => {
       params[item.property] = item.value;
     });
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   yzfPtFpxxCx(params).then((res) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, desc } = res;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
       message.success(desc);
     } else {
       message.info(desc);
@@ -226,7 +226,7 @@ ckbgdFunc.gxxx = (param: any) => {
 
 // 批量修改---是否退税
 ckbgdFunc.btnSetSfts = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -254,7 +254,7 @@ ckbgdFunc.btnSetSfts = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置是否退税成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -266,7 +266,7 @@ ckbgdFunc.btnSetSfts = async (param: any) => {
 }
 // 批量修改---业务编号
 ckbgdFunc.btnSetYwbh = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -291,7 +291,7 @@ ckbgdFunc.btnSetYwbh = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置业务编号成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -304,7 +304,7 @@ ckbgdFunc.btnSetYwbh = async (param: any) => {
 
 // 批量修改---设置发票用途
 ckbgdFunc.btnSetFpyt = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -342,7 +342,7 @@ ckbgdFunc.btnSetFpyt = async (param: any) => {
               const { code, msg } = response;
               if (code === '200') {
                 message.success('设置发票用途');
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
               } else {
                 message.error(msg);
               }
@@ -357,7 +357,7 @@ ckbgdFunc.btnSetFpyt = async (param: any) => {
 
 // 批量修改---设置标签
 ckbgdFunc.btnSetBq = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -382,7 +382,7 @@ ckbgdFunc.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -394,7 +394,7 @@ ckbgdFunc.btnSetBq = async (param: any) => {
 }
 
 ckbgdFunc.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -469,7 +469,7 @@ ckbgdFunc.importTzsx = async (param: any) => {
             thisObj.setState({ masker: false });
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];

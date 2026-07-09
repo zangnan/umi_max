@@ -16,7 +16,7 @@ import {history} from "@@/core/history";
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.tszbcs =(param: any) =>{
@@ -780,7 +780,7 @@ const setCkspxx = (form: any, obj: any, eleName?: any) => {
 
 // 台账筛选
 Func.importTzsx = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -855,7 +855,7 @@ Func.importTzsx = async (param: any) => {
             const { code, msg, body } = response;
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];
@@ -931,7 +931,7 @@ Func.downloadExcel = (param: string) => {
 
 // 导入修改
 Func.importUpdate = async (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -1017,7 +1017,7 @@ Func.importUpdate = async (param: any) => {
             DDAlert.close();
             if (code === '200') {
               message.success(body);
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else if (code === '900') {
               otherRef[3].current!.showModal(body, "MDT_TSSB_IMPORT_UPDATE_DRWTDC");
             } else {
@@ -1038,8 +1038,8 @@ Func.importUpdate = async (param: any) => {
 
 // 配置项：自定义工具栏 海外仓冲击爱你
 Func.hwccj = (param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   otherRef[4].current!.showModal(param);
 }
 

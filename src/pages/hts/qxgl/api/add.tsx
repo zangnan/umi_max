@@ -96,7 +96,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   const close = () => {
     setModalVisible(false);
     form.setFieldsValue({"uuid": "", "apifwDm": "", "apifwmc": "", "yzjdbz": "Y", "sjapifwDm": "", "qqdz":"","yxbz": "Y", "xybz": "Y"});
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
   };
 
 

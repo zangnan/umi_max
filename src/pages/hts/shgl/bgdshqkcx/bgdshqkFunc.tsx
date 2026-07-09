@@ -9,7 +9,7 @@ import TextArea from "antd/lib/input/TextArea";
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -30,8 +30,8 @@ Func.columnsRender = {
 
 // 打开弹窗-收汇凭证份数
 const openModalShpzfs = (param: any) => {
-  const {unitRef} = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const {refUnit} = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -41,15 +41,15 @@ const openModalShpzfs = (param: any) => {
 
 // 数据更新
 Func.sjgx = async (param: any) => {
-  const {unitRef} = param;
+  const {refUnit} = param;
   // 校验
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   bgdshqkSjgx(param).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const {code, msg} = res;
     if (code == '200') {
       message.success('更新成功！');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(msg);
     }
@@ -58,7 +58,7 @@ Func.sjgx = async (param: any) => {
 
 // 人工设置
 Func.rgsz = async (param: any) => {
-  const { unitRef, selectionRowKeys, selectionRows } = param;
+  const { refUnit, selectionRowKeys, selectionRows } = param;
   if (selectionRowKeys.length > 1) {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
@@ -126,7 +126,7 @@ Func.rgsz = async (param: any) => {
           if ('200' == code) {
             message.info('人工设置成功');
             DDAlert.close();
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(msg);
           }
@@ -142,7 +142,7 @@ Func.rgsz = async (param: any) => {
 
 // 批量修改---设置标签
 Func.btnSetBq = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -167,7 +167,7 @@ Func.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }

@@ -7,7 +7,7 @@ import React from 'react';
 import { Button, message } from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -34,8 +34,8 @@ Func.columnsRender = {
 }
 // 打开弹窗-关联用户
 const openModalGlyh = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
     otherRef[1].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[1]) {
@@ -45,8 +45,8 @@ const openModalGlyh = (param: any) => {
 
 // 打开弹窗-新建角色
 Func.addJs = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param,[],'新建');
   } else if (param.otherRef && param.otherRef[0]) {
@@ -56,8 +56,8 @@ Func.addJs = (param: any) => {
 // 打开弹窗-修改角色
 Func.editJs = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit, record } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, record,'修改');
   } else if (param.otherRef && param.otherRef[0]) {

@@ -17,7 +17,7 @@ const index: React.FC<unknown> = () => {
   const { TreeNode } = Tree;
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
   const modalRef: any = useRef();
   Func.getOtherRef = () => {

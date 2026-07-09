@@ -9,7 +9,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.initEditForm = (param: any) => {
@@ -20,7 +20,7 @@ Func.initEditForm = (param: any) => {
 
 // 签约
 Func.qianyue = async (param: any) => {
-  const { selectionRowKeys, unitRef, selectionRows } = param;
+  const { selectionRowKeys, refUnit, selectionRows } = param;
   if (selectionRowKeys?.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -69,7 +69,7 @@ Func.qianyue = async (param: any) => {
               if (response2.code == '200') {
                 message.success('客户签约成功！');
                 DDAlert.close();
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
               } else {
                 message.error(response2.msg);
               }
@@ -85,17 +85,17 @@ Func.qianyue = async (param: any) => {
 
 //移至黑名单 
 Func.yzhmd = async (param: any) => {
-  const { selectionRowKeys, unitRef, } = param;
+  const { selectionRowKeys, refUnit, } = param;
   if (selectionRowKeys?.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   await yrhmdKhda({ khuuids: selectionRowKeys ,'hmdbz':'Y'}).then((response2) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response2.code == '200') {
       message.success('操作成功！');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response2.msg);
     }
@@ -107,17 +107,17 @@ Func.yzhmd = async (param: any) => {
 
 //移除黑名单 
 Func.ychmd = async (param: any) => {
-  const { selectionRowKeys, unitRef, } = param;
+  const { selectionRowKeys, refUnit, } = param;
   if (selectionRowKeys?.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   await yrhmdKhda({ khuuids: selectionRowKeys ,'hmdbz':'N'}).then((response2) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response2.code == '200') {
       message.success('操作成功！');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response2.msg);
     }

@@ -12,7 +12,7 @@ import { ClockCircleOutlined, InboxOutlined } from '@ant-design/icons';
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -66,9 +66,9 @@ Func.getSj= (param: any) => {
 // 数据检查
 Func.shjcFunc = (param: any, checkFlag: any = 'N') => {
   function funcCheckDlzm(params: any) {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     checkDlzm(params).then(async (res) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { body, code, desc } = res;
       if (code !== '200') {
         message.error(desc);
@@ -77,7 +77,7 @@ Func.shjcFunc = (param: any, checkFlag: any = 'N') => {
         const resData = JSON.parse(body);
         if ('N' == resData.msgKey) {
           message.success(resData.msgInfo);
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           if ('Y' == resData.errTypeHl) {
             const gridDataHl = JSON.parse(resData.gridDataHl);
@@ -104,12 +104,12 @@ Func.shjcFunc = (param: any, checkFlag: any = 'N') => {
     })
   }
 
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   let params :any= {};
   let msg = '';
   let info = '';
   const selectionRowKeys = param?.selectionRowKeys;
-  const searchModel =  param?.unitRef?.current?.getGridParams()?.searchModel;
+  const searchModel =  param?.refUnit?.current?.getGridParams()?.searchModel;
   params.bgdNoEterArray = null;
   if (selectionRowKeys == null || selectionRowKeys.length == 0) {
     // 未勾选
@@ -151,13 +151,13 @@ Func.shjcFunc = (param: any, checkFlag: any = 'N') => {
 }
 
 Func.dyFunc= (param: any) => {
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   otherRef[4].current?.showModal(param);
 }
 
 
 Func.btnDr = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   const beforeUpload = (file: any) => {
     if(!file.name.toUpperCase().endsWith(".XLS") && !file.name.toUpperCase().endsWith(".XLSX")) {
       message.info('上传文件必须是Excel文件。');
@@ -224,7 +224,7 @@ Func.btnDr = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success(desc);
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else if (code === '900') {
             message.error(msg);
           } else {
@@ -254,7 +254,7 @@ Func.downloadExcel = (param: string) => {
 
 // 删除
 Func.btnDelete = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -271,7 +271,7 @@ Func.btnDelete = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }

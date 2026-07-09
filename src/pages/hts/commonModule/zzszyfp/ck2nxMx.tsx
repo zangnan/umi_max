@@ -60,7 +60,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   // 共同方法集合 包括出口报关单信息列表选择、基础信息输入框事件
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     columnsRender: {
       fpzt: (param: any) => {
         const record = param?.record;
@@ -84,7 +84,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
       const { selectedRowKeys, selectedRows } = param;
       setSelectedRowKeys(selectedRowKeys);
       setSelectRows(selectedRows);
-      setLb(param?.unitRef.current);
+      setLb(param?.refUnit.current);
     },
     eventOnBlur: {
       sbxh: (param: any) => {

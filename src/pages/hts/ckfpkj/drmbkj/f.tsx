@@ -12,7 +12,7 @@ const { Dragger } = Upload;
 
 const drmbkjFunc: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 const beforeUpload = (file: any) => {
@@ -29,7 +29,7 @@ drmbkjFunc.excelImport = (param: any) => {
   const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01')
   const tempCode = temp[0];
 
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '导入Excel文件',
     infoType: 'warning',
@@ -92,7 +92,7 @@ drmbkjFunc.excelImport = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success('导入成功！');
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else if (code === '900') {
             otherRef[0].current!.showModal(body, 'ZXSB_SB_DRMBKJ');
           } else {
@@ -125,7 +125,7 @@ drmbkjFunc.downloadExcel = (param: string) => {
 drmbkjFunc.qrkp_dc = (param: any) => {
   const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
  
-  const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+  const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
   const zbuuids: any = [];
   const djbhs: any = [];
   if (selectionRowKeys && selectionRowKeys.length > 0) {
@@ -134,8 +134,8 @@ drmbkjFunc.qrkp_dc = (param: any) => {
       djbhs.push(row.djbh);
     });
   }
-  const gridData = unitRef.current?.getGridData()
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const gridData = refUnit.current?.getGridData()
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   if (gridData.length === 0) {
@@ -155,9 +155,9 @@ drmbkjFunc.qrkp_dc = (param: any) => {
     zbuuids,
     djbhs,
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   qrkptj(kptj).then((res1: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res1.code != '200') {
       message.info(res1.msg);
       return;
@@ -174,9 +174,9 @@ drmbkjFunc.qrkp_dc = (param: any) => {
       ],
       okCallbackFn: function () {
         //继续调用业务接口（原接口）
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         fpsqdqrkp(obj).then((response) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res1.code != '200') {
             message.success('确认开票成功！');
             return;
@@ -196,7 +196,7 @@ drmbkjFunc.qrkp_dc = (param: any) => {
 
 // 上传检查（在线开票）
 drmbkjFunc.qrkp_zx = async (param: any) => {
-  const { selectionRowKeys, unitRef, selectionRows, unit_key, gridRef } = param;
+  const { selectionRowKeys, refUnit, selectionRows, unit_key, gridRef } = param;
   const zbuuids: any = [];
   const djbhs: any = [];
   if (selectionRowKeys && selectionRowKeys.length > 0) {
@@ -205,8 +205,8 @@ drmbkjFunc.qrkp_zx = async (param: any) => {
       djbhs.push(row.djbh);
     });
   }
-  const gridData = unitRef.current?.getGridData()
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const gridData = refUnit.current?.getGridData()
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   if (gridData.length === 0) {
@@ -221,15 +221,15 @@ drmbkjFunc.qrkp_zx = async (param: any) => {
     flag: '02'
   }
   //基础校验
-  zxjpjy(obj, unitRef);
+  zxjpjy(obj, refUnit);
 }
 
 //在线开票校验
-const zxjpjy = (param: any, unitRef: any) => {
+const zxjpjy = (param: any, refUnit: any) => {
   // 校验
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   qrkpjy(param).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg, desc } = res;
     if (code == '200') {
       //如果是数电票，检验
@@ -240,16 +240,16 @@ const zxjpjy = (param: any, unitRef: any) => {
         const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01')
         if (temp[0].fpkjfsDm === '2' && temp[0].fpzlDm1 === '5') {
           //数电票校验 
-          sjpjy(unitRef,param);
+          sjpjy(refUnit,param);
         }else{
           const kptj = {
             cxtj: myUtil.format.toZdy(param.cxtj),
             zbuuids:param.zbuuids,
             djbhs:param.djbhs,
           }
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           qrkptj(kptj).then((res1: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             if (res1.code != '200') {
               message.info(res1.msg);
               return;
@@ -268,14 +268,14 @@ const zxjpjy = (param: any, unitRef: any) => {
               okCallbackFn: function () {
                 kptj.flag = "02";
                 //调用上传检查
-                unitRef.current!.setMasker(true);
+                refUnit.current!.setMasker(true);
                 scjc(kptj).then((res: any) => {
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.setMasker(false);
                   if (res.code != '200') {
                     message.error(res.msg);
                   } else {
                     message.success('审核申请成功！');
-                    unitRef.current!.reload2();
+                    refUnit.current!.reload2();
                   }
                 });
               }
@@ -284,7 +284,7 @@ const zxjpjy = (param: any, unitRef: any) => {
         }
       });
     } else if (code == '900') {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const cwxx = msg?.jyxx?.cwxx;
       const dm = msg?.jyxx?.dm;
       DDAlert.open({
@@ -305,7 +305,7 @@ const zxjpjy = (param: any, unitRef: any) => {
         }
       });
     } else {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       message.error(desc);
     }
   });
@@ -313,10 +313,10 @@ const zxjpjy = (param: any, unitRef: any) => {
 
 
 //数电票校验
-const sjpjy =  (unitRef: any,obj :any) => {
-  unitRef.current!.setMasker(true);
+const sjpjy =  (refUnit: any,obj :any) => {
+  refUnit.current!.setMasker(true);
   //  skxxcx().then((res1: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     // if (res1.code === '200') {
       // const zcbz = res1.body.zcbz;
       // if (zcbz === '2') {
@@ -326,9 +326,9 @@ const sjpjy =  (unitRef: any,obj :any) => {
           zbuuids:obj.zbuuids,
           djbhs:obj.djbhs,
         }
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         qrkptj(kptj).then((res1: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res1.code != '200') {
             message.info(res1.msg);
             return;
@@ -346,13 +346,13 @@ const sjpjy =  (unitRef: any,obj :any) => {
             okCallbackFn: function () {
               kptj.flag = "02";
               //调用上传检查
-              unitRef.current!.setMasker(true);
+              refUnit.current!.setMasker(true);
               scjc(kptj).then((res: any) => {
-                unitRef.current!.setMasker(false);
+                refUnit.current!.setMasker(false);
                 if (res.code != '200') {
                   message.error(res.msg);
                 } else {
-                  unitRef.current!.reload2();
+                  refUnit.current!.reload2();
                   message.success('审核申请成功！');
                 }
               });
@@ -377,8 +377,8 @@ const sjpjy =  (unitRef: any,obj :any) => {
 
 // 手动采集开具
 drmbkjFunc.sdcjkj = (param: any) => {
-  const { otherRef, unitRef } = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, refUnit } = param;
+  refUnit.current!.setMasker(true);
   xsfpzcx({}).then((response) => {
     const { code, body } = response;
     if (code === '200') {
@@ -388,10 +388,10 @@ drmbkjFunc.sdcjkj = (param: any) => {
       const fpsqdxx = Object.assign(temp, { xhfkhhjzh: zhpzList[0]?.yhzhmc + zhpzList[0]?.yhzh });
       queryDjbh({}).then((response) => {
         const { code, body } = response;
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (code === '200') {
           otherRef[1].current!.setDjh(body);
-          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.text.uuid(32) }] }, false, unitRef);
+          otherRef[1].current!.showModal({ fpsqdxx, hw: [{ uuid: myUtil.text.uuid(32) }] }, false, refUnit);
         }
       })
     }
@@ -400,12 +400,12 @@ drmbkjFunc.sdcjkj = (param: any) => {
 
 // 根据单据号打开详情
 drmbkjFunc.openFp = (djh: any, param: any) => {
-  const { unitRef, record } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
-  unitRef.current!.setMasker(true);
+  const { refUnit, record } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
+  refUnit.current!.setMasker(true);
   fpsqdmxcx({ zbuuid: record.zbuuid }).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
@@ -417,7 +417,7 @@ drmbkjFunc.openFp = (djh: any, param: any) => {
         item.je = item.jshj;
         item.dj = item.hsdj;
       })
-      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, unitRef);
+      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, true, refUnit);
       otherRef[1].current!.setDjh(djh);
     }
   })
@@ -425,7 +425,7 @@ drmbkjFunc.openFp = (djh: any, param: any) => {
 
 // 删除
 drmbkjFunc.deleteFpsqd = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -446,7 +446,7 @@ drmbkjFunc.deleteFpsqd = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(desc);
           }
@@ -497,7 +497,7 @@ drmbkjFunc.columnsRender = {
 
 // 修改
 drmbkjFunc.gxDrmbkj = (param: any) => {
-  const { selectionRowKeys, unitRef, selectionRows } = param;
+  const { selectionRowKeys, refUnit, selectionRows } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -507,10 +507,10 @@ drmbkjFunc.gxDrmbkj = (param: any) => {
     return;
   }
   const record = selectionRows[0];
-  const otherRef = unitRef.current?.getOtherRefs();
+  const otherRef = refUnit.current?.getOtherRefs();
   fpsqdmxcx({ zbuuid: record.zbuuid }).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const hw: any = [...body.hwxxList]
       hw.forEach((item: any) => {
@@ -522,7 +522,7 @@ drmbkjFunc.gxDrmbkj = (param: any) => {
         item.je = item.jshj;
         item.dj = item.hsdj;
       })
-      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, false, unitRef, '4');
+      otherRef[1].current!.showModal({ fpsqdxx: body.fpsqdxx, hw, sbyy1: record?.sbyy1 }, false, refUnit, '4');
       otherRef[1].current!.setDjh(record.djbh);
     }
   })

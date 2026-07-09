@@ -30,7 +30,7 @@ const DrawerglFm: React.FC<BdjgProps> = ({
     const parsedSrcs = JSON.parse(srcs);
     setBadzlx(parsedSrcs?.badzlx);
     setZrwuuid(zrwid);
-    setZymUnitRef(param?.unitRef);
+    setZymUnitRef(param?.refUnit);
     if (zrwuuid) {
       const gridParams = {
         initSearchModal: [

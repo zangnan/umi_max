@@ -85,7 +85,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   };
 
   Func.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if(dataSource && dataSource.length > 0 ) {
@@ -96,23 +96,23 @@ const DrawerForm: React.FC<BdjgProps> = ({
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   const close = async () => {
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 
   // 保存
   Func.save = (param: any) => {
-    const { selectionRowKeys, unitRef,selectionRows } = param;
+    const { selectionRowKeys, refUnit,selectionRows } = param;
     // if (!selectionRows || selectionRows.length === 0) {
     //         message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     //         return;
     //     }
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     setMasker(true);
     const params = {
       bdbz:'fhrpz',
@@ -131,8 +131,8 @@ const DrawerForm: React.FC<BdjgProps> = ({
       setMasker(false);
       const { code, msg } = res;
       if (code == '200') {
-        unitRef.current?.setSelectionRowKeys([]);
-        unitRef.current?.setSelectionRows([]);
+        refUnit.current?.setSelectionRowKeys([]);
+        refUnit.current?.setSelectionRows([]);
         message.success("关联境外收货人成功！");
         close();
       } else {

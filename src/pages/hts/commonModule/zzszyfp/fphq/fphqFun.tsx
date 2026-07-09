@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 按钮显隐-刷新

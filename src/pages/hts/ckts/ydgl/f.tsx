@@ -3,17 +3,17 @@ import { message, Modal } from 'antd';
 import cktsUtil from '@/pages/hts/cktsUtil';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配置项：疑点管理导出
 Func.exportYd = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   if (otherRef && otherRef[0]) {
     console.info('配置项：疑点管理导出')
     console.info(otherRef[0])
   }
-  const gridData = unitRef.current?.getGridData();
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length === 0) {
     message.info('不存在可打印数据，请确认后操作！');
     return;

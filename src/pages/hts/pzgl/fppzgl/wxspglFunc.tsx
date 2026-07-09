@@ -10,7 +10,7 @@ import myUtil from '@/components/DDAssist/util';
 import cktsUtil from '@/pages/hts/cktsUtil';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 const sl1vListF = [
@@ -27,7 +27,7 @@ const sl1vList = [
 
 // 外销商品管理页面：设置征税标志
 Func.handleWxspglZsBz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -36,13 +36,13 @@ Func.handleWxspglZsBz = (param: any) => {
     selectionRows.forEach((row: any) => {
       wxspVoList.push({ hgckspDm: row.hgckspDm, hgspmc: row.hgspmc, ggxhhgsh: row?.ggxhhgsh });
     });
-    Func.wxspsztmsbz({ cksptssplxDm: '3', wxspVoList: wxspVoList }, unitRef);
+    Func.wxspsztmsbz({ cksptssplxDm: '3', wxspVoList: wxspVoList }, refUnit);
   }
 }
 
 // 外销商品管理页面：设置免税标志
 Func.handleWxspglMsBz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -51,13 +51,13 @@ Func.handleWxspglMsBz = (param: any) => {
     selectionRows.forEach((row: any) => {
       wxspVoList.push({ hgckspDm: row.hgckspDm, hgspmc: row.hgspmc, ggxhhgsh: row?.ggxhhgsh });
     });
-    Func.wxspsztmsbz({ cksptssplxDm: '2', wxspVoList: wxspVoList }, unitRef);
+    Func.wxspsztmsbz({ cksptssplxDm: '2', wxspVoList: wxspVoList }, refUnit);
   }
 }
 
 // 外销商品管理页面：设置退税标志
 Func.handleWxspglTsBz = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -66,19 +66,19 @@ Func.handleWxspglTsBz = (param: any) => {
     selectionRows.forEach((row: any) => {
       wxspVoList.push({ hgckspDm: row.hgckspDm, hgspmc: row.hgspmc, ggxhhgsh: row?.ggxhhgsh });
     });
-    Func.wxspsztmsbz({ cksptssplxDm: '1', wxspVoList: wxspVoList }, unitRef);
+    Func.wxspsztmsbz({ cksptssplxDm: '1', wxspVoList: wxspVoList }, refUnit);
   }
 }
 
 // 外销商品管理 设置退免税类型
-Func.wxspsztmsbz = (param: any, unitRef: any) => {
-  unitRef.current!.setMasker(true);
+Func.wxspsztmsbz = (param: any, refUnit: any) => {
+  refUnit.current!.setMasker(true);
   wxspsztmsbz(param).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, desc } = response;
     if (code === '200') {
       message.success(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_settmslx_success' }));
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(desc);
     }
@@ -87,7 +87,7 @@ Func.wxspsztmsbz = (param: any, unitRef: any) => {
 
 // 外销商品管理页面:删除
 Func.deleteWxspgl = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -108,7 +108,7 @@ Func.deleteWxspgl = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(msg);
           }
@@ -120,20 +120,20 @@ Func.deleteWxspgl = (param: any) => {
 
 // 外销商品管理页面：赋码按钮点击事件
 Func.handleWxspglFm = (param: any) => {
-  const { selectionRows, otherRef, unitRef } = param;
+  const { selectionRows, otherRef, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   } else {
-    otherRef[0].current!.showModal({ data: selectionRows, mainRef: unitRef, zslx: 'wxspGrid' });
+    otherRef[0].current!.showModal({ data: selectionRows, mainRef: refUnit, zslx: 'wxspGrid' });
   }
 }
 
 // 外销商品管理 赋码列操作
 Func.handleWxspglFmColumns = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, otherRef, unitRef } = param;
-  otherRef[0].current!.showModal({ data: [].concat(record), mainRef: unitRef, zslx: 'wxspGrid' });
+  const { record, otherRef, refUnit } = param;
+  otherRef[0].current!.showModal({ data: [].concat(record), mainRef: refUnit, zslx: 'wxspGrid' });
 }
 
 Func.initEditForm = (param: any) => {
@@ -324,7 +324,7 @@ Func.validator = {
 
 // 外销商品管理 提取商品信息
 Func.getSpxx = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   DDAlert.open({
     title: '提取商品信息',
     infoType: 'warning',
@@ -347,7 +347,7 @@ Func.getSpxx = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_spxxtqcg_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {
@@ -381,7 +381,7 @@ Func.reportExcel=async (param :any)=>{
     key: mbxzkey,
     relx: 'xls',
     iszip: 'N',
-    searchModel: param.unitRef.current.getGridParams().searchModel,
+    searchModel: param.refUnit.current.getGridParams().searchModel,
     orderModel: [],
   }
   await cktsUtil.downloadFilePost(url, tmp);

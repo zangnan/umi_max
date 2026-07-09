@@ -28,7 +28,7 @@ export interface DDModalGridProps {
 }
 const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) => {
   // const intl = useIntl();
-  const [unitRefs, setUnitRefs] = useState<any>();// 主列表
+  const [refUnits, setUnitRefs] = useState<any>();// 主列表
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   //Form
@@ -656,7 +656,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
                 obj['pdType']='bgdzxpd';//发票逐项配单；
                 const fpjeCheckObj = await pdCheckByHistoryData(obj);
                 if ('200' != fpjeCheckObj.code) {
-                  const otherRef = unitRefs.current?.getOtherRefs();
+                  const otherRef = refUnits.current?.getOtherRefs();
                   otherRef[2].current!.showModal(fpjeCheckObj);
                   return false;
                 }
@@ -753,23 +753,23 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
     setJshuiJe(0);
     setJshuiSl(0);
     setValue(1);
-    unitRefs.current!.reload2();
-    unitRefs.current!.setSelectionRowKeys([]);
-    unitRefs.current!.setSelectionRows([]);
+    refUnits.current!.reload2();
+    refUnits.current!.setSelectionRowKeys([]);
+    refUnits.current!.setSelectionRows([]);
   }
   /********************************************************************筛选*********************************************************************/
 
   // 筛选发票（商品）
   const funSp: any = {
     inputRef1 : useRef(),
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     //添加发票
     fptianjia: (param: any) => {
-      const { selectionRows, unitRef } = param;
+      const { selectionRows, refUnit } = param;
       //添加发票
       const newArray = pdFun.bgdpd(gridData, selectionRows, value);
       setGridData(newArray);
-      unitRef?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
+      refUnit?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
       //计算计税金额
       jsje(newArray);
       //计算计税数量
@@ -778,9 +778,9 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
     },
     // 关单品名查询
     gdpmcx: (param: any) => {
-      const { unitRef } = param;
+      const { refUnit } = param;
       spConfig.filter_items[1].defaultValue = records?.hgspmc
-      unitRef.current?.addQueryModel(records?.hgspmc, 'hwhyslwmc');
+      refUnit.current?.addQueryModel(records?.hgspmc, 'hwhyslwmc');
     },
     useEffectEnd: (param: any) => {
       if (spVisible) {
@@ -1010,9 +1010,9 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
           visible={spVisible}
           width={CONSTANTS.C_MODAL_WIDTH_X4}
           onClose={() => {
-            const rowKeys = funSp.unitRef.current.getSelectionRowKeys();
+            const rowKeys = funSp.refUnit.current.getSelectionRowKeys();
             if (rowKeys.length > 0) {
-              const selectionRows = funSp.unitRef.current.getSelectionRows()
+              const selectionRows = funSp.refUnit.current.getSelectionRows()
               DDAlert.open({
                 title: '系统提示',
                 info: '你已勾选了' + rowKeys.length + '条发票数据，是否添加至进货信息？',
@@ -1021,7 +1021,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
                 closeStatus: false,
                 okCallbackFn: function() {
                   DDAlert.close();
-                  funSp.fptianjia({ selectionRows, unitRef: funSp.unitRef });
+                  funSp.fptianjia({ selectionRows, refUnit: funSp.refUnit });
                 },
               });
             } else {

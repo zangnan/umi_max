@@ -5,7 +5,7 @@ import { ycsbYzfFkxzFksjbSc } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 按钮显隐-刷新
@@ -26,7 +26,7 @@ Func.displayDownload = (record: any) => {
 // 配置项：删除
 Func.handleColumnDelete = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   DDAlert.open({
     title: '系统提示',
     info: intl2.formatMessage({ id: 'message_inquiry_delete' }),
@@ -40,7 +40,7 @@ Func.handleColumnDelete = (param: any, event: any) => {
         const { code, msg } = res;
         if (code == '200') {
           message.success("删除成功！");
-          unitRef?.current!.reload2();
+          refUnit?.current!.reload2();
         } else {
           message.error(msg);
         }

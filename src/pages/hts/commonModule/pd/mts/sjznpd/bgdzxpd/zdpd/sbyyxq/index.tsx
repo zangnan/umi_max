@@ -20,7 +20,7 @@ const Index: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
   const [queryParam, setQueryParam] = useState<any>();
   let myConfig = cloneDeep(Config);
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   Func.download = async () => {

@@ -12,7 +12,7 @@ import qxUtil from '@/pages/hts/common/qxUtil';
 import moment from 'moment';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化

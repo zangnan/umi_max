@@ -316,8 +316,8 @@ khdgjUtil.khdgjFpXgljSet = async (params: any) => {
   }).catch(() => {
     message.error('连接客户端工具失败！');
   }).finally(() => {
-    params.unitRef.current?.setMasker(false);
-    // params.unitRef.current!.reload2();
+    params.refUnit.current?.setMasker(false);
+    // params.refUnit.current!.reload2();
   });
 }
 

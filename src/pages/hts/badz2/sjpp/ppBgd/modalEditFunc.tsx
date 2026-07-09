@@ -5,7 +5,7 @@ import { deleteBaqkAndDzRelation, saveBaqkAndDzRelation } from '@/pages/hts/serv
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 删除
@@ -25,7 +25,7 @@ Func.costomerToobarDelete = async (param: any) => {
   deleteBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      otherRef[1].unitRef.current!.reload2();
+      otherRef[1].refUnit.current!.reload2();
       otherRef[2].topRef.current!.reload2();
       otherRef[2].bottomRef.current!.reload2();
       message.success('数据删除成功');
@@ -60,7 +60,7 @@ Func.costomerToobarSave = async (param: any) => {
   saveBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      otherRef[1].unitRef.current!.reload2();
+      otherRef[1].refUnit.current!.reload2();
       otherRef[2].topRef.current!.reload2();
       otherRef[2].bottomRef.current!.reload2();
       message.success('单证匹配成功');

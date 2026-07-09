@@ -6,7 +6,7 @@ import {scQxz, scjy, dcjb } from '@/pages/hts/services/htsApi';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 
@@ -32,14 +32,14 @@ Func.edit = (param: any) => {
 }
 
 Func.del = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await scjy({ qxlx: '1', qxzDms: selectionRowKeys }).then((response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (response.code === '200') {
       DDAlert.open({
         title: '删除',
@@ -54,7 +54,7 @@ Func.del = async (param: any) => {
             if (response.code === '200') {
               // 清空选中并设置按钮可用状态
               message.success('删除成功！');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               DDAlert.close();
             } else {
               message.error(response.msg);
@@ -108,7 +108,7 @@ Func.gldq = (param: any) => {
 
 // 关联服务
 Func.glfw =(param: any) => {
-  const { otherRef,selectionRowKeys,unitRef} = param;
+  const { otherRef,selectionRowKeys,refUnit} = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -117,7 +117,7 @@ Func.glfw =(param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  otherRef[5].current?.showModal(unitRef,selectionRowKeys);
+  otherRef[5].current?.showModal(refUnit,selectionRowKeys);
 }
 
 

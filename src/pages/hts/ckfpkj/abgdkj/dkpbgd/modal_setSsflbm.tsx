@@ -489,7 +489,7 @@ const Modalsphfwssflhbbm: React.FC<DDModalGridProps> = ({ onRef, visible = false
 
   // 导入
   const importModal = async (param: any) => {
-    const { unitRef, otherRef } = param;
+    const { refUnit, otherRef } = param;
     DDAlert.open({
       title: '导入Excel文件',
       infoType: 'warning',

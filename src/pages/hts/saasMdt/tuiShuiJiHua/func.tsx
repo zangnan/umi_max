@@ -11,13 +11,13 @@ import { history, useRouteData } from 'umi';
 // import { constant } from 'lodash';
 
 const tuiShuiJiHuaFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 月度-修改
 tuiShuiJiHuaFunc.monthModify = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
-  // const selectDataSize = unitRef.current?.getSelectionRows().length;
+  const { selectionRowKeys, refUnit } = param;
+  // const selectDataSize = refUnit.current?.getSelectionRows().length;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -26,7 +26,7 @@ tuiShuiJiHuaFunc.monthModify = async (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const xgObj = unitRef.current?.getSelectionRows()[0];
+  const xgObj = refUnit.current?.getSelectionRows()[0];
 
   param.xgObj = {};
   param.xgObj.tjqDm = xgObj.tjqDm;
@@ -39,7 +39,7 @@ tuiShuiJiHuaFunc.monthModify = async (param: any) => {
 
 // 月度-新增
 tuiShuiJiHuaFunc.monthAdd = (param: any) => {
-  // const { otherRef, unitRef } = param;
+  // const { otherRef, refUnit } = param;
   const userInfo = myUtil.sessionStore.getItem('userInfo');
   const qxQys = userInfo?.qxQys[0];
   // if (qxQys?.cktsqylxDm === 'WM') {
@@ -134,7 +134,7 @@ tuiShuiJiHuaFunc.monthAdd = (param: any) => {
             const { code, msg, body } = res;
             if (code === '200') {
               tuiShuiJiHuaFunc.monthAddFun(param1);
-              // unitRef.current!.reload2();
+              // refUnit.current!.reload2();
             } else if (code === '900') {
               // 弹出提示信息
               DDAlert.open({
@@ -162,13 +162,13 @@ tuiShuiJiHuaFunc.monthAdd = (param: any) => {
 };
 
 tuiShuiJiHuaFunc.monthAddFun = (param: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   tuishuijihuaAdd(param).then((res: any) => {
     const { code, msg, body } = res;
     if (code === '200') {
       DDAlert.close();
       message.success(body);
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else if (code === '900') {
       message.error(msg);
     }
@@ -177,13 +177,13 @@ tuiShuiJiHuaFunc.monthAddFun = (param: any) => {
 
 // 月度、季度、年度-删除
 tuiShuiJiHuaFunc.monthDel = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
-  // const selectDataSize = unitRef.current?.getSelectionRows().length;
+  const { selectionRowKeys, refUnit } = param;
+  // const selectDataSize = refUnit.current?.getSelectionRows().length;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  const delArr = unitRef.current?.getSelectionRows();
+  const delArr = refUnit.current?.getSelectionRows();
   param.delArr = {};
   param.delArr = delArr;
 
@@ -201,7 +201,7 @@ tuiShuiJiHuaFunc.monthDel = (param: any) => {
         if (code === '200') {
           DDAlert.close();
           message.success(body);
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else if (code === '900') {
           message.error(msg);
         }
@@ -220,8 +220,8 @@ tuiShuiJiHuaFunc.monthDel = (param: any) => {
 
 // 季度-修改
 tuiShuiJiHuaFunc.seasonModify = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
-  // const selectDataSize = unitRef.current?.getSelectionRows().length;
+  const { selectionRowKeys, refUnit } = param;
+  // const selectDataSize = refUnit.current?.getSelectionRows().length;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -230,7 +230,7 @@ tuiShuiJiHuaFunc.seasonModify = async (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const xgObj = unitRef.current?.getSelectionRows()[0];
+  const xgObj = refUnit.current?.getSelectionRows()[0];
 
   param.xgObj = {};
   param.xgObj.tjqDm = xgObj.tjqDm;
@@ -245,7 +245,7 @@ tuiShuiJiHuaFunc.seasonModify = async (param: any) => {
 
 // 季度-新增
 tuiShuiJiHuaFunc.seasonAdd = (param: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   const userInfo = myUtil.sessionStore.getItem('userInfo');
   const qxQys = userInfo?.qxQys[0];
   DDAlert.open({
@@ -350,7 +350,7 @@ tuiShuiJiHuaFunc.seasonAdd = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success(body);
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else if (code === '900') {
               message.error(msg);
             }
@@ -362,8 +362,8 @@ tuiShuiJiHuaFunc.seasonAdd = (param: any) => {
 
 // 年度-修改
 tuiShuiJiHuaFunc.yearModify = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
-  // const selectDataSize = unitRef.current?.getSelectionRows().length;
+  const { selectionRowKeys, refUnit } = param;
+  // const selectDataSize = refUnit.current?.getSelectionRows().length;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -372,7 +372,7 @@ tuiShuiJiHuaFunc.yearModify = async (param: any) => {
     message.info(intl2.formatMessage({ id: 'message_one_selected' }));
     return;
   }
-  const xgObj = unitRef.current?.getSelectionRows()[0];
+  const xgObj = refUnit.current?.getSelectionRows()[0];
 
   param.xgObj = {};
   param.xgObj.tjqDm = xgObj.tjqDm;
@@ -384,7 +384,7 @@ tuiShuiJiHuaFunc.yearModify = async (param: any) => {
 
 // 年度-新增
 tuiShuiJiHuaFunc.yearAdd = (param: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   const userInfo = myUtil.sessionStore.getItem('userInfo');
   const qxQys = userInfo?.qxQys[0];
   DDAlert.open({
@@ -456,7 +456,7 @@ tuiShuiJiHuaFunc.yearAdd = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success(body);
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else if (code === '900') {
               message.error(msg);
             }
@@ -468,13 +468,13 @@ tuiShuiJiHuaFunc.yearAdd = (param: any) => {
 
 // 季度、年度、日志、导出
 tuiShuiJiHuaFunc.seasonDownload = async (param: any) => {
-  const { otherRef, selectionRowKeys, unitRef } = param;
+  const { otherRef, selectionRowKeys, refUnit } = param;
 
   let modalTitle = '将导出当前筛选条件下的所有数据，是否确认';
   if (selectionRowKeys && selectionRowKeys.length > 0) {
     modalTitle = '将导出选中的数据，是否确认';
   }
-  const commonValue = unitRef.current?.getGridParams();
+  const commonValue = refUnit.current?.getGridParams();
   const val = commonValue.searchModel;
   const model: any = [];
   model.push(commonValue.initSearchModal[0]);
@@ -567,7 +567,7 @@ tuiShuiJiHuaFunc.seasonDownload = async (param: any) => {
 
 
 tuiShuiJiHuaFunc.btnGxsj = (param: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   DDAlert.open({
     title: '更新数据',
     closeStatus: false,
@@ -614,7 +614,7 @@ tuiShuiJiHuaFunc.btnGxsj = (param: any) => {
             // if (code === '200') {
             //   DDAlert.close();
             //   message.success(body);
-            //   unitRef.current!.reload2();
+            //   refUnit.current!.reload2();
             // } else if (code === '900') {
             //   message.error(msg);
             // }
@@ -645,8 +645,8 @@ tuiShuiJiHuaFunc.btnGxsj = (param: any) => {
   });
 }
 // tuiShuiJiHuaFunc.rzDownload = async (param: any) => {
-//   const { otherRef, unitRef } = param;
-//   const commonValue = unitRef.current?.getGridParams();
+//   const { otherRef, refUnit } = param;
+//   const commonValue = refUnit.current?.getGridParams();
 //   const val = commonValue.searchModel;
 //   const model: any = [];
 //   model.push(commonValue.initSearchModal[0]);

@@ -13,7 +13,7 @@ import CONSTANTS from '@/components/DDAssist/constants';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -50,7 +50,7 @@ Func.columnsRender = {
 
 // 提取境外收货人
 Func.handletqJwshr = (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   DDAlert.open({
     title: '提取境外收货人',
     infoType: 'warning',
@@ -76,7 +76,7 @@ Func.handletqJwshr = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             if(body.tqsl === 0 ){
               message.error("未查询到报关单数据");
             } else {
@@ -122,7 +122,7 @@ Func.jwshrs = (param: any) => {
 }
 
 Func.deleteJwshr = (param: any) => {
-  const { gridRef, selectionRows, unitRef, selectionRowKeys } = param;
+  const { gridRef, selectionRows, refUnit, selectionRowKeys } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_delete_unselected' }));
     return;
@@ -140,13 +140,13 @@ Func.deleteJwshr = (param: any) => {
       const data = {
         jwshruuids: selectionRowKeys
       };
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       deleteJwshr(data).then((response: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, msg } = response;
         if (code === '200') {
-          unitRef.current?.setSelectionRowKeys([]);
-          unitRef.current?.setSelectionRows([]);
+          refUnit.current?.setSelectionRowKeys([]);
+          refUnit.current?.setSelectionRows([]);
           gridRef.current?.reload();
           message.success('删除成功！');
         } else {
@@ -161,8 +161,8 @@ Func.deleteJwshr = (param: any) => {
 
 // 境外收货人编辑
 Func.handleJwshrpzbj = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param,param?.record.jwshruuid, '境外收货人编辑');
   } else if (param.otherRef && param.otherRef[0]) {

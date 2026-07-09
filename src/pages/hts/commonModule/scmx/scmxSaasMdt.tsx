@@ -143,7 +143,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     const save = () => {
         form.validateFields().then(() => {
             if (paramValue.selectionRowKeys.length === 0) {
-                const searchModel = paramValue.unitRef.current?.getGridParams().searchModel || [];
+                const searchModel = paramValue.refUnit.current?.getGridParams().searchModel || [];
                 const headerSearchModel = paramValue.gridRef.current?.getHeaderFilter() || [];
                 const allSearchModel: any = searchModel.concat(headerSearchModel);
                 allSearchModel.push({ property: 'cxlx', value: cxlx, op: 'zdy' });
@@ -185,7 +185,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
             if (code === '200') {
                 message.success(msg)
                 setModalVisible(false);
-                paramValue?.unitRef.current!.reload2();
+                paramValue?.refUnit.current!.reload2();
                 form.resetFields();
             } else {
                 message.error(msg)

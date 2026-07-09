@@ -11,7 +11,7 @@ import { message } from 'antd';
 import moment from 'moment';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.validator = {

@@ -38,7 +38,7 @@ const Jdcx: React.FC<unknown> = () => {
   const bgdsjly = cktsUtil.sys.bgdsjlyType();
 
   Func.zxrw = async (param: any, e: any) => {
-    const { unitRef, record, gridRef } = param;
+    const { refUnit, record, gridRef } = param;
     const sjgjsjDm = record?.sjgjsjDm;
     const xzztDm = record?.xzztDm;
     const bgdsjlyDm = record?.bgdsjlyDm ? record?.bgdsjlyDm : bgdsjly;
@@ -48,10 +48,10 @@ const Jdcx: React.FC<unknown> = () => {
       gridRef.current?.reload();
     } else if (bgdsjlyDm === '6' && record.dxzts > 0 && (sjgjsjDm === '010101' || sjgjsjDm === '010201')) {
       const curShowModalYbt = refICListYbt.current!.showModal;
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       const result = await queryKakPassword({ uuid: param.record.kakuuid });
       const { code, msg, body } = result;
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (code === '200') {
         const param2 = {};
         param2['taskId'] = param.record.xzdyuuid;
@@ -65,9 +65,9 @@ const Jdcx: React.FC<unknown> = () => {
     } else if (sjgjsjDm === '030603') {
       // 更新报关单信息状态
       const param = { zrwuuid: record.zrwuuid };
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       gxBgdCzbzCxzx(param).then(async (res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { msg, code } = res;
         if (code === '200') {
           gridRef.current?.reload();
@@ -77,9 +77,9 @@ const Jdcx: React.FC<unknown> = () => {
         }
       })
     } else {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       await khdgjUtil.checkIsExistTaskGy(param.record.kakuuid, bgdsjlyDm).then(async (res: any) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (res == 'Y') {
           message.error('存在正在执行中任务，请稍后重试！');
           return;
@@ -117,10 +117,10 @@ const Jdcx: React.FC<unknown> = () => {
         } else {
           const curShowModal = refICList.current!.showModal;
           const curShowModalGpt = refICListGpt.current!.showModal;
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           const result = await queryKakPassword({ uuid: param.record.kakuuid });
           const { code, body } = result;
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (code === '200') {
             const param2 = {};
             param2['taskId'] = param.record.xzdyuuid;
@@ -232,10 +232,10 @@ const Jdcx: React.FC<unknown> = () => {
 
 
   Func.kszx = (param: any, e: any) => {
-    const { unitRef, record } = param;
+    const { refUnit, record } = param;
     Func.param = param;
     e.stopPropagation();
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     let url = `/saas/sjgl/fpsjxz/zxqjy`;
     if (record?.sjgjsjDm == "020011" || record?.sjgjsjDm == "020111") {
       url = `/saas/sjgl/fpsjxz/zxqjySdbswj`;
@@ -245,13 +245,13 @@ const Jdcx: React.FC<unknown> = () => {
     }
     // zxqjy({}).then(async (response: any) => {
     request(url, { method: 'POST', data: {} }).then(async (response: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { body, code, msg } = response;
       if (code == '200') {
         if (body?.jybz == 'Y') {
-          unitRef.current!.setMasker(true);
+          refUnit.current!.setMasker(true);
           await checkDlt2({ jxbz: "Y" }).then(async (res: any) => {
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
             const { code, body, msg } = res;
             if (code == '200') {
               const dl = body?.dlbz == 'Y' ? true : false;
@@ -277,8 +277,8 @@ const Jdcx: React.FC<unknown> = () => {
   }
 
   Func.save2 = async (param: any) => {
-    const { unitRef, record } = Func.param;
-    unitRef.current!.setMasker(true);
+    const { refUnit, record } = Func.param;
+    refUnit.current!.setMasker(true);
     let url = `/saas/sjgl/fpsjxz/kszx`;
     if (record?.sjgjsjDm == "020011" || record?.sjgjsjDm == "020111") {
       url = `/saas/sjgl/fpsjxz/kszxSdbswj`;
@@ -288,10 +288,10 @@ const Jdcx: React.FC<unknown> = () => {
     }
     request(url, { method: 'POST', data: { "zrwuuid": record?.zrwuuid, "xzztDm": record?.xzztDm, sjgjsjDm: record?.sjgjsjDm } }).then(async (response: any) => {
       // await kszx({ "zrwuuid": record?.zrwuuid, "xzztDm": record?.xzztDm }).then(async (res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, body, msg } = response;
       if (code == '200') {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
       } else {
         message.error(msg);
       }

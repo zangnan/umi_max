@@ -2,13 +2,13 @@ import React from 'react';
 import 'moment/locale/zh-cn';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.handleJmbgdDy = (param: any) => {
-  const { selectionRows, unitRef, gridRef, otherRef} = param;
+  const { selectionRows, refUnit, gridRef, otherRef} = param;
   const searchModel: any = [];
-  const gridValues = unitRef.current?.getGridParams();
+  const gridValues = refUnit.current?.getGridParams();
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });

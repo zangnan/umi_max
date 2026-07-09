@@ -11,7 +11,7 @@ import { history } from 'umi';
 const {Dragger} = Upload;
 
 const fpxxFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 fpxxFunc.filterValidate = (param: any) => {
@@ -39,7 +39,7 @@ fpxxFunc.filterValidate = (param: any) => {
 }
 
 fpxxFunc.importTzsxComn = async (param: any, cdDm :any) => {
-  const {unitRef} = param;
+  const {refUnit} = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -111,13 +111,13 @@ fpxxFunc.importTzsxComn = async (param: any, cdDm :any) => {
           formData.append('file', values.file[0].originFileObj);
           formData.append('fileName', values.file[0].name);
           formData.append('cdDm', cdDm);
-          unitRef.current?.setMasker(true);
+          refUnit.current?.setMasker(true);
           zzsfptzsx(formData).then((response: any) => {
             const {code, msg, body} = response;
             thisObj.setState({masker: false});
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];
@@ -171,7 +171,7 @@ fpxxFunc.importTzsxComn = async (param: any, cdDm :any) => {
             message.error('导入失败，请重新上传文件。');
           }).finally(() => {
             thisObj.setState({masker: false});
-            unitRef.current?.setMasker(false);
+            refUnit.current?.setMasker(false);
           });
         } else {
           message.info('文件传输失败，请重试！')
@@ -183,7 +183,7 @@ fpxxFunc.importTzsxComn = async (param: any, cdDm :any) => {
 
 // 批量修改---设置签收章台
 fpxxFunc.btnSetQszt = async (param: any) => {
-  const {selectionRowKeys, unitRef} = param;
+  const {selectionRowKeys, refUnit} = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({id: 'message_handle_unselected'}));
     return;
@@ -211,7 +211,7 @@ fpxxFunc.btnSetQszt = async (param: any) => {
             const {code, msg} = response;
             if (code === '200') {
               message.success('设置签收状态成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -260,10 +260,10 @@ fpxxFunc.columnsRender = {
 };
 
 fpxxFunc.openfp = async (param: any) => {
-  const {record, unitRef, otherRef} = param;
-  unitRef.current?.setMasker(true);
+  const {record, refUnit, otherRef} = param;
+  refUnit.current?.setMasker(true);
   await fpyl({uuid: record?.uuid, jhpzh: record?.jhpzh, exportKey:'PDF_REPORT_SJGLSAAS_JXFPCCX_FP'}).then(async (response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code == '200') {
       otherRef[0].current?.showModal(response.body);
     } else {

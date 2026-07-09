@@ -12,7 +12,7 @@ import { deleteHcrwHcrwsc, hcdyHcrwSchcwj, hcdyHcrwDy } from "@/pages/hts/servic
 
 const hcjlFunc: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 根据路由获取业务key
@@ -30,22 +30,22 @@ hcjlFunc.getYwKey = () => {
 // 调阅
 hcjlFunc.handlebadzHcjlDyCz = (param: any, event: any) => {
   event.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const qqbw = {
     rwbh: record.rwbh,
     rzlx: 'rwbh',
     badzczlxDm: '2'
   };
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   hcdyHcrwDy(qqbw).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (response.code === '200') {
-      const otherRef = param.unitRef.current?.getOtherRefs();
+      const otherRef = param.refUnit.current?.getOtherRefs();
       const listData = response.body.wjljs;
       if (otherRef && otherRef[0]) {
-        otherRef[0].current?.showModal(listData, param.unitRef);
+        otherRef[0].current?.showModal(listData, param.refUnit);
       } else if (param.otherRef && param.otherRef[0]) {
-        param.otherRef[0].current?.showModal(listData, param.unitRef);
+        param.otherRef[0].current?.showModal(listData, param.refUnit);
       }
     } else {
       message.error(response.desc);
@@ -70,7 +70,7 @@ hcjlFunc.handlebadzHcjlCkxqCz = (param: any, event: any) => {
 
 // 删除
 hcjlFunc.handlebadzHcjlScCz = (param: any, event: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   event.stopPropagation();
   DDAlert.open({
     title: '系统提示',
@@ -79,16 +79,16 @@ hcjlFunc.handlebadzHcjlScCz = (param: any, event: any) => {
     modalType: 'confirm',
     closeStatus: true,
     okCallbackFn: function (thisObj: any) {
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       const obj = { uuids: [param.record.rwbh] };
       deleteHcrwHcrwsc(obj).then((response) => {
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         if (response.code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
           // 清空选中并设置按钮可用状态
-          unitRef.current?.setSelectionRowKeys([]);
-          unitRef.current?.setSelectionRows([]);
-          unitRef.current!.reload2();
+          refUnit.current?.setSelectionRowKeys([]);
+          refUnit.current?.setSelectionRows([]);
+          refUnit.current!.reload2();
         } else {
           message.error(response.desc);
           return;
@@ -180,7 +180,7 @@ hcjlFunc.downloadExcel = () => {
 // 生成核查文件
 hcjlFunc.schcwj = (param: any) => {
 
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -202,16 +202,16 @@ hcjlFunc.schcwj = (param: any) => {
     }
   }
   if (rwbhs.length == selectionRows.length) {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     // 生成核查文件
     hcdyHcrwSchcwj({ rwbhs }).then((response) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (response.code === '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_hcdy_schcwj_success' }));
         // 清空选中并设置按钮可用状态
-        unitRef.current?.setSelectionRowKeys([]);
-        unitRef.current?.setSelectionRows([]);
-        unitRef.current!.reload2();
+        refUnit.current?.setSelectionRowKeys([]);
+        refUnit.current?.setSelectionRows([]);
+        refUnit.current!.reload2();
       } else {
         message.error(response.desc);
         return;

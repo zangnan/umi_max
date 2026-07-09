@@ -76,7 +76,7 @@ const sbbqd: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
   const renderGjcsTz = (param: any) => {
     const { bdmc } = param;
     const { otherRef } = paramRef;
-    const otherRef2 = otherRef && otherRef[1]?.current ? otherRef : paramRef.unitRef.current?.getOtherRefs();
+    const otherRef2 = otherRef && otherRef[1]?.current ? otherRef : paramRef.refUnit.current?.getOtherRefs();
     const gridParams = {
       initSearchModal: [
         { property: 'ssq', value: searchData.ssq, op: 'zdy' },

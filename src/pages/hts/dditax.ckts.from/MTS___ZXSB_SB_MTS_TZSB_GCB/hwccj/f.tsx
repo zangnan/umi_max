@@ -7,23 +7,23 @@ import baseValidator from '@/components/DDAssist/field/baseValidator';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配置项：自定义工具栏 冲减出口
 Func.hwccj = (param: any) => {
-  const {selectionRowKeys, unitRef} = param;
+  const {selectionRowKeys, refUnit} = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info('请选择要操作的数据！');
     return;
   } else {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     let apiParam = {
       uuids: selectionRowKeys,
       checkFlag: 'Y'
     };
     mtsTzsbHwccj(apiParam).then((response: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const {code, body, desc} = response;
       if (code === '200') {
         Promise.all([myUtil.code.getCodeFromServerT1('code_dm_ckts_hzcjyy:01')]).then(() => {
@@ -88,7 +88,7 @@ Func.hwccj = (param: any) => {
               mtsTzsbHwccj(apiParam1).then((response: any) => {
                 thisObj.setState({masker: false});
                 const {code, body, desc} = response;
-                unitRef.current?.setMasker(false);
+                refUnit.current?.setMasker(false);
                 if (code === '200') {
                   DDAlert.close();
                   message.info(body);

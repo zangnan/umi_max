@@ -4,7 +4,7 @@ import myUtil from '@/components/DDAssist/util';
 import { Button } from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 下钻
@@ -15,7 +15,7 @@ Func.openDrawer = (param: any, unitKey: any,flag:any) => {
     { property: 'ckny', value: param.record.ckny, op: 'zdy' },
     { property: "xzbz", value: flag, op: "zdy"}
   ];
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[0]) {
     otherRef[0].current?.showModal(param, initSearchModal,searchModel);
   } else if (param.otherRef && param.otherRef[0]) {
@@ -30,7 +30,7 @@ Func.columnsRender = {
     if(param.text == 0 || param.text == '0'){
       return param.text;
     }
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Button type="link" onClick={() => { Func.openDrawer(param, key) }}>
       {myUtil.text.formatNum(param.text, '0,0.00')}
@@ -43,7 +43,7 @@ Func.columnsRender = {
       return param.text;
     }
   if (param.text) {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Button type="link" onClick={() => { Func.openDrawer(param, key, '2')  }}>
         {myUtil.text.formatNum(param.text, '0,0')}
@@ -61,7 +61,7 @@ Func.columnsRender = {
     return param.text;
   }
   if (param.text) {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Button type="link" onClick={() => { Func.openDrawer(param, key, '1')  }}>
         {myUtil.text.formatNum(param.text, '0,0')}
@@ -79,7 +79,7 @@ Func.columnsRender = {
     return param.text;
   }
   if (param.text) {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Button type="link" onClick={() => { Func.openDrawer(param, key, '3')  }}>
         {myUtil.text.formatNum(param.text, '0,0')}
@@ -98,7 +98,7 @@ Func.columnsRender = {
     return param.text;
   }
   if (param.text) {
-    const key = param.unitRef?.current?.getGridParams().key;
+    const key = param.refUnit?.current?.getGridParams().key;
     return (
       <Button type="link" onClick={() => { Func.openDrawer(param, key, '4')  }}>
         {myUtil.text.formatNum(param.text, '0,0')}

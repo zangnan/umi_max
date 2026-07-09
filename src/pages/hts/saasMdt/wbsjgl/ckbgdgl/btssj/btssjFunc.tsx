@@ -9,7 +9,7 @@ import businessValidator from '@/pages/hts/common/field/businessValidator';
 import CkbgdFunc from "../../common/CkbgdFunc";
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 关单信息状态标志
@@ -50,10 +50,10 @@ Func.openCkbgdh = (param: any, ckbgd: any) => {
   })
 };
 Func.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -64,7 +64,7 @@ Func.openCkbgdh2 = (param: any, ckbgd: any) => {
 
 // 批量修改汇率
 Func.btnPlXgHl = (param: any) => {
-  const { unitRef, selectionRowKeys, otherRef } = param;
+  const { refUnit, selectionRowKeys, otherRef } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -76,19 +76,19 @@ Func.btnPlXgHl = (param: any) => {
     ],
     key: 'WBSJ_CKBGD_PLXGHLABZ_QUERY_PAGER'
   }
-  otherRef[1].current?.showModal(unitRef, selectionRowKeys, null, obj2);
+  otherRef[1].current?.showModal(refUnit, selectionRowKeys, null, obj2);
 };
 
 
 // 批量修改运费折算数量
 Func.yfzsslPlxg = (param: any) => {
-  const {unitRef, selectionRowKeys, gridRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const {refUnit, selectionRowKeys, gridRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({id: 'message_common_type_no_griddata'}));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({property: 'cxlx', value: '8', op: 'zdy'});
@@ -124,7 +124,7 @@ Func.yfzsslPlxg = (param: any) => {
                   uuids,
                   yfzssl: values.yfzssl
                 }
-                plxgyfzsslApi(obj2, unitRef, thisObj)
+                plxgyfzsslApi(obj2, refUnit, thisObj)
               } else {
                 message.error(msg)
               }
@@ -135,7 +135,7 @@ Func.yfzsslPlxg = (param: any) => {
               uuids,
               yfzssl: values.yfzssl
             }
-            plxgyfzsslApi(obj2, unitRef, thisObj)
+            plxgyfzsslApi(obj2, refUnit, thisObj)
           }
         }
       })
@@ -162,16 +162,16 @@ const inputNumperFormatter = (value: any, info: any, format: any) => {
 }
 
 // 批量修改运费折算数量接口
-const plxgyfzsslApi = (params: any, unitRef: any, thisObj: any) => {
+const plxgyfzsslApi = (params: any, refUnit: any, thisObj: any) => {
   thisObj.setState({ masker: true });
   plxgYfzssl(params).then((res: any) => {
     thisObj.setState({ masker: false });
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl2.formatMessage({ id: 'message_common_batchedit_success' }));
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
       DDAlert.close();
     } else {
       message.error(msg)
@@ -181,7 +181,7 @@ const plxgyfzsslApi = (params: any, unitRef: any, thisObj: any) => {
 
 // 转退税
 Func.btnZts = (param: any) => {
-  const { unitRef, selectionRowKeys } = param;
+  const { refUnit, selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -200,10 +200,10 @@ Func.btnZts = (param: any) => {
         if (code === '200') {
           message.success('转退税成功！');
           close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else if(code === '900') {
           close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           const tableData = response.body?.wfztsList;
           const html:any = []
           tableData.forEach((item:any) => {
@@ -270,8 +270,8 @@ Func.btnZbts = (param: any) => {
 
 // 试算进项税额转出额
 Func.btnSsjxseByGdw = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -286,9 +286,9 @@ Func.btnSsjxseByGdw = (param: any) => {
   } else {
     title = '确认对当前筛选条件下所有数据进行试算进项税额转出额操作？';
     infoType = 'question';
-    const searchModel: any = [...unitRef?.current?.getGridParams()?.initSearchModal];
+    const searchModel: any = [...refUnit?.current?.getGridParams()?.initSearchModal];
 
-    const gridValues = unitRef.current?.getGridParams();
+    const gridValues = refUnit.current?.getGridParams();
     gridValues.searchModel.forEach((item: any) => {
       searchModel.push(item);
     });
@@ -324,9 +324,9 @@ Func.btnSsjxseByGdw = (param: any) => {
 
   // 拼接结果
   let initSsq = currentYear + '' + monthStr;
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   btssjSsxx(data).then((resJy: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     if (resJy.code === '200') {
       DDAlert.open({
         title: '试算进项税额转出额',
@@ -360,7 +360,7 @@ Func.btnSsjxseByGdw = (param: any) => {
             thisObj.setState({ masker: false });
             DDAlert.close();
             if (resJy2.code === '200') {
-              const otherRef = unitRef.current?.getOtherRefs();
+              const otherRef = refUnit.current?.getOtherRefs();
               if (otherRef[3]) {
                  obj = {
                   uuids: resJy?.body?.uuids,
@@ -370,10 +370,10 @@ Func.btnSsjxseByGdw = (param: any) => {
                   rmblajHj: myUtil.grid.formatNum(resJy?.body?.rmblajHj, '0,0.00'),
                   ssjxzcssq: val.ssjxzcssq,
                 }
-                otherRef[3].current?.showModal(unitRef, obj);
+                otherRef[3].current?.showModal(refUnit, obj);
               }
             } else if (resJy2.code === '900') {
-              const otherRef = unitRef.current?.getOtherRefs();
+              const otherRef = refUnit.current?.getOtherRefs();
               if (otherRef[2]) {
                 const obj2 = {
                   uuids: resJy?.body?.uuids
@@ -386,7 +386,7 @@ Func.btnSsjxseByGdw = (param: any) => {
                   rmblajHj: myUtil.grid.formatNum(resJy?.body?.rmblajHj, '0,0.00'),
                   ssjxzcssq: val.ssjxzcssq,
                 }
-                otherRef[2].current?.showModal(unitRef, obj2, resJy2?.body,obj);
+                otherRef[2].current?.showModal(refUnit, obj2, resJy2?.body,obj);
               }
             } else {
               message.error(resJy2.msg)

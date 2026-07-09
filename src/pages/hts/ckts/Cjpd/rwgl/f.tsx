@@ -5,7 +5,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -193,7 +193,7 @@ Func.columnsRender = {
 // 配单任务情况-刷新
 Func.handlePdrwreload = async (param: any, e: any) => {
   e.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   const searchModel: any[] = [];
   searchModel.push({
     type: "1",
@@ -208,13 +208,13 @@ Func.handlePdrwreload = async (param: any, e: any) => {
     ],
     orderModel: [],
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await queryPager(params).then(async (response: any) => {
     const { code, desc, msg } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      unitRef?.current?.reload2();
+      refUnit?.current?.reload2();
     } else {
       message.error(desc);
       return;
@@ -226,18 +226,18 @@ Func.handlePdrwreload = async (param: any, e: any) => {
 // 重新配单
 Func.handleZdpd = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const params = JSON.parse(record.srcs1);
   params.pduuid = record.pduuid;
   params.tzpdztDm = record.tzpdztDm;
   if (record?.pdrwlxDm == '02') {
     //超级配单
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     sjpp(params).then((response) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, msg } = response;
       if (code === '200') {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
       } else {
         message.error(msg);
       }
@@ -245,12 +245,12 @@ Func.handleZdpd = async (param: any, e: any) => {
 
   } else {
     //台账配单
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     tssbTzpdZdpd(params).then((response) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, msg } = response;
       if (code === '200') {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
       } else {
         message.error(msg);
       }
@@ -291,16 +291,16 @@ Func.handlePdrwRwxq = async (param: any, e: any) => {
 // 生成明细
 Func.handleScmx = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const params = JSON.parse(record.sccs2);
   params.pduuid = record.pduuid;
   params.tzpdztDm = record.tzpdztDm;
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   tssbTzpdScmx(params).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(msg);
     }

@@ -91,8 +91,8 @@ const index: React.FC<unknown> = () => {
   Func.addQy = (param: any) => {
     let yhuuid1 = qxUtil.getYhuuid1(paramPtgly);
     const flag = '新建';
-    const { unitRef } = param;
-    const otherRef = unitRef.current?.getOtherRefs();
+    const { refUnit } = param;
+    const otherRef = refUnit.current?.getOtherRefs();
     if (otherRef && otherRef[0]) {
       otherRef[0].current?.showModal(param, [], flag,yhuuid1,yhlx);
     } else if (param.otherRef && param.otherRef[0]) {
@@ -119,7 +119,7 @@ const index: React.FC<unknown> = () => {
   Func.editQy = (param: any) => {
     let yhuuid1 = qxUtil.getYhuuid1(paramPtgly);
     const flag = '修改';
-    const { selectionRows, unitRef } = param;
+    const { selectionRows, refUnit } = param;
     // 选择数据条数判断
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -129,7 +129,7 @@ const index: React.FC<unknown> = () => {
       message.info(intl2.formatMessage({ id: 'message_one_selected' }));
       return;
     }
-    const otherRef = unitRef.current?.getOtherRefs();
+    const otherRef = refUnit.current?.getOtherRefs();
     if (otherRef && otherRef[0]) {
       otherRef[0].current?.showModal(param, selectionRows[0], flag,yhuuid1,yhlx);
     } else if (param.otherRef && param.otherRef[0]) {

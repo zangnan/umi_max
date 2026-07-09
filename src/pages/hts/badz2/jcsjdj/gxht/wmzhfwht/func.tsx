@@ -11,7 +11,7 @@ import htFun from '../../../common/htcx/func';
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化
@@ -24,8 +24,8 @@ Func.initAddForm = (param: any) => {
 }
 // 编辑表单初始化
 Func.initEditForm = (param: any) => {
-  const { handleModalVisible, unitRef } = param;
-  const selectionRows = unitRef.current.getSelectionRows()
+  const { handleModalVisible, refUnit } = param;
+  const selectionRows = refUnit.current.getSelectionRows()
   if (selectionRows[0].sfzdcc === 'Y') {
     message.info('已经装订成册的数据不允许修改');
     return;
@@ -67,7 +67,7 @@ Func.columnsRender = {
 
 
 Func.del = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit } = param;
   let flag = false;
   selectionRows.forEach((element: any) => {
     if (element.sfzdcc == 'Y') {
@@ -93,7 +93,7 @@ Func.del = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             DDAlert.close();
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             message.success('删除成功！');
           } else {
             message.error(msg);
@@ -140,7 +140,7 @@ Func.handleColumnsYl = (param: any) => {
 }
 // 上传附件
 Func.handleColumnsScfj = async (param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if(isLt2M > 10485760) {
@@ -212,7 +212,7 @@ Func.handleColumnsScfj = async (param: any) => {
             thisObj.setState({ masker: false });
             DDAlert.close();
             if (code === '200') {
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
               message.success(`上传成功`);
             } else{
               message.error(msg);

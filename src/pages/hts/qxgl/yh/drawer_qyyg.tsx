@@ -31,11 +31,11 @@ const DrawerForm: React.FC<BdjgProps> = ({
   const [yhConfig, setYhConfig] = useState<any>();
 
   const qyFunc: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   const yhFunc: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
 
   // 开启
@@ -122,13 +122,13 @@ const DrawerForm: React.FC<BdjgProps> = ({
 
 
   const close = async () => {
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 
   const save = async () => {
-    const yhuuids = yhFunc.unitRef.current.getSelectionRowKeys();
-    const qyuuids = qyFunc.unitRef.current.getSelectionRowKeys();
+    const yhuuids = yhFunc.refUnit.current.getSelectionRowKeys();
+    const qyuuids = qyFunc.refUnit.current.getSelectionRowKeys();
     if (!yhuuids || yhuuids.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -139,14 +139,14 @@ const DrawerForm: React.FC<BdjgProps> = ({
     }
 
     const textAreaValues: any = []
-    qyFunc.unitRef.current.getSelectionRows().forEach((item: any) => {
+    qyFunc.refUnit.current.getSelectionRows().forEach((item: any) => {
       textAreaValues.push(<div>{item.nsrmcDqlb}</div>)
     })
     DDAlert.open({
       title: '确认移管',
       infoType: 'warning',
       modalType: 'info',
-      info: `确定将以下企业移管至${yhFunc.unitRef.current.getSelectionRows()[0].yddh}用户吗？`,
+      info: `确定将以下企业移管至${yhFunc.refUnit.current.getSelectionRows()[0].yddh}用户吗？`,
       closeStatus: false,
       content: <div className="fpsqd_qrkp_bzcheck">
         {textAreaValues}

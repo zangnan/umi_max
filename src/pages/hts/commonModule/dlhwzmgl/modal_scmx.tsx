@@ -107,7 +107,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
       })
     }
     close();
-    cparam?.unitRef?.current?.reload2();
+    cparam?.refUnit?.current?.reload2();
   };
 
 

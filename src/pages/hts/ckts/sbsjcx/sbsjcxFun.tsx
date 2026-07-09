@@ -4,23 +4,23 @@ import { message, Form, Upload, Button, Tooltip } from 'antd';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 // 配置项：自定义操作列 刷新数据审核结果
 Func.reloadColumn = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record, otherRef } = param;
+  const { refUnit, record, otherRef } = param;
   const params = {
     ssq: record.ssq,
     sbwjuuid: record.sbwjuuid,
     ywKey: otherRef[2]
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   ycsbZssbztCx(params).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg, desc } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else if (code === '900') {
       message.info(msg || desc);
     } else {
@@ -39,10 +39,10 @@ Func.displayReload = (record: any) => {
 // 配置项：自定义操作列 审核进度查询
 Func.shjdcxColumn = (param: any, event: any) => {
   event.stopPropagation();
-  const { unitRef, record, otherRef } = param;
-  unitRef.current?.setMasker(true);
+  const { refUnit, record, otherRef } = param;
+  refUnit.current?.setMasker(true);
   getJ4TsshjdInfo({ ssq: record.ssq, sbpc: record?.sbpc, sbwjuuid: record.sbwjuuid, sjsbsj: record.sjsbsj, ywKey: otherRef[2] }).then((response) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg, body } = response;
     if (code === '200' && otherRef && otherRef[3]) {
       otherRef[3].current?.showModal(body);

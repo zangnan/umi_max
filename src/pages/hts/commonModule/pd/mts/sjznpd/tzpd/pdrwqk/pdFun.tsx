@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const pdFun: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 /* 1、“筛选发票”交互界面，点击“添加”按钮时，“筛选发票”页面不关闭。（注意：重复添加一条发票时，不要增长）

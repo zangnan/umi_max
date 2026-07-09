@@ -3,7 +3,7 @@ import myUtil from '@/components/DDAssist/util';
 import { history } from 'umi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配置项：快捷筛选

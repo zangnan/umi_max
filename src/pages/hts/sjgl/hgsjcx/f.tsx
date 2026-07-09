@@ -3,12 +3,12 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 import { message } from 'antd';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 
 Func.handleMdthxFplSjdc = async (param :any) =>{
-  if(param.unitRef.current.getGridData().length == 0 ){
+  if(param.refUnit.current.getGridData().length == 0 ){
     message.info('当前筛选条件下无数据，请确认！');
     return  
   }
@@ -18,7 +18,7 @@ Func.handleMdthxFplSjdc = async (param :any) =>{
     key: mbxzkey,
     relx: 'xls',
     iszip: 'N',
-    searchModel:param.unitRef.current.getGridParams().searchModel,
+    searchModel:param.refUnit.current.getGridParams().searchModel,
     orderModel: [],
   }
   const selectionRows =  param?.selectionRowKeys;

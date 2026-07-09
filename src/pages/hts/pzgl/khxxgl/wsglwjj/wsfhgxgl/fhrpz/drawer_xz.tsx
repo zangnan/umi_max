@@ -85,7 +85,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   };
 
   Func.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if(dataSource && dataSource.length > 0 ) {
@@ -96,19 +96,19 @@ const DrawerForm: React.FC<BdjgProps> = ({
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   const close = async () => {
-    initParam?.unitRef.current?.reload2();
+    initParam?.refUnit.current?.reload2();
     setModalVisible(false);
   }
 
   
   // 删除已绑定境外收货人
 Func.delBdjwshr = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   // 选择数据条数判断
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
@@ -134,7 +134,7 @@ Func.delBdjwshr = (param: any) => {
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
           close();
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
         } else {
           message.error(msg);
         }

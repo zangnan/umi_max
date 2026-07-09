@@ -75,7 +75,7 @@ const Glqxz: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   //开关值改变
 const onChangeSwitch = async (param: any) => {
-  const { record, unitRef,checked,dataSource } = param;
+  const { record, refUnit,checked,dataSource } = param;
   const bz = checked? "Y":"N";
   const data = {
     "qdDm":rowKeys,
@@ -87,18 +87,18 @@ const onChangeSwitch = async (param: any) => {
     setMasker(false);
     if (response.code === '200') {
       message.success('保存成功！');
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(response.msg);
     }
   });
-  param.unitRef.current!.reload2();
+  param.refUnit.current!.reload2();
 
 
 }
 
   qxzFunc.afterReload = (param: any) => {
-    const { dataSource, unitRef } = param;
+    const { dataSource, refUnit } = param;
     const checkRow: any = [];
     const checkRowKey: any = [];
     if (dataSource && dataSource.length > 0) {
@@ -109,13 +109,13 @@ const onChangeSwitch = async (param: any) => {
         }
       });
     }
-    unitRef.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
-    unitRef.current?.setSelectionRows(checkRow);  // 设置SelectionRows
+    refUnit.current?.setSelectionRowKeys(checkRowKey);  // 设置SelectionRows
+    refUnit.current?.setSelectionRows(checkRow);  // 设置SelectionRows
   }
 
   qxzFunc.save = async (param: any) => {
     const { selectionRowKeys, } = param;
-    const searchModel = param.unitRef.current.getGridParams().searchModel;
+    const searchModel = param.refUnit.current.getGridParams().searchModel;
     const data = {
       "qdDm": rowKeys,
       "qxzDms": selectionRowKeys,
@@ -131,7 +131,7 @@ const onChangeSwitch = async (param: any) => {
       setMasker(false);
       if (response.code === '200') {
         message.success('保存成功！');
-        param.unitRef.current!.reload2();
+        param.refUnit.current!.reload2();
       } else {
         message.error(response.msg);
       }
@@ -147,7 +147,7 @@ const onChangeSwitch = async (param: any) => {
 
   const close = () => {
     setModalVisible(false);
-    mainRef.unitRef.current!.reload2();
+    mainRef.refUnit.current!.reload2();
   }
 
   return (

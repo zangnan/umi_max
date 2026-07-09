@@ -43,12 +43,12 @@ const ErrorMsgGrid: React.FC<DDModalGridProps> = ({
 
   // // 对照关系配单
   // const ddzgxpdContinue = () => {
-  //   const { otherRef, unitRef } = yymParam;
+  //   const { otherRef, refUnit } = yymParam;
   //   setMasker(true);
   //   ddzgxpd({}).then((response: any) => {
   //     setMasker(false);
   //     const { body, msg } = response;
-  //     unitRef.current?.setMasker(false);
+  //     refUnit.current?.setMasker(false);
   //     if (response.code == '200') {
   //       otherRef[0].current?.showModal({ zdpdResult: body });
   //       setModalVisible(false);

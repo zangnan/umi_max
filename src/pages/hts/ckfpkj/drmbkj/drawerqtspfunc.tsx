@@ -3,7 +3,7 @@ import React from 'react';
 import { intl as intl2 } from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.handleFpsqdTzSave = (param: any) => {

@@ -7,18 +7,18 @@ import {Form, Input} from "antd";
 import baseValidator from '@/components/DDAssist/field/baseValidator';
 
 const dlzmKsyFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 生成明细报表
 dlzmKsyFunc.produceDetailsReport = (param: any) => {
-  const { unitRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const otherRef = param.unitRef.current?.getOtherRefs();
+  const otherRef = param.refUnit.current?.getOtherRefs();
   if (otherRef) {
     otherRef[0].current?.showModal(param, '3');
   }
@@ -26,13 +26,13 @@ dlzmKsyFunc.produceDetailsReport = (param: any) => {
 
 // 批量修改出口发票号
 dlzmKsyFunc.ckfphPlxg = (param: any) => {
-  const {unitRef, selectionRowKeys, gridRef} = param;
-  const gridData = unitRef.current?.getGridData();
+  const {refUnit, selectionRowKeys, gridRef} = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({id: 'message_common_type_no_griddata'}));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({property: 'cxlx', value: '3', op: 'zdy'});
@@ -69,7 +69,7 @@ dlzmKsyFunc.ckfphPlxg = (param: any) => {
                   ywlx: 'dlckhwzm',
                   ckfph: values.ckfph
                 }
-                plxgckfphApi(obj2, unitRef)
+                plxgckfphApi(obj2, refUnit)
               } else {
                 message.error(msg)
               }
@@ -81,7 +81,7 @@ dlzmKsyFunc.ckfphPlxg = (param: any) => {
               ywlx: 'dlckhwzm',
               ckfph: values.ckfph
             }
-            plxgckfphApi(obj2, unitRef)
+            plxgckfphApi(obj2, refUnit)
           }
         }
       })
@@ -90,14 +90,14 @@ dlzmKsyFunc.ckfphPlxg = (param: any) => {
 }
 
 // 批量修改出口发票号接口
-const plxgckfphApi = (params: any, unitRef: any) => {
+const plxgckfphApi = (params: any, refUnit: any) => {
   plxgckfph(params).then((res: any) => {
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-      unitRef.current!.reload2();
-      unitRef.current?.setSelectionRowKeys([]);
-      unitRef.current?.setSelectionRows([]);
+      refUnit.current!.reload2();
+      refUnit.current?.setSelectionRowKeys([]);
+      refUnit.current?.setSelectionRows([]);
       DDAlert.close();
     } else {
       message.error(msg)
@@ -107,7 +107,7 @@ const plxgckfphApi = (params: any, unitRef: any) => {
 
 // 批量修改出口商品代码
 dlzmKsyFunc.ckspdmPlxg = (param: any) => {
-  const { unitRef, selectionRowKeys } = param;
+  const { refUnit, selectionRowKeys } = param;
   if (selectionRowKeys.length === 0) {
     message.info(intl.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -132,15 +132,15 @@ dlzmKsyFunc.ckspdmPlxg = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(body);
-            unitRef.current!.reload2();
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current!.reload2();
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
           } else if (code === '900') {
             if (body === '' || body === null) {
               message.error(msg);
             } else {
               //#region  失败展示页面
-              const otherRef = param.unitRef.current?.getOtherRefs();
+              const otherRef = param.refUnit.current?.getOtherRefs();
               if (otherRef) {
                 otherRef[1].current?.showModal(body, 'dlzm', '批量修改');
               }

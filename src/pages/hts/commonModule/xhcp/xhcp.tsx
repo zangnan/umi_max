@@ -17,14 +17,14 @@ const Order: React.FC<OrderProps> = ({
 }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [orderType, setOrderType] = useState<any>();
-  const [unitRef, setUnitRef] = useState<any>();
+  const [refUnit, setUnitRef] = useState<any>();
   const [formData, setFormData] = useState<any>({});
   const [orderForm] = Form.useForm();
   const [masker, setMasker] = useState<boolean>(false);
   // 开启
   const showModal = (param: any) => {
     setOrderType(param.type);
-    setUnitRef(param.unitRef);
+    setUnitRef(param.refUnit);
     initFormData(param);
     setModalVisible(true);
   };
@@ -142,7 +142,7 @@ const Order: React.FC<OrderProps> = ({
         const { code, desc } = response;
         if (code === '200') {
           message.success('序号重排成功');
-          unitRef.current!.reload2();;
+          refUnit.current!.reload2();;
           close();
         } else {
           message.error(desc);

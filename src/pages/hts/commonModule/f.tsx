@@ -9,16 +9,16 @@ import { history } from 'umi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const DditCktsFormCommonFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化
 DditCktsFormCommonFunc.initAddForm = (param: any) => {
-  const { form, handleModalVisible, unitKey, unit_lcswsx_dm = '', unitRef, doSuccess, setMasker, tcbz } = param;
+  const { form, handleModalVisible, unitKey, unit_lcswsx_dm = '', refUnit, doSuccess, setMasker, tcbz } = param;
   if (setMasker) {
     setMasker(true);  // 按报关单生成明细：外贸、生产、证明开具
   } else {
-    unitRef.current?.setMasker(true); // 通用页面
+    refUnit.current?.setMasker(true); // 通用页面
   }
   let apiParam: any = {
     lcswsxDm: unit_lcswsx_dm,
@@ -120,7 +120,7 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
     if (setMasker) {
       setMasker(false);  // 按报关单生成明细：外贸、生产、证明开具
     } else {
-      unitRef.current?.setMasker(false); // 通用页面
+      refUnit.current?.setMasker(false); // 通用页面
     }
     if (handleModalVisible) {
       handleModalVisible(true); // 通用页面
@@ -131,8 +131,8 @@ DditCktsFormCommonFunc.initAddForm = (param: any) => {
 // 配置项：自定义工具栏 关联号重排
 DditCktsFormCommonFunc.glhcp = (param: any) => {
   // edit by yangzq 关联号重排增加按所属期、申报批次进行排序
-  const { unitRef, unit_key, unit_lcswsx_dm = '' } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, unit_key, unit_lcswsx_dm = '' } = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info("无需要操作的数据");
     return;
@@ -238,9 +238,9 @@ DditCktsFormCommonFunc.glhcp = (param: any) => {
               if (code === '200') {
                 DDAlert.close();
                 message.info('关联号重排成功');
-                unitRef.current?.setSelectionRowKeys([]);  // 设置SelectionRows
-                unitRef.current?.setSelectionRows([]);     // 设置SelectionRowKeys
-                unitRef.current?.reload2();
+                refUnit.current?.setSelectionRowKeys([]);  // 设置SelectionRows
+                refUnit.current?.setSelectionRows([]);     // 设置SelectionRowKeys
+                refUnit.current?.reload2();
               } else {
                 message.error(desc);
               }

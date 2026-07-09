@@ -6,7 +6,7 @@ import { deleteBaqkAndDzRelation, saveBaqkAndDzRelation } from '@/pages/hts/serv
 import DDAlert from '@/pages/hts/components/DDAlert';
 import cktsUtil from '@/pages/hts/cktsUtil';
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -52,7 +52,7 @@ Func.costomerToobarMatching = (param: any) => {
 
 // 删除
 Func.costomerToobarDelete = async (param: any) => {
-  const { otherRef, unitRef, selectionRowKeys, selectionRows } = param;
+  const { otherRef, refUnit, selectionRowKeys, selectionRows } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -70,7 +70,7 @@ Func.costomerToobarDelete = async (param: any) => {
   deleteBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
       message.success('数据删除成功');
     } else {
       message.error(desc);
@@ -80,7 +80,7 @@ Func.costomerToobarDelete = async (param: any) => {
 
 // 保存
 Func.costomerToobarSave = async (param: any) => {
-  const { otherRef, unitRef, selectionRowKeys, selectionRows } = param;
+  const { otherRef, refUnit, selectionRowKeys, selectionRows } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -102,8 +102,8 @@ Func.costomerToobarSave = async (param: any) => {
   saveBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
-      otherRef[4]?.unitRef?.current!.reload2();
+      refUnit.current!.reload2();
+      otherRef[4]?.refUnit?.current!.reload2();
       message.success('单证匹配成功');
     } else {
       message.error(desc);
@@ -128,9 +128,9 @@ Func.ylDisplay = (record: any) => {
 };
 
 Func.commonPlxz =(param:any,dzlx:string) => {
-  const { selectionRowKeys, selectionRows, unitRef, gridRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit, gridRef } = param;
   // 当前页面的数据
-  const gridData = unitRef.current?.getGridData();
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info('当前页面无可下载的数据！');
     return;
@@ -144,7 +144,7 @@ Func.commonPlxz =(param:any,dzlx:string) => {
     downloadParam.uuids = selectionRowKeys;
   }
   // 获取筛选条件
-  const searchModel = unitRef.current?.getGridParams().searchModel;
+  const searchModel = refUnit.current?.getGridParams().searchModel;
   const headerSearchModel = gridRef.current?.getHeaderFilter();
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   convertAdQueryToSearchModel(allSearchModel,downloadParam);

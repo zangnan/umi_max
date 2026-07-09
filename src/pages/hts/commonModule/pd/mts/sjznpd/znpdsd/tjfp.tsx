@@ -62,7 +62,7 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
   };
 
   const Func = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     columnsRender: {
       renderZnpdSddw: (param: any) => {
         const record = param?.record;
@@ -83,7 +83,7 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
     },
     // 选中
     onSelect: (param: any) => {
-      const { record, selected, unitRef } = param;
+      const { record, selected, refUnit } = param;
       const tmpRows = [...selectRows];
       const tmpRowKeys = [...selectKeys];
       if (selected) {
@@ -97,13 +97,13 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
       }
       setSelectKeys(tmpRowKeys);
       setSelectRows(tmpRows);
-      unitRef.current!.setSelectionRowKeys(tmpRowKeys);
-      unitRef.current!.setSelectionRows(tmpRows);
+      refUnit.current!.setSelectionRowKeys(tmpRowKeys);
+      refUnit.current!.setSelectionRows(tmpRows);
       const addNum = tmpRows.length;
-      unitRef?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
+      refUnit?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
     },
     onSelectAll: (param: any) => {
-      const { selected, changeRows, unitRef } = param;
+      const { selected, changeRows, refUnit } = param;
       const tmpRowKeys = [...selectKeys];
       const tmpRows = [...selectRows];
       if (selected) {
@@ -121,15 +121,15 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
       }
       setSelectKeys(tmpRowKeys);
       setSelectRows(tmpRows);
-      unitRef.current!.setSelectionRowKeys(tmpRowKeys);
-      unitRef.current!.setSelectionRows(tmpRows);
+      refUnit.current!.setSelectionRowKeys(tmpRowKeys);
+      refUnit.current!.setSelectionRows(tmpRows);
       const addNum = tmpRows.length;
-      unitRef?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
+      refUnit?.current?.setGridHeaderInfoCustomer(getGridHeaderInfo(addNum));
     },
     afterReload: (param: any) => {
-      const { unitRef } = param;
-      unitRef.current?.setSelectionRowKeys(selectKeys);
-      unitRef.current?.setSelectionRows(selectRows);
+      const { refUnit } = param;
+      refUnit.current?.setSelectionRowKeys(selectKeys);
+      refUnit.current?.setSelectionRows(selectRows);
     },
     addFpxx: (param: any) => {
       if (selectRows.length === 0) {

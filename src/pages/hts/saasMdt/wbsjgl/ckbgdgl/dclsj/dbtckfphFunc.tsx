@@ -12,7 +12,7 @@ import CkbgdFunc from "../../common/CkbgdFunc";
 const { Dragger } = Upload;
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 const beforeUpload = (file: any) => {
@@ -30,7 +30,7 @@ const beforeUpload = (file: any) => {
 
 // 导入
 ckfpFunc.btnPldr = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '导入出口发票号',
     infoType: 'warning',
@@ -90,7 +90,7 @@ ckfpFunc.btnPldr = (param: any) => {
               message.success('导入成功');
               otherRef[2].current!.getDclsjBttj(); // 刷新头部条数
               setTimeout(() => {
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
                 thisObj.setState({ masker: false });
               },300)
             } else if (code === '900') {
@@ -135,14 +135,14 @@ ckfpFunc.downloadExcelMb = (key: any) => {
 
 // 批量补录
 ckfpFunc.btnPlbl = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
 
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: 1, op: 'zdy' });
@@ -179,7 +179,7 @@ ckfpFunc.btnPlbl = (param: any) => {
                   ywlx: 'ckbgd',
                   ckfph: values.ckfph
                 }
-                plxgckfphApi(obj2, unitRef, otherRef, thisObj)
+                plxgckfphApi(obj2, refUnit, otherRef, thisObj)
               } else {
                 message.error(msg)
               }
@@ -191,7 +191,7 @@ ckfpFunc.btnPlbl = (param: any) => {
               ywlx: 'ckbgd',
               ckfph: values.ckfph
             }
-            plxgckfphApi(obj2, unitRef, otherRef, thisObj)
+            plxgckfphApi(obj2, refUnit, otherRef, thisObj)
           }
         }
       })
@@ -213,7 +213,7 @@ const validatorFlag = {
 }
 
 // 批量补录接口
-const plxgckfphApi = (params: any, unitRef: any, otherRef: any, thisObj: any) => {
+const plxgckfphApi = (params: any, refUnit: any, otherRef: any, thisObj: any) => {
   thisObj.setState({ masker: true });
   plxgckfph(params).then((res: any) => {
     const { code, msg } = res;
@@ -222,7 +222,7 @@ const plxgckfphApi = (params: any, unitRef: any, otherRef: any, thisObj: any) =>
       // 刷新头部条数
       otherRef[2].current!.getDclsjBttj()
       setTimeout(() => {
-        unitRef.current!.reload2()
+        refUnit.current!.reload2()
         DDAlert.close();
         thisObj.setState({ masker: false });
       },300)
@@ -234,13 +234,13 @@ const plxgckfphApi = (params: any, unitRef: any, otherRef: any, thisObj: any) =>
 
 // 设置为出口合同号
 ckfpFunc.btnSetCkht = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: "1", op: 'zdy' });
@@ -264,20 +264,20 @@ ckfpFunc.btnSetCkht = (param: any) => {
           const { code, body, msg } = res;
           if (code === '200') {
             uuids = body.rows;
-            ckhthTockfphApi(uuids, unitRef, otherRef, thisObj);
+            ckhthTockfphApi(uuids, refUnit, otherRef, thisObj);
           } else {
             message.error(msg)
           }
         })
       } else {
         uuids = selectionRowKeys;
-        ckhthTockfphApi(uuids, unitRef, otherRef, thisObj);
+        ckhthTockfphApi(uuids, refUnit, otherRef, thisObj);
       }
     }
   })
 }
 // 设置为出口合同号 接口
-const ckhthTockfphApi = (param: any, unitRef: any, otherRef: any, thisObj: any) => {
+const ckhthTockfphApi = (param: any, refUnit: any, otherRef: any, thisObj: any) => {
   thisObj.setState({ masker: true });
   ckhthTockfph({ uuids: param }).then((res: any) => {
     const { code, msg } = res;
@@ -286,7 +286,7 @@ const ckhthTockfphApi = (param: any, unitRef: any, otherRef: any, thisObj: any) 
       // 刷新头部条数
       otherRef[2].current!.getDclsjBttj();
       setTimeout(() => {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         thisObj.setState({ masker: false });
       },300)
     } else {
@@ -316,10 +316,10 @@ ckfpFunc.openCkbgdh = (param: any, ckbgd: any) => {
 }
 
 ckfpFunc.openCkbgdh2 = (param: any, ckbgd: any) => {
-  const { otherRef, record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const { otherRef, record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   bgdpdfyl({ uuid: record?.uuid, bgdhgbh: record?.bgdhgbh }).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code == '200') {
       otherRef[0].current?.showModal(res?.body, { uuid: record?.uuid, bgdhgbh: record?.bgdhgbh });
     } else {
@@ -351,7 +351,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[2].current!.getDclsjBttj();
           setTimeout(() => {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             close();
             thisObj.setState({ masker: false });
           },300)

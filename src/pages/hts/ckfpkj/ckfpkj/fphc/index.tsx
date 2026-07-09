@@ -50,7 +50,7 @@ const Index: React.FC<unknown> = () => {
 
   // 发票红冲
   func.handleFphc = (param: any) => {
-    const { selectionRowKeys, selectionRows, unitRef } = param;
+    const { selectionRowKeys, selectionRows, refUnit } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info('请选择一条“开票成功”或“作废失败”的数据进行操作。');
       return;
@@ -102,14 +102,14 @@ const Index: React.FC<unknown> = () => {
             const hcyy = values.hcyy
             if (selectionRows[0]?.kpfsDm === '2' && selectionRows[0].fpzlDm1 === '5') {
               // 数电票
-              setUnitRef(unitRef);
+              setUnitRef(refUnit);
               DDAlert.close();
               setParamSdp({ fpsqduuid: selectionRowKeys[0], hcyy })
               setCheckBtn('hc')
               if(qxUtil.getQxz(paramLq)){
-                tz("200", { fpsqduuid: selectionRowKeys[0], hcyy }, unitRef);
+                tz("200", { fpsqduuid: selectionRowKeys[0], hcyy }, refUnit);
               }else{
-                kpSuccess({ fpsqduuid: selectionRowKeys[0], hcyy }, unitRef, '1');
+                kpSuccess({ fpsqduuid: selectionRowKeys[0], hcyy }, refUnit, '1');
               }
             } else {
               thisObj.setState({ masker: true });
@@ -118,7 +118,7 @@ const Index: React.FC<unknown> = () => {
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  unitRef.current!.reload2();
+                  refUnit.current!.reload2();
                   message.success('发票红冲申请成功');
                 } else if (response.code === '900') {
                   message.error(response.msg);
@@ -137,23 +137,23 @@ const Index: React.FC<unknown> = () => {
 
   // 开票
   const kpSuccess = async (obj: any, ref: any, flag: any) => {
-    const unitRef = ref ? ref : hcUnitRef;
+    const refUnit = ref ? ref : hcUnitRef;
     if (flag === '1') {
       setMasker(true);
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       await checkDlt2({}).then(async (res: any) => {
         setMasker(false);
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, body } = res;
         if (code == "200") {
           const dl = body?.dlbz;
           const rz = body?.rzbz;
           if (dl === 'Y' && rz == 'Y') {
-            tz("200", obj, unitRef);
+            tz("200", obj, refUnit);
           } else if (dl != 'Y') {
-            tz("2004", obj, unitRef);
+            tz("2004", obj, refUnit);
           } else if (dl === 'Y' && rz != 'Y') {
-            tz("2005", obj, unitRef);
+            tz("2005", obj, refUnit);
           }
         } else {
           message.error(res?.msg);
@@ -169,7 +169,7 @@ const Index: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if (rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -206,17 +206,17 @@ const Index: React.FC<unknown> = () => {
     }
   }
 
-  const tz = (rtnCode: any, obj: any, unitRef: any) => {
+  const tz = (rtnCode: any, obj: any, refUnit: any) => {
     if (rtnCode == '200') {
       setMasker(true);
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       sdpfphc2(obj ? obj : paramSdp).then((res: any) => {
         setMasker(false);
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
         const { code, body, desc, msg } = res;
         if (code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票红冲申请成功!');
         } else if (code === '900') {
           // 业务校验
@@ -250,13 +250,13 @@ const Index: React.FC<unknown> = () => {
               const rz = body?.rzbz;
               //已登錄
               if (dl && rz =='N') {
-                tz("2005", obj, unitRef);
+                tz("2005", obj, refUnit);
               }
               if(dl && rz =='Y'){
-                tz("200", obj, unitRef);
+                tz("200", obj, refUnit);
               }
               if(dl && rz =='U'){
-                tz("2005", obj, unitRef);
+                tz("2005", obj, refUnit);
               }
             } else {
               message.error(msg);
@@ -282,7 +282,7 @@ const Index: React.FC<unknown> = () => {
               const dl = body?.dlbz == 'Y' ? true : false;
               //已登錄
               if (dl && body?.rzbz != "N" ) {
-                tz("200", obj, unitRef);
+                tz("200", obj, refUnit);
               }
             } else {
               message.error(msg);

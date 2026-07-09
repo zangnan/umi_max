@@ -6,7 +6,7 @@ import DditCktsFormCommonFunc from '@/pages/hts/commonModule/f';
 import { checkJtgszbSh } from '@/pages/hts/services/htsApi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化

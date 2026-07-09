@@ -18,7 +18,7 @@ const Tjfp: React.FC<ZzsfpSxProps> = ({ onRef, visible = false }) => {
   const Func: any = {};
 
   // 开启
-  const showModal = (param: any, unitRef: any, sbqyuuid:any) => {
+  const showModal = (param: any, refUnit: any, sbqyuuid:any) => {
     Config.gridParams = {
       initSearchModal: [
         {property: 'sbqyuuid', value: sbqyuuid, op: 'zdy'},

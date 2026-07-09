@@ -210,8 +210,8 @@ const Index: React.FC = () => {
       if (res.code === '200') {
         message.success('操作成功！');
         close();
-        const unitRef = Func.unitRef;
-        unitRef?.current?.reload2();
+        const refUnit = Func.refUnit;
+        refUnit?.current?.reload2();
       } else {
         message.error(res?.msg);
       }

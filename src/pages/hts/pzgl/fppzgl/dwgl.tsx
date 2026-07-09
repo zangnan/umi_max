@@ -34,7 +34,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   }
 
   const Func: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
   };
   const dwglConfig: any = {};
   const access = useAccess(); // 权限
@@ -68,21 +68,21 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
   //开关值改变
   const onChangeSwitch = (_record: any,) => {
-    const { record, unitRef, checked } = _record;
+    const { record, refUnit, checked } = _record;
     const obj = {
       uuid: record?.uuid,
       czlx: '3',
       qybz: checked ? 'Y' : 'N',
     }
-    unitRef.current!?.setMasker(true);
+    refUnit.current!?.setMasker(true);
     kpdwwh(obj).then((res2: any) => {
-      unitRef.current!?.setMasker(false);
+      refUnit.current!?.setMasker(false);
       if (res2.code === '200') {
         message.success('保存成功！');
-        unitRef?.current?.reload2();
+        refUnit?.current?.reload2();
       } else {
         message.error(res2.msg);
-        unitRef?.current?.reload2();
+        refUnit?.current?.reload2();
       }
     });
   }
@@ -107,7 +107,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   ];
 
   Func.add = (param: any) => {
-    const { unitRef, selectionRows } = param;
+    const { refUnit, selectionRows } = param;
     DDAlert.open({
       title: '新增',
       infoType: 'warning',
@@ -140,7 +140,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
                   if (res2.code === '200') {
                     message.success('保存成功！');
                     DDAlert.close();
-                    unitRef.current!.reload2();
+                    refUnit.current!.reload2();
                   } else {
                     message.error(res2.msg);
                   }
@@ -157,7 +157,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   }
 
   Func.edit = (param: any) => {
-    const { unitRef, selectionRows } = param;
+    const { refUnit, selectionRows } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -196,7 +196,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
               if (res2.code === '200') {
                 message.success('保存成功！');
                 DDAlert.close();
-                unitRef.current!.reload2();
+                refUnit.current!.reload2();
               } else {
                 message.error(res2.msg);
               }
@@ -208,7 +208,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
   }
 
   Func.del = (param: any) => {
-    const { unitRef, selectionRows, selectionRowKeys } = param;
+    const { refUnit, selectionRows, selectionRowKeys } = param;
     if (!selectionRows || selectionRows.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
       return;
@@ -227,7 +227,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
           if (res2.code === '200') {
             message.success('删除成功！');
             DDAlert.close();
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
           } else {
             message.error(res2.msg);
           }
@@ -239,7 +239,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
 
   // 导入Excel模板
   Func.excelImport = (param: any) => {
-    const { unitRef, otherRef } = param;
+    const { refUnit, otherRef } = param;
     DDAlert.open({
       title: '导入Excel文件',
       infoType: 'warning',
@@ -298,7 +298,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
             DDAlert.close();
             if (code === '200') {
               message.success("导入成功！");
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             }
             else if (code === '900') {
               otherRef[0].current!.showModal(body);

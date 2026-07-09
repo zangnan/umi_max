@@ -7,14 +7,14 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.fxbg=(param :any)=>{
-  const {unitRef} = param;
-  unitRef.current?.setMasker(true);
+  const {refUnit} = param;
+  refUnit.current?.setMasker(true);
   getXzbg({ ny: myUtil.date.getCurrentYearMonth()}).then((res2: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const {code,msg,body} = res2;
     if(!"200" == code){
       message.error(msg);
@@ -51,10 +51,10 @@ Func.fxbg=(param :any)=>{
 }
 
 Func.ydqc=(param :any)=>{
-  const {unitRef} = param;
-  unitRef.current?.setMasker(true);
+  const {refUnit} = param;
+  refUnit.current?.setMasker(true);
   downloadTemplate({ ny: myUtil.date.getCurrentYearMonth()}).then((res2: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const {code,msg,body} = res2;
     if(!"200" == code){
       message.error(msg);

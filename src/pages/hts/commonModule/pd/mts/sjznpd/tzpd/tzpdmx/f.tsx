@@ -12,16 +12,16 @@ import { importData, queryPager } from '@/pages/hts/services/htsApi';
 const { Dragger } = Upload;
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 配单
 Func.handPdColumns = (param: any) => {
-  const { unitRef, record, otherRef } = param;
-  unitRef.current!.setMasker(true);
+  const { refUnit, record, otherRef } = param;
+  refUnit.current!.setMasker(true);
   queryCjCsh({tableKey: "MTS_ZXSB_SB_MTS_TSSB_G"}).then((response) => {
     const { code, body } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       const obj = {
         sbpc: body.sbpc,
@@ -31,7 +31,7 @@ Func.handPdColumns = (param: any) => {
         if(res.code === '200') {
           const para = body;
           para.glh = res.body.glh
-          otherRef[0].current!.showModal(para, unitRef,record);
+          otherRef[0].current!.showModal(para, refUnit,record);
         }
       })
     }
@@ -39,8 +39,8 @@ Func.handPdColumns = (param: any) => {
 }
 // 模板下载
 Func.mbxz = (param: any) => {
-  const {otherRef,unitRef} = param;
-  otherRef[0].current?.showModal(unitRef);
+  const {otherRef,refUnit} = param;
+  otherRef[0].current?.showModal(refUnit);
 }
 
 const beforeUpload = (file: any) => {
@@ -53,7 +53,7 @@ const beforeUpload = (file: any) => {
 }
 //台账导入
 Func.tzdr = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '台账导入',
     infoType: 'warning',
@@ -116,7 +116,7 @@ Func.tzdr = (param: any) => {
             if (code === '200') {
               message.success(msg);
               thisObj.setState({ masker: false });
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else if (code === '900') {
               otherRef[1].current?.showModal(body.drycxx,  body.druuid);
               if(!(msg === '' || msg === null)){
@@ -142,8 +142,8 @@ Func.tzdr = (param: any) => {
 
 // 自动配单
 Func.zdpd = (param: any) => {
-  const {otherRef,unitRef, selectionRowKeys, gridRef} = param;
-  const gridData  = unitRef.current.getGridData();
+  const {otherRef,refUnit, selectionRowKeys, gridRef} = param;
+  const gridData  = refUnit.current.getGridData();
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
     return;
@@ -152,7 +152,7 @@ Func.zdpd = (param: any) => {
   if (selectionRowKeys?.length > 0) {
     cxModel.push({op: 'zdy', property: 'uuids', values: selectionRowKeys});
   } else {
-    const searchModel = unitRef.current?.getGridParams().searchModel || [];
+    const searchModel = refUnit.current?.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     cxModel.push(...allSearchModel);
@@ -165,9 +165,9 @@ Func.zdpd = (param: any) => {
     key : 'MTS_SJPP_TZPD_QUERY_PAGE',
     searchModel: cxModel
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   queryPager(obj).then((res: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, body, msg } = res;
     if (code === '200') {
       const bgdts = body?.rowCount || 0;
@@ -178,13 +178,13 @@ Func.zdpd = (param: any) => {
           bgdts: body?.rowCount || 0,
           sxtj : cxModel
         }
-        otherRef[2].current?.showModal(unitRef, params);
+        otherRef[2].current?.showModal(refUnit, params);
       }
     } else {
       message.error(msg);
     }
   })
-  // otherRef[2].current?.showModal(unitRef);
+  // otherRef[2].current?.showModal(refUnit);
 }
 
 export default Func;

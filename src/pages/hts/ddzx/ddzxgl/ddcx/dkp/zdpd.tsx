@@ -23,7 +23,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   const [masker, setMasker] = useState(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [key, setKey] = useState('');
-  const [unitRef, setUnitRef] = useState();
+  const [refUnit, setUnitRef] = useState();
   const [body, setBody] = useState({});
   const [ckn, setCkn] = useState('');
   const [flag, setFlag] = useState('N');
@@ -31,10 +31,10 @@ const ModalForm: React.FC<BdjgProps> = ({
 
 
   // 开启
-  const showModal = async (key: any, unitRef: any, body: any,ckny:any) => {
+  const showModal = async (key: any, refUnit: any, body: any,ckny:any) => {
     setModalVisible(true);
     setKey(key);
-    setUnitRef(unitRef);
+    setUnitRef(refUnit);
     setBody(body);
     setCkn(ckny);
     for (let index = 0; index < body?.pdmxList.length; index++) {
@@ -74,7 +74,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   });
 
   const close = () => {
-    unitRef?.current?.reload2();
+    refUnit?.current?.reload2();
     setModalVisible(false);
     setBody({});
     setCkn('');

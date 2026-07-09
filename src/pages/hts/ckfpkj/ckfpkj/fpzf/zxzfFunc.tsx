@@ -6,12 +6,12 @@ import { downloadTemplate, fpzf } from '@/pages/hts/services/htsApi';
 import DDAlert from '@/pages/hts/components/DDAlert';
 
 const ckfpFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 发票作废
 ckfpFunc.handleFpzf = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info('请选择一条“开票成功”或“作废失败”的数据进行操作。');
     return;
@@ -44,7 +44,7 @@ ckfpFunc.handleFpzf = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          unitRef.current!.reload2();
+          refUnit.current!.reload2();
           message.success('发票作废申请成功！')
         } else if (response.code === '900') {
           message.info(response.msg);
@@ -58,8 +58,8 @@ ckfpFunc.handleFpzf = (param: any) => {
 
 // 自定义工具栏：导出开票结果
 ckfpFunc.exportKpjg = (param: any) => {
-  const { selectionRowKeys, unitRef, gridRef, } = param;
-  const gridData  = param.unitRef.current.getGridData();
+  const { selectionRowKeys, refUnit, gridRef, } = param;
+  const gridData  = param.refUnit.current.getGridData();
   if (gridData.length === 0) {
     message.info('当前筛选条件下无数据，请确认！');
     return;
@@ -68,9 +68,9 @@ ckfpFunc.exportKpjg = (param: any) => {
   if(selectionRowKeys.length > 0) {
     title = '确定对勾选数据进行导出开票结果的操作吗？';
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
-  const initSearchModel = unitRef.current.getGridParams().initSearchModal || [];
+  const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'uuids', values: selectionRowKeys, op: 'ain' },...initSearchModel]);

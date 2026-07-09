@@ -10,7 +10,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import myUtil from '@/components/DDAssist/util';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.columnsRender = {
@@ -37,8 +37,8 @@ Func.columnsRender = {
 }
 // 打开弹窗-关联用户
 const openModalGlyh = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef && otherRef[1]) {
     otherRef[1].current?.showModal(param);
   } else if (param.otherRef && param.otherRef[1]) {
@@ -47,14 +47,14 @@ const openModalGlyh = (param: any) => {
 };
 
 Func.add = (param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   param.otherRef[0].current?.showModal(param,"add");
 };
 
 
 Func.edit = (param: any, event: any) => {
-  const { unitRef, record,selectionRowKeys } = param;
+  const { refUnit, record,selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -69,21 +69,21 @@ Func.edit = (param: any, event: any) => {
 
 
 Func.del = (param: any, event: any) => {
-  const { unitRef, selectionRowKeys } = param;
+  const { refUnit, selectionRowKeys } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current?.setMasker(true);
+  refUnit.current?.setMasker(true);
   const data = {"uuids": selectionRowKeys};
   deleteApifw(data).then((res: any) => {
-    unitRef.current?.setMasker(false);
+    refUnit.current?.setMasker(false);
     const { code, msg } = res;
     // setMasker(false);
     if (code == '200') {
       close();
       message.success("保存成功！");
-      unitRef.current?.reload2();
+      refUnit.current?.reload2();
     } else {
       message.error(msg)
     }
@@ -99,14 +99,14 @@ Func.editBd = (param: any, event: any) => {
 
 
 Func.exportZd = (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   apifwDcsjzd().then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, body, msg } = res;
     if (code === '200') {
       const { blob, fileName } = body;

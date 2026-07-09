@@ -13,7 +13,7 @@ const { Dragger } = Upload;
 
 const Func: any = {
   // 加载时蒙板使用
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 Func.columnsRender = {
   // 合同份数
@@ -221,8 +221,8 @@ Func.eventOnBlur = {
 
 // 修改初始化校验
 Func.initEditForm = (param: any) => {
-  const { handleModalVisible, unitRef, formItems, setFormItems } = param;
-  const selectionRows = unitRef.current.getSelectionRows();
+  const { handleModalVisible, refUnit, formItems, setFormItems } = param;
+  const selectionRows = refUnit.current.getSelectionRows();
   const ppztDm = selectionRows[0]?.ppztDm;
   if (ppztDm === '1') {
     message.info('收汇水单已被匹配，若需修改请先删除已匹配的报关单');
@@ -260,17 +260,17 @@ Func.initEditForm = (param: any) => {
 
 // 匹配
 Func.handleColumnsPp = (param: any, e: any) => {
-  const { otherRef, unitRef } = param;
+  const { otherRef, refUnit } = param;
   e.stopPropagation();
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   shglppqjy({}).then((res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const {code, body, msg} = res;
     if (code === '200') {
       if (body?.jybz == 'Y') {
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         initShsdPpsj({shpzh: param?.record?.shpzh}).then((res1: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           if (res1?.code === '200') {
             otherRef[0].current?.showModal(param, res1?.body?.rwuuid1); 
           } else {
@@ -288,9 +288,9 @@ Func.handleColumnsPp = (param: any, e: any) => {
 
 // 预览
 Func.handleColumnsScfj = (param: any) => {
-  const { otherRef, record, unitRef } = param;
+  const { otherRef, record, refUnit } = param;
   if (otherRef && otherRef[2]) {
-    otherRef[2].current?.showModal(record?.shdzuuid, '08', unitRef, true);
+    otherRef[2].current?.showModal(record?.shdzuuid, '08', refUnit, true);
   }
 }
 
@@ -300,7 +300,7 @@ Func.scfjDisplay = (param: any) => {
 
 // 导入Excel模板
 Func.shsdsjImport = (param: any) => {
-  const { unitRef, otherRef } = param;
+  const { refUnit, otherRef } = param;
   DDAlert.open({
     title: '导入Excel文件',
     infoType: 'warning',
@@ -357,7 +357,7 @@ Func.shsdsjImport = (param: any) => {
           DDAlert.close();
           // code === '201' ? 'large' : 'small'
           if (code == '200' || code == '201') {
-            unitRef.current!.reload2();
+            refUnit.current!.reload2();
             DDAlert.open({
               title: '系统提示',
               info: '数据导入成功，共导入' + body?.drsl + '条数据，跳过' + body?.tgsl + '条 。',
@@ -441,7 +441,7 @@ Func.downloadTemplate = (param: any) => {
 }
 
 Func.shsdsjBatchDelete = (param: any) => {
-  const { gridRef, selectionRows, unitRef } = param;
+  const { gridRef, selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     const unSelectedMessage = Func.intl.formatMessage({ id: 'message_delete_unselected' });
     message.info(unSelectedMessage);
@@ -472,13 +472,13 @@ Func.shsdsjBatchDelete = (param: any) => {
         const data = {
           uuids: shpzhs
         };
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         shsdsjDelete(data).then((response: any) => {
-          unitRef.current!.setMasker(false);
+          refUnit.current!.setMasker(false);
           const { code, desc } = response;
           if (code === '200') {
-            unitRef.current?.setSelectionRowKeys([]);
-            unitRef.current?.setSelectionRows([]);
+            refUnit.current?.setSelectionRowKeys([]);
+            refUnit.current?.setSelectionRows([]);
             gridRef.current?.reload();
             message.success('删除成功！');
           } else {
@@ -514,13 +514,13 @@ Func.beforeDelete = (params: any) => {
 
 // 批量补填
 Func.btnPlbtHl = (param: any) => {
-  const { unitRef, selectionRowKeys, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'sfcxZj', value: "Y", op: 'zdy' });
@@ -543,7 +543,7 @@ Func.btnPlbtHl = (param: any) => {
           searchModel: removedArr,
           key: 'CX_SHGL_SHSDSJ_SHSDSJCX_DBTHL',
         }
-        otherRef[5].current?.showModal(unitRef, uuids, otherRef[2], obj2);
+        otherRef[5].current?.showModal(refUnit, uuids, otherRef[2], obj2);
       } else {
         message.info(msg);
       }
@@ -555,7 +555,7 @@ Func.btnPlbtHl = (param: any) => {
       searchModel: removedArr,
       key: 'CX_SHGL_SHSDSJ_SHSDSJCX_DBTHL',
     }
-    otherRef[5].current?.showModal(unitRef, selectionRowKeys, otherRef[2], obj2);
+    otherRef[5].current?.showModal(refUnit, selectionRowKeys, otherRef[2], obj2);
   }
 }
 
@@ -586,8 +586,8 @@ Func.initAddForm = (param: any) => {
 
 // 批量自动匹配
 Func.btnPlzdpp = (param: any) => {
-  const { unitRef, selectionRows, gridRef, otherRef } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRows, gridRef, otherRef } = param;
+  const gridData = refUnit.current?.getGridData();
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -626,9 +626,9 @@ Func.btnPlzdpp = (param: any) => {
             const obj: any = {
               uuids: uuids
             };
-            unitRef.current!.setMasker(true);
+            refUnit.current!.setMasker(true);
             shglSdplzdpp(obj).then((res2: any) => {
-              unitRef.current!.setMasker(false);
+              refUnit.current!.setMasker(false);
               const {code, msg} = res2;
               if (code === '200') {
                 DDAlert.open({

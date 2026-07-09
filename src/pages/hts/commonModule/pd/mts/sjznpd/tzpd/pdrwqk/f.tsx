@@ -5,7 +5,7 @@ import { intl as intl2 } from '@/components/DDAssist/util';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 列表自定义渲染
@@ -384,7 +384,7 @@ Func.columnsRender = {
 
 // 删除
 Func.del = (param: any) => {
-  const { selectionRowKeys, selectionRows, unitRef } = param;
+  const { selectionRowKeys, selectionRows, refUnit } = param;
   let flag = false;
   selectionRows.forEach((element: any) => {
     if (element.tzpdztDm == '02' || element.tzpdztDm == '11') {
@@ -401,7 +401,7 @@ Func.del = (param: any) => {
     deletePdrwByIds({ uuids: selectionRowKeys }).then((response) => {
       const { code, msg } = response;
       if (code === '200') {
-        unitRef.current!.reload2();
+        refUnit.current!.reload2();
         message.success('删除成功！');
       } else {
         message.error(msg);
@@ -412,7 +412,7 @@ Func.del = (param: any) => {
 // 配单任务情况-刷新
 Func.handlePdrwreload = async (param: any, e: any) => {
   e.stopPropagation();
-  const { unitRef, record } = param;
+  const { refUnit, record } = param;
   const searchModel: any[] = [];
   searchModel.push({
     type: "1",
@@ -427,13 +427,13 @@ Func.handlePdrwreload = async (param: any, e: any) => {
     ],
     orderModel: [],
   };
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   await queryPager(params).then(async (response: any) => {
     const { code, desc, msg } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      unitRef?.current?.reload2();
+      refUnit?.current?.reload2();
     } else {
       message.error(desc);
       return;
@@ -446,11 +446,11 @@ Func.handlePdrwreload = async (param: any, e: any) => {
 // 配单任务情况-查看明细
 Func.handlePdrwCkmx = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, otherRef, unitRef } = param;
+  const { record, otherRef, refUnit } = param;
   if (record?.pdrwlxDm == '02') {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     await initScmx({ tableKey: "MTS_ZXSB_SB_MTS_TSSB_G" }).then(async (res: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       if (res.code === '200') {
         const p = { "hhcbhlxx": res.body?.hhcbhlxx, 'hhcbhlsx': res.body?.hhcbhlsx };
         otherRef[2].current?.showModal(param, otherRef, p);
@@ -472,10 +472,10 @@ Func.handlePdrwCkmx = async (param: any, e: any) => {
 // 配单任务情况-查看明细
 Func.handlePdrwCkmx02 = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, otherRef, unitRef } = param;
-  unitRef.current!.setMasker(true);
+  const { record, otherRef, refUnit } = param;
+  refUnit.current!.setMasker(true);
   await initScmx({ tableKey: "MTS_ZXSB_SB_MTS_TSSB_G" }).then(async (res: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (res.code === '200') {
       const p = { "hhcbhlxx": res.body?.hhcbhlxx, 'hhcbhlsx': res.body?.hhcbhlsx };
       otherRef[2].current?.showModal(param, otherRef, p);
@@ -512,16 +512,16 @@ Func.handlePdrwRwxq02 = async (param: any, e: any) => {
 // 重新配单
 Func.handleZdpd = async (param: any, e: any) => {
   e.stopPropagation();
-  const {record, unitRef} = param;
-  unitRef.current!.setMasker(true);
+  const {record, refUnit} = param;
+  refUnit.current!.setMasker(true);
   const params = JSON.parse(record.srcs1);
   params.pduuid = record.pduuid;
   params.tzpdztDm = record.tzpdztDm;
   tssbTzpdZdpd(params).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(msg);
     }
@@ -532,18 +532,18 @@ Func.handleZdpd = async (param: any, e: any) => {
 // 重新配单
 Func.handleZdpd02 = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   const params = {};
   params.sjpp = JSON.parse(record.srcs1);
   params.pduuid = record.pduuid;
   params.tzpdztDm = record.tzpdztDm;
   //超级配单
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   sjpp(params).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(msg);
     }
@@ -555,16 +555,16 @@ Func.handleZdpd02 = async (param: any, e: any) => {
 // 生成明细
 Func.handleScmx = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, unitRef, otherRef } = param;
-  unitRef.current!.setMasker(true);
+  const { record, refUnit, otherRef } = param;
+  refUnit.current!.setMasker(true);
   const params = JSON.parse(record.sccs2);
   params.pduuid = record.pduuid;
   params.tzpdztDm = record.tzpdztDm;
   tssbTzpdScmx(params).then((response) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
     } else {
       message.error(msg);
     }
@@ -575,7 +575,7 @@ Func.handleScmx = async (param: any, e: any) => {
 // 生成明细
 Func.handleScmx02 = async (param: any, e: any) => {
   e.stopPropagation();
-  const { record, unitRef, otherRef } = param;
+  const { record, refUnit, otherRef } = param;
   otherRef[4].current?.showModal(param);
 
 

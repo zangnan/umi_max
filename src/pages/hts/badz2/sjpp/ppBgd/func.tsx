@@ -5,7 +5,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
 import htcxFun from '../../common/htcx/func';
 import { badzJcpp } from '@/pages/hts/services/htsApi';
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 编辑
@@ -26,15 +26,15 @@ Func.handleColumnsXq = (param: any) => {
 
 Func.badzBgdjcpp = (param: any) => {
   // console.log(param);
-  const { unitRef, selectionRowKeys } = param;
-  const gridData = unitRef.current?.getGridData();
+  const { refUnit, selectionRowKeys } = param;
+  const gridData = refUnit.current?.getGridData();
   if (!gridData || gridData.length <= 0) {
     message.info('当前页面无可解除匹配的数据！');
     return;
   }
   let jcppParam: any = {};
-  const initSearchModal = unitRef.current?.getGridParams().initSearchModal;
-  const searchModel = unitRef.current?.getGridParams().searchModel;
+  const initSearchModal = refUnit.current?.getGridParams().initSearchModal;
+  const searchModel = refUnit.current?.getGridParams().searchModel;
   const allSearchModel: any = searchModel.concat(initSearchModal);
   console.log(allSearchModel);
   htcxFun.convertJcppParam(allSearchModel, jcppParam);
@@ -74,10 +74,10 @@ Func.badzBgdjcpp = (param: any) => {
       jcppParam.jcppfsDm = '02';
       jcppParam.jcppfwDm = contentFormData.jcppfwDm;
       
-      unitRef.current!.setMasker(true);
+      refUnit.current!.setMasker(true);
       badzJcpp(jcppParam).then((response) => {
-        unitRef.current!.setMasker(false);
-        unitRef.current!.reload2(param);
+        refUnit.current!.setMasker(false);
+        refUnit.current!.reload2(param);
         const { code, desc } = response;
         if (code === '200') {
           message.success('解除匹配成功！');

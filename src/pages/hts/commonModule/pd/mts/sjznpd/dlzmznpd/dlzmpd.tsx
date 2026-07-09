@@ -25,7 +25,7 @@ export interface DDModalGridProps {
 
 const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) => {
   // const intl = useIntl();
-  const [unitRefs, setUnitRefs] = useState<any>();// 主列表
+  const [refUnits, setUnitRefs] = useState<any>();// 主列表
   //全局变量页面开关
   const [modalVisible, setModalVisible] = useState<boolean>(visible);
   //Form
@@ -486,7 +486,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
               obj['pdType'] = 'dlzmznpd';//发票逐项配单；
               const fpjeCheckObj = await pdCheckByHistoryData(obj);
               if ('200' != fpjeCheckObj.code) {
-                const otherRef = unitRefs.current?.getOtherRefs();
+                const otherRef = refUnits.current?.getOtherRefs();
                 otherRef[1].current!.showModal(fpjeCheckObj);
                 return false;
               }
@@ -558,9 +558,9 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
     setGridData([]);
     setValue(1);
     setJshuiSl(0);
-    unitRefs.current!.reload2();
-    unitRefs.current!.setSelectionRowKeys([]);
-    unitRefs.current!.setSelectionRows([]);
+    refUnits.current!.reload2();
+    refUnits.current!.setSelectionRowKeys([]);
+    refUnits.current!.setSelectionRows([]);
   }
 
   const inputNumperFormatter = (value: any, info: any, format: any) => {
@@ -586,10 +586,10 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
 
   // 筛选发票（商品）
   const funSp: any = {
-    unitRef: React.createRef(),
+    refUnit: React.createRef(),
     //添加发票
     fptianjia: (param: any) => {
-      const { selectionRows, unitRef } = param;
+      const { selectionRows, refUnit } = param;
       //添加发票
       const newArray = pdFun.bgdpd(gridData, selectionRows, value);
       setGridData(newArray);
@@ -601,7 +601,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
       }
       setJshuiJe(myUtil.grid.formatNum(pdje, '0, 0.00'));
       setJshuiSl(myUtil.grid.formatNum(sl, '0, 0.00000'));
-      unitRef?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
+      refUnit?.current?.setGridHeaderInfoCustomer(`当前已添加${newArray.length}条发票信息`);
       setSpVisible(false);
     },
     columnsRender: {
@@ -797,9 +797,9 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
           visible={spVisible}
           width={CONSTANTS.C_MODAL_WIDTH_X4}
           onClose={() => {
-            const rowKeys = funSp.unitRef.current.getSelectionRowKeys();
+            const rowKeys = funSp.refUnit.current.getSelectionRowKeys();
             if (rowKeys.length > 0) {
-              const selectionRows = funSp.unitRef.current.getSelectionRows()
+              const selectionRows = funSp.refUnit.current.getSelectionRows()
               DDAlert.open({
                 title: '系统提示',
                 info: '你已勾选了' + rowKeys.length + '条发票数据，是否添加至进货信息？',
@@ -808,7 +808,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
                 closeStatus: false,
                 okCallbackFn: function() {
                   DDAlert.close();
-                  funSp.fptianjia({ selectionRows, unitRef: funSp.unitRef });
+                  funSp.fptianjia({ selectionRows, refUnit: funSp.refUnit });
                 },
               });
             } else {

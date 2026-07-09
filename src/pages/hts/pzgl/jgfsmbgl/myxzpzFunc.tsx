@@ -4,22 +4,22 @@ import { myxzsztsbz } from '@/pages/hts/services/htsApi';
 import 'moment/locale/zh-cn';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 贸易性质配置-设置退税标志
 Func.setTsbz = (checked: any, param: any) => {
-  const { record, unitRef } = param;
+  const { record, refUnit } = param;
   let tsbz = 'N';
   if (checked) {
     tsbz = 'Y'
   }
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   myxzsztsbz({ tsbz: tsbz, jgfsDm: record.jgfsDm }).then((response) => {
     const { code, desc } = response;
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
       message.success("退税标志设置成功！");
       return true;
     } else {
@@ -35,7 +35,7 @@ Func.handlerClfs= (params: any) => {
     message.error('请选择要修改的数据！');
     return;
   }
-  otherRef[0].current?.showModal({selectionRows: params?.selectionRows, selectionRowKeys: selectionRowKeys, unitRef: params?.unitRef});
+  otherRef[0].current?.showModal({selectionRows: params?.selectionRows, selectionRowKeys: selectionRowKeys, refUnit: params?.refUnit});
 }
 
 // 列表自定义渲染

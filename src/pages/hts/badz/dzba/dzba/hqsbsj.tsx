@@ -57,13 +57,13 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
     return file.name.toUpperCase().endsWith(".XML") ? true : Upload.LIST_IGNORE;
   }
   const save = () => {
-    const { unitRef, } = param2;
+    const { refUnit, } = param2;
     const qylx = cktsUtil.sys.enterpriseType();
     form.validateFields().then(values => {
       if ('1' == values.bz) {
         //从小图获取
         const data = { "hqrq": values.ssq, "badzsbsjlyDm": "1", "tbrwmxBz": "N", "lcswsxDm": qylx === 'WM' ? values.lcswsxDm : 'LCSXA081038001' }
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         // 获取申报数据
         close();
         obtainDeclarationData(data).then((response) => {
@@ -83,18 +83,18 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
                 const { code, desc } = response;
                 if (code === '200') {
                   message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-                  unitRef.current!.reload2();
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.reload2();
+                  refUnit.current!.setMasker(false);
                 } else {
                   message.error(desc);
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.setMasker(false);
                 }
               })
             }
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           } else {
             message.error(desc);
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           }
         })
       } else {
@@ -103,7 +103,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
         data.append('file', values.fkwj[0].originFileObj);
         data.append('badzsbsjlyDm', '2');
         data.append('tbrwmxBz', 'N');
-        unitRef.current!.setMasker(true);
+        refUnit.current!.setMasker(true);
         // 获取申报数据
         close();
         fkhqsbsjqzjy(data).then((response) => {
@@ -123,36 +123,36 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
                 const { code, desc } = response;
                 if (code === '200') {
                   message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-                  unitRef.current!.reload2();
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.reload2();
+                  refUnit.current!.setMasker(false);
                 } else {
                   message.error(desc);
-                  unitRef.current!.setMasker(false);
+                  refUnit.current!.setMasker(false);
                 }
               })
             }
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           } else {
             message.error(desc);
-            unitRef.current!.setMasker(false);
+            refUnit.current!.setMasker(false);
           }
         })
       }
     })
   }
   const save2 = () => {
-    const { unitRef, } = param2;
-    unitRef.current!.setMasker(true);
+    const { refUnit, } = param2;
+    refUnit.current!.setMasker(true);
     close2();
     hqsbsjSave(crcs).then((response) => {
       const { code, desc } = response;
       if (code === '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-        unitRef.current!.reload2();
-        unitRef.current!.setMasker(false);
+        refUnit.current!.reload2();
+        refUnit.current!.setMasker(false);
       } else {
         message.error(desc);
-        unitRef.current!.setMasker(false);
+        refUnit.current!.setMasker(false);
       }
     })
   }

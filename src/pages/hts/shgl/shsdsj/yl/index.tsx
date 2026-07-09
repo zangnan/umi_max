@@ -17,14 +17,14 @@ const YlPic: React.FC<YlPicViewer> = ({
   const [src, setSrc] = useState<any>([]);
 
   // 开启
-  const showModal = (uuid: any,dzlx: any,unitRef: any, visible: Boolean) => {
+  const showModal = (uuid: any,dzlx: any,refUnit: any, visible: Boolean) => {
     const obj = {
       uuid: uuid,
       dzlx: dzlx
     }
-    unitRef.current?.setMasker(true);
+    refUnit.current?.setMasker(true);
     viewBdazFjImage(obj).then((res) => {
-      unitRef.current?.setMasker(false);
+      refUnit.current?.setMasker(false);
       const { body, code, desc } = res;
       if (code === '200') {
         const wjnr = body.wjnr;

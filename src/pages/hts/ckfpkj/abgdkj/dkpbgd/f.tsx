@@ -14,12 +14,12 @@ import { ClockCircleOutlined, InboxOutlined, WarningOutlined, StopOutlined, Chec
 const { Dragger } = Upload;
 
 const abgdkjFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 编辑开票btnBjkp
 abgdkjFunc.btnBjkp = (param: any) => {
-  const { selectionRows, otherRef, unitRef } = param;
+  const { selectionRows, otherRef, refUnit } = param;
   if (history?.location?.pathname === '/hts/ckfpkj/abgdkj21') {
     message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_18bgd' }));
     return;
@@ -36,12 +36,12 @@ abgdkjFunc.btnBjkp = (param: any) => {
       message.info(tempMessage);
       return;
     }
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     kbjkpbgdcx(getParam(selectionRows)).then((response: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, body, desc } = response;
       if (code === '200') {
-        otherRef[4].current!.showModal({ data: body, ref: unitRef });
+        otherRef[4].current!.showModal({ data: body, ref: refUnit });
       } else {
         message.error(desc)
       }
@@ -52,13 +52,13 @@ abgdkjFunc.btnBjkp = (param: any) => {
 
 //获取报关单
 abgdkjFunc.abgdkjHqbgd = (param: any) => {
-  const { unitRef, access ,otherRef} = param;
+  const { refUnit, access ,otherRef} = param;
   let sbrqFlag = true;
   // 顺络电子不显示按申报日期获取
   if (access?.isNsrsbh){
     sbrqFlag = false;
   }
-  otherRef[5].current!.showModal(sbrqFlag,unitRef,access);
+  otherRef[5].current!.showModal(sbrqFlag,refUnit,access);
 
   // DDAlert.open({
   //   title: '获取报关单',
@@ -133,7 +133,7 @@ abgdkjFunc.abgdkjHqbgd = (param: any) => {
   //         DDAlert.close();
   //         const { code, body, desc ,msg} = response;
   //         if (code === '200') {
-  //           openAckrqhq(body, param, unitRef, access);
+  //           openAckrqhq(body, param, refUnit, access);
   //         } else {
   //           if (code === '300' && body.gdykpbz === 'Y') {
   //             message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_error' }));
@@ -149,7 +149,7 @@ abgdkjFunc.abgdkjHqbgd = (param: any) => {
 
 // 待开票台账导入
 abgdkjFunc.dkptzdr = async (param: any) => {
-  const { unitRef } = param;
+  const { refUnit } = param;
   const beforeUpload = (file: any) => {
     const isLt2M = file.size;
     if (isLt2M > 10485760) {
@@ -225,7 +225,7 @@ abgdkjFunc.dkptzdr = async (param: any) => {
             thisObj.setState({ masker: false });
             if (code === '200') {
               // 台账数据筛选 赋值
-              unitRef.current?.addQueryModel("Y", 'tzsxbz');
+              refUnit.current?.addQueryModel("Y", 'tzsxbz');
               if (body?.sbzs != 0) {
                 // 业务校验
                 const sbyyList = body?.sbmx || [];
@@ -311,7 +311,7 @@ const onChangeHqbgd = (e: any) => {
 }
 
 // 弹出统计条数，点击确定后调用接口处理数据
-const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
+const openAckrqhq = (param: any, param1: any, refUnit: any, access: any) => {
   const tmpMessage = intl2.formatMessage({ id: access.isNsrsbh ? 'message_ckfp_abgdkj_hqbgd_ackrq_sl_success' : 'message_ckfp_abgdkj_hqbgd_ackrq_success' });
   const infoMessage = cktsUtil.text.formatRepalce(tmpMessage, param)
   DDAlert.open({
@@ -337,7 +337,7 @@ const openAckrqhq = (param: any, param1: any, unitRef: any, access: any) => {
                 temp.push(Object.assign(item, { code: item.khuuid, name: item.ghfnsrmc }));
               })
               myUtil.code.saveCodeToLocalTable('CODE_CKFP_ABGDKJ_GMFMC',temp,'01');
-              unitRef.current?.reload2();
+              refUnit.current?.reload2();
               message.success(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_success' }));
             }
           });
@@ -356,7 +356,7 @@ abgdkjFunc.btnScfpspd = (param: any) => {
   }).catch(() => {
     message.error('获取码表失败');
   }).finally(async () => {
-    const { selectionRows, otherRef, unitRef, access, unit_key, gridRef } = param;
+    const { selectionRows, otherRef, refUnit, access, unit_key, gridRef } = param;
     const bgdhs: any = [];
     if (selectionRows && selectionRows.length > 0) {
       const tempRows = selectionRows.filter((row: any) => {
@@ -376,15 +376,15 @@ abgdkjFunc.btnScfpspd = (param: any) => {
       // if(temp && temp[0].fpzlDm1 === '5'){
       //   var qdfpissckpResp = await qdfpissckp({bgdhs:bgdhs});
       //   if(qdfpissckpResp && qdfpissckpResp.code === '900'){
-      //     unitRef.current!.setMasker(false);
+      //     refUnit.current!.setMasker(false);
       //     const tempMessage = intl2.formatMessage({ id: 'message_ckfp_abgdkj_bjkp_qdfpissckp' });
       //     message.info(tempMessage);
       //     return;
       //   }
       // }
     }
-    const gridData = unitRef.current?.getGridData();
-    const searchModel = unitRef.current?.getGridParams().searchModel || [];
+    const gridData = refUnit.current?.getGridData();
+    const searchModel = refUnit.current?.getGridParams().searchModel || [];
     const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if(gridData.length === 0) {
@@ -394,12 +394,12 @@ abgdkjFunc.btnScfpspd = (param: any) => {
     const params:any = getParam(selectionRows, access);
     params.key = unit_key;
     params.cxtj = allSearchModel;
-    unitRef?.current?.setMasker(true);
+    refUnit?.current?.setMasker(true);
     tjkpxx(params).then((response) => {
       const { code, body, msg } = response;
-      unitRef?.current?.setMasker(false);
+      refUnit?.current?.setMasker(false);
       if (code === '200') {
-        otherRef[3]?.current?.showModal(selectionRows, body, unitRef, params);
+        otherRef[3]?.current?.showModal(selectionRows, body, refUnit, params);
       } else {
         message.error(msg);
       }
@@ -429,8 +429,8 @@ function getParam(selectionRows: any, access?: any) {
 
 // 设置税收分类编码
 abgdkjFunc.btnSetSsflbm = (param: any) => {
-  const { selectionRows, otherRef, unitRef, gridRef, unit_key } = param;
-  const gridData = unitRef.current?.getGridData()
+  const { selectionRows, otherRef, refUnit, gridRef, unit_key } = param;
+  const gridData = refUnit.current?.getGridData()
   if(gridData && gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -444,16 +444,16 @@ abgdkjFunc.btnSetSsflbm = (param: any) => {
   //   return;
   // }
   const tempParam:any = getParam(selectionRows);
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   tempParam.key = unit_key;
   tempParam.cxtj = allSearchModel;
   myUtil.sessionStore.setItem('tmp_ckfp_setssflbm');
   myUtil.sessionStore.setItem('tmp_ckfp_setssflbm_tableSource');
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   ssflbmcx(tempParam).then((response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, body, desc } = response;
     if (code === '200' && body.length > 0) {
       getCode({codeStoreKey:'CODE_CS_ZXSB_FPKJ_CSPZ',codeViewKey:'01'}).then((resCode:any)=> {
@@ -467,9 +467,9 @@ abgdkjFunc.btnSetSsflbm = (param: any) => {
             myUtil.sessionStore.setItem('szwxtssflbmbz', false);
           }
           if (body.length > 50) {
-            otherRef[6].current!.showModal({ data: body, ref: unitRef, ssflTemp: tempParam});
+            otherRef[6].current!.showModal({ data: body, ref: refUnit, ssflTemp: tempParam});
           } else {
-            otherRef[0].current!.showModal({ data: body, ref: unitRef, fphwxxxqgzDm: temp[0]?.fphwxxxqgzDm, ssflTemp: tempParam ,temp:temp[0]});
+            otherRef[0].current!.showModal({ data: body, ref: refUnit, fphwxxxqgzDm: temp[0]?.fphwxxxqgzDm, ssflTemp: tempParam ,temp:temp[0]});
           }
         } else {
           message.error('获取码表失败');
@@ -488,8 +488,8 @@ abgdkjFunc.btnSetSsflbm = (param: any) => {
 
 // 设置购买方
 abgdkjFunc.btnSetGmf = (param: any) => {
-  const { selectionRows, otherRef, unitRef, gridRef, unit_key } = param;
-  const gridData = unitRef.current?.getGridData()
+  const { selectionRows, otherRef, refUnit, gridRef, unit_key } = param;
+  const gridData = refUnit.current?.getGridData()
   if(gridData.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
     return;
@@ -502,17 +502,17 @@ abgdkjFunc.btnSetGmf = (param: any) => {
   //   message.info('每次勾选50条记录！'); 
   //   return;
   // }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
 
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   let tempParam:any = getParam(selectionRows);
   tempParam.key = unit_key;
   tempParam.cxtj = allSearchModel;
   tempParam.bgdwd = 'N';
   gmfxxcx(tempParam).then((response: any) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, body, desc } = response;
     if (code === '200' && body?.dataList.length > 0) {
       // Promise.all([myUtil.code.getCodeFromServerT1('CODE_CS_ZXSB_FPKJ_CSPZ:01')]).then(() => {
@@ -520,7 +520,7 @@ abgdkjFunc.btnSetGmf = (param: any) => {
       //   message.error('获取码表失败');
       // }).finally(() => {
       //   const temp = myUtil.code.getCode('CODE_CS_ZXSB_FPKJ_CSPZ:01');
-      //   otherRef[1].current!.showModal(body, unitRef, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
+      //   otherRef[1].current!.showModal(body, refUnit, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
       // });
       getCode({codeStoreKey:'CODE_CS_ZXSB_FPKJ_CSPZ',codeViewKey:'01'}).then((resCode:any)=> {
         if(resCode.code === '200') {
@@ -532,9 +532,9 @@ abgdkjFunc.btnSetGmf = (param: any) => {
             myUtil.sessionStore.setItem('szwxtgmfbz', false);
           }
           if (body?.dataList.length > 50) {
-            otherRef[7].current!.showModal({ref: unitRef, gmfTemp: tempParam});
+            otherRef[7].current!.showModal({ref: refUnit, gmfTemp: tempParam});
           } else {
-            otherRef[1].current!.showModal(body, unitRef, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
+            otherRef[1].current!.showModal(body, refUnit, tempParam,{szwxtgmfbz: temp[0]?.szwxtgmfbz});
           }
         } else {
           message.error('获取码表失败');
@@ -552,17 +552,17 @@ abgdkjFunc.btnSetGmf = (param: any) => {
 
 // 设置汇率
 abgdkjFunc.btnSetHl = (param: any) => {
-  const { selectionRows, otherRef, unitRef } = param;
+  const { selectionRows, otherRef, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
   } else {
-    unitRef.current!.setMasker(true);
+    refUnit.current!.setMasker(true);
     hlxxcx(getParam(selectionRows)).then((response: any) => {
-      unitRef.current!.setMasker(false);
+      refUnit.current!.setMasker(false);
       const { code, body, desc } = response;
       if (code === '200') {
-        otherRef[2].current!.showModal(body, unitRef);
+        otherRef[2].current!.showModal(body, refUnit);
       } else {
         message.error(desc);
       }
@@ -572,7 +572,7 @@ abgdkjFunc.btnSetHl = (param: any) => {
 
 // 暂不开票
 abgdkjFunc.zbkp = (param: any) => {
-  const { selectionRows, unitRef } = param;
+  const { selectionRows, refUnit } = param;
   if (!selectionRows || selectionRows.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -604,7 +604,7 @@ abgdkjFunc.zbkp = (param: any) => {
               } else {
                 message.info(intl2.formatMessage({ id: 'message_ckfp_abgdkj_cancelzbkp_success' }));
               }
-              unitRef.current?.reload2();
+              refUnit.current?.reload2();
             } else {
               message.error(desc);
             }
@@ -617,8 +617,8 @@ abgdkjFunc.zbkp = (param: any) => {
 
 // 根据单据号打开详情
 abgdkjFunc.openBjkp = (bgdhORtybh: any, param: any) => {
-  const { unitRef } = param;
-  const otherRef = unitRef.current?.getOtherRefs();
+  const { refUnit } = param;
+  const otherRef = refUnit.current?.getOtherRefs();
   if (otherRef[4]) {
     otherRef[4].current?.showModal();
   }
@@ -628,7 +628,7 @@ abgdkjFunc.openBjkp = (bgdhORtybh: any, param: any) => {
 abgdkjFunc.handleOnChangeBgd = (param: any) => {
   const ckrq :any = ['','']; 
   const hgckhwbgdsbrq1 :any = ['','']; 
-  const searchModel =  param.unitRef.current.getGridParams().searchModel;
+  const searchModel =  param.refUnit.current.getGridParams().searchModel;
   const p = {};
   for(let i=0;i< searchModel?.length;i++){
     const property = searchModel[i].property;
@@ -671,7 +671,7 @@ abgdkjFunc.handleOnChangeBgd = (param: any) => {
 
 // 行编辑购买方名称选中对应方法
 abgdkjFunc.selectChangeGmfmc = (params: any) => {
-  const { record, values, reload, unitRef } = params;
+  const { record, values, reload, refUnit } = params;
   if (values.khuuid != record.khuuid) {
     const bgdhgbhs: any = [].concat((record.bgdhgbh || record.bgdtybh));
     xbgdkhxx({ bgdhgbhs, khuuid: values.khuuid }).then((response) => {
@@ -746,7 +746,7 @@ abgdkjFunc.columnsRender = {
 
 // 顺络删除
 abgdkjFunc.slDelete = (params: any) => {
-  const { selectionRows, unitRef, unit_key } = params;
+  const { selectionRows, refUnit, unit_key } = params;
   if (selectionRows?.length <= 0) {
     message.info(intl2.formatMessage({ id: 'message_delete_unselected' }));
     return;
@@ -772,12 +772,12 @@ abgdkjFunc.slDelete = (params: any) => {
         const { code, body, desc } = response;
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-          unitRef.current?.reload2();
+          refUnit.current?.reload2();
         } else {
           message.success(desc);
           // if (func.afterDeletionFailure) {
           //   func.afterDeletionFailure({
-          //     unitRef,
+          //     refUnit,
           //     gridRef: refDDBaseGrid,
           //     body
           //   });
@@ -792,18 +792,18 @@ abgdkjFunc.slDelete = (params: any) => {
 
   // EXCEL下载
 // abgdkjFunc.downloadExcel =  async (record: any) => {
-//   const {unit_key,selectionRowKeys,unitRef} = record;
+//   const {unit_key,selectionRowKeys,refUnit} = record;
 //    let url = `/hx/ty/report/excelExportGet/${unit_key}_EXCEL/`;
 //    let params = {};
-//    const searchModel = unitRef.current.getGridParams().searchModel
+//    const searchModel = refUnit.current.getGridParams().searchModel
 //    if(selectionRowKeys && selectionRowKeys.length>0){
 //     params = {bgdtybhs: selectionRowKeys};
 //    }else{
 //     params = {searchModel:searchModel};
 //    }
-//    unitRef.current!.setMasker(true);
+//    refUnit.current!.setMasker(true);
 //    await cktsUtil.downloadFileCkts(url, params);
-//    unitRef.current!.setMasker(false);
+//    refUnit.current!.setMasker(false);
 //   };
 
 // 表单事件：OnChange

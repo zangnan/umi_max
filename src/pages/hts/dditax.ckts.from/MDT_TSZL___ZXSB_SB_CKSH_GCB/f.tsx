@@ -11,7 +11,7 @@ import cktsUtil from '@/pages/hts/cktsUtil';
 
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 Func.validator = {
@@ -298,8 +298,8 @@ Func.formAfterSubmit = (param: any) => {
 
 // 模板下载
 Func.mdtShMbxz = (param: any) => {
-  const {otherRef,unitRef} = param;
-  otherRef[0].current?.showModal(unitRef);
+  const {otherRef,refUnit} = param;
+  otherRef[0].current?.showModal(refUnit);
 }
 
 Func.mdtShDr = (param: any) => {

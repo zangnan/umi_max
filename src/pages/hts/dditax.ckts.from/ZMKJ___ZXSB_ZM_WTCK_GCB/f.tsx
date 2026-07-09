@@ -11,7 +11,7 @@ import moment from 'moment';
 import { getCmCode } from '@/pages/hts/services/htsApi';
 
 const Func: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 新建表单初始化

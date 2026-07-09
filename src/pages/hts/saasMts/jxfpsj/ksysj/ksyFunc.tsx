@@ -9,18 +9,18 @@ import {history} from "@@/core/history";
 import locale from "antd/es/date-picker/locale/zh_CN";
 
 const ksyFunc: any = {
-  unitRef: React.createRef(),
+  refUnit: React.createRef(),
 };
 
 // 批量修改出口发票号
 ksyFunc.funcGxxxzt = (param: any) => {
-  const {unitRef, gridRef, selectionRows} = param;
-  const gridData = unitRef.current?.getGridData();
+  const {refUnit, gridRef, selectionRows} = param;
+  const gridData = refUnit.current?.getGridData();
   if (gridData.length === 0) {
     message.info(intl2.formatMessage({id: 'message_common_type_no_griddata'}));
     return;
   }
-  const searchModel = unitRef.current?.getGridParams().searchModel || [];
+  const searchModel = refUnit.current?.getGridParams().searchModel || [];
   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   let params: any = {};
@@ -39,12 +39,12 @@ ksyFunc.funcGxxxzt = (param: any) => {
   }
   params.cxlx = '1'
 
-  unitRef.current!.setMasker(true);
+  refUnit.current!.setMasker(true);
   yzfPtFpxxCx(params).then((res) => {
-    unitRef.current!.setMasker(false);
+    refUnit.current!.setMasker(false);
     const { code, desc, msg } = res;
     if (code === '200') {
-      unitRef.current!.reload2();
+      refUnit.current!.reload2();
       DDAlert.open({
         title: '系统提示',
         info: '创建任务成功，是否跳转任务管理？',
@@ -98,7 +98,7 @@ ksyFunc.openjhpzh = (param: any, ckbgd: any) => {
 
 // 批量修改---是否退税
 ksyFunc.btnSetSfts = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -126,7 +126,7 @@ ksyFunc.btnSetSfts = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置是否退税成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -138,7 +138,7 @@ ksyFunc.btnSetSfts = async (param: any) => {
 }
 // 批量修改---业务编号
 ksyFunc.btnSetYwbh = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -163,7 +163,7 @@ ksyFunc.btnSetYwbh = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置业务编号成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
@@ -177,7 +177,7 @@ ksyFunc.btnSetYwbh = async (param: any) => {
 
 // 批量修改---设置标签
 ksyFunc.btnSetBq = async (param: any) => {
-  const { selectionRowKeys, unitRef } = param;
+  const { selectionRowKeys, refUnit } = param;
   if (!selectionRowKeys || selectionRowKeys.length === 0) {
     message.info(intl2.formatMessage({ id: 'message_handle_unselected' }));
     return;
@@ -202,7 +202,7 @@ ksyFunc.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              unitRef.current!.reload2();
+              refUnit.current!.reload2();
             } else {
               message.error(msg);
             }
