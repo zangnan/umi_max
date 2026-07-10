@@ -5,7 +5,7 @@ const unitConfig: any = {};
 
 // 配置项
 unitConfig.grid_title = '（单位：元、美元）';
-unitConfig.unit_key = 'CX_SJFX_SC_TSQK_TSSBQK_XZ_HKGJYSSRQSZDSBMXB';                            // 业务单元key，对应后端接口
+unitConfig.module_key = 'CX_SJFX_SC_TSQK_TSSBQK_XZ_HKGJYSSRQSZDSBMXB';                            // 业务单元key，对应后端接口
 unitConfig.page_id = 'CX_SJFX_SC_TSQK_TSSBQK_XZ_HKGJYSSRQSZDSBMXB';                          // 页面id
 unitConfig.grid_show_serial_number = false;                      // 是否显示序号，默认不显示
 unitConfig.grid_selection_type = false;                         // 列表首选项类别，默认 checkbox，可选 false radio checkbox

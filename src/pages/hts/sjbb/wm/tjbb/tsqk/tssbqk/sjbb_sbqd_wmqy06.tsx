@@ -6,7 +6,7 @@ const unitConfig: any = {};
 
 // 配置项
 // unitConfig.grid_title = '金额单位：元';
-unitConfig.unit_key = 'CX_SJFX_WM_TSQK_TSSBQK_XZ_WMQYTZBSBB';                            // 业务单元key，对应后端接口
+unitConfig.module_key = 'CX_SJFX_WM_TSQK_TSSBQK_XZ_WMQYTZBSBB';                            // 业务单元key，对应后端接口
 unitConfig.page_id = 'CX_SJFX_WM_TSQK_TSSBQK_XZ_WMQYTZBSBB';                                        // 页面id
 unitConfig.show_toolbar = true;                                                       // 是否开启工具栏，默认true开启
 unitConfig.layout_type = 'modal';                                                     // 页面类型，默认default 可选 default modal tabs

@@ -240,6 +240,10 @@
         "new": "dwglConfig.module_key"
       },
       {
+        "old": "unitConfig.unit_key",
+        "new": "unitConfig.module_key"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },

@@ -41,7 +41,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     unitConfig.form_save_check = false; // 表单编辑是否执行后端校验
     unitConfig.click_checked = '1';
     unitConfig.grid_scroll_x = '1020px';
-    unitConfig.unit_key = 'CX_SAAS_QXGL_YSCQY';
+    unitConfig.module_key = 'CX_SAAS_QXGL_YSCQY';
 
 
 

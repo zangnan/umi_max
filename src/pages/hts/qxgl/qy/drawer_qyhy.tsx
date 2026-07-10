@@ -42,7 +42,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   const unitConfig: any = {};
 
   // 配置项
-  unitConfig.unit_key = 'CX_SAAS_QXGL_QYGL_QYHY';                                         // 业务单元key，对应后端接口
+  unitConfig.module_key = 'CX_SAAS_QXGL_QYGL_QYHY';                                         // 业务单元key，对应后端接口
   unitConfig.grid_show_serial_number = false; // 是否显示序号，可选
   unitConfig.grid_row_key = 'sbqyuuidDqlb'; // 列表主键，默认uuid
   unitConfig.form_save_check = false; // 表单编辑是否执行后端校验

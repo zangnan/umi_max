@@ -32,7 +32,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   const showModal = (param: any) => {
     const unitConfig: any = {};
     // 配置项
-    unitConfig.unit_key = 'CX_SAAS_QXGL_HDFWGL_FFFWMX';
+    unitConfig.module_key = 'CX_SAAS_QXGL_HDFWGL_FFFWMX';
     unitConfig.grid_show_serial_number = false; // 是否显示序号，可选
     unitConfig.grid_selection_type = 'checkbox'; // 列表首选项类别，默认 checkbox，可选 false radio checkbox
     unitConfig.grid_row_key = 'fffwuuid'; // 列表主键，默认uuid

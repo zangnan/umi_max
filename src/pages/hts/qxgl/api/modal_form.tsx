@@ -40,7 +40,7 @@ const ModalForm: React.FC<BdjgProps> = ({
 
 
   // 配置项
-  unitConfig.unit_key = 'FPZS_BGDKP_DKP18WBGDCX';
+  unitConfig.module_key = 'FPZS_BGDKP_DKP18WBGDCX';
   unitConfig.api_grid_query = `/yw/dditSaas/qxjs/queryJsPager`;
   unitConfig.api_form_delete = '/yw/dditSaas/qxyh/deleteYh'
   unitConfig.grid_show_serial_number = false; // 是否显示序号，可选

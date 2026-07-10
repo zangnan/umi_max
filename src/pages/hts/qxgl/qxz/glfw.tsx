@@ -38,7 +38,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
     const unitConfig: any = {};
 
-    unitConfig.unit_key = 'CX_SAAS_QXGL_QXZGLHDFW';                                         // 业务单元key，对应后端接口
+    unitConfig.module_key = 'CX_SAAS_QXGL_QXZGLHDFW';                                         // 业务单元key，对应后端接口
     // api 列表查询
     unitConfig.grid_show_serial_number = false;                                           // 是否显示序号，可选
     unitConfig.click_checked = '1';                                                       // 是否开启单击或双击勾选事件，1单击勾选，2双击勾选，默认点击不勾选

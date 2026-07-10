@@ -220,7 +220,7 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
   const unitConfig: any = {};
 
   // 配置项
-  unitConfig.unit_key = 'SAAS_TSSB_MTS_AIPD_JHMX_CX'; // 业务单元key，对应后端接口
+  unitConfig.module_key = 'SAAS_TSSB_MTS_AIPD_JHMX_CX'; // 业务单元key，对应后端接口
   unitConfig.page_id = 'SAAS_TSSB_MTS_AIPD_JHMX_CX'; // 页面id
   unitConfig.grid_title = '外贸企业出口退税进货明细申报表'; // 列表标题，可选
   unitConfig.grid_selection_type = 'checkbox';
