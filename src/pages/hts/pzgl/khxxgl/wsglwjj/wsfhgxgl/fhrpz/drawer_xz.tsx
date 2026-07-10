@@ -36,7 +36,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     c.click_checked = '1';
     c.grid_scroll_x = '700px';
     c.layout_type = 'modal';
-    c.unit_key = 'PZGL_WSGL_WSFHPZGL_JWSHRXZCX';
+    c.module_key = 'PZGL_WSGL_WSFHPZGL_JWSHRXZCX';
     // 配置项：列表列
     c.grid_columns = [
       { title: '规范化境外收货人', dataIndex: 'gfhjwshrmc', width: 200, ellipsis: true },

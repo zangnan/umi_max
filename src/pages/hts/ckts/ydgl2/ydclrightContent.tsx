@@ -67,11 +67,11 @@ const Hwqd: React.FC<HwqdProps> = ({
       setFormName(`${config.page_id}_form`);
       const form_items  = config.form_items;
       for(let i = 0; i < form_items.length; i++){
-        if (form_items[i].name === 'tse' && config.unit_key === 'MTS_ZXSB_SB_MTS_TSJH_G') {
+        if (form_items[i].name === 'tse' && config.module_key === 'MTS_ZXSB_SB_MTS_TSJH_G') {
           form_items[i].readOnly = false;
         }
         if(form_items[i].name === 'ssq' || form_items[i].name === 'sbpc' || form_items[i].name === 'sbxh' || form_items[i].name === 'glh'){
-          if (config.unit_key === 'MTS_ZXSB_SB_MTS_TSJH_G') {
+          if (config.module_key === 'MTS_ZXSB_SB_MTS_TSJH_G') {
             form_items[i].disabled = true;
           } else {
             form_items[i].readOnly = true;

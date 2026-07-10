@@ -16,7 +16,7 @@ const Mdthx: React.FC<unknown> = () => {
   const config = { ...mdthxConfig };
 
   if( history.location.pathname.indexOf('/jljg/ckts/scsbsj/JLJG_MDTHX') >-1){
-    config.unit_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_YSC';                                         // 业务单元key，对应后端接口
+    config.module_key = 'JLJG_ZXSB_SB_JLJG_MDTHX_YSC';                                         // 业务单元key，对应后端接口
   }
 
   return <>

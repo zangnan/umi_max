@@ -41,7 +41,7 @@ import myUtil from '@/components/DDAssist/util';
      let unit_key = '';
      unit_key = 'ZXSB_SB_JLJG_JHFPL_CKMX';
      let til = '';
-     c.unit_key = unit_key;
+     c.module_key = unit_key;
      const model = [
       { property: 'jljgszch', value: searchModel.jljgszch, op: 'dd' },
      ];

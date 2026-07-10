@@ -34,7 +34,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     c.click_checked = '1';
     c.grid_scroll_x = '700px';
     c.layout_type = 'modal';
-    c.unit_key = 'PZGL_WSGL_WSFHPZGL_FHR_WGLFHRCX';
+    c.module_key = 'PZGL_WSGL_WSFHPZGL_FHR_WGLFHRCX';
     // c.pagination2 = false;
 
     // 配置项：列表列

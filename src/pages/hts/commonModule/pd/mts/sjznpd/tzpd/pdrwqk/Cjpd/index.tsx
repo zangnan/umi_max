@@ -76,7 +76,7 @@ const Tzpd: React.FC<PdrwProps> = ({
 
 
   const config: any = {};
-  config.unit_key = 'MTS_SJPP_CJPD_CKMX_QUERY_PAGE';                  // 业务单元key，对应后端接口
+  config.module_key = 'MTS_SJPP_CJPD_CKMX_QUERY_PAGE';                  // 业务单元key，对应后端接口
   config.page_id = 'MTS_SJPP_CJPD_CKMX_QUERY_PAGE';                                        // 页面id
   config.grid_row_key = 'uuid';
   config.grid_show_serial_number = false;                      // 工具栏左侧是否显示数据条数及选中数，默认true显示

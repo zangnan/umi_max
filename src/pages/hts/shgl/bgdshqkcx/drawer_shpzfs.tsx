@@ -32,7 +32,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     c.grid_show_serial_number = false; // 是否显示序号，可选
     c.grid_row_key = 'uuid'; // 列表主键，默认uuid
     c.export_key = 'SHGL_BGDSHQK_XZ_DC';
-    c.unit_key = 'SHGL_BGDSHQK_XZ';
+    c.module_key = 'SHGL_BGDSHQK_XZ';
     c.export_large = true; // tssb_download 配合此导出使用，同步大数据量导出
     // 配置项：列表列
     c.grid_columns = [

@@ -102,7 +102,7 @@ const ModalJckgd: React.FC<JckgdProps> = ({
     }
     c.grid_columns = gridColumns;
     let til = '';
-    c.unit_key = unit_key;
+    c.module_key = unit_key;
     c.export_key=export_key;
     c.toolbar_default.tssb_download=false;
     c.toolbar_default.download=true;

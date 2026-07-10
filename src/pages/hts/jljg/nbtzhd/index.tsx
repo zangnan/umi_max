@@ -117,10 +117,10 @@ const Nbtzhd: React.FC<unknown> = () => {
     c.grid_scroll_y = `${document.documentElement.clientHeight - 315}px`;
     const bgdwsTmp = searchForm.getFieldValue('bgdws');
     if (bgdwsTmp === '18') {
-      c.unit_key = c.unit_key_18;
+      c.module_key = c.unit_key_18;
       c.grid_columns = c.grid_columns_18;
     } else {
-      c.unit_key = c.unit_key_21;
+      c.module_key = c.unit_key_21;
       c.grid_columns = c.grid_columns_21;
     }
     setMyConfig(c);

@@ -34,7 +34,7 @@ const DrawerList: React.FC<DzxxProps> = ({
     setZlcjSelectedRowKeys(param.selectionRowKeys);
     const config = { ...myConfig };
     if (flag === 'jcgl') {
-      config.unit_key = 'CX_BADZ_JCGL_ZXSB_BADZ_DZXX';
+      config.module_key = 'CX_BADZ_JCGL_ZXSB_BADZ_DZXX';
       config.page_id = 'CX_BADZ_JCGL_ZXSB_BADZ_DZXX';
       config.grid_row_key = 'badzuuid';
       gridParams = {
@@ -47,7 +47,7 @@ const DrawerList: React.FC<DzxxProps> = ({
       setFlag('jcgl');
       setMyTitle('解除关联');
     } else {
-      config.unit_key = 'CX_BADZ_GLDZ_ZXSB_BADZ_DZXX';
+      config.module_key = 'CX_BADZ_GLDZ_ZXSB_BADZ_DZXX';
       config.page_id = 'CX_BADZ_GLDZ_ZXSB_BADZ_DZXX';
       gridParams = {
         initSearchModal: [

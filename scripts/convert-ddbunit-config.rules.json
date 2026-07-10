@@ -244,6 +244,14 @@
         "new": "unitConfig.module_key"
       },
       {
+        "old": "config.unit_key =",
+        "new": "config.module_key ="
+      },
+      {
+        "old": "c.unit_key =",
+        "new": "c.module_key ="
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },

@@ -33,7 +33,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
     c.click_checked = '1';
     c.grid_scroll_x = '1020px';
     c.layout_type = 'modal';
-    c.unit_key = 'CX_SHGL_SHSDSJ_SHSDSJCX_GDXZ';
+    c.module_key = 'CX_SHGL_SHSDSJ_SHSDSJCX_GDXZ';
     c.export_large = true; // tssb_download 配合此导出使用，同步大数据量导出
     c.export_key = 'CX_SHGL_SHSDSJ_SHSDSJCX_GDXZ_DC';
     // 配置项：列表列

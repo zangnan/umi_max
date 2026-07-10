@@ -74,7 +74,7 @@ const ModalJckhzqd: React.FC<JckhzqdProps> = ({
     }
     c.filter_items = filterItems;
     c.layout_type = "modal";
-    c.unit_key = 'JLJG_ZXSB_SB_JLJG_ZNFX_SJHQ_BSHZQD';
+    c.module_key = 'JLJG_ZXSB_SB_JLJG_ZNFX_SJHQ_BSHZQD';
     c.export_key = 'JLJG_ZXSB_SB_JLJG_ZNFX_SJHQ_BSHZQD';
     c.customer_toolbar=[];
     c.toolbar_default.tssb_download=false;

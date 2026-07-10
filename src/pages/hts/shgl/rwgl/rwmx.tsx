@@ -42,7 +42,7 @@ const ShrwMx: React.FC<ShrwMxProps> = ({
 
 
   const config: any = {};
-  config.unit_key = 'CX_SHGL_RWGL_MXLB';                  // 业务单元key，对应后端接口
+  config.module_key = 'CX_SHGL_RWGL_MXLB';                  // 业务单元key，对应后端接口
   config.page_id = 'CX_SHGL_RWGL_MXLB_PAGE';                                        // 页面id
   config.grid_row_key = 'uuid';
   config.grid_show_serial_number = false;                      // 工具栏左侧是否显示数据条数及选中数，默认true显示
