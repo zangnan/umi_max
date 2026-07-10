@@ -558,7 +558,7 @@ const Mtspd: React.FC<DDModalGridProps> = ({ onRef, visible = false, ywKey }) =>
     setGridData([]);
     setValue(1);
     setJshuiSl(0);
-    refUnits.current!.reload2();
+    refUnits.current!.reload();
     refUnits.current!.setSelectionRowKeys([]);
     refUnits.current!.setSelectionRows([]);
   }

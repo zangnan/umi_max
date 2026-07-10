@@ -42,7 +42,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
                 if(body.uuids){
                  setExportKey(body.uuids);
                 }
-                ref.current!.reload2();
+                ref.current!.reload();
                 formData.setFieldsValue({
                     bgdts: body?.bgdts,
                     rmblajHj: body?.rmblajHj ? myUtil.text.formatNum(body?.rmblajHj, '0,0.00') : '0.00',

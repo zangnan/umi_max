@@ -54,7 +54,7 @@ const DrawerglFm: React.FC<BdjgProps> = ({
 
   const closeModal = () => {
     debugger;
-    zymUnitRef?.current!.reload2();
+    zymUnitRef?.current!.reload();
     setModalVisible(false);
   }
 
@@ -84,7 +84,7 @@ const DrawerglFm: React.FC<BdjgProps> = ({
       open={modalVisible}
       onClose={() => {
         debugger;
-        zymUnitRef?.current!.reload2();
+        zymUnitRef?.current!.reload();
         setModalVisible(false)
       }}
       width={CONSTANTS.C_MODAL_WIDTH_X3}

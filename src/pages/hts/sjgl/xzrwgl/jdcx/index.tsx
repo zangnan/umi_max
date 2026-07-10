@@ -291,7 +291,7 @@ const Jdcx: React.FC<unknown> = () => {
       refUnit.current!.setMasker(false);
       const { code, body, msg } = response;
       if (code == '200') {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(msg);
       }

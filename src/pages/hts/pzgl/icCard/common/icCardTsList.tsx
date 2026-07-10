@@ -99,7 +99,7 @@ const Index: React.FC<IcList> = ({onRef, visible = false, saveBtn}) => {
   // 确认判断是否成功
   const jcSuccess = () => {
     if (history?.location?.pathname === '/02/0201') {
-      sxparam?.refUnit?.current?.reload2();
+      sxparam?.refUnit?.current?.reload();
       closeModal();
     } else {
       history.push({pathname: '/02/0201'});

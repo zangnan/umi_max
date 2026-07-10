@@ -60,7 +60,7 @@ dzhcFunc.hcbs = (param: any) => {
             // 清空选中并设置按钮可用状态
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(intl2.formatMessage({ id: 'message_delete_error' }));
             return;
@@ -119,7 +119,7 @@ dzhcFunc.drHcqd = (param: any) => {
         DDAlert.close();
         const { code } = response;
         if (code === '200') {
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           // DDAlert.open({
           //   title: '导入Excel模板',
           //   info: '成功导入Excel模板文件',
@@ -176,7 +176,7 @@ dzhcFunc.txhcsm = (param: any, event: any) => {
           DDAlert.close();
           const { code } = response;
           if (code === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success('填写核查说明成功！');
           } else {
             message.error(response.desc);

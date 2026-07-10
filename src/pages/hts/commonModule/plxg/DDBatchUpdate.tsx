@@ -344,7 +344,7 @@ const DDBatchUpdate: React.FC<DDBatchUpdateProps> = ({ onRef, visible = false })
             if (code === '200') {
               message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
               closeModel();
-              ref.current!.reload2();
+              ref.current!.reload();
             } else if (code === '900'){
               DDAlert.open({
                 title: '系统提示',
@@ -383,7 +383,7 @@ const DDBatchUpdate: React.FC<DDBatchUpdateProps> = ({ onRef, visible = false })
               setSsflbmObj({});
               message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
               closeModel();
-              ref.current!.reload2();
+              ref.current!.reload();
             } else {
               message.error(desc);
             }
@@ -391,7 +391,7 @@ const DDBatchUpdate: React.FC<DDBatchUpdateProps> = ({ onRef, visible = false })
           DDAlert.close();
         }
 
-       // ref.current!.reload2();
+       // ref.current!.reload();
   }});
   };
 

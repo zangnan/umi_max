@@ -132,7 +132,7 @@ const Jhmx2: React.FC<DDTsort> = ({
       if (code === '200') {
         setModalVisible(false);
         // 更新发票转进货的发票列表、进货明细列表
-        pCurrent.reload2();
+        pCurrent.reload();
         pCurrent2?.reload();
         message.success(body || desc);
       } else {

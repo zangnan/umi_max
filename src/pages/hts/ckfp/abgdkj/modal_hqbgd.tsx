@@ -156,7 +156,7 @@ const openAckrqhq = (param: any, param1: any, refUnit: any, access: any) => {
                 temp.push(Object.assign(item, { code: item.khuuid, name: item.ghfnsrmc }));
               })
               myUtil.code.saveCodeToLocalTable('CODE_CKFP_ABGDKJ_GMFMC',temp,'01');
-              refUnit.current?.reload2();
+              refUnit.current?.reload();
               message.success(intl2.formatMessage({ id: 'message_ckfp_abgdkj_hqbgd_success' }));
             }
           });

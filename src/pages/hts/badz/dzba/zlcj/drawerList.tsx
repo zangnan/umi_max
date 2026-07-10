@@ -104,7 +104,7 @@ const DrawerList: React.FC<DzxxProps> = ({
         setModalVisible(false);
         // 清空选择的key，防止跟解除关联冲突
         setDzxxSelectedRowKeys('');
-        mainUnitRef.current?.reload2();  // 刷新主页面列表数据
+        mainUnitRef.current?.reload();  // 刷新主页面列表数据
       } else {
         message.error(response.desc)
       }
@@ -133,7 +133,7 @@ const DrawerList: React.FC<DzxxProps> = ({
             setModalVisible(false);
             // 清空选择的key，防止跟关联单证冲突
             setDzxxSelectedRowKeys('');
-            mainUnitRef.current?.reload2();  // 刷新主页面列表数据
+            mainUnitRef.current?.reload();  // 刷新主页面列表数据
           } else {
             message.error(response.desc)
           }

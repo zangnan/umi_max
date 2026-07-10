@@ -93,7 +93,7 @@ const Znfx: React.FC<unknown> = () => {
         if(!startLx){
           run();
         } else {
-          refUnit.current!.reload2(); // 刷新页面
+          refUnit.current!.reload(); // 刷新页面
         }
       }else if(code === '901'){
         message.info(msg)
@@ -112,11 +112,11 @@ const Znfx: React.FC<unknown> = () => {
       if(res01.code === '200') {
         if(res01?.body === 'Y') {
           setStartLx(true);
-          ZnfxFunc?.refUnit.current?.reload2();
+          ZnfxFunc?.refUnit.current?.reload();
         } else if(res01?.body === 'S') {
           cancel();
           setStartLx(false);
-          ZnfxFunc?.refUnit.current?.reload2();
+          ZnfxFunc?.refUnit.current?.reload();
         } else {
           setStartLx(true);
         }

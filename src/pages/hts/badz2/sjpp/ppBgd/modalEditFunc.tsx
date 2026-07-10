@@ -25,9 +25,9 @@ Func.costomerToobarDelete = async (param: any) => {
   deleteBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      otherRef[1].refUnit.current!.reload2();
-      otherRef[2].topRef.current!.reload2();
-      otherRef[2].bottomRef.current!.reload2();
+      otherRef[1].refUnit.current!.reload();
+      otherRef[2].topRef.current!.reload();
+      otherRef[2].bottomRef.current!.reload();
       message.success('数据删除成功');
     } else {
       message.error(desc);
@@ -60,9 +60,9 @@ Func.costomerToobarSave = async (param: any) => {
   saveBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      otherRef[1].refUnit.current!.reload2();
-      otherRef[2].topRef.current!.reload2();
-      otherRef[2].bottomRef.current!.reload2();
+      otherRef[1].refUnit.current!.reload();
+      otherRef[2].topRef.current!.reload();
+      otherRef[2].bottomRef.current!.reload();
       message.success('单证匹配成功');
     } else {
       message.error(desc);

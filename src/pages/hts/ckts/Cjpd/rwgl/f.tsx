@@ -214,7 +214,7 @@ Func.handlePdrwreload = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
     } else {
       message.error(desc);
       return;
@@ -237,7 +237,7 @@ Func.handleZdpd = async (param: any, e: any) => {
       refUnit.current!.setMasker(false);
       const { code, msg } = response;
       if (code === '200') {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(msg);
       }
@@ -250,7 +250,7 @@ Func.handleZdpd = async (param: any, e: any) => {
       refUnit.current!.setMasker(false);
       const { code, msg } = response;
       if (code === '200') {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(msg);
       }
@@ -300,7 +300,7 @@ Func.handleScmx = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(msg);
     }

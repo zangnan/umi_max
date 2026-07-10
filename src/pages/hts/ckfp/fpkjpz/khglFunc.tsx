@@ -38,7 +38,7 @@ Func.handletqjwfhr = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_khtq_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {
@@ -69,7 +69,7 @@ Func.deleteKhgl = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(desc);
           }
@@ -91,7 +91,7 @@ Func.setKhzt = (checked: any, param: any) => {
     const { code, desc } = response;
     refUnit.current!.setMasker(false);
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       message.success(intl2.formatMessage({ id: 'message_ckfp_fppz_khgl_setkhzt_success' }));
       return true;
     } else {

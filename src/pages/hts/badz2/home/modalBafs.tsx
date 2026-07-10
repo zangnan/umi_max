@@ -58,7 +58,7 @@ const BadzylModal: React.FC<BadzylModal> = ({
         const { code, desc } = response;
         if (code === '200') {
           closeModalVisible();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('已切换为电子备案');
         } else {
           message.error(desc);

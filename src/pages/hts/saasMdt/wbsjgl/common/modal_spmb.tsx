@@ -307,7 +307,7 @@ const EditableCellQr = ({
           setMasker(false);
           closeModal();
           message.success('操作成功');
-          pageRef.current!.reload2();
+          pageRef.current!.reload();
         },300)
       } else {
         message.info(msg)

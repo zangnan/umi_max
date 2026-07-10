@@ -92,7 +92,7 @@ drmbkjFunc.excelImport = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success('导入成功！');
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else if (code === '900') {
             otherRef[0].current!.showModal(body, 'ZXSB_SB_DRMBKJ');
           } else {
@@ -275,7 +275,7 @@ const zxjpjy = (param: any, refUnit: any) => {
                     message.error(res.msg);
                   } else {
                     message.success('审核申请成功！');
-                    refUnit.current!.reload2();
+                    refUnit.current!.reload();
                   }
                 });
               }
@@ -352,7 +352,7 @@ const sjpjy =  (refUnit: any,obj :any) => {
                 if (res.code != '200') {
                   message.error(res.msg);
                 } else {
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   message.success('审核申请成功！');
                 }
               });
@@ -446,7 +446,7 @@ drmbkjFunc.deleteFpsqd = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(desc);
           }

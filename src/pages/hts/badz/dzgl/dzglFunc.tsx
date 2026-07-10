@@ -121,7 +121,7 @@ dzglFunc.dzglDelete = (param: any) => {
             const { code } = response;
             if (code === '200') {
               message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(intl2.formatMessage({ id: 'message_delete_error' }));
             }
@@ -144,7 +144,7 @@ dzglFunc.dzglDelete = (param: any) => {
         const { code } = response;
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(intl2.formatMessage({ id: 'message_delete_error' }));
         }

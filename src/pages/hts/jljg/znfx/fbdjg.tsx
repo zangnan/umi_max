@@ -67,7 +67,7 @@ ZnfxBdjgFunc.handleZnfxBdjgSzhl = (params: any) => {
     if (code === '200') {
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
       const tmpMessage = intl2.formatMessage({ id: 'message_jljghx_znfx_bdjg_szhl' });
       const successMessage = cktsUtil.text.formatRepalce(tmpMessage, body);
       message.success(successMessage);
@@ -91,7 +91,7 @@ ZnfxBdjgFunc.handleZnfxBdjgQxhl = (params: any) => {
     if (code === '200') {
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
       const tmpMessage = intl2.formatMessage({ id: 'message_jljghx_znfx_bdjg_qxhl' });
       const successMessage = cktsUtil.text.formatRepalce(tmpMessage, body);
       message.success(successMessage);

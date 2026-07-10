@@ -154,7 +154,7 @@ const ModalForm: React.FC<BdjgProps> = ({
     setSsqd(true);
     form.resetFields();
     setYhlxDmbyRows('');
-    initParam?.refUnit.current?.reload2();
+    initParam?.refUnit.current?.reload();
   };
 
   useImperativeHandle(onRef, () => {

@@ -211,7 +211,7 @@ const Index: React.FC = () => {
         message.success('操作成功！');
         close();
         const refUnit = Func.refUnit;
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
       } else {
         message.error(res?.msg);
       }

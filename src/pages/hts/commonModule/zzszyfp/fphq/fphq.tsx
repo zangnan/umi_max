@@ -103,7 +103,7 @@ const Shsjxz: React.FC<BdjgProps> = ({
         const { code } = res;
         if (code === '200') {
           const refUnit = Func.refUnit;
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else if (code === '900') {
           message.info(res.msg);
         } else {
@@ -120,7 +120,7 @@ const Shsjxz: React.FC<BdjgProps> = ({
         const { code } = res;
         if (code === '200') {
           const refUnit = Func.refUnit;
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else if (code === '900') {
           message.info(res.msg);
         } else {
@@ -146,7 +146,7 @@ const Shsjxz: React.FC<BdjgProps> = ({
         const { code } = res;
         if (code === '200') {
           const refUnit = Func.refUnit;
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else if (code === '900') {
           message.info(res.msg);
         } else {
@@ -160,7 +160,7 @@ const Shsjxz: React.FC<BdjgProps> = ({
         const { code, msg } = res;
         if (code === '200') {
           const refUnit = Func.refUnit;
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.info(msg);
         }

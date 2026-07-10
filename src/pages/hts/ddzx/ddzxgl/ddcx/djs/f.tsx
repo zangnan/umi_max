@@ -55,7 +55,7 @@ Func.zyt = async (param :any) => {
   await ddzyt(obj).then((response :any) => {
     refUnit.current?.setMasker(false);
     if (response.code == '200') {
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
       message.success('操作成功！');
     } else {
       message.error(response.msg);

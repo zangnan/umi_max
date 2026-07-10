@@ -44,7 +44,7 @@ ckfpFunc.handleFpzf = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('发票作废申请成功！')
         } else if (response.code === '900') {
           message.info(response.msg);

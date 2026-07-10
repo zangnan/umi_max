@@ -59,7 +59,7 @@ const ModalForm: React.FC<BdjgProps> = ({
         setMasker(false);
         const { code, msg } = res;
         if (code == '200') {
-          initParam?.refUnit.current?.reload2();
+          initParam?.refUnit.current?.reload();
           message.success("绑定角色成功！");
           setModalVisible(false);
         } else {

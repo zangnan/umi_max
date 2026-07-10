@@ -119,8 +119,8 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
   }
 
   Func.reload = () => {
-    currentData?.current?.reload2();
-    initData?.refUnit?.current?.reload2();
+    currentData?.current?.reload();
+    initData?.refUnit?.current?.reload();
   }
   Func.scmx = (param: any) => {
     const { record, refUnit } = param;

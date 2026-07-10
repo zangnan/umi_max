@@ -55,7 +55,7 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
 
   // 开启
   const showModal = (param: any, mainUnitRef: any, param1: any) => {
-    mainUnitRef?.current?.reload2();
+    mainUnitRef?.current?.reload();
     if (param) {
       setFormDate(param);
       
@@ -139,7 +139,7 @@ const BadzZlyl: React.FC<BadzZlylProps> = ({ onRef, visible = false, gnmk }) => 
     setXqMasker(false);
     filterForm.setFieldsValue({});
     xqForm.setFieldsValue({});
-    mainUnitRef?.current?.reload2();
+    mainUnitRef?.current?.reload();
     setFormDate("");
     setDzmcTree([]);
     setdzData([]);

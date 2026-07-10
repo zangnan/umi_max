@@ -56,7 +56,7 @@ Func.handleDownLoadKpwj = (param: any) => {
           // 清空选中并设置按钮可用状态
           refUnit.current?.setSelectionRowKeys([]);
           refUnit.current?.setSelectionRows([]);
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.info('下载失败！');
         }
@@ -100,7 +100,7 @@ const openXz = (refUnit: any, obj: any) => {
             // 清空选中并设置按钮可用状态
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.info('下载失败！');
           }
@@ -218,7 +218,7 @@ Func.handleDownLoadClickKpwj = (param: any) => {
       // 清空选中并设置按钮可用状态
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response.desc);
     }
@@ -256,7 +256,7 @@ Func.handleFpkjht = (param: any) => {
             DDAlert.close();
             const { code, body, desc } = response;
             if (code === '200') {
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               const successInfo = body[0].htxq;
               if(body[0].tsxxbz === 'Y') {
                  // 业务校验
@@ -409,7 +409,7 @@ Func.handleThzwkpzt = (param: any) => {
           DDAlert.close();
           const { code, desc } = response;
           if (code === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_fpch_success' }))
           } else {
             message.error(desc)
@@ -443,7 +443,7 @@ Func.handleSzhcbz = (param: any) => {
       refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_sethbbz_success' }))
       } else {
         message.error(desc)
@@ -474,7 +474,7 @@ Func.handleQxhcbz = (param: any) => {
       refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_cancelhcbz_successr' }));
       } else {
         message.error(desc)
@@ -505,7 +505,7 @@ Func.handleSzzfbz = (param: any) => {
       refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_setzfbz_success' }));
       } else {
         message.error(desc)
@@ -536,7 +536,7 @@ Func.handleQxzfbz = (param: any) => {
       refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_cancelzfbz_success' }));
       } else {
         message.error(desc)

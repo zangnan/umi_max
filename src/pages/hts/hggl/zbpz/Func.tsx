@@ -51,7 +51,7 @@ Func.hh = (p: any) => {
         if (res.code === '200') {
           message.success(ck ? '启用成功！' : '关闭成功！');
           DDAlert.close();
-          Func.refUnit?.current!.reload2();
+          Func.refUnit?.current!.reload();
         } else {
           message.error(res?.msg);
         }
@@ -101,7 +101,7 @@ const onChangeSwitch = (_record: any,) => {
     refUnit.current!?.setMasker(false);
     if (res.code === '200') {
       message.success(checked ? '启用成功！' : '关闭成功！');
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
     } else {
       message.error(res?.msg);
     }
@@ -144,7 +144,7 @@ Func.qybz = (p: any,) => {
           thisObj.setState({ masker: false });
           if (res.code === '200') {
             message.success(values.qybz=='Y'? '指标启用成功！':'指标停用成功');
-            refUnit.current?.reload2();
+            refUnit.current?.reload();
             DDAlert.close();
           } else {
             message.error(res?.msg);

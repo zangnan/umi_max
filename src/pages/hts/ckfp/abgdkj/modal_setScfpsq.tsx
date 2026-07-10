@@ -234,13 +234,13 @@ const ModalScfp: React.FC<DDModalGridProps> = ({ onRef }) => {
             '申请单金额总计' + myUtil.text.formatNum(body.fpsqdzje, '0,0.00') + '元',
           ],
         });
-        mainRef.current!.reload2();
+        mainRef.current!.reload();
       } else {
         if (body?.sjztczbz === 'Y' && code === '300') {
           setModalVisibleK(false);
           setModalVisibleG(false);
           setModalVisibleB(false);
-          mainRef.current!.reload2();
+          mainRef.current!.reload();
           message.error(intl.formatMessage({ id: 'message_ckfp_abgdkj_scfpsqd_wszssbm' }));
         } else {
           message.error(desc);

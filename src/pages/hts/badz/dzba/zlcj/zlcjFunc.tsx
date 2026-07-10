@@ -112,7 +112,7 @@ zlcjFunc.completeFiling = (param: any, event: any) => {
         DDAlert.close();
         if (res.code == '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_complete_filing_success' }));
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(res.desc)
         }

@@ -89,7 +89,7 @@ drmbkjFunc.excelImport = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success(desc);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else if (code === '900') {
             otherRef[0].current!.showModal(body, 'ZXSB_SB_DRMBKJ');
           } else {
@@ -183,7 +183,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                 skxxcx().then((res1: any) => {
                   refUnit.current!.setMasker(false);
                   if (res1.code === '200') {
-                    refUnit.current!.reload2();
+                    refUnit.current!.reload();
                     const zcbz = res1.body.zcbz;
                     if (zcbz === '2') {
                       // 查询是否完成注册 若未成功 尚未注册页
@@ -224,7 +224,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                           refUnit.current!.setMasker(false);
                           const { code, body, desc } = responseKp;
                           if (code === '200') {
-                            refUnit.current!.reload2();
+                            refUnit.current!.reload();
                             DDAlert.open({
                               title: '确认开票数据',
                               info: '成功确认开票数据',
@@ -251,7 +251,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                           }
                         })
                       } else if (code === '900') {
-                        refUnit.current!.reload2();
+                        refUnit.current!.reload();
                         if (Array.isArray(resddtjkp?.msg)) {
                           openYwjyModal(resddtjkp?.msg, '', false);
                         } else {
@@ -263,7 +263,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
                     })
                   } else if (code === '900') {
                     refUnit.current!.setMasker(false);
-                    refUnit.current!.reload2();
+                    refUnit.current!.reload();
                     const sbyyList = msg;
                     const textAreaValues: any = []
                     sbyyList.forEach((item: any, index: any) => {
@@ -362,7 +362,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
             const { code, body, desc } = response;
             if (code === '200') {
               DDAlert.close();
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               DDAlert.open({
                 title: '确认开票数据',
                 info: '成功确认开票数据',
@@ -507,7 +507,7 @@ drmbkjFunc.deleteFpsqd = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(desc);
           }

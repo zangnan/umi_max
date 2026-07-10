@@ -69,7 +69,7 @@ const ModalForm: React.FC<BdjgProps> = ({
           close();
           message.success("保存成功！");
           // initParam?.gridRef?.current!.reload();
-          initParam?.refUnit.current?.reload2();
+          initParam?.refUnit.current?.reload();
         } else {
           message.error(msg)
         }

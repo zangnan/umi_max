@@ -154,7 +154,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
                     if (code === '200') {
                         setModalVisible(false);
                         message.success(body)
-                        refUnit.current!.reload2();
+                        refUnit.current!.reload();
                         refUnit.current?.setSelectionRowKeys([]);
                         refUnit.current?.setSelectionRows([]);
                     } else if(code === '900') {

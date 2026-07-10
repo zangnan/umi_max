@@ -99,7 +99,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   const close = async () => {
     setModalVisible(false);
-    // mainRef.refUnit.current.reload2();
+    // mainRef.refUnit.current.reload();
     // 配置项：自定义工具栏
     dqConfig.customer_toolbar = [];
 

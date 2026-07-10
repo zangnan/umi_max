@@ -74,7 +74,7 @@ Func.del = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             DDAlert.close();
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success('删除成功！');
           } else {
             message.error(msg);
@@ -224,7 +224,7 @@ Func.handleColumnsScfj = async (param: any) => {
             thisObj.setState({ masker: false });
             DDAlert.close();
             if (code === '200') {
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               message.success(`上传成功`);
             } else{
               message.error(msg);

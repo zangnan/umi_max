@@ -242,7 +242,7 @@ const Maintain: React.FC<Props> = ({
       setMasker(false);
       const { code } = response;
       if (code === '200') {
-        mainRef.current!.reload2();
+        mainRef.current!.reload();
         close();
         message.success('保存成功！');
       }

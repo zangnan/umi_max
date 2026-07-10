@@ -23,7 +23,7 @@ Func.sckptz = async (param :any) => {
   await createKptzs({ ddbhs: selectionRowKeys}).then((response2) => {
     refUnit.current?.setMasker(false);
     if (response2.code == '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       const { blob, fileName } = response2.body;
       myUtil.file.downloadExcel(blob, fileName);
     } else {
@@ -62,7 +62,7 @@ Func.zyt = async (param :any) => {
   await ddzyt(obj).then((response :any) => {
     refUnit.current?.setMasker(false);
     if (response.code == '200') {
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
       message.success('操作成功！');
     } else {
       message.error(response.msg);

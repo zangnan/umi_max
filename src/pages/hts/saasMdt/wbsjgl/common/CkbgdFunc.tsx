@@ -42,11 +42,11 @@ CkbgdFunc.btnZbts = (param: any, refCurrent: any, cdly:any) => {
               // 刷新头部条数
               refCurrent!.getDclsjBttj();
               setTimeout(() => {
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
                 DDAlert.close();
               }, 300)
             } else {
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               DDAlert.close();
             }
           } else {

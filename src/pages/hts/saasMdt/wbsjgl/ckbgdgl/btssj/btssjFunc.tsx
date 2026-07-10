@@ -169,7 +169,7 @@ const plxgyfzsslApi = (params: any, refUnit: any, thisObj: any) => {
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl2.formatMessage({ id: 'message_common_batchedit_success' }));
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
       DDAlert.close();
@@ -200,10 +200,10 @@ Func.btnZts = (param: any) => {
         if (code === '200') {
           message.success('转退税成功！');
           close();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else if(code === '900') {
           close();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           const tableData = response.body?.wfztsList;
           const html:any = []
           tableData.forEach((item:any) => {

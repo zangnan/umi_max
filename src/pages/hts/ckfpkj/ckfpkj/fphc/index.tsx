@@ -118,7 +118,7 @@ const Index: React.FC<unknown> = () => {
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   message.success('发票红冲申请成功');
                 } else if (response.code === '900') {
                   message.error(response.msg);
@@ -169,7 +169,7 @@ const Index: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if (rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -216,7 +216,7 @@ const Index: React.FC<unknown> = () => {
         const { code, body, desc, msg } = res;
         if (code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('发票红冲申请成功!');
         } else if (code === '900') {
           // 业务校验

@@ -131,7 +131,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         tszbqdMdt({ ssq: p.ssq, csssq: csssq, uuids: uuids }).then((response2: any) => {
           if (response2.code == '200') {
             message.success('数据调整成功！');
-            param?.refUnit?.current!.reload2();
+            param?.refUnit?.current!.reload();
             close();
           } else {
             message.error(response2.msg);

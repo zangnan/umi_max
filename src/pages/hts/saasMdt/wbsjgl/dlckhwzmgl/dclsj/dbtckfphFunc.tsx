@@ -94,7 +94,7 @@ ckfpFunc.btnPldr= (param: any) => {
               // 刷新头部条数
               otherRef[1].current!.getDclsjBttj()
               setTimeout(() => {
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
                 thisObj.setState({ masker: false });
               },300)
             } else if (code === '900') {
@@ -211,7 +211,7 @@ const plxgckfphApi = (params: any, refUnit: any, otherRef: any, thisObj: any) =>
       // 刷新头部条数
       otherRef[1].current!.getDclsjBttj()
       setTimeout(() => {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         thisObj.setState({ masker: false });
         DDAlert.close();
       },300)

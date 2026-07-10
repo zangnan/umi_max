@@ -110,7 +110,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[2].current!.getDclsjBttj();
           setTimeout(() => {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             close();
             thisObj.setState({ masker: false });
           },300)

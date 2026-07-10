@@ -59,7 +59,7 @@ dzbaFunc.del = (param: any) => {
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
           close();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           refUnit.current!.setMasker(false);
         } else {
           message.error(desc);
@@ -113,7 +113,7 @@ dzbaFunc.modifySlrq = (param: any) => {
         DDAlert.close();
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_xgslrq_success' }))
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(desc);
         }

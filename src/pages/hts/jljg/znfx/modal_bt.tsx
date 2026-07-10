@@ -233,7 +233,7 @@ const EditableCellQr = ({
       setMasker(false);
       const { code, msg } = res;
       if (code === '200') {
-        pageRef.current!.reload2();
+        pageRef.current!.reload();
         closeModal();
         // 弹窗关闭
         DDAlert.open({

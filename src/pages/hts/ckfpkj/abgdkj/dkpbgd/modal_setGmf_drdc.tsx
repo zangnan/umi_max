@@ -59,7 +59,7 @@ const ModalSsflbmDrDc: React.FC<DDImportProps> = ({
         message.success("导入成功");
         await sxghf();
         setModalVisible(false);
-        mainRef.current!.reload2();
+        mainRef.current!.reload();
       } else if (code === '900') {
         message.error(desc);
         setModalVisibleExport(true);

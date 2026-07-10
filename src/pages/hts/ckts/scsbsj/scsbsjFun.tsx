@@ -71,7 +71,7 @@ Func.dataRecallS2 = (param: any) => {
     const { code, msg } = response;
     if (code === '200') {
       Func.dataRecallChBadzSJ(param)
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
     } else {
       message.error(msg);
     }
@@ -85,9 +85,9 @@ Func.dataRecallChBadzSJ = (param: any) => {
   chBadzSJ({ sbwjuuid: selectionRows[0].sbwjuuid }).then((response) => {
     refUnit.current?.setMasker(false);
     const { code, msg } = response;
-    refUnit.current?.reload2();
+    refUnit.current?.reload();
     if (code === '200') {
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
       message.success('数据撤销成功');
     } else {
       message.error(msg);
@@ -141,7 +141,7 @@ Func.dataCheck = (param: any) => {
         refUnit.current?.setMasker(false);
         const { code, msg } = response;
         if (code === '200') {
-          refUnit.current?.reload2();
+          refUnit.current?.reload();
           message.success('数据自检成功');
         } else {
           message.error(msg);
@@ -229,7 +229,7 @@ Func.proveApply = (param: any) => {
       okText: '转申报结果查询',
       okCallbackFn: function (thisObj: any) {
         history.push(param);
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         // message.success('数据申报成功');
       },
     });
@@ -370,7 +370,7 @@ Func.reloadColumn = async (param: any, event: any) => {
   refUnit.current?.setMasker(false);
   if (sjzj.code === '200') {
     if (zssb?.code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else if (zssb?.code === '900'){
       message.info(zssb?.msg || zssb?.desc);
     } else {

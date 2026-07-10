@@ -105,7 +105,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
         const { code, body, desc, msg } = res;
         if (code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('发票红冲申请成功!');
         } else if (code === '900') {
           // 业务校验
@@ -241,7 +241,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   message.success('重新开票申请成功！');
                 } else if (response.code === '900') {
                   message.error(response.msg);
@@ -456,7 +456,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
             refUnit?.current?.setMasker(false);
             if (res2.code === '200') {
               message.success('重新开票申请成功！');
-              refUnit?.current?.reload2();
+              refUnit?.current?.reload();
             } else {
               message.error(res2.msg);
             }
@@ -487,7 +487,7 @@ const Fpkjgl: React.FC<BdjgProps> = ({
       refUnit.current!.setMasker(false);
       if (response.code === '200') {
         // 清空选中并设置按钮可用状态
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         DDAlert.open({
           title: '发票红冲',
           info: '发票红冲申请成功',

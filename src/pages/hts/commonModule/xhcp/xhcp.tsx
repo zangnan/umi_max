@@ -142,7 +142,7 @@ const Order: React.FC<OrderProps> = ({
         const { code, desc } = response;
         if (code === '200') {
           message.success('序号重排成功');
-          refUnit.current!.reload2();;
+          refUnit.current!.reload();;
           close();
         } else {
           message.error(desc);

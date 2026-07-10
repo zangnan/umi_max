@@ -82,7 +82,7 @@ Func.del = (param: any) => {
         const { code, msg } = response;
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(msg);
         }

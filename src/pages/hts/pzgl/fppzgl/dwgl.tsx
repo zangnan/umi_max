@@ -79,10 +79,10 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
       refUnit.current!?.setMasker(false);
       if (res2.code === '200') {
         message.success('保存成功！');
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
       } else {
         message.error(res2.msg);
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
       }
     });
   }
@@ -140,7 +140,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
                   if (res2.code === '200') {
                     message.success('保存成功！');
                     DDAlert.close();
-                    refUnit.current!.reload2();
+                    refUnit.current!.reload();
                   } else {
                     message.error(res2.msg);
                   }
@@ -196,7 +196,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
               if (res2.code === '200') {
                 message.success('保存成功！');
                 DDAlert.close();
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(res2.msg);
               }
@@ -227,7 +227,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
           if (res2.code === '200') {
             message.success('删除成功！');
             DDAlert.close();
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(res2.msg);
           }
@@ -298,7 +298,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
             DDAlert.close();
             if (code === '200') {
               message.success("导入成功！");
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             }
             else if (code === '900') {
               otherRef[0].current!.showModal(body);

@@ -85,7 +85,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   const close = () => {
     setModalVisible(false);
     form.setFieldsValue({});
-    initParam?.refUnit.current?.reload2();
+    initParam?.refUnit.current?.reload();
   };
 
 

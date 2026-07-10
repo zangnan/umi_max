@@ -211,7 +211,7 @@ fpxxFunc.btnSetQszt = async (param: any) => {
             const {code, msg} = response;
             if (code === '200') {
               message.success('设置签收状态成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }

@@ -1017,7 +1017,7 @@ Func.importUpdate = async (param: any) => {
             DDAlert.close();
             if (code === '200') {
               message.success(body);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               otherRef[3].current!.showModal(body, "MDT_TSSB_IMPORT_UPDATE_DRWTDC");
             } else {

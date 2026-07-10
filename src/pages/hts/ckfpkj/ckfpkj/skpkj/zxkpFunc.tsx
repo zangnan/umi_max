@@ -89,7 +89,7 @@ ckfpFunc.handleFpch = (param: any) => {
           DDAlert.close();
           if (response.code === '200') {
             // 清空选中并设置按钮可用状态
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success('发票撤回成功! 数据已转到“发票申请单”或“导入模板开具”页面。');
           } else {
             message.error(response.msg);

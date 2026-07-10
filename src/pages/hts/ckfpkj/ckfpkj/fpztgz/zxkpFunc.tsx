@@ -42,7 +42,7 @@ Func.handleFpchLz = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('发票撤回成功! 数据已转到“发票申请单”或“导入模板开具”页面。');
         } else {
           message.error(response.msg);
@@ -60,7 +60,7 @@ Func.handleUpdateLzLp = (param: any) => {
     refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response.msg);
     }
@@ -75,7 +75,7 @@ Func.handleUpdateLz = (param: any) => {
     refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response.msg);
     }
@@ -90,7 +90,7 @@ Func.handleUpdateHz = (param: any) => {
     refUnit.current?.setMasker(false);
     if (response.code === '200') {
       message.success('更新状态申请成功!');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response.msg);
     }
@@ -138,7 +138,7 @@ Func.handleFpzf = (param: any) => {
             DDAlert.close();
             if (response.code === '200') {
               // 清空选中并设置按钮可用状态
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               message.success('重新作废申请成功！')
             } else if (response.code === '900') {
               message.info(response.msg);
@@ -181,7 +181,7 @@ Func.deleteHz = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('删除成功！');
         } else {
           message.error(response.msg);
@@ -219,7 +219,7 @@ Func.deleteZf = (param: any) => {
         DDAlert.close();
         if (response.code === '200') {
           // 清空选中并设置按钮可用状态
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('删除成功！');
         } else {
           message.error(response.msg);

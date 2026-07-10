@@ -54,7 +54,7 @@ Func.del = async (param: any) => {
             if (response.code === '200') {
               // 清空选中并设置按钮可用状态
               message.success('删除成功！');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               DDAlert.close();
             } else {
               message.error(response.msg);

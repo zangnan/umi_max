@@ -62,7 +62,7 @@ Func.cjck = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.info(body);
-              // refUnit.current?.reload2(); // 刷新并清空SelectionRows、SelectionRowKeys
+              // refUnit.current?.reload(); // 刷新并清空SelectionRows、SelectionRowKeys
               if (Func.closeHwcj) {
                 Func.closeHwcj();
               }

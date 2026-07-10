@@ -83,7 +83,7 @@ Func.del = (param: any, event: any) => {
     if (code == '200') {
       close();
       message.success("保存成功！");
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
     } else {
       message.error(msg)
     }

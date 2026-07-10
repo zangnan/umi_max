@@ -848,7 +848,7 @@ Func.displayReload = (record: any) => {
 
 Func.fpReload = (param: any) => {
   const { refUnit } = param;
-  refUnit?.current?.reload2();
+  refUnit?.current?.reload();
 }
 
 Func.dcsjxz = (param: any) => {
@@ -872,7 +872,7 @@ Func.handleGptreload = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
       // const num = index + 2;
       // const elemsBadge:any = document.querySelectorAll('.ant-table-tbody .ant-table-row:nth-child('+ num +') .ant-table-cell:nth-child(7) .ant-badge-status-dot');
       // const elems:any = document.querySelectorAll('.ant-table-tbody .ant-table-row:nth-child('+ num +') .ant-table-cell:nth-child(7) .zxzt-text');
@@ -882,7 +882,7 @@ Func.handleGptreload = async (param: any, e: any) => {
     } else if (code === '900') {
       message.error(msg);
     } else if (code === '901') {
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
     } else {
       message.error(desc);
       return;
@@ -903,7 +903,7 @@ Func.handleFpsqdTzreload = async (param: any) => {
   await rwjdsx(params).then(async (response: any) => {
     const { code, body, desc } = response;
     if (code === '200') {
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
       refUnit.current!.setMasker(false);
     } else {
       refUnit.current!.setMasker(false);
@@ -938,7 +938,7 @@ Func.zyzx = async (param: any) => {
             refUnit.current!.setMasker(false);
             if (res.code === '200') {
               message.success('操作成功!')
-              refUnit?.current?.reload2();
+              refUnit?.current?.reload();
             } else {
               message.error(res.msg);
             }
@@ -970,9 +970,9 @@ Func.qxzx = async (param: any) => {
           refUnit.current!.setMasker(false);
           if (res.code === '200') {
             message.success('操作成功!');
-            refUnit?.current?.reload2();
+            refUnit?.current?.reload();
           } else if (res.code === '901') {
-            refUnit?.current?.reload2();
+            refUnit?.current?.reload();
           } else {
             message.error(res.msg);
           }
@@ -987,7 +987,7 @@ Func.qxzx = async (param: any) => {
               refUnit.current!.setMasker(false);
               if(res.code === '200') {
                 message.success('操作成功!')
-                refUnit?.current?.reload2();
+                refUnit?.current?.reload();
               } else {
                 message.error(res.msg);
               }
@@ -1034,7 +1034,7 @@ Func.qxzx = async (param: any) => {
                     refUnit.current!.setMasker(false);
                     if (res.code === '200') {
                       message.success('操作成功!')
-                      refUnit?.current?.reload2();
+                      refUnit?.current?.reload();
                     } else {
                       message.error(res.msg);
                     }
@@ -1069,7 +1069,7 @@ Func.handleJ4RpaSx = async (param: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
     } else {
       message.error(msg);
       return;
@@ -1094,7 +1094,7 @@ Func.gdhdrwqxzx = async (param: any) => {
           const { code, msg } = qxzxRes;
           if (code === '200') {
             refUnit.current!.setMasker(false);
-            refUnit?.current?.reload2();
+            refUnit?.current?.reload();
           } else {
             refUnit.current!.setMasker(false);
             message.error(msg);
@@ -1106,7 +1106,7 @@ Func.gdhdrwqxzx = async (param: any) => {
       }
     } else if (code === '901') {
       refUnit.current!.setMasker(false);
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
     } else {
       refUnit.current!.setMasker(false);
       message.error(msg);

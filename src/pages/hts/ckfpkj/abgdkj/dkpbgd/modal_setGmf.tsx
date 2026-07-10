@@ -499,7 +499,7 @@ const ModalGmf: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
               temp.push(Object.assign(item, { code: item.khuuid, name: item.ghfnsrmc }));
             })
             myUtil.code.saveCodeToLocalTable('CODE_CKFP_ABGDKJ_GMFMC',temp,'01');
-            // mainRef.current!.reload2();
+            // mainRef.current!.reload();
             onclose();
             message.success(intl.formatMessage({ id: 'message_ckfp_abgdkj_setgmf_success' }));
           }
@@ -714,7 +714,7 @@ const ModalGmf: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
 
 
   const onclose=async ()=>{
-    mainRef.current!.reload2();
+    mainRef.current!.reload();
     setModalVisible(false);
     myUtil.sessionStore.clear('szwxtgmfbz');
     // myUtil.sessionStore.clear('codeTable');

@@ -167,7 +167,7 @@ Func.hysbqk = (param:any) =>  {
     hysbqkByIds({ glhs: yglhArr, uuids:selectionRowKeys }).then((response) => {
       const { code, msg,body,desc } = response;
       if (code === '200') {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         DDAlert.open({
           title: '系统提示',
           isShowcancelText: false,

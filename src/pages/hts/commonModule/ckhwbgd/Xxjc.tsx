@@ -74,7 +74,7 @@ const Scmx: React.FC<DDModalGridProps> = ({
     setNum(0);
     setStatus('');
     setNone('none');
-    refUnit?.current?.reload2();
+    refUnit?.current?.reload();
   }
 
   return (

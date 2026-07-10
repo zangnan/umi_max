@@ -63,8 +63,8 @@ Func.costomerToobarSave = async (param: any) => {
   saveBaqkAndDzRelation(obj).then((response) => {
     const { code, desc } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
-      otherRef[4]?.refUnit?.current!.reload2();
+      refUnit.current!.reload();
+      otherRef[4]?.refUnit?.current!.reload();
       message.success('单证匹配成功');
     } else {
       message.error(desc);

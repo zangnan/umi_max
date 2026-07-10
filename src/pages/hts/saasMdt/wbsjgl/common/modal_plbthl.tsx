@@ -256,11 +256,11 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
                     otherRef.current!.getDclsjBttj()
                     setTimeout(() => {
                       setMasker(false);
-                      mainRef.current!.reload2();
+                      mainRef.current!.reload();
                       setModalVisible(false);
                     },300)
                   } else {
-                    mainRef.current!.reload2();
+                    mainRef.current!.reload();
                     setModalVisible(false);
                   }
                 } else if(code === '900') {
@@ -282,7 +282,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
                     otherRef.current!.getDclsjBttj()
                     setTimeout(() => {
                       setMasker(false);
-                      mainRef.current!.reload2();
+                      mainRef.current!.reload();
                       setModalVisible(false);
                     },300)
                   } else {

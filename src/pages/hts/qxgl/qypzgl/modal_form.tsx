@@ -66,7 +66,7 @@ const ModalForm: React.FC<BdjgProps> = ({
       setMasker(false);
       if (response.code === '200') {
         close();
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
         message.success('保存成功！');
       } else {
         message.error(response.msg);

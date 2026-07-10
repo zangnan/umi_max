@@ -76,7 +76,7 @@ Func.handletqJwshr = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             if(body.tqsl === 0 ){
               message.error("未查询到报关单数据");
             } else {

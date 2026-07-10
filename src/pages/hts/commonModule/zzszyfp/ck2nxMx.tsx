@@ -109,7 +109,7 @@ const Jhmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     },
     reload: () => {
       const zlb= lb;
-      zlb.reload2();
+      zlb.reload();
 
     }
   };

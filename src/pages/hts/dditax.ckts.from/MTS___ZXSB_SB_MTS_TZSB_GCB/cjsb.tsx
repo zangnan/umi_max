@@ -73,7 +73,7 @@ const Hgdzxzjy: React.FC<DDInvoiceProps> = ({
           const {code, msg} = response;
           if (code === '200') {
             close();
-            refUnit.current.reload2();
+            refUnit.current.reload();
           }else{
             message.error(msg);
           }

@@ -93,7 +93,7 @@ ckfpFunc.btnPlbt = (param: any) => {
               // 刷新头部条数
               otherRef[1].current!.getDclsjBttj()
               setTimeout(() => {
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
                 thisObj.setState({ masker: false });
               },300)
             } else if (code === '900') {
@@ -189,7 +189,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[1].current!.getDclsjBttj();
           setTimeout(() => {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             close();
             thisObj.setState({ masker: false });
           },300)

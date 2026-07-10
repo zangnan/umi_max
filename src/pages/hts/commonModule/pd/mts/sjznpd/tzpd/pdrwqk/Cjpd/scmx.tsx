@@ -110,8 +110,8 @@ const Tzpd: React.FC<PdrwProps> = ({
   const closeMx = () => {
     setModalVisibleMx(false);
     ssgzForm.resetFields();
-    param?.refUnit?.current?.reload2();
-    param2?.refUnit?.current?.reload2();
+    param?.refUnit?.current?.reload();
+    param2?.refUnit?.current?.reload();
   }
 
   const save = async () => {

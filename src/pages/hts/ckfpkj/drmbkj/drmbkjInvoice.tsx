@@ -130,7 +130,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
                const { code, desc } = response;
                setMasker(false);
                if (code === '200') {
-                 mainRef.current!.reload2();
+                 mainRef.current!.reload();
                  // 修改
                  message.success(intl.formatMessage({ id: 'message_edit_success' }));
                  setModalVisible(false);
@@ -143,7 +143,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
                const { code, desc } = response;
                setMasker(false);
                if (code === '200') {
-                 mainRef.current!.reload2();
+                 mainRef.current!.reload();
                  if (readonly) {
                    // 修改
                    message.success(intl.formatMessage({ id: 'message_edit_success' }));
@@ -166,7 +166,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
            const { code, desc } = response;
            setMasker(false);
            if (code === '200') {
-             mainRef.current!.reload2();
+             mainRef.current!.reload();
              // 修改
              message.success(intl.formatMessage({ id: 'message_edit_success' }));
              setModalVisible(false);
@@ -180,7 +180,7 @@ import DDAlert from '@/pages/hts/components/DDAlert';
            const { code, desc } = response;
            setMasker(false);
            if (code === '200') {
-             mainRef.current!.reload2();
+             mainRef.current!.reload();
              if (isFpsqdFlag === '4') {
                message.success(intl.formatMessage({ id: 'message_edit_success' }));
              } else {

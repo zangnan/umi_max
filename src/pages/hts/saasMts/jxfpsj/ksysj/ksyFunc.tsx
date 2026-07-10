@@ -44,7 +44,7 @@ ksyFunc.funcGxxxzt = (param: any) => {
     refUnit.current!.setMasker(false);
     const { code, desc, msg } = res;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       DDAlert.open({
         title: '系统提示',
         info: '创建任务成功，是否跳转任务管理？',
@@ -126,7 +126,7 @@ ksyFunc.btnSetSfts = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置是否退税成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -163,7 +163,7 @@ ksyFunc.btnSetYwbh = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置业务编号成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -202,7 +202,7 @@ ksyFunc.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }

@@ -77,7 +77,7 @@ Func.shjcFunc = (param: any, checkFlag: any = 'N') => {
         const resData = JSON.parse(body);
         if ('N' == resData.msgKey) {
           message.success(resData.msgInfo);
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           if ('Y' == resData.errTypeHl) {
             const gridDataHl = JSON.parse(resData.gridDataHl);
@@ -224,7 +224,7 @@ Func.btnDr = (param: any) => {
           DDAlert.close();
           if (code === '200') {
             message.success(desc);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else if (code === '900') {
             message.error(msg);
           } else {
@@ -271,7 +271,7 @@ Func.btnDelete = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(desc);
           }

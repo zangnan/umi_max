@@ -185,7 +185,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
             if (code === '200') {
                 message.success(msg)
                 setModalVisible(false);
-                paramValue?.refUnit.current!.reload2();
+                paramValue?.refUnit.current!.reload();
                 form.resetFields();
             } else {
                 message.error(msg)

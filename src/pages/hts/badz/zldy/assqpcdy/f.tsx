@@ -120,7 +120,7 @@ Func.scssqsj = (param: any) => {
           refUnit.current!.setMasker(false);
           if (res.code == '200') {
             message.success(intl2.formatMessage({ id: 'message_badz_scssqsj_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(res.desc)
           }
@@ -136,7 +136,7 @@ Func.scssqsj = (param: any) => {
       refUnit.current!.setMasker(false);
       if (res.code == '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_scssqsj_success' }));
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(res.desc)
       }

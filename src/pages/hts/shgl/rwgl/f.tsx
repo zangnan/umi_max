@@ -37,7 +37,7 @@ Func.columnsRender = {
 //任务刷新
 Func.handleShppRwReload = (param: any) => {
   const { refUnit } = param;
-  refUnit?.current?.reload2();
+  refUnit?.current?.reload();
 }
 
 
@@ -88,7 +88,7 @@ Func.handlerDel = (param: any) => {
         refUnit.current!.setMasker(false);
         const { code, msg } = res;
         if (code === '200') {
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success('删除成功！');
         } else {
           message.error(msg);

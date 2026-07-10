@@ -20,7 +20,7 @@ Func.reloadColumn = (param: any, event: any) => {
     refUnit.current?.setMasker(false);
     const { code, msg, desc } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else if (code === '900') {
       message.info(msg || desc);
     } else {

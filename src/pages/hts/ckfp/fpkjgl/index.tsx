@@ -48,7 +48,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -85,7 +85,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             DDAlert.open({
               title: '发票红冲',
               info: '发票红冲申请成功',
@@ -184,7 +184,7 @@ const Fpkjgl: React.FC<unknown> = () => {
                 DDAlert.close();
                 if (response.code === '200') {
                   // 清空选中并设置按钮可用状态
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   DDAlert.open({
                     title: '发票红冲',
                     info: '发票红冲申请成功',
@@ -226,7 +226,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = res01?.body?.rtnCode;
           const rtnData = res01?.body;
           if(rtnCode === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(res01?.desc)
           } else if(rtnCode === '2004'){
             const param = {
@@ -261,7 +261,7 @@ const Fpkjgl: React.FC<unknown> = () => {
           const rtnCode = res02?.body?.rtnCode;
           if(rtnCode === '200') {
             // 清空选中并设置按钮可用状态
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(res02?.msg)
           } else if(rtnCode === '2004'){
             refSfyz.current!.showModal(); // 打开电子税务局身份验证

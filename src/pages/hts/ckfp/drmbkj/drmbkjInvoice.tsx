@@ -118,7 +118,7 @@ const DrmbkjInvoice: React.FC<DDModalGridProps> = ({
             const { code, desc } = response;
             setMasker(false);
             if (code === '200') {
-              mainRef.current!.reload2();
+              mainRef.current!.reload();
               if (readonly) {
                 // 修改
                 message.success(intl.formatMessage({ id: 'message_edit_success' }));
@@ -139,7 +139,7 @@ const DrmbkjInvoice: React.FC<DDModalGridProps> = ({
         const { code, desc } = response;
         setMasker(false);
         if (code === '200') {
-          mainRef.current!.reload2();
+          mainRef.current!.reload();
           if (readonly) {
             // 修改
             message.success(intl.formatMessage({ id: 'message_edit_success' }));

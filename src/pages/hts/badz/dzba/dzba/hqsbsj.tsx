@@ -83,7 +83,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
                 const { code, desc } = response;
                 if (code === '200') {
                   message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   refUnit.current!.setMasker(false);
                 } else {
                   message.error(desc);
@@ -123,7 +123,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
                 const { code, desc } = response;
                 if (code === '200') {
                   message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-                  refUnit.current!.reload2();
+                  refUnit.current!.reload();
                   refUnit.current!.setMasker(false);
                 } else {
                   message.error(desc);
@@ -148,7 +148,7 @@ const Hqsbsj: React.FC<AttachmentDataProps> = ({
       const { code, desc } = response;
       if (code === '200') {
         message.success(intl2.formatMessage({ id: 'message_badz_dzba_dzba_hqsbsj_success' }));
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         refUnit.current!.setMasker(false);
       } else {
         message.error(desc);

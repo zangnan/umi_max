@@ -19,7 +19,7 @@ Func.setTsbz = (checked: any, param: any) => {
     const { code, desc } = response;
     refUnit.current!.setMasker(false);
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       message.success("退税标志设置成功！");
       return true;
     } else {

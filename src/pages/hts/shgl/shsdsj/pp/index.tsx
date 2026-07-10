@@ -804,7 +804,7 @@ const ShsdsjPp: React.FC<ShsdsjPpProps> = ({
         // 关闭弹窗
         setDrawerVisible(false);
         // 刷新主列表
-        params?.refUnit?.current?.reload2();
+        params?.refUnit?.current?.reload();
       } else if (code === '900') {
         refPpjg?.current?.showModal(body);
       } else {

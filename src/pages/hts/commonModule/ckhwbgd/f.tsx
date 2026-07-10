@@ -60,7 +60,7 @@ ckbgdFunc.shjcFunc = (param: any, checkFlag: any = 'N') => {
         const resData = JSON.parse(body);
         if ('N' == resData.msgKey) {
           message.success(resData.msgInfo);
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           if ('Y' == resData.errTypeHl) {
             const gridDataHl = JSON.parse(resData.gridDataHl);
@@ -212,7 +212,7 @@ ckbgdFunc.sjdrFunc = (param: any) => {
             DDAlert.close();
             if (code === '200') {
               message.success(desc);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               message.error(msg);
             } else {
@@ -254,7 +254,7 @@ ckbgdFunc.gxxx = (param: any) => {
     const { code, body } = res;
     if (code === '200') {
       message.success(body);
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.info(body.rtnMsg);
     }
@@ -281,7 +281,7 @@ ckbgdFunc.btnDelete = (param: any) => {
           const { code, desc } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(desc);
           }
@@ -774,7 +774,7 @@ ckbgdFunc.btnSetSfts = async (param: any) => {
               const { code, msg } = response;
               if (code === '200') {
                 message.success('操作成功！');
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(msg);
               }
@@ -786,7 +786,7 @@ ckbgdFunc.btnSetSfts = async (param: any) => {
               const { code, msg } = response;
               if (code === '200') {
                 message.success('操作成功！');
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(msg);
               }
@@ -824,7 +824,7 @@ ckbgdFunc.btnSetYwbh = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置业务编号成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -861,7 +861,7 @@ ckbgdFunc.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -1269,7 +1269,7 @@ ckbgdFunc.importWj = async (param: any) => {
             DDAlert.close();
             if (code === '200') {
               message.success(body?.msgInfo);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               message.error(msg);
             } else {

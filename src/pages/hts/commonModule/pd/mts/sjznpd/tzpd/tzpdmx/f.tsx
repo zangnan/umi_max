@@ -116,7 +116,7 @@ Func.tzdr = (param: any) => {
             if (code === '200') {
               message.success(msg);
               thisObj.setState({ masker: false });
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               otherRef[1].current?.showModal(body.drycxx,  body.druuid);
               if(!(msg === '' || msg === null)){

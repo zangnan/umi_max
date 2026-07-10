@@ -55,10 +55,10 @@ const Index: React.FC<{ data?: any, funcRef?: any ,setActiveKey:any}> = ({
       refUnit.current!?.setMasker(false);
       if (res2.code === '200') {
         message.success('保存成功！');
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
       } else {
         message.error(res2.msg);
-        refUnit?.current?.reload2();
+        refUnit?.current?.reload();
       }
     });
   }

@@ -25,7 +25,7 @@ const HwccjModal: React.FC<DDTsort> = ({onRef, visible = false}) => {
   // 关闭
   const closeModal = () => {
     setModalVisible(false);
-    initData.refUnit.current?.reload2();
+    initData.refUnit.current?.reload();
   };
 
   useImperativeHandle(onRef, () => {

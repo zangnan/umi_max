@@ -78,7 +78,7 @@ const Add: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     setModalVisible(false);
     setMainRef({});
     setZy(false);
-    mainRef.refUnit.current!.reload2();
+    mainRef.refUnit.current!.reload();
   }
 
   const save = async () => {

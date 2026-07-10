@@ -86,7 +86,7 @@ const ModalForm: React.FC<BdjgProps> = ({
           if (code == '200') {
             close();
             message.success("保存成功！");
-            initParam?.refUnit.current!.reload2();
+            initParam?.refUnit.current!.reload();
           } else {
             message.error(msg)
           }
@@ -108,7 +108,7 @@ const ModalForm: React.FC<BdjgProps> = ({
               if (code == '200') {
                 close();
                 message.success("保存成功！");
-                initParam?.refUnit.current!.reload2();
+                initParam?.refUnit.current!.reload();
               } else {
                 message.error(msg)
               }

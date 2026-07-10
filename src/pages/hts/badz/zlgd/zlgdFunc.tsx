@@ -51,7 +51,7 @@ zlgdFunc.dataArchiving = (param: any, event: any) => {
         message.error(res.desc)
       }
     })
-    //refUnit.current!.reload2();
+    //refUnit.current!.reload();
   }
 }
 // 撤销备案
@@ -84,7 +84,7 @@ zlgdFunc.cancellationOfFiling = (param: any, event: any) => {
           } else {
             message.error(res.desc)
           }
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         })
       },
     });

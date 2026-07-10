@@ -120,7 +120,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   }
 
   const close = async () => {
-    initParam?.refUnit.current?.reload2();
+    initParam?.refUnit.current?.reload();
     setModalVisible(false);
   }
 

@@ -357,7 +357,7 @@ Func.shsdsjImport = (param: any) => {
           DDAlert.close();
           // code === '201' ? 'large' : 'small'
           if (code == '200' || code == '201') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             DDAlert.open({
               title: '系统提示',
               info: '数据导入成功，共导入' + body?.drsl + '条数据，跳过' + body?.tgsl + '条 。',

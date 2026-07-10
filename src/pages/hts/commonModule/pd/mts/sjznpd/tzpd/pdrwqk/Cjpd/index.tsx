@@ -203,7 +203,7 @@ const Tzpd: React.FC<PdrwProps> = ({
 
   const close =()=>{
     setModalVisible(false);
-    record?.refUnit?.current?.reload2();
+    record?.refUnit?.current?.reload();
 
   }
 

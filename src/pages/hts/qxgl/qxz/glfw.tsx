@@ -111,7 +111,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     await saveQxzGlfw(data).then((response: any) => {
       setMasker(false);
       if (response.code === '200') {
-        // mainRef?.current?.reload2();
+        // mainRef?.current?.reload();
         message.success('保存成功！');
         close();
       } else {

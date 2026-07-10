@@ -46,7 +46,7 @@ const DrawerList: React.FC<BdjgProps> = ({
 
 
   const close = async () => {
-    param?.refUnit.current?.reload2();
+    param?.refUnit.current?.reload();
     setModalVisible(false);
   }
 

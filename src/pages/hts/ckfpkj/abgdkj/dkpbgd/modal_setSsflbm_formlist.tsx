@@ -420,7 +420,7 @@ const Modalsphfwssflhbbm: React.FC<DDModalGridProps> = ({ onRef, visible = false
         setMasker(false);
         const { code } = response;
         if (code === '200') {
-          mainRef.current!.reload2();
+          mainRef.current!.reload();
           setModalVisible(false);
           message.success(intl.formatMessage({ id: 'message_ckfp_abgdkj_setssflbm_success' }));
         }

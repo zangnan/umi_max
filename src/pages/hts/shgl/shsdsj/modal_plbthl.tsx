@@ -239,7 +239,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({onRef, visible = false}) => {
                   setMasker(true);
                   setTimeout(() => {
                     setMasker(false);
-                    mainRef.current!.reload2();
+                    mainRef.current!.reload();
                     setModalVisible(false);
                   }, 300)
                 } else {

@@ -66,7 +66,7 @@ Func.wxspsztmsbz = (param: any, refUnit: any) => {
     const { code, desc } = response;
     if (code === '200') {
       message.success(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_settmslx_success' }));
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(desc);
     }
@@ -96,7 +96,7 @@ Func.deleteWxspgl = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(msg);
           }
@@ -225,7 +225,7 @@ Func.setGridWxspfm = (param: any) => {
     fmMainRef.current.closeModal();
     const { code, desc } = response;
     if (code === '200') {
-      wxspGridRef.current.reload2();
+      wxspGridRef.current.reload();
       message.success(intl2.formatMessage({ id: 'message_ckfp_fppz_fm_success' }));
     } else {
       message.error(desc);
@@ -288,7 +288,7 @@ Func.getSpxx = (param: any) => {
           const { code, body, desc } = response;
           DDAlert.close();
           if (code === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             const tempMessage = cktsUtil.text.formatRepalce(intl2.formatMessage({ id: 'message_ckfp_fppz_wxspgl_spxxtqcg_success' }), { yxsl: body.yxsl })
             message.success(tempMessage);
           } else {

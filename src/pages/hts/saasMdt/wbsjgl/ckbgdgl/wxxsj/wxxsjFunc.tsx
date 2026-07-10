@@ -99,7 +99,7 @@ Func.btnPlxgCkfph = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success("批量更新出口发票成功，共更新" + selectionRowKeys.length + "条数据")
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               refUnit.current?.setSelectionRowKeys([]);
               refUnit.current?.setSelectionRows([]);
             } else {
@@ -143,7 +143,7 @@ Func.btnPlxgCkspdm = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(body)
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
           } else if (code === '0') {
@@ -219,7 +219,7 @@ Func.btnPlxgYfzssl = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
           } else {
@@ -303,7 +303,7 @@ const updateBgdCzbzApi = (param: any, refUnit: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg ,body} = res;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
       DDAlert.open({
@@ -379,7 +379,7 @@ Func.btnZbts = (param: any) => {
         if (code === '200') {
           message.success('转不退税成功！');
           close();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(msg);
         }

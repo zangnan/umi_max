@@ -139,7 +139,7 @@ const ModalForm: React.FC<BdjgProps> = ({
 
   
   const close2 =  ()  => {
-    param2?.reload2();
+    param2?.reload();
     form.resetFields();
     setModalVisible2(false);
   };
@@ -153,7 +153,7 @@ const ModalForm: React.FC<BdjgProps> = ({
       const { code, msg } = res;
       if (code == '200') {
         message.success("保存成功！");
-        param2?.current?.reload2();
+        param2?.current?.reload();
         close2();
       } else {
         message.error(msg)
@@ -166,7 +166,7 @@ const ModalForm: React.FC<BdjgProps> = ({
     setModalVisible(false)  ;
     setFwdm('');
     form.resetFields();
-    initParam.refUnit.current!.reload2();
+    initParam.refUnit.current!.reload();
   }
   return (
     <>

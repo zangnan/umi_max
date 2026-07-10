@@ -90,7 +90,7 @@ ckfpFunc.btnPldr = (param: any) => {
               message.success('导入成功');
               otherRef[2].current!.getDclsjBttj(); // 刷新头部条数
               setTimeout(() => {
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
                 thisObj.setState({ masker: false });
               },300)
             } else if (code === '900') {
@@ -222,7 +222,7 @@ const plxgckfphApi = (params: any, refUnit: any, otherRef: any, thisObj: any) =>
       // 刷新头部条数
       otherRef[2].current!.getDclsjBttj()
       setTimeout(() => {
-        refUnit.current!.reload2()
+        refUnit.current!.reload()
         DDAlert.close();
         thisObj.setState({ masker: false });
       },300)
@@ -286,7 +286,7 @@ const ckhthTockfphApi = (param: any, refUnit: any, otherRef: any, thisObj: any) 
       // 刷新头部条数
       otherRef[2].current!.getDclsjBttj();
       setTimeout(() => {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         thisObj.setState({ masker: false });
       },300)
     } else {
@@ -351,7 +351,7 @@ ckfpFunc.btnZbts = (param: any) => {
           // 刷新头部条数
           otherRef[2].current!.getDclsjBttj();
           setTimeout(() => {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             close();
             thisObj.setState({ masker: false });
           },300)

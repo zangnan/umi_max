@@ -134,7 +134,7 @@ tuiShuiJiHuaFunc.monthAdd = (param: any) => {
             const { code, msg, body } = res;
             if (code === '200') {
               tuiShuiJiHuaFunc.monthAddFun(param1);
-              // refUnit.current!.reload2();
+              // refUnit.current!.reload();
             } else if (code === '900') {
               // 弹出提示信息
               DDAlert.open({
@@ -168,7 +168,7 @@ tuiShuiJiHuaFunc.monthAddFun = (param: any) => {
     if (code === '200') {
       DDAlert.close();
       message.success(body);
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else if (code === '900') {
       message.error(msg);
     }
@@ -201,7 +201,7 @@ tuiShuiJiHuaFunc.monthDel = (param: any) => {
         if (code === '200') {
           DDAlert.close();
           message.success(body);
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else if (code === '900') {
           message.error(msg);
         }
@@ -350,7 +350,7 @@ tuiShuiJiHuaFunc.seasonAdd = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success(body);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               message.error(msg);
             }
@@ -456,7 +456,7 @@ tuiShuiJiHuaFunc.yearAdd = (param: any) => {
             if (code === '200') {
               DDAlert.close();
               message.success(body);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else if (code === '900') {
               message.error(msg);
             }
@@ -614,7 +614,7 @@ tuiShuiJiHuaFunc.btnGxsj = (param: any) => {
             // if (code === '200') {
             //   DDAlert.close();
             //   message.success(body);
-            //   refUnit.current!.reload2();
+            //   refUnit.current!.reload();
             // } else if (code === '900') {
             //   message.error(msg);
             // }

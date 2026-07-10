@@ -401,7 +401,7 @@ import myUtil from '@/components/DDAssist/util';
        setMasker(false);
        const { code, body, desc } = response;
        if (code === '200') {
-         mainRef.current!.reload2();
+         mainRef.current!.reload();
          setModalVisible(false);
          DDAlert.open({
            title: '立即开票',
@@ -414,7 +414,7 @@ import myUtil from '@/components/DDAssist/util';
        } else {
          if (body.sjztczbz === 'Y' && code === '300') {
            setModalVisible(false);
-           mainRef.current!.reload2();
+           mainRef.current!.reload();
            message.error(intl.formatMessage({ id: 'message_ckfp_abgdkj_scfpsqd_wszssbm' }));
          } else {
            message.error(desc);

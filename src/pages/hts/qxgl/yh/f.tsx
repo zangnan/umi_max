@@ -188,7 +188,7 @@ Func.del = (param: any) => {
           const { code, msg } = response;
           if (code === '200') {
             message.success(intl2.formatMessage({ id: 'message_delete_success' }));
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(msg);
           }
@@ -231,7 +231,7 @@ const onChangeSwitch = (param: any) => {
     refUnit.current?.setMasker(false);
     const { code, msg } = res;
     if (code == '200') {
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
       message.success("修改用户状态成功！");
     } else {
       message.error(msg)

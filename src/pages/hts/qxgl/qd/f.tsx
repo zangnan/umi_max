@@ -35,7 +35,7 @@ const onChangeSwitch = (param: any) => {
     refUnit.current?.setMasker(false);
     const { code, msg } = res;
     if (code == '200') {
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
     } else {
       message.error(msg)
     }
@@ -82,7 +82,7 @@ Func.del = async (param: any) => {
               // 清空选中并设置按钮可用状态
               message.success('删除成功！');
               DDAlert.close();
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(response.msg);
             }

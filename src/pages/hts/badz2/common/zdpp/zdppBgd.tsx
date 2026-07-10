@@ -125,7 +125,7 @@ const ZdppBgd: React.FC<ZdppBgd> = ({ onRef, visible = false }) => {
             if (code === '200') {
               message.success('操作成功');
               close();
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(desc);
             }

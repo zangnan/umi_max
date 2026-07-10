@@ -286,6 +286,10 @@
       {
         "old": "unitRef",
         "new": "refUnit"
+      },
+      {
+        "old": ".reload2()",
+        "new": ".reload()"
       }
     ],
     "less": [

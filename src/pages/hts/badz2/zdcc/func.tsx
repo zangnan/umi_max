@@ -54,7 +54,7 @@ Func.handleColumnsCkxq = (param: any) => {
 //             const { code, desc } = response;
 //             if (code === '200') {
 //               message.success('操作成功');
-//               refUnit.current!.reload2();
+//               refUnit.current!.reload();
 //             } else {
 //               message.error(desc);
 //             }
@@ -119,7 +119,7 @@ Func.costomerToobarCxba = async (param: any) => {
         const { code, desc } = response;
         if (code === '200') {
           message.success('撤销备案成功');
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(desc);
         }

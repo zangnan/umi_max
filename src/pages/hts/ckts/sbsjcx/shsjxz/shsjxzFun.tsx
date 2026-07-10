@@ -40,7 +40,7 @@ Func.handleColumnDelete = (param: any, event: any) => {
         const { code, msg } = res;
         if (code == '200') {
           message.success("删除成功！");
-          refUnit?.current!.reload2();
+          refUnit?.current!.reload();
         } else {
           message.error(msg);
         }

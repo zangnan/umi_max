@@ -56,7 +56,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
           getJnhydsj(param).then((res2: any) => {
             thisObj.setState({ masker: false });
             if (res2.code === '200') {
-              refUnit?.current?.reload2();
+              refUnit?.current?.reload();
               message.success(res2.body);
               DDAlert.close();
             } else {
@@ -101,7 +101,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
             if (res2.code === '200') {
               message.success('保存成功！');
               DDAlert.close();
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(res2.msg);
             }
@@ -152,7 +152,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
               if (res2.code === '200') {
                 message.success('保存成功！');
                 DDAlert.close();
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(res2.msg);
               }
@@ -175,7 +175,7 @@ const Index: React.FC<{ data?: any, funcRef?: any }> = ({
       setMasker(false);
       if (res2.code === '200') {
         message.success('删除成功！');
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(res2.msg);
       }

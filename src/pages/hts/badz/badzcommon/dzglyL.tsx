@@ -637,7 +637,7 @@ const DzglImport: React.FC<DzglImportProps> = ({ onRef, gnmk, visible = false })
           } else {
             form1.setFieldsValue({ badzbh: '', badzsm: '', ywbh: '' });
           }
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           setMasker(false);
           setFileList([]);
           // 将最新的报关单号，所属期，批次返回上一层执行查询

@@ -113,7 +113,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   const close = async () => {
     setModalVisible(false);
-    // mainRef.refUnit.current.reload2();
+    // mainRef.refUnit.current.reload();
   }
 
 

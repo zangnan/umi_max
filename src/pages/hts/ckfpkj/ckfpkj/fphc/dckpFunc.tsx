@@ -48,7 +48,7 @@ Func.handleSzhcbz = (param: any) => {
               refUnit.current?.setMasker(false);
               const { code, desc } = response;
               if (code === '200') {
-                refUnit.current?.reload2();
+                refUnit.current?.reload();
                 message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_sethbbz_success' }))
               } else {
                 message.error(desc)
@@ -95,7 +95,7 @@ Func.handleSzzfbz = (param: any) => {
       refUnit.current?.setMasker(false);
       const { code, desc } = response;
       if (code === '200') {
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         message.success(intl2.formatMessage({ id: 'message_ckfp_fpkjgl_setzfbz_success' }));
       } else {
         message.error(desc)

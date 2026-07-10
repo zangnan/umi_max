@@ -103,7 +103,7 @@ const DrmbkjIndex: React.FC<unknown> = () => {
         if(code === '200') {
           const rtnCode = body.rtnCode;
           if(rtnCode === '200') {
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_success' }));
           } else if(rtnCode === '2004'){
             refSfyz.current!.showModal(); // 打开电子税务局身份验证
@@ -138,7 +138,7 @@ const DrmbkjIndex: React.FC<unknown> = () => {
             // 二次认证
             refKprz.current!.showModal();
           } else if(body.rtnCode === '200') {       
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(intl2.formatMessage({ id: 'message_ckfp_fpsqd_qrkp_success' }));
           }
         } else if(res1.code === '900'){

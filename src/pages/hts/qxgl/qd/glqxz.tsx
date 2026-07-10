@@ -87,12 +87,12 @@ const onChangeSwitch = async (param: any) => {
     setMasker(false);
     if (response.code === '200') {
       message.success('保存成功！');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response.msg);
     }
   });
-  param.refUnit.current!.reload2();
+  param.refUnit.current!.reload();
 
 
 }
@@ -131,7 +131,7 @@ const onChangeSwitch = async (param: any) => {
       setMasker(false);
       if (response.code === '200') {
         message.success('保存成功！');
-        param.refUnit.current!.reload2();
+        param.refUnit.current!.reload();
       } else {
         message.error(response.msg);
       }
@@ -147,7 +147,7 @@ const onChangeSwitch = async (param: any) => {
 
   const close = () => {
     setModalVisible(false);
-    mainRef.refUnit.current!.reload2();
+    mainRef.refUnit.current!.reload();
   }
 
   return (

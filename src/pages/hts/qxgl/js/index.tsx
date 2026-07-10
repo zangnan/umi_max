@@ -173,7 +173,7 @@ const index: React.FC<unknown> = () => {
             const { code, msg } = res;
             if (code == '200') {
               message.success("数据删除成功！");
-              refUnit?.current!.reload2();
+              refUnit?.current!.reload();
             } else {
               message.error(msg)
             }

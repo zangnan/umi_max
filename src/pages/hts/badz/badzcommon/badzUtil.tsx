@@ -161,7 +161,7 @@ badzUtil.common = {
               // 清空选中并设置按钮可用状态
               refUnit.current?.setSelectionRowKeys([]);
               refUnit.current?.setSelectionRows([]);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
             } else {
               message.error(response.desc);
@@ -186,7 +186,7 @@ badzUtil.common = {
                 // 清空选中并设置按钮可用状态
                 refUnit.current?.setSelectionRowKeys([]);
                 refUnit.current?.setSelectionRows([]);
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
                 //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
               })
             } else {
@@ -221,7 +221,7 @@ badzUtil.common = {
               // 清空选中并设置按钮可用状态
               refUnit.current?.setSelectionRowKeys([]);
               refUnit.current?.setSelectionRows([]);
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
               //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
             } else {
               message.error(response.desc);
@@ -253,7 +253,7 @@ badzUtil.common = {
             // 清空选中并设置按钮可用状态
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             //message.success(intl2.formatMessage({ id: 'message_badz_dycc_success' }));
           } else {
             message.error(response.desc);

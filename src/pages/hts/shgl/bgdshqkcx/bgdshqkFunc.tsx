@@ -49,7 +49,7 @@ Func.sjgx = async (param: any) => {
     const {code, msg} = res;
     if (code == '200') {
       message.success('更新成功！');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(msg);
     }
@@ -126,7 +126,7 @@ Func.rgsz = async (param: any) => {
           if ('200' == code) {
             message.info('人工设置成功');
             DDAlert.close();
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
           } else {
             message.error(msg);
           }
@@ -167,7 +167,7 @@ Func.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }

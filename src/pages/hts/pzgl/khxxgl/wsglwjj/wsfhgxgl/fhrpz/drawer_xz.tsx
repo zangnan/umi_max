@@ -101,7 +101,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
   }
 
   const close = async () => {
-    initParam?.refUnit.current?.reload2();
+    initParam?.refUnit.current?.reload();
     setModalVisible(false);
   }
 
@@ -134,7 +134,7 @@ Func.delBdjwshr = (param: any) => {
         if (code === '200') {
           message.success(intl2.formatMessage({ id: 'message_delete_success' }));
           close();
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(msg);
         }

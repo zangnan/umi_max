@@ -95,7 +95,7 @@ const plxgckfphApi = (params: any, refUnit: any) => {
     const {code, msg} = res;
     if (code === '200') {
       message.success(intl.formatMessage({ id: 'message_common_batchedit_success' }));
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       refUnit.current?.setSelectionRowKeys([]);
       refUnit.current?.setSelectionRows([]);
       DDAlert.close();
@@ -132,7 +132,7 @@ dlzmKsyFunc.ckspdmPlxg = (param: any) => {
           if (code === '200') {
             DDAlert.close();
             message.success(body);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             refUnit.current?.setSelectionRowKeys([]);
             refUnit.current?.setSelectionRows([]);
           } else if (code === '900') {

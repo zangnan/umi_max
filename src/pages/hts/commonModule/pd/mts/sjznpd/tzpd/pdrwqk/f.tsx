@@ -401,7 +401,7 @@ Func.del = (param: any) => {
     deletePdrwByIds({ uuids: selectionRowKeys }).then((response) => {
       const { code, msg } = response;
       if (code === '200') {
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         message.success('删除成功！');
       } else {
         message.error(msg);
@@ -433,7 +433,7 @@ Func.handlePdrwreload = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     if (code === '200') {
       message.success('操作成功');
-      refUnit?.current?.reload2();
+      refUnit?.current?.reload();
     } else {
       message.error(desc);
       return;
@@ -521,7 +521,7 @@ Func.handleZdpd = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(msg);
     }
@@ -543,7 +543,7 @@ Func.handleZdpd02 = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(msg);
     }
@@ -564,7 +564,7 @@ Func.handleScmx = async (param: any, e: any) => {
     refUnit.current!.setMasker(false);
     const { code, msg } = response;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(msg);
     }

@@ -216,7 +216,7 @@ ckbgdFunc.gxxx = (param: any) => {
     refUnit.current!.setMasker(false);
     const { code, desc } = res;
     if (code === '200') {
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
       message.success(desc);
     } else {
       message.info(desc);
@@ -254,7 +254,7 @@ ckbgdFunc.btnSetSfts = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置是否退税成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -291,7 +291,7 @@ ckbgdFunc.btnSetYwbh = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置业务编号成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }
@@ -342,7 +342,7 @@ ckbgdFunc.btnSetFpyt = async (param: any) => {
               const { code, msg } = response;
               if (code === '200') {
                 message.success('设置发票用途');
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(msg);
               }
@@ -382,7 +382,7 @@ ckbgdFunc.btnSetBq = async (param: any) => {
             const { code, msg } = response;
             if (code === '200') {
               message.success('设置标签成功');
-              refUnit.current!.reload2();
+              refUnit.current!.reload();
             } else {
               message.error(msg);
             }

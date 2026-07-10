@@ -243,7 +243,7 @@ const onChangeSwitch = (param: any) => {
     refUnit.current?.setMasker(false);
     const {code, msg} = res;
     if (code == '200') {
-      refUnit.current?.reload2();
+      refUnit.current?.reload();
       message.success("修改用户状态成功！");
     } else {
       message.error(msg)

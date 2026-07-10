@@ -89,7 +89,7 @@ Func.abgdZdpd = (param: any) => {
           thisObj.setState({ masker: false });
           if (code === '200') {
             DDAlert.close();
-            refUnit?.current?.reload2();
+            refUnit?.current?.reload();
             otherRef[1].current?.showModal({ ...param, zdpdResult: body });
           } else {
             message.error(desc);

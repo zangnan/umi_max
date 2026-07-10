@@ -120,7 +120,7 @@ const DrawerForm: React.FC<BdjgProps> = ({
       setMasker(false);
       const { code, msg } = res;
       if (code == '200') {
-        initParam?.refUnit.current!.reload2();
+        initParam?.refUnit.current!.reload();
         refUnit.current?.setSelectionRowKeys([]);
         refUnit.current?.setSelectionRows([]);
         message.success("绑定用户成功！");

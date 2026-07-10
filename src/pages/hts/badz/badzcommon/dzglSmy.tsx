@@ -610,7 +610,7 @@ const DzglSmy: React.FC<DzglSmyProps> = ({ onRef, gnmk, visible = false }) => {
           initData.ywbh = '';
           form1.setFieldsValue({ badzbh: '', badzsm: '', ywbh: '' });
         }
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         setMasker(false);
         setDate([]);
         // 将最新的报关单号，所属期，批次返回上一层执行查询

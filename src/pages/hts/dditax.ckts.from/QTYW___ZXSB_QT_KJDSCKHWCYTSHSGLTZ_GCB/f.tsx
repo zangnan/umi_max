@@ -145,7 +145,7 @@ Func.zrqrb = (param: any) => {
                 message.info('转入确认表成功');
                 refUnit.current?.setSelectionRowKeys([]);  // 设置SelectionRows
                 refUnit.current?.setSelectionRows([]);     // 设置SelectionRowKeys
-                refUnit.current?.reload2();
+                refUnit.current?.reload();
               } else {
                 message.error(desc);
               }

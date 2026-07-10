@@ -113,7 +113,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     setExpandedKeys([]);
     setCheckedKeys([]);
     setCheckedNodes([]);
-    // mainRef.refUnit.current!.reload2();
+    // mainRef.refUnit.current!.reload();
   }
 
   const handleChange = async (param :any) => {

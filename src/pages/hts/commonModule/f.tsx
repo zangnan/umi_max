@@ -240,7 +240,7 @@ DditCktsFormCommonFunc.glhcp = (param: any) => {
                 message.info('关联号重排成功');
                 refUnit.current?.setSelectionRowKeys([]);  // 设置SelectionRows
                 refUnit.current?.setSelectionRows([]);     // 设置SelectionRowKeys
-                refUnit.current?.reload2();
+                refUnit.current?.reload();
               } else {
                 message.error(desc);
               }

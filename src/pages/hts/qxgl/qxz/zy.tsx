@@ -111,7 +111,7 @@ const pbcd: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     setModalVisible(false);
     // 配置项：自定义工具栏
     zyconfig.customer_toolbar = [];
-    // mainRef.refUnit.current.reload2();
+    // mainRef.refUnit.current.reload();
 
   }
 

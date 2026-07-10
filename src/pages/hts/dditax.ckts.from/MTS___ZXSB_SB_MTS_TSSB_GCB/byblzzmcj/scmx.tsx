@@ -84,7 +84,7 @@ const Zmxcj: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
       byblzzmcjByIds(params).then((response) => {
         const { code, msg,body } = response;
         if (code === '200') {
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
           message.success(body);
           setMasker(false);
           setModalVisible(false);

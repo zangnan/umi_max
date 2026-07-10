@@ -154,7 +154,7 @@ const ModalHl: React.FC<DDModalGridProps> = ({ onRef, visible = false }) => {
       const { code, desc } = response;
       if (code === '200') {
         setModalVisible(false);
-        mainRef.current!.reload2();
+        mainRef.current!.reload();
         message.success(intl.formatMessage({ id: 'message_ckfp_abgdkj_sethl_success' }));
       } else {
         message.error(desc);

@@ -115,7 +115,7 @@ const Index: React.FC<ScsbsjProps> = ({
           const { code } = response;
           if (code === '200') {
             setModalVisible(false);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(intl2.formatMessage({ id: 'message_badz_hcdy_hcrw_success' }));
           } else if (code === '900') {
             message.info(response.desc);
@@ -140,7 +140,7 @@ const Index: React.FC<ScsbsjProps> = ({
           const { code, desc } = response;
           if (code === '200') {
             setModalVisible(false);
-            refUnit.current!.reload2();
+            refUnit.current!.reload();
             message.success(intl2.formatMessage({ id: 'message_badz_hcdy_hcrw_success' }));
           } else if (code === '900') {
             const html: any = [];

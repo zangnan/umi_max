@@ -88,7 +88,7 @@ hcjlFunc.handlebadzHcjlScCz = (param: any, event: any) => {
           // 清空选中并设置按钮可用状态
           refUnit.current?.setSelectionRowKeys([]);
           refUnit.current?.setSelectionRows([]);
-          refUnit.current!.reload2();
+          refUnit.current!.reload();
         } else {
           message.error(response.desc);
           return;
@@ -211,7 +211,7 @@ hcjlFunc.schcwj = (param: any) => {
         // 清空选中并设置按钮可用状态
         refUnit.current?.setSelectionRowKeys([]);
         refUnit.current?.setSelectionRows([]);
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
       } else {
         message.error(response.desc);
         return;

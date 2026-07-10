@@ -200,7 +200,7 @@ const DyViewer: React.FC<DyViewerProps> = ({
       const { code, desc, body } = response;
       if (code === '200') {
         closeModalVisible();
-        refUnit.current!.reload2();
+        refUnit.current!.reload();
         message.success(body.msg);
       } else {
         message.error(desc);

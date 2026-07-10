@@ -69,7 +69,7 @@ Func.qianyue = async (param: any) => {
               if (response2.code == '200') {
                 message.success('客户签约成功！');
                 DDAlert.close();
-                refUnit.current!.reload2();
+                refUnit.current!.reload();
               } else {
                 message.error(response2.msg);
               }
@@ -95,7 +95,7 @@ Func.yzhmd = async (param: any) => {
     refUnit.current?.setMasker(false);
     if (response2.code == '200') {
       message.success('操作成功！');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response2.msg);
     }
@@ -117,7 +117,7 @@ Func.ychmd = async (param: any) => {
     refUnit.current?.setMasker(false);
     if (response2.code == '200') {
       message.success('操作成功！');
-      refUnit.current!.reload2();
+      refUnit.current!.reload();
     } else {
       message.error(response2.msg);
     }

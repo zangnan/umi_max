@@ -71,7 +71,7 @@ const ModelClfs: React.FC<ModalClfsProps> = ({
       if (code === '200') {
         message.success('处理方式保存成功！');
         setModalVisible(false);
-        params?.refUnit.current!.reload2();
+        params?.refUnit.current!.reload();
       } else {
         message.error(msg);
       }

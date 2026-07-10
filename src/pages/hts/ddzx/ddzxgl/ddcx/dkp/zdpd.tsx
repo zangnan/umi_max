@@ -74,7 +74,7 @@ const ModalForm: React.FC<BdjgProps> = ({
   });
 
   const close = () => {
-    refUnit?.current?.reload2();
+    refUnit?.current?.reload();
     setModalVisible(false);
     setBody({});
     setCkn('');

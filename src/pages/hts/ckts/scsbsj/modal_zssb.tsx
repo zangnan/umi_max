@@ -97,7 +97,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
          const {code, desc} = res;
          if (code === '200') {
            setModalVisible(false);
-           ref.current?.reload2();
+           ref.current?.reload();
            if (history.location.pathname.indexOf('/25/2505') > -1) {
              successTzNew('/25/2506', ref);
            }
@@ -127,7 +127,7 @@ const ModelZssb: React.FC<AbgdBjProps> = ({
       okText: '转申报结果查询',
       okCallbackFn: function (thisObj: any) {
         history.push(param);
-        refUnit.current?.reload2();
+        refUnit.current?.reload();
         // message.success('数据申报成功');
       },
     });
