@@ -252,6 +252,14 @@
         "new": "c.module_key ="
       },
       {
+        "old": "fb18config.unit_key_",
+        "new": "fb18config.module_key_"
+      },
+      {
+        "old": "myConfigRz.unit_key",
+        "new": "myConfigRz.module_key"
+      },
+      {
         "old": "getCodeFromServerT2",
         "new": "getCodeFromServerT1"
       },

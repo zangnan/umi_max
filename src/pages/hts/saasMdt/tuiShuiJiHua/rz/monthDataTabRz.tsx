@@ -29,7 +29,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
     ],
   }
 
-  myConfigRz.unit_key = 'CX_SAAS_MDT_TUISHUIJIHUA_RZ'; // 业务单元key，对应后端接口
+  myConfigRz.module_key = 'CX_SAAS_MDT_TUISHUIJIHUA_RZ'; // 业务单元key，对应后端接口
   myConfigRz.export_key = 'SAAS_TUISHUISHUJU_YD_RZ_EXPORT'; // 业务单元key，对应后端接口
   myConfigRz.toolbar_default={tssb_download: true, reload: true,full: true,setting: true,};
   myConfigRz.customer_toolbar = [];
@@ -54,7 +54,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
   const qxQys = userInfo?.qxQys[0];
   if (qxQys?.cktsqylxDm === 'WM') {
     myColumns =  myConfigRz.wm_grid_columns;
-    myConfigRz.unit_key = 'CX_SAAS_MTS_TUISHUIJIHUA_RZ'; // 业务单元key，对应后端接口
+    myConfigRz.module_key = 'CX_SAAS_MTS_TUISHUIJIHUA_RZ'; // 业务单元key，对应后端接口
     myConfigRz.toolbar_default.tssb_download=false;
     myConfigRz.customer_toolbar=[{ name: '导出', key: 'dc', func: 'seasonDownload' }];
   }

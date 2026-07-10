@@ -8,8 +8,8 @@ const fb18config: any = {};
 
 // 配置项
 fb18config.module_key = 'JLJG_ZXSB_SB_JLJG_SZC_TZHD_JCKBGD_18';
-fb18config.unit_key_18 = 'JLJG_ZXSB_SB_JLJG_SZC_TZHD_JCKBGD_18';
-fb18config.unit_key_21 = 'JLJG_ZXSB_SB_JLJG_SZC_TZHD_JCKBGD_21';
+fb18config.module_key_18 = 'JLJG_ZXSB_SB_JLJG_SZC_TZHD_JCKBGD_18';
+fb18config.module_key_21 = 'JLJG_ZXSB_SB_JLJG_SZC_TZHD_JCKBGD_21';
 fb18config.grid_show_serial_number = false;                                           // 是否显示序号，可选
 fb18config.toolbar_show_grid_checked_num = false;
 fb18config.show_toolbar = false;                                                       // 是否开启工具栏，默认true开启

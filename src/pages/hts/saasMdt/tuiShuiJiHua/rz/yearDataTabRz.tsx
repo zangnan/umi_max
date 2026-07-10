@@ -27,7 +27,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
       { property: 'tjqlxDm', value: '4', op: 'zdy' },
     ],
   }
-  myConfigRz.unit_key = 'CX_SAAS_MDT_TUISHUIJIHUA_RZ_YEAR'; // 业务单元key，对应后端接口
+  myConfigRz.module_key = 'CX_SAAS_MDT_TUISHUIJIHUA_RZ_YEAR'; // 业务单元key，对应后端接口
   myConfigRz.customer_toolbar=[{ name: '导出', key: 'dc', func: 'seasonDownload' }];
   let myColumns = myConfigRz.grid_columns;
 
@@ -49,7 +49,7 @@ const Index: React.FC<{ data: any, mainref: any }> = ({
   const qxQys = userInfo?.qxQys[0];
   if (qxQys?.cktsqylxDm === 'WM') {
     myColumns = myConfigRz.wm_grid_columns;
-    myConfigRz.unit_key = 'CX_SAAS_MTS_TUISHUIJIHUA_RZ_YEAR'; // 业务单元key，对应后端接口
+    myConfigRz.module_key = 'CX_SAAS_MTS_TUISHUIJIHUA_RZ_YEAR'; // 业务单元key，对应后端接口
   }
   myColumns.push({ title: '删除人', dataIndex: 'scr', width: 120, align: 'left' });
   myColumns.push({ title: '删除时间', dataIndex: 'scrq1', width: 150, align: 'center', render: { type: 'date', format: 'yyyy-MM-DD HH:mm:ss' }});
