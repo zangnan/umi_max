@@ -2503,6 +2503,7 @@ async function main() {
       console.error(`[copy] 处理失败: ${e.message}`);
       process.exit(1);
     }
+    processSpecialStage();
     return;
   }
 
@@ -2564,7 +2565,10 @@ async function main() {
     }
   }
 
-  // 4. 汇总
+  // ========== 5. special 阶段：code_sample/special/src → 项目 src/ ==========
+  processSpecialStage();
+
+  // 6. 汇总
   console.log(`\n========== 批处理结果 ==========`);
   console.log(`成功: ${successCount} / ${files.length}`);
   console.log(`失败: ${failures.length}`);
@@ -2580,6 +2584,29 @@ function isDirectory(p) {
     return fs.statSync(p).isDirectory();
   } catch {
     return false;
+  }
+}
+
+/**
+ * special 阶段：把 code_sample/special/src/ 原样覆盖到项目 src/。
+ *
+ * - 默认总是执行（用户原话「在最后增加一个处理过程」）。
+ * - 源目录缺失时 silent fallback，仅打 log 不抛错。
+ * - 只做原始覆盖，不应用任何 rewrite 流水线（这 4 个文件本身已是新协议成品）。
+ */
+function processSpecialStage() {
+  const specialSrc = path.join(__dirname, '..', 'code_sample', 'special', 'src');
+  const specialDst = path.join(__dirname, '..', 'src');
+  try {
+    if (fs.existsSync(specialSrc)) {
+      console.log(`\n[special] 开始覆盖: ${specialSrc} → ${specialDst}`);
+      fs.cpSync(specialSrc, specialDst, { recursive: true, force: true });
+      console.log(`[special] 覆盖完成`);
+    } else {
+      console.log(`\n[special] 跳过: ${specialSrc} 不存在`);
+    }
+  } catch (e) {
+    console.error(`[special] 失败: ${e.message}`);
   }
 }
 

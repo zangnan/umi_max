@@ -119,11 +119,11 @@ const TemplateStep: React.FC<TemplateStepProps> = ({
           </Typography.Paragraph>
         </Col>
         <Col xs={16} sm={16} md={16} lg={16} xl={16}>
-          <Steps type="navigation" onChange={(cur) => onChange(cur)} className="site-navigation-steps" size="small" current={current} >
-            {myStep.map((item: any) => (
-              <Steps.Step key={item.id} title={item.name} />
-            ))}
-          </Steps>
+          <Steps type="navigation"
+            onChange={(cur) => onChange(cur)}
+            className="site-navigation-steps" size="small" current={current}
+            items={myStep.map((item: any) => ({ key: item.id, title: item.name }))}
+          />
         </Col>
       </Row>
       <div className="steps-content">
