@@ -31,7 +31,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     const showModal = (param: any, type: any) => {
         // 初始化页面参数
         setModalVisible(true);
-        const unit_key = param?.unit_key;
+        const unit_key = param?.unitKey;
         setParamValue(param)
         if (unit_key.includes('WBSJ_CKBGD')) {
             setModalTile('生成明细报表');

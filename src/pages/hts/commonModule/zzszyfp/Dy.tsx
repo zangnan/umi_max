@@ -44,7 +44,7 @@ const LoginCompany: React.FC<LoginCompanyProps> = ({
     setModalVisible(true);
     form.setFieldsValue({ sjfwlx: 1, pxgz: '01' });
     setDis(1);
-    setCdDm(param?.unit_key === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX' ? 'JXFP_020602' : 'JXFP_020601');
+    setCdDm(param?.unitKey === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX' ? 'JXFP_020602' : 'JXFP_020601');
   };
 
 

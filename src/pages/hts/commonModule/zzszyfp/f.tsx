@@ -129,7 +129,7 @@ ckbgdFunc.xj = (param: any) => {
   const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat([...headerSearchModel,...initSearchModel]);
   const obj = {searchModel:allSearchModel};
-  const xjlx = param?.unit_key === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX' ? 'FPXX' : 'SPXX'
+  const xjlx = param?.unitKey === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX' ? 'FPXX' : 'SPXX'
   if(selectionRowKeys.length != 0){
     obj.searchModel.push({
       "type": 1,
@@ -459,7 +459,7 @@ ckbgdFunc.importTzsx = async (param: any) => {
           const formData = new FormData();
           formData.append('file', values.file[0].originFileObj);
           formData.append('fileName', values.file[0].name);
-          if (param?.unit_key === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX') {
+          if (param?.unitKey === 'CX_SAAS_SJGL_JXFPSJCX_ZZSFPDZSJCX_FPXX') {
             formData.append('cdDm', 'JXFP_020602');
           } else {
             formData.append('cdDm', 'JXFP_020601');

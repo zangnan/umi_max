@@ -560,7 +560,7 @@ const queryGlhBySsqAndSbpcFunc = (param: any, param02: any, flag?:any) => {
  */
 const setMtsTsjhgtjs = (param: any) => {
   const form = param.form;
-  const unitKey = form?.otherParam?.unit_key;
+  const unitKey = form?.otherParam?.unitKey;
   // 税种
   let sz = form.getFieldValue('sz');
   // 英文自动转大写

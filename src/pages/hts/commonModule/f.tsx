@@ -294,7 +294,7 @@ DditCktsFormCommonFunc.eventOnBlur = {
 
     const sbpc = event.target.value;
     const ssq = form?.getFieldsValue().ssq;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     // 修改申报批次-获取属期批次下最大申报编号
     if (unitKey === 'ZMKJ_ZXSB_ZM_LLJG_G' || unitKey === 'ZMKJ_ZXSB_ZM_LLJGHX_G'
             || unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G' || unitKey === 'ZMKJ_ZXSB_ZM_DLJK_G'
@@ -331,7 +331,7 @@ DditCktsFormCommonFunc.eventOnBlur = {
   // 出口货物销售额
   cjzj: (param: any) => {
     const { form, otherParam } = param;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     if (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G') {
 
     } else {
@@ -432,7 +432,7 @@ DditCktsFormCommonFunc.eventOnBlur = {
   // 成交币制
   hbhlDm: (param: any, glName:any) => {
     const { form, event, value, item, otherParam, unit_key } = param;
-    const unitKey = unit_key || otherParam?.unit_key;
+    const unitKey = unit_key || otherParam?.unitKey;
     const inputValue = event?.target?.value || value;
     // 根据币种带出名称
     const option = myUtil.code.getCode('url_gy_hbhl:01');
@@ -604,7 +604,7 @@ DditCktsFormCommonFunc.eventOnChange = {
     const ssq = event.target.value;
     const sbpc = form?.getFieldsValue().sbpc;
     const glh = form?.getFieldsValue().glh;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     // 赋值关联号
     // 外贸企业出口退税出口明细申报
     if (unitKey === 'MTS_ZXSB_SB_MTS_TSSB_G') {
@@ -695,7 +695,7 @@ DditCktsFormCommonFunc.eventOnChange = {
   // 申报商品代码
   sbspDm2: (param: any) => {
     const { form, value, otherParam } = param;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     const ckspDm = value;
     const ckrq1 = form.getFieldValue('ckrq1');
     const ssq = form.getFieldValue('ssq');
@@ -758,7 +758,7 @@ DditCktsFormCommonFunc.eventOnChange = {
   // 业务类型代码（原tableSelect）
   cktmsywlxdmjh: async (param: any) => {
     const { form, otherParam,myItems, setMyItems} = param;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     const cktmsywlxdmjh = form?.getFieldValue('cktmsywlxdmjh');
     let codeKey = '01';
     if (unitKey == 'DBTS_ZXSB_SB_DB_TSSB_G') {
@@ -892,7 +892,7 @@ DditCktsFormCommonFunc.validator = {
   ssq01: (form?: any) => {
     const ssq = form?.getFieldValue('ssq');
     const sbpc = form?.getFieldValue('sbpc');
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const apiParam: any = {
       ssq,
       tableKey: unitKey,
@@ -921,7 +921,7 @@ DditCktsFormCommonFunc.validator = {
   },
   // 所属期
   ssq02: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     // 该申报所属期已申报，请确认后填报
     const validator = async (_rule: any, value: any) => {
       if (history.location.pathname.indexOf('SBMXCX') == -1 && (unitKey === 'MDT_ZXSB_SB_MDT_TSSB_G' || unitKey ===  'QTYW_ZXSB_QT_QYNBFKTXJS_G' || unitKey === 'ZBYW_ZXSB_SB_GJ_SBMX_G'
@@ -949,7 +949,7 @@ DditCktsFormCommonFunc.validator = {
   },
   // 申请日期
   tbrq02: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     // 该申报所属期已申报，请确认后填报
     const validator = async (_rule: any, value: any) => {
       if (unitKey === 'ZGBA_ZXSB_BA_JTCYBA_G') {
@@ -974,7 +974,7 @@ DditCktsFormCommonFunc.validator = {
 
   // 申报批次
   sbpc01: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const ssq = form?.getFieldValue('ssq');
     const sbpc = form?.getFieldValue('sbpc');
     // 请求后端验证所属期是否已申报
@@ -1052,7 +1052,7 @@ DditCktsFormCommonFunc.validator = {
       const uuid = form?.getFieldValue('uuid');    // 表单其他项目
       const ssq = form?.getFieldValue('ssq');    // 表单其他项目
       const sbpc = form?.getFieldValue('sbpc');    // 表单其他项目
-      const unitKey = form?.otherParam?.unit_key;//MTS_ZXSB_SB_MTS_TSSB_G
+      const unitKey = form?.otherParam?.unitKey;//MTS_ZXSB_SB_MTS_TSSB_G
       let params = {
         glh: value,
         uuid: uuid,
@@ -1137,7 +1137,7 @@ DditCktsFormCommonFunc.validator = {
   },
   // 公共税率取值范围
   ggslqzfw01: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     // 公共税率取值范围 校验处理
     const validator = (_rule: any, val: any) => {
       const zsslQzfwArr = [1, 2, 3, 4, 6, 9, 10, 11, 13, 16, 17, 0.5];
@@ -1194,7 +1194,7 @@ DditCktsFormCommonFunc.validator = {
   },
   // 进货凭证号
   jhpzh03: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     // 请求后端验证所属期是否已申报
     const validator =  (_rule: any, value: any) => {
       if (unitKey === 'MTS_ZXSB_SB_MTS_TSJH_G') {
@@ -1255,7 +1255,7 @@ DditCktsFormCommonFunc.validator = {
   },
   // 编号
   sbbh102: (form?: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const validator =  async (_rule: any, value: any) => {
       if (history.location.pathname.indexOf('SBMXCX') == -1 && history.location.pathname.indexOf('/27/2705') == -1 && history.location.pathname.indexOf('/26/2605') == -1 && history.location.pathname.indexOf('/25/2505') == -1) {
         let params = {
@@ -1278,7 +1278,7 @@ DditCktsFormCommonFunc.validator = {
   xh401: (form: any) => {
     const sbbh1  = form?.getFieldsValue().sbbh1;
     const uuid = form?.getFieldsValue().uuid;
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const validator =  async (_rule: any, value: any) => {
       const params = {
         sbbh1: sbbh1,
@@ -1871,7 +1871,7 @@ DditCktsFormCommonFunc.util = {
    */
   getmyhlByLjDate: function(ljDate: any, param: any) {
     const { form, func, otherParam } = param;
-    const unitKey = otherParam?.unit_key;
+    const unitKey = otherParam?.unitKey;
     if (!ljDate) {
       ljDate = form?.getFieldValue('kprq1');
     }

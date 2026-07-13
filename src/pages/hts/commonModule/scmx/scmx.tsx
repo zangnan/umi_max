@@ -46,7 +46,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     setInitData(param);
     initForm(param);  // 表单初始化
     getMyConfig(param.type, param, isuuids);
-    const unit_key = param?.unit_key;
+    const unit_key = param?.unitKey;
     if (unit_key === 'ZMKJ_ZXSB_ZM_DLCK_G') {
       setModalTile('生成代理出口明细');
     } else if (unit_key === 'ZGBA_ZXSB_BA_BMDLCKBA_G') {
@@ -68,7 +68,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
     param.setMasker = setMasker;
     param.form = form;
     param.tcbz = 'ZXSB_ZM_DLCK_GCB_ABGDSC';
-    const unit_key = param?.unit_key;
+    const unit_key = param?.unitKey;
     if (unit_key === 'ZMKJ_ZXSB_ZM_DLCK_G') {
       param.tcbz = unit_key;
     }
@@ -172,7 +172,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
 
   // 出口报关单信息配置
   const getMyConfig = (type: any, param:any, isuuids: any) => {
-    const unit_key = param?.unit_key;
+    const unit_key = param?.unitKey;
     let configTmp: any = {
       grid_api_grid_query: `/yw/bszx/wbsj/bgd/queryBgd21Page`,
       grid_selection_type: 'checkbox',
@@ -280,7 +280,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         });
         form.validateFields(['ssq']);
         // 获取属期批次下最大申报编号+1
-        const unitKey = param?.otherParam?.unit_key;
+        const unitKey = param?.otherParam?.unitKey;
         if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G' ){
           const ssq = form.getFieldValue('ssq');
           const sbpc = form.getFieldValue('sbpc');
@@ -346,7 +346,7 @@ const Scmx: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         let sbbh1 = form.getFieldValue('sbbh1');
         let sbpc = form.getFieldValue('sbpc');
         // 获取属期批次下最大申报编号+1
-        const unitKey = param?.otherParam?.unit_key;
+        const unitKey = param?.otherParam?.unitKey;
         if (unitKey === 'ZMKJ_ZXSB_ZM_DLCK_G' ){
           let data ={ssq:ssq,sbpc:sbpc,tableKey:unitKey};
           queryCjBh(data).then((res: any)=>{

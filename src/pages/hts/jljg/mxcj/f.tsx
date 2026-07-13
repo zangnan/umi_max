@@ -542,7 +542,7 @@ Func.eventOnChange = {
             type: '1',
             hxqsrq : formVal.hxqsrq.valueOf(),
             hxjzrq : formVal.hxjzrq.valueOf(),
-            tableKey : form?.otherParam?.unit_key
+            tableKey : form?.otherParam?.unitKey
           }
           Func.setReadOnly(true, param);
           checkSsqPcYsb(data).then((response) => {
@@ -751,7 +751,7 @@ Func.eventOnBlur = {
             sbpc: sbpc,
             jljgszch: formVal.jljgszch,
             type: '1',
-            tableKey: form?.otherParam?.unit_key
+            tableKey: form?.otherParam?.unitKey
           }
           if (!formVal.jljgszch.startsWith("C")) {
             data.hxqsrq = formVal.hxqsrq.valueOf();

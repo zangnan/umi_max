@@ -310,6 +310,14 @@
       {
         "old": ".reload2()",
         "new": ".reload()"
+      },
+      {
+        "old": "param?.unit_key",
+        "new": "param?.unitKey"
+      },
+      {
+        "old": "otherParam?.unit_key",
+        "new": "otherParam?.unitKey"
       }
     ],
     "less": [

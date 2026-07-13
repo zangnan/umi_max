@@ -63,7 +63,7 @@ Func.initAddForm = (param: any) => {
 Func.validator = {
   // 申请日期
   tbrq01: (form: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const validator = async (_rule: any, value: any) => {
 			// 该应税服务代码应为货物类商品代码！
       const obj = {

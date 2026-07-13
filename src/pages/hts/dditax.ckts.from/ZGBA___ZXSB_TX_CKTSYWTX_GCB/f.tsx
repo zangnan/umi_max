@@ -18,7 +18,7 @@ Func.initAddForm = (param: any) => {
 Func.validator = {
   // 申请日期
   tbrq01: (form: any) => {
-    const unitKey = form?.otherParam?.unit_key;
+    const unitKey = form?.otherParam?.unitKey;
     const uuid = form?.getFieldValue('uuid');
     const validator = async (_rule: any, value: any) => {
       const tbrq1= form.getFieldValue('tbrq1');
