@@ -1746,3 +1746,43 @@ background: url('~@/assets/css/img/bookBg.png') no-repeat top center;
 - `ReactDOM.render` 仍触发 React 18 废弃 warning —— 不影响功能，未来若需彻底消除 warning 需配合 class component 转 function component（不在本 bug 范围）
 - 不引入 `App.useApp()`（涉及大范围重构）
 - 不在本次回归范围内但理论应同时恢复的 49+ 处其它 DDAlert.open 调用点（如 `workplace/index.tsx` / `sjgl/xzrwgl/sjxz/index.tsx` / `ckts/scsbsj/scsbsj.tsx` 等），建议用户自然浏览过程中留意验证
+
+## 待提交变更（2026-07-14）
+
+### dayjs → moment 回退：4 个文件（DDItems / znfx / Zdylb3 / wfkMxtsMod）回退到 9fc230b 之前的 moment 写法
+
+**背景**：上一轮提交 `9fc230b fix(DDForm): RangePicker 收到 moment 实例导致 .isValid 报错 — moment 全替换为 dayjs` 将工作区 4 个文件的 `import moment from 'moment'` / `moment(...)` 统一改为 dayjs。但本次工作区又把同一批 4 个文件反向改回 moment（即回退 `9fc230b` 的转换成果），用户决策保留 moment 写法。
+
+**改动文件**（全部将 `import dayjs from 'dayjs'` → `import moment from 'moment'` + `dayjs(...)` → `moment(...)` + 对应 API 差异同步调整）：
+
+| 文件 | 修改要点 | 涉及 API 差异 |
+|---|---|---|
+| [src/components/DDForm/DDItems.tsx](src/components/DDForm/DDItems.tsx) | line 4 import + line 604-608 / line 746-749 4 处 presets | `subtract(1, 'day')` → `subtract(1, 'days')`；`subtract(N, 'day')` → `subtract('days', N)`（参数顺序反转）|
+| [src/pages/hts/jljg/znfx/index.tsx](src/pages/hts/jljg/znfx/index.tsx) | line 17 import + line 31/34 `myConfig.grid_filter_quick[1].defaultValue` | 仅 import + 调用改名 |
+| [src/pages/hts/mbcx/slcx/comm/Zdylb3.tsx](src/pages/hts/mbcx/slcx/comm/Zdylb3.tsx) | line 18 import + line 575/578/580、line 1303、line 1326、line 1692 | `dataPickFormat` 解析路径；formatter 链 |
+| [src/pages/hts/sjbb/wm/tjbb/tsqk/zbblgyscx/wfkMxtsMod.tsx](src/pages/hts/sjbb/wm/tjbb/tsqk/zbblgyscx/wfkMxtsMod.tsx) | line 9 import + line 36/55 `tempFilterItems[i].defaultValue` | 仅 import + 调用改名 |
+
+**与历史约束的冲突**：
+- **CLAUDE.md「代码规范」** 已声明"日期操作统一使用 `dayjs`，**不再使用 `moment`**"，本轮变更与该约束相反
+- **HEAD `9fc230b` 提交说明** —— "moment 全替换为 dayjs" 的修复成果被本次反向回退
+- **CLAUDE.md 历次「待提交变更」**（2026-05-13、2026-05-22、2026-06-10、2026-06-25、2026-06-29、2026-06-30、2026-07-07）均按 dayjs 路径走，本次是首次反向
+
+**用户决策接受**：
+- 既然代码运行需要 moment（如某业务方依赖、antd 6 兼容性、RangePicker isValid 问题根因进一步定位等），回到 moment 是用户明确意愿（用户在 Claude 提示 dayjs → moment 反向风险后回复"推"）
+- 后续如再启 dayjs 迁移，需另起新一轮（含 `9fc230b` 二次回退），不应直接覆盖本次提交
+
+**端到端验证**：
+
+| 验证项 | 期望 | 说明 |
+|---|---|---|
+| `git log --oneline origin/export-tax-refund` 当前最新 | `9fc230b` | 本次提交前本地与远端一致 |
+| `git log --oneline origin/export-tax-refund` 提交后最新 | `9fc230b` 之上的新提交 | 推送后远端多 1 commit |
+| 工作区已修改 4 文件 + CLAUDE.md | 5 文件 1 commit | `git show --stat HEAD` 自检 |
+| 工作区无其它遗留改动 | 0 uncommitted | `git status --porcelain` 应为空 |
+
+**已知限制**（用户决策接受）：
+- 与 `9fc230b` 同期声明的 "antd 5+ 默认 dayjs" 假设在本分支**不再成立** —— 工作区运行时实际依赖 moment
+- `RangePicker isValid` 报错（`9fc230b` 修复点）理论可能在某些调用栈再次出现 —— 若 CI / 业务方发现，需重新启用 dayjs
+- 不在本次范围内的其它 30+ 个 `code_sample` 重生成产物可能仍用 dayjs（如 `auto_config*.tsx`）—— 当前提交只动这 4 个文件，不影响 scripts 产物
+- **CLAUDE.md「代码规范」段落未同步** —— 仍写"不再使用 moment"。本次反向回退未更新该规范段，如需更准确应另起一轮修订
+- **HEAD 提交说明未改写** —— `9fc230b` 仍描述 "moment 全替换为 dayjs"，本提交是覆盖其成果而非 rebase / revert

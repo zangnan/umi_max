@@ -6,7 +6,7 @@ import wfk_ckmx01 from '../wfkmxcx/config';
 import wfk_jhmx02 from '../wfkmxcx/configJh';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import myUtil from '@/components/DDAssist/util';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
 export interface BdjgProps {
   onRef?: any;
@@ -33,7 +33,7 @@ const DrawerList: React.FC<BdjgProps> = ({
       let tempFilterItems = [...wfk_ckmx01.filter_items];
       for (let i = tempFilterItems.length - 1; i >= 0; i--) {
         if (tempFilterItems[i]?.name === 'sbrq') {
-          tempFilterItems[i].defaultValue = [dayjs(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD')), dayjs(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD'))];
+          tempFilterItems[i].defaultValue = [moment(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD')), moment(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD'))];
           tempFilterItems[i].allowClear = false;
         }
         if (tempFilterItems[i]?.name === 'ssq') {
@@ -52,7 +52,7 @@ const DrawerList: React.FC<BdjgProps> = ({
       let tempFilterItems = [...wfk_jhmx02.filter_items];
       for (let i = tempFilterItems.length - 1; i >= 0; i--) {
         if (tempFilterItems[i]?.name === 'sbrq') {
-          tempFilterItems[i].defaultValue = [dayjs(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD')), dayjs(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD'))];
+          tempFilterItems[i].defaultValue = [moment(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD')), moment(myUtil.date.formatDate(param.record.sbrq1,'YYYY-MM-DD'))];
           tempFilterItems[i].allowClear = false;
         }
         if (tempFilterItems[i]?.name === 'ssq') {

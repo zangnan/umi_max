@@ -14,7 +14,7 @@ import UnitUtil from '@/components/DDBunit/unit_util';
 
 import myUtil from '@/components/DDAssist/util';
 import ProCard from '@ant-design/pro-card';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { useModel } from 'umi';
 import { useAccess } from 'umi';
 import { intl as intl2 } from '@/components/DDAssist/util';
@@ -572,13 +572,13 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             const reg2 = /^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))$/;
             if (new RegExp(reg1).test(formValue[item.name]) || new RegExp(reg2).test(formValue[item.name])) {
               // 后端返回 yyyymmdd
-              formValue[item.name] = dayjs(new Date(formValue[item.name]))
+              formValue[item.name] = moment(new Date(formValue[item.name]))
             } else {
               // 后端返回时间戳格式
               if (formValue[item.name]?.constructor === String) {
-                formValue[item.name] = dayjs(new Date(Number(formValue[item.name])));
+                formValue[item.name] = moment(new Date(Number(formValue[item.name])));
               } else {
-                formValue[item.name] = dayjs(new Date(formValue[item.name]));
+                formValue[item.name] = moment(new Date(formValue[item.name]));
               }
             }
           }
@@ -1300,7 +1300,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
           };
           if (item1.range) {
             if (item1.defaultValue) {
-              initialValues[item1.name] = [dayjs(item1.defaultValue[0], dataPickFormat), dayjs(item1.defaultValue[1], dataPickFormat)];
+              initialValues[item1.name] = [moment(item1.defaultValue[0], dataPickFormat), moment(item1.defaultValue[1], dataPickFormat)];
             }
             inputProps.placeholder = [`${item1.label}起`, `${item1.label}止`];
             if (item1.allowClear === undefined) {
@@ -1323,7 +1323,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
             );
           } else {
             if (item1.defaultValue) {
-              initialValues[item1.name] = dayjs(item1.defaultValue, dataPickFormat);
+              initialValues[item1.name] = moment(item1.defaultValue, dataPickFormat);
             }
             kkkk.push(
               <Form.Item key={index.toString()} {...formItemOutsideCommonProps}>
@@ -1689,7 +1689,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({
       // 表单特殊类型处理
       formItems.forEach((item: any) => {
         if (item.type === itemType.DatePicker && values[item.name]) {  // 日期类型
-          values[item.name] = dayjs(values[item.name]).format('YYYY-MM-DD');
+          values[item.name] = moment(values[item.name]).format('YYYY-MM-DD');
         }
         if (item.type === itemType.Select && item.mode === 'multiple') {
           if (values[item.name]) {
