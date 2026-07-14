@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React, { useImperativeHandle, useState } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -28,14 +29,14 @@ const DrawerList: React.FC<BdjgProps> = ({
     c.layout_type = 'modal';
     c.gridParams = gridParams;
     if (history?.location?.pathname === '/hts/sjbb/sc/tjbb/ckqk/fyhz') {
-      const timeQ = myUtil.date.getDateNYRBeforeCurr(0, moment(param.record.fzxmmc).startOf('month'));
-      const timeZ = myUtil.date.getDateNYRBeforeCurr(0, moment(param.record.fzxmmc).endOf('month'))
-      c.grid_filter_quick[0].defaultValue = [timeQ, timeZ];
+      const timeQ = myUtil.date.getDateNYRBeforeCurr(0, dayjs(param.record.fzxmmc).startOf('month'));
+      const timeZ = myUtil.date.getDateNYRBeforeCurr(0, dayjs(param.record.fzxmmc).endOf('month'))
+      c.grid_filter_quick[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
     } else {
       const searchModel = myUtil.localStore.getItem(unitKey) || [];
-      const timeQ = myUtil.date.getDateNYRBeforeCurr(0, moment(searchModel[0].value).startOf('month'));
-      const timeZ = myUtil.date.getDateNYRBeforeCurr(0, moment(searchModel[1].value).endOf('month'));
-      c.grid_filter_quick[0].defaultValue = [timeQ, timeZ];
+      const timeQ = myUtil.date.getDateNYRBeforeCurr(0, dayjs(searchModel[0].value).startOf('month'));
+      const timeZ = myUtil.date.getDateNYRBeforeCurr(0, dayjs(searchModel[1].value).endOf('month'));
+      c.grid_filter_quick[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
     }
     c.grid_filter_quick[0].allowClear = false;
 

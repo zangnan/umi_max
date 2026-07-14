@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React, { useRef, useEffect , } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import abgdkjConfig from './config';
@@ -294,14 +295,14 @@ const abgdkjIndx: React.FC<unknown> = () => {
       let timeQ ;
       let timeZ ;
       if(ckrq1){
-        timeQ = moment(myUtil.date.formatData(ckrq1[0]));
-        timeZ = moment(myUtil.date.formatData(ckrq1[1]));
+        timeQ = dayjs(myUtil.date.formatDate(ckrq1[0]));
+        timeZ = dayjs(myUtil.date.formatDate(ckrq1[1]));
         myConfig.filter_items[2].defaultValue = [timeQ,timeZ];
       }
       const hgckhwbgdsbrq= query.hgckhwbgdsbrq;
       if(hgckhwbgdsbrq){
-        timeQ = moment(myUtil.date.formatData(hgckhwbgdsbrq[0]));
-        timeZ = moment(myUtil.date.formatData(hgckhwbgdsbrq[1]));
+        timeQ = dayjs(myUtil.date.formatDate(hgckhwbgdsbrq[0]));
+        timeZ = dayjs(myUtil.date.formatDate(hgckhwbgdsbrq[1]));
         myConfig.filter_items[3].defaultValue = [timeQ,timeZ];
       }
     }

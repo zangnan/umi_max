@@ -47,7 +47,7 @@ const DrawerList: React.FC<BdjgProps> = ({
     if(jljgszch.startsWith('C')){
       setTitle(`手册号：${param?.record?.jljgszch} 实际分配率：${param?.record?.jljgsjfpl}`);
     }else{
-      setTitle(`账册号：${param?.record?.jljgszch} 核销周期：${ myUtil.date.formatData(param?.record?.hxqsrq)} 至 ${myUtil.date.formatData(param?.record?.hxjzrq)} 实际分配率：${param?.record?.jljgsjfpl}`);
+      setTitle(`账册号：${param?.record?.jljgszch} 核销周期：${ myUtil.date.formatDate(param?.record?.hxqsrq)} 至 ${myUtil.date.formatDate(param?.record?.hxjzrq)} 实际分配率：${param?.record?.jljgsjfpl}`);
     }
     setMyconfig(c);
   };

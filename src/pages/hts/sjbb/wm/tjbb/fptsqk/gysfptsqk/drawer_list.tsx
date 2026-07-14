@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React, { useImperativeHandle, useState } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -25,12 +26,12 @@ const DrawerList: React.FC<BdjgProps> = ({
     c.gridParams = gridParams;
     const yyyy =  initSearchModal[0].value.substring(0,4);
     const mm =  initSearchModal[0].value.substring(4,6);
-    const timeQ = myUtil.date.formatData(myUtil.date.getMonthFirstDay(yyyy+'-'+mm));
+    const timeQ = myUtil.date.formatDate(myUtil.date.getMonthFirstDay(yyyy+'-'+mm));
     const yyyy1 =  initSearchModal[1].value.substring(0,4);
     const mm1 =  initSearchModal[1].value.substring(4,6);
-    const timeZ = myUtil.date.formatData(myUtil.date.getMonthLastDay(yyyy1+'-'+mm1));
+    const timeZ = myUtil.date.formatDate(myUtil.date.getMonthLastDay(yyyy1+'-'+mm1));
     c.layout_type = 'modal';
-    c.grid_filter_quick[0].defaultValue = [timeQ, timeZ];
+    c.grid_filter_quick[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
 
     c.toolbar_default = {
       sjgxUpdateData: false,               // 是否显示更新台账数据，默认关闭

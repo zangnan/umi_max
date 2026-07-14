@@ -1,6 +1,7 @@
 /**
  * title: 退税申报情况生产
  */
+import dayjs from 'dayjs';
 import React, { useRef, useEffect, useState }from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import { message, Spin} from 'antd';
@@ -57,12 +58,12 @@ const Index: React.FC<unknown> = () => {
         const nowMonth = time.getMonth();
         let newMonth = (nowMonth + 1) < 10 ? '0' + (nowMonth + 2) : nowMonth + 2;
         if(newMonth === 13){
-          timeQ = moment(myUtil.date.getYearBeforeCurr(0) + '-01-01');
+          timeQ = dayjs(myUtil.date.getYearBeforeCurr(0) + '-01-01');
         } else {
-          timeQ = moment(myUtil.date.getYearBeforeCurr(1) + '-' + newMonth + '-01');
+          timeQ = dayjs(myUtil.date.getYearBeforeCurr(1) + '-' + newMonth + '-01');
         }
-        timeZ = moment(myUtil.date.accurateDate(new Date().getTime()));
-        configData.grid_filter_quick[0].defaultValue = [timeQ, timeZ];
+        timeZ = dayjs(myUtil.date.accurateDate(new Date().getTime()));
+        configData.grid_filter_quick[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
         configData.grid_filter_quick[0].allowClear = false;
       } else {
         message.error(desc)

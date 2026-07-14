@@ -318,6 +318,32 @@
       {
         "old": "otherParam?.unit_key",
         "new": "otherParam?.unitKey"
+      },
+      {
+        "old": "myUtil.date.formatData",
+        "new": "myUtil.date.formatDate"
+      },
+      {
+        "old": ".defaultValue = [timeQ, timeZ];",
+        "new": ".defaultValue = [dayjs(timeQ), dayjs(timeZ)];"
+      },
+      {
+        "old": "timeQ = moment(",
+        "new": "timeQ = dayjs("
+      },
+      {
+        "old": "timeZ = moment(",
+        "new": "timeZ = dayjs("
+      },
+      {
+        "old": "moment(param.record.",
+        "new": "dayjs(param.record."
+        
+      },
+      {
+        "old": "moment(searchModel[",
+        "new": "dayjs(searchModel["
+        
       }
     ],
     "less": [

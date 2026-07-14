@@ -63,6 +63,8 @@ UnitUtil.grid = {
         }
       }
     });
+    // 老系统迁移
+    cktsUtil.grid.handleSpeSearchModel(param, searchModel);
     return {
       key: unitKey,
       searchModel: [

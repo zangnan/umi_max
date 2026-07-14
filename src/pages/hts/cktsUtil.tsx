@@ -1225,6 +1225,16 @@ cktsUtil.grid = {
       }
     }
     return tmp;
+  },
+  handleSpeSearchModel:(param: any, searchModel: any) => {
+    // 数据报表模块：查询参数特殊处理
+    // 新修改页面：查询参数特殊处理
+    let moduleType: any = param.moduleType;
+    if (moduleType === 'sjbb' || moduleType === 'QZ_type') {
+      searchModel.forEach((item: any) => {
+        item.op = 'zdy';
+      });
+    }
   }
 }
 

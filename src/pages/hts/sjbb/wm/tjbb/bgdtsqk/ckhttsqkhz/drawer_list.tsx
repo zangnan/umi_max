@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React, { useImperativeHandle, useState } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import CONSTANTS from '@/components/DDAssist/constants';
@@ -28,9 +29,9 @@ const DrawerList: React.FC<BdjgProps> = ({
     const ckny = initSearchModal[0].value.substr(0,4)+'-'+initSearchModal[0].value.substr(4,6);
     const ckny1 = initSearchModal[1].value.substr(0,4)+'-'+initSearchModal[1].value.substr(4,6);
 
-    const timeQ = myUtil.date.formatData(myUtil.date.getMonthFirstDay(ckny));
-    const timeZ = myUtil.date.formatData(myUtil.date.getMonthLastDay(ckny1));
-    c.grid_filter_quick[0].defaultValue = [timeQ, timeZ];
+    const timeQ = myUtil.date.formatDate(myUtil.date.getMonthFirstDay(ckny));
+    const timeZ = myUtil.date.formatDate(myUtil.date.getMonthLastDay(ckny1));
+    c.grid_filter_quick[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
     c.layout_type = 'modal';  
     const ckhth = param?.record?.ckhth;
     // c.filter_items[1].defaultValue=ckhth;

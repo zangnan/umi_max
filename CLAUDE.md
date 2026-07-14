@@ -2,6 +2,76 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 待提交变更（2026-07-14）
+
+### 修复 antd v6 RangePicker `getUDayjs(...).isValid is not a function` 报错 + 批量迁移
+
+**背景**：浏览器运行时抛 `TypeError: getUDayjs(...).isValid is not a function`，
+调用栈定位到 antd v6 `<RangePicker>` 内部 `generateConfig.isValidate`。
+
+**根因**：`@rc-component/picker@1.10.0` 的 `getUDayjs` 逻辑 bug（`dayjs.js:106-111`）：
+```js
+var getUDayjs = function getUDayjs(value) {
+  if (!dayjs.isDayjs(value) || value instanceof dayjs) {
+    return value;          // 任何非 dayjs 都直接原样返回！
+  }
+  return dayjs(value.valueOf());
+};
+```
+对 string / moment / Date 都会直接返回原值，下面的 `.isValid()` 调用炸。
+
+两类调用方把 string 塞进了 RangePicker `defaultValue`：
+
+1. **`myUtil.date.getDateNYRBeforeCurr(...)`** 返回 `"YYYY-MM-DD"` 字符串
+   （[src/components/DDAssist/util/index.tsx:859-866](src/components/DDAssist/util/index.tsx#L859) 内 `return date;`）
+2. **`myUtil.date.formatData(...)`** —— util 里**根本不存在**该方法（只有 `formatDate`），
+   引用方原本会先炸 `formatData is not a function`，但因 bug 链位置靠后表现为 RangePicker 报错
+
+**关键设计点**：
+
+- 新规则匹配精确且互不干扰（`\b` 词边界 / 全字匹配）
+- 6 条规则一次性把 30+ 兄弟文件批量改写
+- 新增 `cktsUtil.grid.handleSpeSearchModel(param, searchModel)` 给老 `UnitUtil.grid` 接入
+  数据报表模块特殊搜索参数处理（`moduleType === 'sjbb' || 'QZ_type'` 时把 `op` 强制设为 `'zdy'`）
+
+**改动文件（32 个）**：
+
+1. **新增 6 条 replace.ts 规则**（[scripts/convert-ddbunit-config.rules.json:321-344](scripts/convert-ddbunit-config.rules.json#L321)）：
+
+   | # | 规则 |
+   |---|---|
+   | 1 | `myUtil.date.formatData` → `myUtil.date.formatDate` |
+   | 2 | `.defaultValue = [timeQ, timeZ];` → `.defaultValue = [dayjs(timeQ), dayjs(timeZ)];` |
+   | 3 | `timeQ = moment(` → `timeQ = dayjs(` |
+   | 4 | `timeZ = moment(` → `timeZ = dayjs(` |
+   | 5 | `moment(param.record.` → `dayjs(param.record.` |
+   | 6 | `moment(searchModel[` → `dayjs(searchModel[` |
+
+2. **支持函数改动**：
+   - [src/components/DDBunit/unit_util.tsx:66-67](src/components/DDBunit/unit_util.tsx#L66) — `UnitUtil.grid` 末尾调用 `cktsUtil.grid.handleSpeSearchModel(param, searchModel)`
+   - [src/pages/hts/cktsUtil.tsx:1229-1238](src/pages/hts/cktsUtil.tsx#L1229) — 新增 `handleSpeSearchModel` 函数
+   - [src/pages/hts/jljg/mxcj/drawer_list.tsx:50](src/pages/hts/jljg/mxcj/drawer_list.tsx#L50) — `formatData` → `formatDate`
+
+3. **批量应用规则到 28 个页面文件**（`src/pages/hts/sjbb/{sc,wm}/tjbb/` + `ckfp/` + `ckfpkj/`）：
+   - 6 个 `common/bgdtsqk/fptsqk` drawer_list.tsx：formatData→formatDate + dayjs 包裹 defaultValue
+   - 16 个 `tsqk/*/index.tsx`：moment→dayjs + dayjs 包裹 defaultValue
+   - 8 个 `bgdtsqk/{ckbgdmx,ckbgdtsqk,wsbbgdmx}/index.tsx` + 4 个 `fptsqk/{wsbzzsfpmx,zzszyfpmx}/index.tsx`：同款
+   - 2 个 `abgdkj/index.tsx`：formatData→formatDate（ckfp + ckfpkj 各 1）
+   - 2 个 `sjbb/{sc,wm}/tjbb/common/drawer_list.tsx`：本次主目标 + 手工同步
+
+**端到端验证**：
+- `npm run dev` 启动 dev server
+- 浏览器打开 `/hts/sjbb/sc/tjbb/ckqk/fyhz` → 点击行操作按钮 → Drawer 打开
+- **期望**：Console 不再抛 `getUDayjs(...).isValid is not a function`；RangePicker 显示当月起止
+- 切到 `/hts/sjbb/wm/tjbb/ckqk/fyhz` 重复验证 wm 版本
+- TypeScript 检查：`npx tsc --noEmit`
+
+**已知限制**（用户决策接受）：
+- **`getDateNYRBeforeCurr` util 本身仍返回 string** —— 影响范围太大（`src/pages/hts/cktsUtil.tsx:1212-1222` 也用），按本方案由 caller 在外层 `dayjs()` 包裹
+- **与 `c8cf653` 决策相反** —— 那 4 个 revert 文件（DDItems / znfx / Zdylb3 / wfkMxtsMod）保留 moment 不动；本批改动属于"其余文件统一回 dayjs"
+- **`handleSpeSearchModel` 仅覆盖 `sjbb` / `QZ_type`** —— 其它 moduleType 走原 UnitUtil.grid 逻辑
+- **`UnitUtil.grid` 中新加的 `handleSpeSearchModel` 调用紧跟现有 `.forEach`**（[unit_util.tsx:67](src/components/DDBunit/unit_util.tsx#L67)），不改变既有调用语义
+
 ## 项目概述
 
 应用开发工具 SDP（Software Development Platform），基于 Umi Max 框架的企业级前端应用，支持敏捷开发、多环境部署和微前端架构。

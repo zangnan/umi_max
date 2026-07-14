@@ -1,6 +1,7 @@
 /**
  * title: 出口报关单台账
  */
+import dayjs from 'dayjs';
 import React, { useState, useEffect, useRef } from 'react';
 import DDBunit2 from '@/pages/hts/components/DDBunit2_ckts/DDBunit2_CKTS';
 import config from './config';
@@ -28,13 +29,13 @@ const Index: React.FC<unknown> = () => {
   const nowMonth = time.getMonth();
   let newMonth = (nowMonth + 1) < 10 ? '0' + (nowMonth + 2) : nowMonth + 2;
   if (newMonth === 13) {
-    timeQ = moment(myUtil.date.getYearBeforeCurr(0) + '-01-01');
+    timeQ = dayjs(myUtil.date.getYearBeforeCurr(0) + '-01-01');
   } else {
-    timeQ = moment(myUtil.date.getYearBeforeCurr(1) + '-' + newMonth + '-01');
+    timeQ = dayjs(myUtil.date.getYearBeforeCurr(1) + '-' + newMonth + '-01');
   }
-  timeZ = moment(myUtil.date.accurateDate(new Date().getTime()));
+  timeZ = dayjs(myUtil.date.accurateDate(new Date().getTime()));
 
-  myConfig.filter_items[0].defaultValue = [timeQ, timeZ];
+  myConfig.filter_items[0].defaultValue = [dayjs(timeQ), dayjs(timeZ)];
   myConfig.filter_items[0].allowClear = false;
 
   return <>
