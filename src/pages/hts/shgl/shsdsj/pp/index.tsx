@@ -830,7 +830,7 @@ const ShsdsjPp: React.FC<ShsdsjPpProps> = ({
     <>
       <Drawer
         title={'收汇水单匹配'}
-        visible={drawerVisible}
+        open={drawerVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         onClose={() => { handlerClose() }}
         className="dd_data_page_modal"

@@ -296,6 +296,10 @@
         "new": "open={modalVisible}"
       },
       {
+        "old": "visible={drawerVisible}",
+        "new": "open={drawerVisible}"
+      },
+      {
         "old": "myUtil.fpfw.",
         "new": "cktsUtil.fpfw."
       },
@@ -343,6 +347,11 @@
       {
         "old": "moment(searchModel[",
         "new": "dayjs(searchModel["
+        
+      },
+      {
+        "old": "unitRef?.current?.",
+        "new": "refUnit?.current?."
         
       }
     ],

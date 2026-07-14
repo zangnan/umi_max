@@ -444,7 +444,7 @@ const Znpdmx: React.FC<ZnpdmxProps> = ({
     <>
       <Drawer
         title={'配单明细'}
-        visible={drawerVisible}
+        open={drawerVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         onClose={() => { setDrawerVisible(false) }}
         className="dd_data_page_modal"

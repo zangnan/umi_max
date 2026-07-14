@@ -660,7 +660,7 @@ const Index: React.FC<ZnpdsdProps> = ({
     <>
       <Drawer
         title={'配单明细'}
-        visible={drawerVisible}
+        open={drawerVisible}
         width={CONSTANTS.C_MODAL_WIDTH_MAX}
         onClose={() => { returnZnpdMain() }}
         className="dd_data_page_modal"
