@@ -14,7 +14,7 @@ import ModalYsbcke from './ysbcke';
 import ModalJckze from './jckze';
 import ModalBt from './modal_bt';
 import myUtil from '@/components/DDAssist/util';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useRequest } from 'ahooks';
 import { bgdtjmyjjy, queryFxzSjTs } from '@/pages/hts/services/htsApi';
 import { message } from 'antd';
@@ -28,9 +28,9 @@ const Znfx: React.FC<unknown> = () => {
   myConfig.grid_filter_quick[0].defaultValue = '2';
   const initHxzq = myUtil.localStore.getItem('znfx-hxzq');
   if (initHxzq) {
-    myConfig.grid_filter_quick[1].defaultValue=  [moment(new Date(initHxzq[0])) , moment(new Date(initHxzq[1]))];
+    myConfig.grid_filter_quick[1].defaultValue=  [dayjs(new Date(initHxzq[0])) , dayjs(new Date(initHxzq[1]))];
   } else {
-    myConfig.grid_filter_quick[1].defaultValue= [moment(new Date(myUtil.date.getQZDateBeforeCurr(1).firstDay)) , moment(new Date(myUtil.date.getQZDateBeforeCurr(1).lastDay))];
+    myConfig.grid_filter_quick[1].defaultValue= [dayjs(new Date(myUtil.date.getQZDateBeforeCurr(1).firstDay)) , dayjs(new Date(myUtil.date.getQZDateBeforeCurr(1).lastDay))];
   }
 
   const bdjgRef: any = useRef();

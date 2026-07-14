@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useCallback } from 'react';
 import { ColorPicker, Button, message, Form, Row, Col, Input, Typography, Tag, Space, InputNumber, DatePicker, TimePicker, Radio, Checkbox, Select, AutoComplete, Cascader, Upload, TreeSelect, Switch, Modal, theme } from 'antd';
 import { PlusOutlined, UploadOutlined, MinusCircleOutlined, DeleteOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import type { ItemsProps } from './data.d';
 import { itemType } from './data.d';
 import './style.less';
@@ -601,10 +601,10 @@ const DDItems: React.FC<ItemsProps> = ({
         itemLabel = <Form.Item {...formItemCommonProps}>
           {range ? <DatePicker.RangePicker {...inputProps} picker={picker} showTime={showTime} size='default' style={{ width: '100%' }} onOpenChange={onOpenChange} presets={{
           // {range ? <DatePicker.RangePicker {...inputProps} picker={picker} showTime={showTime} format={[dataPickFormat]} size='default' style={{ width: '100%' }} onOpenChange={onOpenChange} presets={{
-            '今天': [moment().startOf('day'), moment().endOf('day')],
-            '昨天': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-            '本月': [moment().startOf('month'), moment().endOf('month')],
-            '上月': [moment().subtract(1, 'months').startOf('month'), moment().subtract(1, 'months').endOf('month')],
+            '今天': [dayjs().startOf('day'), dayjs().endOf('day')],
+            '昨天': [dayjs().subtract(1, 'day').startOf('day'), dayjs().subtract(1, 'day').endOf('day')],
+            '本月': [dayjs().startOf('month'), dayjs().endOf('month')],
+            '上月': [dayjs().subtract(1, 'month').startOf('month'), dayjs().subtract(1, 'month').endOf('month')],
           }} />
             : <DatePicker {...inputProps} picker={picker} showTime={showTime} format={dataPickFormat} onOpenChange={onOpenChange} style={{ width: '100%' }}/>
           }
@@ -743,10 +743,10 @@ const DDItems: React.FC<ItemsProps> = ({
         itemLabel = <Form.Item {...formItemCommonProps}>
           <DatePicker.RangePicker {...inputProps}
             presets={{
-              '今日': [moment().startOf('day'), moment().endOf('day')],
-              '昨日': [moment().subtract('days', 1), moment()],
-              '最近7日': [moment().subtract('days', 6), moment()],
-              '最近30日': [moment().subtract('days', 29), moment()],
+              '今日': [dayjs().startOf('day'), dayjs().endOf('day')],
+              '昨日': [dayjs().subtract(1, 'day'), dayjs()],
+              '最近7日': [dayjs().subtract(6, 'day'), dayjs()],
+              '最近30日': [dayjs().subtract(29, 'day'), dayjs()],
             }}
             showTime
             format="YYYY/MM/DD HH:mm:ss"
