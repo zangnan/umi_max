@@ -104,6 +104,7 @@ export default defineConfig({
     ENV_TYPE: envType, // 后端环境类型
     SYS_TITLE: sysTitle,
     VERSION_DATE: versionDate,
+    PRO_BASE: process.env.NODE_ENV === 'production' ? 'saas' : '', // 项目根环境
   },
   routes,
   npmClient: 'yarn',

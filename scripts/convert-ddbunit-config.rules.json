@@ -500,6 +500,15 @@
           "new": "useLocation, Outlet } from 'umi'"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/badz2/zlgl/index.tsx",
+      "replace": [
+        {
+          "old": "const gridData = cloneDeep(gridRef?.current?.getSource());",
+          "new": "const gridData = cloneDeep(param?.dataSource || []);"
+        }
+      ]
     }
   ],
   "excludeFiles": [

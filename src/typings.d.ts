@@ -15,3 +15,5 @@ declare let VERSION_DATE: string;
 declare module 'numeral';
 declare module 'xlsx-style';
 declare module 'file-saver';
+// hts
+declare let PRO_BASE;

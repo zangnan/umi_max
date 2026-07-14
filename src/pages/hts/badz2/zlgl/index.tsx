@@ -42,7 +42,7 @@ const Index: React.FC<unknown> = () => {
   // 列表加载后执行
   func.afterReload = (param: any) => {
     const { gridRef } = param;
-    const gridData = cloneDeep(gridRef?.current?.getSource());
+    const gridData = cloneDeep(param?.dataSource || []);
     if (gridData && gridData.length > 0) {
       setMlRecord(gridData[0]);
       setMlDisplay(true);
