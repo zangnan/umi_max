@@ -12,7 +12,7 @@ Func.handleJmbgdDy = (param: any) => {
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
-  const headerValues = gridRef.current?.getHeaderFilter();
+  const headerValues = param.refGrid.current?.getHeaderFilter();
   if (headerValues && headerValues.length > 0) {
     headerValues.forEach((item: any) => {
       searchModel.push(item);

@@ -145,7 +145,7 @@ Func.commonPlxz =(param:any,dzlx:string) => {
   }
   // 获取筛选条件
   const searchModel = refUnit.current?.getGridParams().searchModel;
-  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter();
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   convertAdQueryToSearchModel(allSearchModel,downloadParam);
   // 此时拿到了所有的条件，准备下载附件 

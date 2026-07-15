@@ -102,7 +102,7 @@ const ScxxcxDialog: React.FC<DDTsort> = ({ onRef, visible = false }) => {
             
             if (paramValue.selectionRowKeys.length === 0) {
                 const searchModel = paramValue.refUnit.current?.getGridParams().searchModel || [];
-                const headerSearchModel = paramValue.gridRef.current?.getHeaderFilter() || [];
+                const headerSearchModel = paramValue.param.refGrid.current?.getHeaderFilter() || [];
                 const allSearchModel: any = searchModel.concat(headerSearchModel);
                 allSearchModel.push({ property: 'cxlx', value: '5', op: 'zdy' });
                 allSearchModel.push({ property: 'sfcxZj', value: "Y", op: 'zdy' });

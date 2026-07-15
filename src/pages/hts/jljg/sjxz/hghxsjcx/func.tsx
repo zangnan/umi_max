@@ -23,7 +23,7 @@ Func.handleHghzqdDy = (param: any) => {
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
-  const headerValues = gridRef.current?.getHeaderFilter();
+  const headerValues = param.refGrid.current?.getHeaderFilter();
   if (headerValues && headerValues.length > 0) {
     headerValues.forEach((item: any) => {
       searchModel.push(item);
@@ -65,7 +65,7 @@ Func.handleHgbgdDy = (param: any) => {
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
-  const headerValues = gridRef.current?.getHeaderFilter();
+  const headerValues = param.refGrid.current?.getHeaderFilter();
   if (headerValues && headerValues.length > 0) {
     headerValues.forEach((item: any) => {
       searchModel.push(item);
@@ -93,7 +93,7 @@ Func.handleBgdJstjmyj = (param: any) => {
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
-  const headerValues = gridRef.current?.getHeaderFilter();
+  const headerValues = param.refGrid.current?.getHeaderFilter();
   if (headerValues && headerValues.length > 0) {
     headerValues.forEach((item: any) => {
       searchModel.push(item);
@@ -143,7 +143,7 @@ Func.handleHzqdJstjmyj = (param: any) => {
   gridValues.searchModel.forEach((item: any) => {
     searchModel.push(item);
   });
-  const headerValues = gridRef.current?.getHeaderFilter();
+  const headerValues = param.refGrid.current?.getHeaderFilter();
   if (headerValues && headerValues.length > 0) {
     headerValues.forEach((item: any) => {
       searchModel.push(item);

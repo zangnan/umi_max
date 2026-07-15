@@ -95,7 +95,7 @@ Func.tbsffwsj = async (param: any, e: any) => {
 Func.sffwxxdc = async (param: any, e: any) => {
   const {refUnit, gridRef, selectionRowKeys} = param;
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'sbqyuuids', values: selectionRowKeys, op: 'zdy' }]);

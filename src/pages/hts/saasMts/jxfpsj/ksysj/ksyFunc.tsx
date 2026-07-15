@@ -21,7 +21,7 @@ ksyFunc.funcGxxxzt = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   let params: any = {};
   if (selectionRows.length > 0) { // 如果有选择数据就 更新选择数据

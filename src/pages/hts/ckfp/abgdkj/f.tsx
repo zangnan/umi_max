@@ -244,7 +244,7 @@ abgdkjFunc.btnScfpspd = (param: any) => {
     }
     const gridData = refUnit.current?.getGridData();
     const searchModel = refUnit.current?.getGridParams().searchModel || [];
-    const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+    const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if(gridData.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));
@@ -304,7 +304,7 @@ abgdkjFunc.btnSetSsflbm = (param: any) => {
   }
   const tempParam:any = getParam(selectionRows);
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   tempParam.key = unit_key;
   tempParam.cxtj = allSearchModel;
@@ -367,7 +367,7 @@ abgdkjFunc.btnSetGmf = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
 
   refUnit.current!.setMasker(true);

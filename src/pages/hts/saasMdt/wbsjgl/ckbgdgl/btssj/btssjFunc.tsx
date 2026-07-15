@@ -89,7 +89,7 @@ Func.yfzsslPlxg = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({property: 'cxlx', value: '8', op: 'zdy'});
   allSearchModel.push({property: 'sfcxZj', value: "Y", op: 'zdy'});
@@ -292,7 +292,7 @@ Func.btnSsjxseByGdw = (param: any) => {
     gridValues.searchModel.forEach((item: any) => {
       searchModel.push(item);
     });
-    const headerValues = gridRef.current?.getHeaderFilter();
+    const headerValues = param.refGrid.current?.getHeaderFilter();
     if (headerValues && headerValues.length > 0) {
       headerValues.forEach((item: any) => {
         searchModel.push(item);

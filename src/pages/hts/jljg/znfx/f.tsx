@@ -104,7 +104,7 @@ ZnfxFunc.handleZnfxZnfx = (params: any) => {
     message.info('请选择“待分析”、“分析失败”或“计算成功待分析”的数据进行操作。');
     return;
   }
-  const headerFilterValue= gridRef.current?.getHeaderFilter();
+  const headerFilterValue= param.refGrid.current?.getHeaderFilter();
   const quickVals= formQuickFilter.getFieldsValue();
   const model = [];
   if (uuids.length > 0) {
@@ -253,7 +253,7 @@ ZnfxFunc.handleZnfxScmx = (params: any) => {
     message.info(gxCheckMessage);
     return;
   }
-  const headerFilterValue= gridRef.current?.getHeaderFilter();
+  const headerFilterValue= param.refGrid.current?.getHeaderFilter();
   const quickVals= formQuickFilter.getFieldsValue();
   const model = [];
   if (uuids.length > 0) {
@@ -435,7 +435,7 @@ ZnfxFunc.handleZnfxSjdc = (params: any) => {
   };
   const commonValue = refUnit.current?.getGridParams();
   const val = commonValue.searchModel;
-  const headerVal = gridRef.current?.getHeaderFilter();
+  const headerVal = param.refGrid.current?.getHeaderFilter();
   const model: any = [];
   if (val) {
     val.forEach((item: any) => {

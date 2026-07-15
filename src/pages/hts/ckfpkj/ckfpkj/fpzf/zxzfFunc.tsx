@@ -69,7 +69,7 @@ ckfpFunc.exportKpjg = (param: any) => {
     title = '确定对勾选数据进行导出开票结果的操作吗？';
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {

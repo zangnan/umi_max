@@ -521,7 +521,7 @@ Func.btnPlbtHl = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'sfcxZj', value: "Y", op: 'zdy' });
   allSearchModel.push({ property: 'cxlx', value: "whhl", op: 'zdy' });

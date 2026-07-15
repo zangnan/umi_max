@@ -25,8 +25,8 @@ Func.handleMdthxCxjsfpl = (param: any) => {
     refUnit.current?.getGridParams().searchModel.forEach((item:any) => {
       model.push(item);
     });
-    if (gridRef.current?.getHeaderFilter()) {
-      gridRef.current?.getHeaderFilter().forEach((item: any) => {
+    if (param.refGrid.current?.getHeaderFilter()) {
+      param.refGrid.current?.getHeaderFilter().forEach((item: any) => {
         model.push(item);
       });
     }

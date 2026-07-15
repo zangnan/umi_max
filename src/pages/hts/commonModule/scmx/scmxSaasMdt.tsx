@@ -144,7 +144,7 @@ const ScmxSaasMdt: React.FC<DDTsort> = ({ onRef, visible = false }) => {
         form.validateFields().then(() => {
             if (paramValue.selectionRowKeys.length === 0) {
                 const searchModel = paramValue.refUnit.current?.getGridParams().searchModel || [];
-                const headerSearchModel = paramValue.gridRef.current?.getHeaderFilter() || [];
+                const headerSearchModel = paramValue.param.refGrid.current?.getHeaderFilter() || [];
                 const allSearchModel: any = searchModel.concat(headerSearchModel);
                 allSearchModel.push({ property: 'cxlx', value: cxlx, op: 'zdy' });
                 allSearchModel.push({ property: 'sfcxZj', value: "Y", op: 'zdy' });

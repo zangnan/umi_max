@@ -23,7 +23,7 @@ Func.updateInfoState = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel.push({ property: 'cxlx', value: '5', op: 'zdy' });
   allSearchModel.push({ property: 'sfcxZj', value: "Y", op: 'zdy' });
@@ -399,7 +399,7 @@ Func.sendWxxbgdToSwzj = async (param: any) => {
   }
   // 获取筛选条件
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   // 设置固定条件
   allSearchModel.push({ property: 'cxlx', value: '5', op: 'zdy' });

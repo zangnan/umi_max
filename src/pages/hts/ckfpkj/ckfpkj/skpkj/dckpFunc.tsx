@@ -34,7 +34,7 @@ Func.handleDownLoadKpwj = (param: any) => {
     })
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat(headerSearchModel);
   allSearchModel = searchModel.concat(initSearchModel);
@@ -120,7 +120,7 @@ const openXz = (refUnit: any, obj: any) => {
 Func.handleDownLoadKpwjToExportPath = async (param: any) => {
   const { selectionRows, refUnit ,gridRef} = param;
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   if (!selectionRows || selectionRows.length === 0) {
     DDAlert.open({
@@ -564,7 +564,7 @@ Func.exportKpjg = (param: any) => {
   key = 'SAAS_CKFPKJ_FPGL_DCKPJG_DCKP_DC';
 
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'uuids', values: selectionRowKeys, op: 'ain' }]);

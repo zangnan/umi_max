@@ -34,7 +34,7 @@ Func.handleDownLoadKpwj = (param: any) => {
     })
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   const obj = {
     xzlx: 'zip',
@@ -562,7 +562,7 @@ Func.exportKpjg = (param: any) => {
   key = 'SAAS_CKFPKJ_FPGL_DCKPJG_DCKP_DC';
 
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'uuids', values: selectionRowKeys, op: 'ain' }]);

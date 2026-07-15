@@ -31,7 +31,7 @@ const Func: any = {
 //     title = '确定对当前筛选条件下所有“待开票”的数据进行重新开票的操作吗？';
 //   }
 //   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-//   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+//   const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
 //   const allSearchModel: any = searchModel.concat(headerSearchModel);
 //   for (let i = 0; i < allSearchModel.length; i++) {
 //     allSearchModel[i].op = 'zdy'
@@ -275,7 +275,7 @@ Func.exportKpjg = (param: any) => {
     key = 'SAAS_CKFPKJ_FPGL_DCKPJG_ZXKP_ZFFP_DC';
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
 
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
@@ -459,7 +459,7 @@ Func.handlePdfxz = (param: any) => {
     handlePdfPlxz(param, selectionRowKeys, '1');
   } else {
     const searchModel = refUnit.current?.getGridParams().searchModel || [];
-    const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+    const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     for (let i = 0; i < allSearchModel.length; i++) {
       allSearchModel[i].op = 'zdy';

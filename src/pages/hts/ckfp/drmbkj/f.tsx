@@ -150,7 +150,7 @@ drmbkjFunc.qrdrsj = (param: any) => {
     }
     const gridData = refUnit.current?.getGridData()
     const searchModel = refUnit.current?.getGridParams().searchModel || [];
-    const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+    const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     if (gridData.length === 0) {
       message.info(intl2.formatMessage({ id: 'message_common_type_no_griddata' }));

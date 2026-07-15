@@ -153,7 +153,7 @@ Func.zdpd = (param: any) => {
     cxModel.push({op: 'zdy', property: 'uuids', values: selectionRowKeys});
   } else {
     const searchModel = refUnit.current?.getGridParams().searchModel || [];
-    const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+    const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
     const allSearchModel: any = searchModel.concat(headerSearchModel);
     cxModel.push(...allSearchModel);
   }

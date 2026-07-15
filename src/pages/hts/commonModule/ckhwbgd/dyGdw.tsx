@@ -65,7 +65,7 @@ const Index: React.FC<DDModalGridProps> = ({
     const obj: any = {}
     const searchModel = refUnit.current.getGridParams().searchModel || []; // 筛选
     setListSearchModel(searchModel);
-    const headerSearchModel = gridRef.current?.getHeaderFilter() || []; // 列头筛选
+    const headerSearchModel = param.refGrid.current?.getHeaderFilter() || []; // 列头筛选
     setListHeaderSearchModel(headerSearchModel);
     const gridSort: any = gridRef.current?.getGridSort() || []; //  排序
     setListGridSort(gridSort)

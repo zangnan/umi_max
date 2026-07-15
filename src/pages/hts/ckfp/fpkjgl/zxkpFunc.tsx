@@ -31,7 +31,7 @@ const Func: any = {
 //     title = '确定对当前筛选条件下所有“待开票”的数据进行重新开票的操作吗？';
 //   }
 //   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-//   const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+//   const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
 //   const allSearchModel: any = searchModel.concat(headerSearchModel);
 //   for (let i = 0; i < allSearchModel.length; i++) {
 //     allSearchModel[i].op = 'zdy'
@@ -331,7 +331,7 @@ Func.exportKpjg = (param: any) => {
   }
 
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   let allSearchModel: any;
   if (selectionRowKeys?.length > 0) {
     allSearchModel = searchModel.concat([ ...headerSearchModel, { property: 'uuids', values: selectionRowKeys, op: 'ain' }]);

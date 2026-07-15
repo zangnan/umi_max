@@ -33,7 +33,7 @@ const dealCs = (params: any, tgbz: any) => {
     const commonValue = refUnit.current?.getGridParams();
     const initVal = commonValue.initSearchModal;
     const val = commonValue.searchModel;
-    const headerVal = gridRef.current?.getHeaderFilter();
+    const headerVal = param.refGrid.current?.getHeaderFilter();
     const model: any = [];
     if (initVal) {
       initVal.forEach((item: any) => {

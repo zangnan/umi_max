@@ -637,7 +637,7 @@ ckbgdFunc.xj = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat([...headerSearchModel,...initSearchModel]);
   const obj = {searchModel:allSearchModel};
@@ -668,7 +668,7 @@ ckbgdFunc.cjbzXj = (param: any) => {
     return;
   }
   const searchModel = refUnit.current?.getGridParams().searchModel || [];
-  const headerSearchModel = gridRef.current?.getHeaderFilter() || [];
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const initSearchModel = refUnit.current.getGridParams().initSearchModal || [];
   let allSearchModel: any = searchModel.concat([...headerSearchModel,...initSearchModel]);
   const obj = {searchModel:allSearchModel};
