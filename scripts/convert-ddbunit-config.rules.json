@@ -509,6 +509,19 @@
           "new": "const gridData = cloneDeep(param?.dataSource || []);"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/badz2/common/htcx/func.tsx",
+      "replace": [
+        {
+          "old": "const headerSearchModel = gridRef.current?.getHeaderFilter()",
+          "new": "const headerSearchModel = param.refGrid.current?.getHeaderFilter() || []"
+        },
+        {
+          "old": "case 'ain':",
+          "new": "case 'ain': case 'in': searchModel[`${property}Arr`] = values; break;"
+        }
+      ]
     }
   ],
   "excludeFiles": [

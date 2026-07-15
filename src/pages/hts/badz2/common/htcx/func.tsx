@@ -145,7 +145,7 @@ Func.commonPlxz =(param:any,dzlx:string) => {
   }
   // 获取筛选条件
   const searchModel = refUnit.current?.getGridParams().searchModel;
-  const headerSearchModel = gridRef.current?.getHeaderFilter();
+  const headerSearchModel = param.refGrid.current?.getHeaderFilter() || [];
   const allSearchModel: any = searchModel.concat(headerSearchModel);
   convertAdQueryToSearchModel(allSearchModel,downloadParam);
   // 此时拿到了所有的条件，准备下载附件 
@@ -181,7 +181,7 @@ const convertAdQueryToSearchModel = (adQuery: [], searchModel:any = {}) => {
       case '<=':
         searchModel[`${property}End`] = new Date(value); // 处理日期范围结束
         break;
-      case 'ain':
+      case 'ain': case 'in': searchModel[`${property}Arr`] = values; break;
       case 'nin':
         searchModel[`${property}Arr`] = values; // 处理数组类型值
         break;
