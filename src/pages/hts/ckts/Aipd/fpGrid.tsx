@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import ProCard from '@ant-design/pro-card';
-import { Button, Form, Input, Space, Modal, Table, DatePicker, InputNumber, Tooltip,Dropdown,Menu } from 'antd';
+import { Button, Form, Input, Space, Modal, Table, DatePicker, InputNumber, Tooltip, Dropdown } from 'antd';
 import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -522,12 +522,10 @@ const Scsbsj: React.FC<ScsbsjProps> = ({
             <Button type="link" style={{ fontSize: 14, margin: '9px 4px 0px' }} onClick={rightGd}>更多<DownOutlined /></Button>
             {
                 pduuid?.length > 10 ?
-                <Dropdown overlay={(
-                  <Menu>
-                    <Menu.Item onClick={() => fpSx('SAAS_TSSB_MTS_AIPD_ZZSFP_CX','1')} key='szwytz11'>原始数据</Menu.Item>
-                    <Menu.Item onClick={() => fpSx('SAAS_TSSB_MTS_AIPD_ZZSFP_PDJG_CX','1')} key='szwwtz22'>配单结果</Menu.Item>
-                  </Menu>
-                )}>
+                <Dropdown menu={{ items: [
+        { key: 'szwytz11', label: <a onClick={() => fpSx('SAAS_TSSB_MTS_AIPD_ZZSFP_CX','1')}>原始数据</a> },
+        { key: 'szwwtz22', label: <a onClick={() => fpSx('SAAS_TSSB_MTS_AIPD_ZZSFP_PDJG_CX','1')}>配单结果</a> },
+      ] }}>
                   <Button type="primary" style={{ fontSize: 14, margin: '9px 4px 0px' }}>筛选<DownOutlined /></Button>
                   </Dropdown>: <Button type='primary' style={{ fontSize: 14, margin: '9px 4px 0px' }} onClick={() => fpSx('SAAS_TSSB_MTS_AIPD_ZZSFP_CX','1')}>筛选</Button>
               }

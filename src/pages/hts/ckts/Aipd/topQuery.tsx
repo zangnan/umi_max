@@ -1,6 +1,6 @@
 // 疑点管理
 import React, { useEffect, } from 'react';
-import { Button, Form, Input, Space, Radio, Dropdown, Menu,} from 'antd';
+import { Button, Form, Input, Space, Radio, Dropdown } from 'antd';
 import { DownOutlined, } from '@ant-design/icons';
 import ProCard from '@ant-design/pro-card';
 
@@ -54,12 +54,10 @@ const Ydgl: React.FC<YdglProps> = ({
               <Button type="link" onClick={handlerMock} >更多筛选<DownOutlined /></Button>
               {
                 pduuid?.length > 10 ?
-                <Dropdown overlay={(
-                  <Menu>
-                    <Menu.Item onClick={()=>handlerZnpdsearch('1')} key='szwytz'>原始数据</Menu.Item>
-                    <Menu.Item onClick={()=>handlerZnpdsearch('2')} key='szwwtz'>配单结果</Menu.Item>
-                  </Menu>
-                )}>
+                <Dropdown menu={{ items: [
+        { key: 'szwytz', label: <a onClick={()=>handlerZnpdsearch('1')}>原始数据</a> },
+        { key: 'szwwtz', label: <a onClick={()=>handlerZnpdsearch('2')}>配单结果</a> },
+      ] }}>
                   <Button type="primary">筛选<DownOutlined /></Button>
                 </Dropdown>
                 : <Button type='primary' key={'search'} onClick={()=>handlerZnpdsearch('1')}>筛选</Button>

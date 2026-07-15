@@ -2,7 +2,7 @@
  * title: 免抵退疑点处理
  */
 import React, { useState, useEffect, useContext, useImperativeHandle } from 'react';
-import { List, Checkbox, Spin, Button, Form, Space, message, Input, Typography, Row, Col, Badge, Popover, Drawer, Dropdown, Menu, Modal, Table, DatePicker, Tooltip } from 'antd';
+import { List, Checkbox, Spin, Button, Form, Space, message, Input, Typography, Row, Col, Badge, Popover, Drawer, Dropdown, Modal, Table, DatePicker, Tooltip } from 'antd';
 import ProCard from '@ant-design/pro-card';
 import { changeYdcl, querySpdmXxCj, mxSetzbsb, ydtj, queryYdclList, queryYdclXxList, queryYdxxTzff, queryYdclSpList, scHgsptzGcb, queryYdplclSpList, pageRightYdtj, checkSsqPcYsb, checkSsqYsbCj, checkYdglYsb } from '@/pages/hts/services/htsApi';
 import './style.less';
@@ -1228,12 +1228,10 @@ const Ydcl: React.FC<YdclProps> = ({
           style={{ marginTop: '-20px' }}
           extra={
             <Space style={{ marginBottom: '10px' }}>
-              <Dropdown overlay={(
-                <Menu>
-                  <Menu.Item onClick={()=>setTzzt('Y')} key='szwytz'>设置为已调整</Menu.Item>
-                  <Menu.Item onClick={()=>setTzzt('N')} key='szwwtz'>设置为未调整</Menu.Item>
-                </Menu>
-              )}>
+              <Dropdown menu={{ items: [
+        { key: 'szwytz', label: <a onClick={()=>setTzzt('Y')}>设置为已调整</a> },
+        { key: 'szwwtz', label: <a onClick={()=>setTzzt('N')}>设置为未调整</a> },
+      ] }}>
                 <Button type="link">设置疑点状态<DownOutlined /></Button>
               </Dropdown>
               <Button type="link" onClick={setMxzbsb}>下期申报</Button>

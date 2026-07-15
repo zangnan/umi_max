@@ -1420,6 +1420,385 @@ function transformCodeTableArraysGlobal(content) {
   return { content: out, count };
 }
 
+// r20：antd v6 Dropdown overlay={<Menu>...</Menu>} → menu={{ items: [...] }}
+//
+// 背景：antd v6 的 DropdownProps 完全删除了 overlay 属性（node_modules/antd/es/dropdown/dropdown.d.ts），
+// 只能走 menu={{ items: [...] }} 形式。代码 sample（v4）大量使用 overlay={<Menu>...}，
+// 需要在 copy 时改写为 v6 形式。
+//
+// 范围（简单场景自动转换）：
+//   · <Dropdown ... overlay={(<Menu>...</Menu>)}>  静态 inline Menu
+//   · 每个 <Menu.Item key=... onClick=...>label</Menu.Item> → { key, label, onClick }
+//   · 有 onClick → label 包成 <a onClick={handler}>...</a>（与 ydgl2:1232 手改样本一致）
+//   · 无 onClick → children 原样做 label
+//   · 自闭合 <Menu.Item key='x'/> 也支持
+//   · Dropdown 其它 props（placement / trigger / key）原样保留
+//
+// 跳过（复杂场景 log warn，原样保留待人工处理）：
+//   · <Dropdown.Button>（不同组件，menu prop 行为不同）
+//   · overlay={variable}（非常量 inline JSX，无法静态解析）
+//   · overlay 内容含 ({ domEvent }) 解构（v4 Menu.Item.onClick 特有语义，v6 不可静默迁移）
+//   · Menu 子元素含 <Access> / <Fragment> / 条件表达式 {cond ? '' : <Menu.Item>}（非平坦 list）
+//
+// 算法：<Dropdown 起点 regex + overlay={...} 起点 regex + bracket-depth 扫描 {} 配对 +
+//       <Menu>...</Menu> 边界扫描 + <Menu.Item ...>...</Menu.Item> 子节点扫描。
+function transformDropdownOverlayToMenu(content) {
+  let count = 0;
+  const skipped = [];
+
+  // 在字符串字面量（' " `）内时跳过 {} —— 与 extractFuncMethod 同款简化
+  function isInString(s, idx) {
+    let i = idx - 1;
+    while (i >= 0 && (s[i] === '\\')) i -= 2;
+    if (i < 0) return null;
+    const c = s[i];
+    if (c === "'" || c === '"' || c === '`') return c;
+    return null;
+  }
+
+  function findMatchingBrace(s, openIdx) {
+    // s[openIdx] 必须是 '{'，返回匹配的 '}' 索引
+    let depth = 1;
+    let i = openIdx + 1;
+    while (i < s.length) {
+      const c = s[i];
+      if (!isInString(s, i)) {
+        if (c === '{') depth++;
+        else if (c === '}') {
+          depth--;
+          if (depth === 0) return i;
+        }
+      }
+      i++;
+    }
+    return -1;
+  }
+
+  function findOverlayStart(s, fromIdx) {
+    // 从 fromIdx 起找 overlay={<  或 overlay={(
+    const re = /overlay\s*=\s*\{/g;
+    re.lastIndex = fromIdx;
+    const m = re.exec(s);
+    return m ? m.index + m[0].length - 1 : -1; // 返回 '{' 的索引
+  }
+
+  function scanJsxOpenTagEnd(content, startIdx) {
+  // 从 <Tag 起点扫描开标签结束的 '>'，处理字符串字面量 ' " ` / JSX 表达式 {}
+  // 返回 '>' 之后的位置索引（即开标签结束位置）；找不到返回 -1
+  const m = /^<[A-Za-z]/.exec(content.slice(startIdx));
+  if (!m) return -1;
+  let i = startIdx + 1;
+  // 跳过 tag name
+  while (i < content.length && /[A-Za-z0-9.]/.test(content[i])) i++;
+  if (i >= content.length) return -1;
+  let inStr = null;
+  let braceDepth = 0;
+  while (i < content.length) {
+    const c = content[i];
+    if (inStr) {
+      if (c === '\\') { i += 2; continue; }
+      if (c === inStr) inStr = null;
+    } else {
+      if (c === '"' || c === "'" || c === '`') inStr = c;
+      else if (c === '{') braceDepth++;
+      else if (c === '}') braceDepth--;
+      else if (c === '>' && braceDepth === 0) return i + 1;
+    }
+    i++;
+  }
+  return -1;
+}
+
+function findJsxTagBlock(s, tagName, fromIdx) {
+    // 从 fromIdx 起找 <tagName ...>...</tagName> 或 <tagName .../>
+    // 返回 { openStart, openEnd, closeStart, closeEnd, selfClosing }
+    // 注意：tagName 必须严格匹配（<Menu> 不匹配 <Menu.Item>）
+    const openRe = new RegExp(`<${tagName}(?=[\\s>/])`, 'g');
+    openRe.lastIndex = fromIdx;
+    const openMatch = openRe.exec(s);
+    if (!openMatch) return null;
+    const openStart = openMatch.index;
+    // 扫描开标签 attrs（处理 ' " { 内的 >）
+    let i = openStart + openMatch[0].length;
+    let inStr = null;
+    let braceDepth = 0;
+    while (i < s.length) {
+      const c = s[i];
+      if (inStr) {
+        if (c === '\\') { i += 2; continue; }
+        if (c === inStr) inStr = null;
+      } else {
+        if (c === '"' || c === "'" || c === '`') inStr = c;
+        else if (c === '{') braceDepth++;
+        else if (c === '}') braceDepth--;
+        else if (c === '>' && braceDepth === 0) break;
+      }
+      i++;
+    }
+    if (i >= s.length) return null;
+    const openEnd = i;
+    if (s[openEnd - 1] === '/') {
+      // self-closing
+      return { openStart, openEnd: openEnd + 1, closeStart: -1, closeEnd: -1, selfClosing: true };
+    }
+    // 找 </tagName>
+    const closeRe = new RegExp(`</${tagName}\\s*>`, 'g');
+    closeRe.lastIndex = openEnd + 1;
+    const closeMatch = closeRe.exec(s);
+    if (!closeMatch) return null;
+    return {
+      openStart,
+      openEnd: openEnd + 1,
+      closeStart: closeMatch.index,
+      closeEnd: closeMatch.index + closeMatch[0].length,
+      selfClosing: false,
+    };
+  }
+
+  function extractMenuItem(itemText) {
+    // itemText = '<Menu.Item ...>children</Menu.Item>' 或 '<Menu.Item .../>'
+    // 返回 { key, onClick, childrenText, selfClosing }
+    // attrs 必须用 scanner 处理，因为 '=>' 等含 '>' 字符
+    if (!itemText.startsWith('<Menu.Item')) return null;
+    let i = '<Menu.Item'.length;
+    // 跳过空白
+    while (i < itemText.length && /\s/.test(itemText[i])) i++;
+    // 扫描 attrs（处理 ' " { 内的 >）
+    let attrsEnd = -1;
+    let isSelfClosing = false;
+    let inStr = null;
+    let braceDepth = 0;
+    while (i < itemText.length) {
+      const c = itemText[i];
+      if (inStr) {
+        if (c === '\\') { i += 2; continue; }
+        if (c === inStr) inStr = null;
+      } else {
+        if (c === '"' || c === "'" || c === '`') inStr = c;
+        else if (c === '{') braceDepth++;
+        else if (c === '}') braceDepth--;
+        else if (c === '>' && braceDepth === 0) {
+          isSelfClosing = itemText[i - 1] === '/';
+          attrsEnd = i;
+          break;
+        }
+      }
+      i++;
+    }
+    if (attrsEnd < 0) return null;
+    const attrsStr = itemText.slice('<Menu.Item'.length, attrsEnd);
+
+    // 提取 key
+    let key = null;
+    const keyRe = /\bkey\s*=\s*(?:\{([^}]+)\}|(['"])([^'"]+)\2)/;
+    const km = keyRe.exec(attrsStr);
+    if (km) {
+      if (km[1] !== undefined) key = `{${km[1]}}`;
+      else key = `'${km[3]}'`;
+    }
+    // 提取 onClick（用 scanner 跳 => 等含 > 的表达式）
+    let onClick = null;
+    const ocRe = /\bonClick\s*=\s*\{/;
+    const ocMatch = ocRe.exec(attrsStr);
+    if (ocMatch) {
+      const openIdx = ocMatch.index + ocMatch[0].length - 1;
+      const closeIdx = findMatchingBrace(attrsStr, openIdx);
+      if (closeIdx >= 0) {
+        onClick = attrsStr.slice(openIdx, closeIdx + 1);
+      }
+    }
+    let childrenText = '';
+    if (!isSelfClosing) {
+      const endTag = '</Menu.Item>';
+      const endIdx = itemText.lastIndexOf(endTag);
+      if (endIdx > 0) childrenText = itemText.slice(attrsEnd + 1, endIdx);
+    }
+    return { key, onClick, childrenText, selfClosing: isSelfClosing };
+  }
+
+  // 主循环：从头扫描 <Dropdown 起点
+  const result = [];
+  let cursor = 0;
+  while (cursor < content.length) {
+    const ddRe = /<Dropdown\b/g;
+    ddRe.lastIndex = cursor;
+    const ddMatch = ddRe.exec(content);
+    if (!ddMatch) {
+      result.push(content.slice(cursor));
+      break;
+    }
+    const ddStart = ddMatch.index;
+    result.push(content.slice(cursor, ddStart));
+
+    // 扫描开标签结束的 '>'（处理字符串字面量 / JSX 表达式）
+    const openEnd = scanJsxOpenTagEnd(content, ddStart);
+    if (openEnd < 0) {
+      result.push(content.slice(ddStart, ddStart + ddMatch[0].length));
+      cursor = ddStart + ddMatch[0].length;
+      continue;
+    }
+    const openTagText = content.slice(ddStart, openEnd);
+
+    // 检查是不是 Dropdown.Button
+    if (/\bDropdown\.Button\b/.test(openTagText)) {
+      skipped.push({ reason: 'Dropdown.Button 是不同组件，不在自动转换范围', lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, openEnd));
+      cursor = openEnd;
+      continue;
+    }
+
+    // 找 overlay={ 在开标签 attrs 内的位置
+    const overlayRe = /overlay\s*=\s*\{/g;
+    const openTagSlice = content.slice(ddStart, openEnd);
+    overlayRe.lastIndex = 0;
+    const overlayMatch = overlayRe.exec(openTagSlice);
+    if (!overlayMatch) {
+      cursor = openEnd;
+      continue;
+    }
+    const overlayStart = ddStart + overlayMatch.index; // 'overlay' 起点（含 leading whitespace）
+    const braceStart = ddStart + overlayMatch.index + overlayMatch[0].length - 1; // '{' 的绝对位置
+    const braceEnd = findMatchingBrace(content, braceStart);
+    if (braceEnd < 0) {
+      result.push(content.slice(ddStart, ddStart + tagEndRe[0].length));
+      cursor = ddStart + tagEndRe[0].length;
+      continue;
+    }
+    const overlayContent = content.slice(braceStart + 1, braceEnd).trim();
+
+    // 常见 overlay={(...)} 模式：去掉外层括号（仅当括号包裹 JSX，不是函数调用）
+    let jsxContent = overlayContent;
+    if (jsxContent.startsWith('(') && jsxContent.endsWith(')')) {
+      jsxContent = jsxContent.slice(1, -1).trim();
+    }
+    jsxContent = jsxContent.trim();
+
+    // 检查 overlay 内容是不是 inline JSX（以 < 开头）
+    if (!jsxContent.startsWith('<')) {
+      skipped.push({ reason: `overlay={非 inline JSX，疑似变量: ${overlayContent.slice(0, 30).replace(/\s+/g, ' ')}...`, lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, braceEnd + 1));
+      cursor = braceEnd + 1;
+      continue;
+    }
+
+    // 检查 domEvent 解构
+    if (/\(\s*\{\s*domEvent\s*\}/.test(jsxContent)) {
+      skipped.push({ reason: 'onClick 解构 domEvent，v4 Menu.Item 特有语义，v6 不可静默迁移', lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, braceEnd + 1));
+      cursor = braceEnd + 1;
+      continue;
+    }
+
+    // 检查 Menu 内非平坦子元素
+    if (/<Access\b|<Fragment\b/.test(jsxContent) || /\{[^}]+\?\s*[^}]+:\s*[^}]+\}/.test(jsxContent)) {
+      skipped.push({ reason: 'Menu 含非平坦子元素（<Access> / <Fragment> / 条件表达式）', lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, braceEnd + 1));
+      cursor = braceEnd + 1;
+      continue;
+    }
+
+    // 找 <Menu>...</Menu>
+    const menuBlock = findJsxTagBlock(jsxContent, 'Menu', 0);
+    if (!menuBlock || menuBlock.selfClosing) {
+      skipped.push({ reason: '<Menu> 块未找到或格式异常', lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, braceEnd + 1));
+      cursor = braceEnd + 1;
+      continue;
+    }
+    // 限制：Menu 标签不能有属性（className 等需要手动迁移）
+    const menuOpenTag = jsxContent.slice(menuBlock.openStart, menuBlock.openEnd);
+    if (!/^<Menu\s*>$/.test(menuOpenTag)) {
+      skipped.push({ reason: '<Menu> 含属性（如 className），需手动迁移到 menu={{ className, items }}', lineHint: lineOf(content, ddStart) });
+      result.push(content.slice(ddStart, braceEnd + 1));
+      cursor = braceEnd + 1;
+      continue;
+    }
+    const menuInner = jsxContent.slice(menuBlock.openEnd, menuBlock.closeStart);
+
+    // 解析每个 <Menu.Item ...>...</Menu.Item>
+    const items = [];
+    let itemCursor = 0;
+    let parseOk = true;
+    while (itemCursor < menuInner.length) {
+      const itemRe = /<Menu\.Item\b/g;
+      itemRe.lastIndex = itemCursor;
+      const itemMatch = itemRe.exec(menuInner);
+      if (!itemMatch) break;
+      const itemStart = itemMatch.index;
+      const itemBlock = findJsxTagBlock(menuInner, 'Menu.Item', itemStart);
+      if (!itemBlock) {
+        parseOk = false;
+        break;
+      }
+      const itemText = menuInner.slice(itemBlock.openStart, itemBlock.selfClosing ? itemBlock.openEnd : itemBlock.closeEnd);
+      const parsed = extractMenuItem(itemText);
+      if (!parsed) {
+        parseOk = false;
+        break;
+      }
+      items.push(parsed);
+      itemCursor = itemBlock.selfClosing ? itemBlock.openEnd : itemBlock.closeEnd;
+    }
+
+    if (!parseOk || items.length === 0) {
+      skipped.push({ reason: 'Menu.Item 解析失败（可能嵌套 / 格式异常）', lineHint: lineOf(content, ddStart) });
+      cursor = braceEnd + 1;
+      continue;
+    }
+
+    // 构造 items 数组字符串
+    const itemStrs = items.map((it) => {
+      const parts = [];
+      if (it.key !== null) parts.push(`key: ${it.key}`);
+      if (it.onClick !== null) {
+        // 有 onClick → label 包成 <a onClick={...}>...</a>
+        const childTrim = it.childrenText.trim();
+        parts.push(`label: <a onClick={${it.onClick.slice(1, -1)}}>${childTrim}</a>`);
+      } else {
+        // 无 onClick → children 原样做 label
+        parts.push(`label: ${it.childrenText.trim() || "''"}`);
+      }
+      return `{ ${parts.join(', ')} }`;
+    });
+    const menuRepl = `menu={{ items: [\n        ${itemStrs.join(',\n        ')},\n      ] }}`;
+
+    // 替换 overlay={...} 段（保留 overlay 之前的 Dropdown attrs，包括 placement 等）
+    result.push(content.slice(ddStart, overlayStart), menuRepl);
+    cursor = braceEnd + 1;
+    count++;
+  }
+
+  return { content: result.join(''), count, skipped };
+}
+
+function lineOf(content, idx) {
+  let n = 1;
+  for (let i = 0; i < idx && i < content.length; i++) {
+    if (content[i] === '\n') n++;
+  }
+  return n;
+}
+
+// 清理未被引用的 import { Menu } from 'antd';
+// 仅当文件内不再含 Menu.Item / Menu.SubMenu / Menu.Divider / Menu.ItemGroup 时清理
+function cleanupUnusedMenuImport(content) {
+  if (/Menu\.(Item|SubMenu|Divider|ItemGroup)\b/.test(content)) {
+    return { content, removed: false };
+  }
+  // 找 import { ... } from 'antd'（行级匹配）
+  const m = /^[ \t]*import\s*\{([^}]+)\}\s*from\s*['"]antd['"]\s*;?[ \t]*\r?\n?/m.exec(content);
+  if (!m || !/\bMenu\b/.test(m[1])) return { content, removed: false };
+  const names = m[1].split(',').map((s) => s.trim()).filter(Boolean);
+  const newNames = names.filter((n) => n !== 'Menu');
+  if (newNames.length === 0) {
+    // 整行删除（连同换行）
+    const removed = content.replace(m[0], '');
+    return { content: removed, removed: true };
+  }
+  const newImport = `import { ${newNames.join(', ')} } from 'antd';\n`;
+  return { content: content.replace(m[0], newImport), removed: true };
+}
+
 // rules.special 专用：按 fileName 查找并应用该文件特有的替换规则。
 // 触发条件：传入的 srcFile 与 rules.special[*].fileName 精确匹配（路径分隔符归一为 /）。
 // 适用场景：某个具体文件需要做特殊文本替换（不适用于通用规则）。
@@ -1509,6 +1888,28 @@ function applyContentReplaces(content, fileExt, srcFile) {
     const ctResult = transformCodeTableArraysGlobal(text);
     if (ctResult.count > 0) {
       text = ctResult.content;
+    }
+  }
+
+  // 第四点六遍：antd v6 Dropdown overlay={<Menu>...</Menu>} → menu={{ items: [...] }}（仅 ts/tsx）
+  //   仅处理简单 inline Menu 场景；复杂场景（Dropdown.Button / 动态 MenuItem 构建器 /
+  //   overlay={variable} / 非平坦子元素 / domEvent 解构）log warn 后原样保留，由人工处理
+  if (fileExt === 'ts') {
+    const ddResult = transformDropdownOverlayToMenu(text);
+    if (ddResult.count > 0) {
+      text = ddResult.content;
+      console.log(`[convert] r20 antd v6 Dropdown overlay→menu: 命中 ${ddResult.count} 处 (${srcFile || '?'})`);
+    }
+    for (const s of ddResult.skipped) {
+      console.warn(`[convert][skip] Dropdown overlay 未自动转换: ${s.reason} (${srcFile || '?'}:${s.lineHint || '?'})`);
+    }
+  }
+
+  // 第四点七遍：清理未使用的 Menu import（仅 ts/tsx；alwaysOn）
+  if (fileExt === 'ts') {
+    const clResult = cleanupUnusedMenuImport(text);
+    if (clResult.removed) {
+      text = clResult.content;
     }
   }
 
@@ -2639,4 +3040,6 @@ module.exports = {
   applyCopyRewrites,
   applyImportRewritesToContent,
   ensureMyUtilImport,
+  transformDropdownOverlayToMenu,
+  cleanupUnusedMenuImport,
 };
