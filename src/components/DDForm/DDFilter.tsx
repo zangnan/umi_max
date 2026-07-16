@@ -28,6 +28,7 @@ const DDFilter: React.FC<FilterProps> = ({
   layout = {
     group: layoutType === 'modal' ? defaultLayoutModal : defaultLayout,
   },
+  otherParam,
 }) => {
   let ddFilterHeight = `${myUtil.theme.getThemeToken().token?.ddFilterHeight || '30'}px`;
   const [searchHeight, setSearchHeight] = useState(ddFilterHeight);
@@ -76,7 +77,7 @@ const DDFilter: React.FC<FilterProps> = ({
               labelCol={{ flex: '110px' }}
               labelWrap
             >
-              <DDItems items={items} layout={layout} formType='filter' searchAct={onFinish}/>
+              <DDItems items={items} layout={layout} formType='filter' searchAct={onFinish} otherParam={otherParam}/>
             </Form>
           {/* </DndProvider> */}
         </div>

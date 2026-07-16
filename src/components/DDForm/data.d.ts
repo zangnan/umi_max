@@ -104,6 +104,7 @@ export type FilterProps = {
   form?: any;
   layoutType?: any;
   formItemLabelShow?: any;
+  otherParam?: any;
 }
 
 export type FilterSimpleProps = {
@@ -113,4 +114,5 @@ export type FilterSimpleProps = {
   form?: any;
   initialValues?: any;
   name?: any;
+  otherParam?: any;
 }

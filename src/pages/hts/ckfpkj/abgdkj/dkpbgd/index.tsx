@@ -242,10 +242,10 @@ const abgdkjIndx: React.FC<unknown> = () => {
           type: 'Select',
           defaultValue: '2',
           op: 'zdy',
-          onChange: 'handleOnChangeBgd',
+          eventOnChange: 'handleOnChangeBgd',
           list: [
-            { label: '按18位报关单开票', value: '1', },
-            { label: '按21位报关单开票', value: '2' },
+            { name: '按18位报关单开票', value: '1', },
+            { name: '按21位报关单开票', value: '2' },
           ],
         },
       ];

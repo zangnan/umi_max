@@ -155,6 +155,9 @@ formUtil = {
       if (eventOnChange && func?.eventOnChange && func?.eventOnChange[eventOnChange]) {
         item.onChange = func.eventOnChange[eventOnChange];
       }
+      if (eventOnChange && func[eventOnChange]) {// 兼容老版本
+        item.onChange = func[eventOnChange];
+      }
       if (eventOnBlur && func?.eventOnBlur && func?.eventOnBlur[eventOnBlur]) {
         item.onBlur = func.eventOnBlur[eventOnBlur];
       }

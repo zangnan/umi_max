@@ -628,7 +628,7 @@ abgdkjFunc.openBjkp = (bgdhORtybh: any, param: any) => {
 abgdkjFunc.handleOnChangeBgd = (param: any) => {
   const ckrq :any = ['','']; 
   const hgckhwbgdsbrq1 :any = ['','']; 
-  const searchModel =  param.refUnit.current.getGridParams().searchModel;
+  const searchModel =  param.otherParam.refUnit.current.getGridParams().searchModel;
   const p = {};
   for(let i=0;i< searchModel?.length;i++){
     const property = searchModel[i].property;

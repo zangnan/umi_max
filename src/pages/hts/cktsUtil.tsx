@@ -270,6 +270,17 @@ cktsUtil.api = {
         }
       }
     }
+    if (url.indexOf('/yw/bszx/ggfw/scsbsj/sjgl/querySbsjJlCp') > -1 ||
+        url.indexOf('/yw/bszx/ggfw/shjgcx/queryPagerSblbCp') > -1 ||
+        url.indexOf('/yw/fpzs/bgdkp/dkpbgdfycx') > -1) {
+      // console.info(config);
+      config.data = {
+        ...config.data,
+        searchModel: config.data.searchModel.map((item: any) =>
+          item?.op === 'in' ? { ...item, op: 'ain' } : item,
+        ),
+      };
+    }
 
     // 5. getCodeList 端点转换
     //    URL:  /dict/automatic/exp/bs/getCodeList → /hx/ty/code/getCode

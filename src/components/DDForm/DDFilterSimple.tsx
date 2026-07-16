@@ -14,6 +14,7 @@ const DDFilterSimple: React.FC<FilterSimpleProps> = ({
   form,
   name,
   initialValues,
+  otherParam,
 }) => {
 
   const onFinish = () => {
@@ -38,7 +39,7 @@ const DDFilterSimple: React.FC<FilterSimpleProps> = ({
           onFinish={onFinish}
           initialValues={initialValues}
         >
-          <DDItems items={items} formType='filterSimple' searchAct={onFinish}/>
+          <DDItems items={items} formType='filterSimple' searchAct={onFinish} otherParam={otherParam}/>
           <Space>
             <Button htmlType="submit" type="primary">查询</Button>
             <Button onClick={reset} >重置</Button>
