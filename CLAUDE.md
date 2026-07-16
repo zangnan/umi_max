@@ -2,6 +2,61 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 已提交变更（2026-07-16）
+
+### commit 9a0a8f3 — feat(DDBunit2/DDForm): otherParam 透传 + cktsUtil 'in'→'ain' 端点修复 + dkpbgd eventOnChange 修正
+
+**改动 9 文件 / +41 -11**：
+
+1. **DDBunit2 → DDFilter → DDFilterSimple → DDItems 链路新增 `otherParam` 透传**（5 个文件）：
+   - [src/components/DDForm/data.d.ts](src/components/DDForm/data.d.ts) — `FilterProps` / `FilterSimpleProps` 加 `otherParam?: any`
+   - [src/components/DDForm/DDFilter.tsx](src/components/DDForm/DDFilter.tsx) — 接收 `otherParam` → 传 `<DDItems otherParam={otherParam}/>`
+   - [src/components/DDForm/DDFilterSimple.tsx](src/components/DDForm/DDFilterSimple.tsx) — 同上
+   - [src/components/DDBunit/DDBunit2.tsx](src/components/DDBunit/DDBunit2.tsx) — 2 处 `<DDFilter>` 实例化都加 `otherParam={{ otherRef: getOtherRefs(), unitKey, refGrid, refUnit }}`；`formUtil.init` 加 `func: func` 透传给 DDItems
+   - 目的：表单事件回调 (`eventOnChange` / `eventOnBlur` 等) 中需要访问 `param.refUnit` / `param.refGrid` 引用外部组件实例 —— 旧版 `param.refUnit`（直接根级）已不工作，新版 `param.otherParam.refUnit` 透传链
+
+2. **formUtil 老版本 onChange 兼容**（[src/components/DDForm/formUtil.tsx:158-160](src/components/DDForm/formUtil.tsx#L158)）：
+   ```js
+   if (eventOnChange && func[eventOnChange]) {// 兼容老版本
+     item.onChange = func[eventOnChange];
+   }
+   ```
+   - 之前只匹配 `func?.eventOnChange?.[eventOnChange]`（新版协议：Func.eventOnChange 是个对象字面量）
+   - 加一行直接 `func[eventOnChange]` 兼容老版（Func[eventOnChange] 直接是函数）
+   - 命中顺序：先新版再老版（新版优先级高）
+
+3. **cktsUtil.handleHtsRequest 3 端点 'in' → 'ain' 转换**（[src/pages/hts/cktsUtil.tsx:273-284](src/pages/hts/cktsUtil.tsx#L273)）：
+   ```js
+   if (url.indexOf('/yw/bszx/ggfw/scsbsj/sjgl/querySbsjJlCp') > -1 ||
+       url.indexOf('/yw/bszx/ggfw/shjgcx/queryPagerSblbCp') > -1 ||
+       url.indexOf('/yw/fpzs/bgdkp/dkpbgdfycx') > -1) {
+     config.data = {
+       ...config.data,
+       searchModel: config.data.searchModel.map((item: any) =>
+         item?.op === 'in' ? { ...item, op: 'ain' } : item,
+       ),
+     };
+   }
+   ```
+   - 业务端 searchModel 用 `op: 'in'`，但 HTS 这 3 个端点后端要求 `op: 'ain'`
+   - 与 18 业务前缀 `key += '_CX'` 机制平行（不影响该机制）
+
+4. **dkpbgd 页面修复**（3 文件）：
+   - [config.tsx:160](src/pages/hts/ckfpkj/abgdkj/dkpbgd/config.tsx#L160) — `onChange: 'handleOnChangeBgd'` → `eventOnChange: 'handleOnChangeBgd'`（新协议字段名）
+   - [config.tsx:163-166](src/pages/hts/ckfpkj/abgdkj/dkpbgd/config.tsx#L163) — `list` 项 `{ label, value }` → `{ name, value }`（与运行时 `getCode` 期望的 key 一致）
+   - [index.tsx:245-250](src/pages/hts/ckfpkj/abgdkj/dkpbgd/index.tsx#L245) — 同款 `onChange` → `eventOnChange` + `label` → `name`
+   - [f.tsx:631](src/pages/hts/ckfpkj/abgdkj/dkpbgd/f.tsx#L631) — `param.refUnit.current.getGridParams()` → `param.otherParam.refUnit.current.getGridParams()`（与新透传链一致）
+
+**端到端验证**：
+- 启动 `npm run dev`，进入 `/hts/ckfpkj/abgdkj/dkpbgd`
+- 「报关单类型」下拉切换 → `handleOnChangeBgd` 触发 → 取到 `searchModel` 并展开日期范围 ✓
+- 调用 `/yw/bszx/ggfw/scsbsj/sjgl/querySbsjJlCp` 端点 → `op: 'in'` 自动转 `'ain'` ✓
+
+**已知限制**（用户决策接受）：
+- 字符串/注释里的 `otherParam` 不会被识别 —— 实际数据无此场景
+- `func[eventOnChange]` 兼容老版本只在 formUtil 命中；若 `func` 是 `null/undefined` 不会抛错（短路）
+- `op` 转换是 'in' → 'ain' 单向；不做 'ain' → 'in'（业务无此反向需求）
+
 ## 待提交变更（2026-07-14）
 
 ### 修复 antd v6 RangePicker `getUDayjs(...).isValid is not a function` 报错 + 批量迁移
