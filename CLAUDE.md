@@ -2,6 +2,60 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 待提交变更（2026-07-16）
+
+### r21: grid_filter_quick 块内 list.label → name + onChange → eventOnChange
+
+**背景**：运行时 DDBunit2_CKTS 的 grid_filter_quick 期望：
+- `list` 项用 **`name`** 作为展示字段名（不是 `label`）
+- item 级事件处理器用 **`eventOnChange`**（不是 `onChange`）
+
+旧协议 config 全部沿用 `label:` / `onChange:`，导致 Select 下拉项文案为空、
+事件回调 handler 名称找不到。
+
+**用户指示**：执行 `node scripts/copy-from-code-sample.js` 处理 ts/tsx 文件时，
+遇到 `grid_filter_quick` 块：
+1. 若 item 含 `list: [...]`，把内部所有 `label:` 改成 `name:`
+2. 若 item 含 `onChange:`，改成 `eventOnChange:`
+
+**关键设计点**：
+
+- **作用域严格限定** `<configVar>.grid_filter_quick = [ ... ]`（用 `\b${configVar}\\.grid_filter_quick\\s*=\\s*\\[` 锚点 + `\b` 词边界保护，configVar 由 `applySpecialFieldRules` 传入，覆盖 `unitConfig` / `myConfig` / `abgdkjConfig` / `config` 等所有变体）
+- **不动 item 级 `label:`**（按用户决策 —— item 级 `label:` 是表单字段展示名，与 list 项展示名语义不同；znfx config 那种 `label: '核销'` / `label: '核销周期'` 全部保留不动）
+- **嵌套扫描**（与 r15/r18 单层不同）：每个 item 对象 `{...}` 用 bracket-depth 找 `}`，然后在 item 体内再扫描 `list: [...]`（第二个 bracket-depth 找 `]`），只在 listBody 内做 `label → name`
+- **item 级 onChange 正则容错**：`\bonChange(\s*:\s*['"][^'"]+['"])` —— 冒号前后可有任意空白（znfx 风格 `onChange : 'handler'`），替换时通过捕获组原样保留
+- **整块注释跳过**：LHS 行以 `//` 起始时整块跳过（递归到下一个 `grid_filter_quick` 匹配），不会被错误转换
+- **空 list / 缺 list 安全**：list 为空数组 `[]` 时 depth 立即归零，无错；item 不含 `list` 时 Pass 1 自然 no-op
+- **幂等**：`\bonChange\b` 不匹配 `eventOnChange`（无词边界），`\blabel\b` 不匹配 `name:`，二次运行 0 处命中
+
+**改动文件（5 个）**：
+
+1. [scripts/copy-from-code-sample.js:727-846](scripts/copy-from-code-sample.js#L727-L846) —— 新增 `transformGridFilterQuick` 函数（紧跟 `transformBaseDateFormatNormalize` 之后）
+2. [scripts/copy-from-code-sample.js:341-344](scripts/copy-from-code-sample.js#L341-L344) —— 在 `SPECIAL_FIELD_RULES` 数组末尾追加 r21 注册项
+3. [scripts/convert-ddbunit-config.js](scripts/convert-ddbunit-config.js) —— 镜像新增函数（带 JSDoc）+ r21 注册项
+4. [scripts/__fixtures__/grid-filter-quick-transform.input.tsx](scripts/__fixtures__/grid-filter-quick-transform.input.tsx) —— 5 case 测试输入
+5. [scripts/__fixtures__/grid-filter-quick-transform.expected.tsx](scripts/__fixtures__/grid-filter-quick-transform.expected.tsx) —— 期望输出
+
+**端到端验证**：
+
+| 目录 | r21 命中 | 变化 |
+|---|---|---|
+| [src/pages/hts/ckfp/abgdkj/config.tsx](src/pages/hts/ckfp/abgdkj/config.tsx) | 3 | `onChange` → `eventOnChange` + 2 个 list `label → name` |
+| [src/pages/hts/jljg/znfx/config.tsx](src/pages/hts/jljg/znfx/config.tsx) | 5 | 4 个 list `label → name` + `onChange :` → `eventOnChange :`（whitespace 保留）；item 级 `label:` 全部保留 ✓ |
+| fixture `grid-filter-quick-transform` | 7 | CASE 1（3）+ CASE 2（1）+ CASE 4（3）= 7 ✓；CASE 3 无变化；CASE 5 注释块跳过 ✓ |
+
+**测试**：`npm run test:convert-config` → **23 通过**（22 + 新增 `grid-filter-quick-transform`）/ 8 失败（预存在：combo / default-nodes-and-xhcp / multi-line-remove / toolbar-ckts-sum / formUtil-injection* / useintl-replace*，与本次无关）
+
+**幂等验证**：对已转换文件再跑 convert → "应用 0 处特殊字段规则"，diff 为空。
+
+**已知限制**（用户决策接受）：
+
+- 不处理 `/* */` 块注释（codebase 无此场景）
+- item 自身被 `//` 注释时仍会被处理（codebase 无此场景）
+- `onChange` 值若不是字符串字面量（裸标识符 / 表达式）则不匹配，保留原样
+- 不波及 `form_items[].list`（用 `grid_filter_quick` 锚点限定）
+- `grid_filter_quick_extra` 这类带后缀的字段不被匹配（按 design）
+
 ## 已提交变更（2026-07-16）
 
 ### commit 9a0a8f3 — feat(DDBunit2/DDForm): otherParam 透传 + cktsUtil 'in'→'ain' 端点修复 + dkpbgd eventOnChange 修正

@@ -123,10 +123,10 @@ jxfpHwxxConfig.grid_columns = [
     type: 'Select',
     defaultValue: '1',
     op: 'zdy',
-    onChange: 'handleOnChangeCxlx',
+    eventOnChange: 'handleOnChangeCxlx',
     list: [
-      { label: '商品信息', value: '1' },
-      { label: '发票信息', value: '2', },
+      { name: '商品信息', value: '1' },
+      { name: '发票信息', value: '2', },
     ],
   },
 ];

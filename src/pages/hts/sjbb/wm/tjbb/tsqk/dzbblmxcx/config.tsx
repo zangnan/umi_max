@@ -24,10 +24,10 @@ import CONSTANTS from '@/components/DDAssist/constants';
      type: 'Select',
      defaultValue: 'ck',
      width: '5w',
-     onChange: 'handleOnChangeBgd',
+     eventOnChange: 'handleOnChangeBgd',
      list: [
-       { label: '外贸企业出口退税出口明细申报表', value: 'ck' },
-       { label: '外贸企业出口退税进货明细申报表', value: 'jh' },
+       { name: '外贸企业出口退税出口明细申报表', value: 'ck' },
+       { name: '外贸企业出口退税进货明细申报表', value: 'jh' },
      ],
    },
    // { name: 'kprq', label: '开票日期', type: 'DatePicker', range: true,isLabel: true},

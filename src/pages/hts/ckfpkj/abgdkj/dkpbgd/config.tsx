@@ -160,8 +160,8 @@ abgdkjConfig.grid_filter_quick = [
     eventOnChange: 'handleOnChangeBgd',
     op: 'zdy',
     list: [
-      { name: 'aa按18位报关单开票', value: '1' },
-      { name: 'bb按21位报关单开票', value: '2' },
+      { name: '按18位报关单开票', value: '1' },
+      { name: '按21位报关单开票', value: '2' },
     ],
   },
 ];

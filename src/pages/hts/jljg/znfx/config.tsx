@@ -96,10 +96,10 @@ unitConfig.grid_filter_quick = [
     name: 'hxztDm',
     type: 'Select',
     list: [
-      { label: '全部', value: '0' },
-      { label: '已核销', value: '1' },
-      { label: '应核销', value: '2' },
-      { label: '可不核销', value: '3'},
+      { name: '全部', value: '0' },
+      { name: '已核销', value: '1' },
+      { name: '应核销', value: '2' },
+      { name: '可不核销', value: '3'},
     ],
     tooltip: '账册：在海关已核销，核销截止日期在核销时间范围内账册，则需申报核销。账核销周期需连续且不重叠。{br}手册：在海关已核销，结案日期在核销时间范围内，且手册下报关单涉及申报退税，则需申报核销。{br}以上规则适用于一般情况，如有特殊规定，以当地税务机关要求为准。',
     style:{width: 100},
@@ -111,7 +111,7 @@ unitConfig.grid_filter_quick = [
     range:true,
     allowClear: false,
     tooltip: '调整核销周期范围',
-    onChange : 'handleOnChangeHxzq',
+    eventOnChange : 'handleOnChangeHxzq',
   },
   { label: '手（账）册号', name: 'bah', type: 'Input', width: '3w', searchButton: true },
 

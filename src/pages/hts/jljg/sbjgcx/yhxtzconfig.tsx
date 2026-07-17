@@ -91,10 +91,10 @@ yhxtzConfig.grid_filter_quick = [
     searchFlag: false,
     type: 'Select',
     defaultValue: 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J',
-    onChange: 'yhxtzSjbsOnChange',
+    eventOnChange: 'yhxtzSjbsOnChange',
     list: [
-      { label: '已申报数据', value: 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J' },
-      { label: '已核销数据', value: 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F' },
+      { name: '已申报数据', value: 'JLJG_ZXSB_SB_JLJG_HGSJTZ_J' },
+      { name: '已核销数据', value: 'JLJG_ZXSB_SB_JLJG_HGSJTZ_F' },
     ],
   },
 ];

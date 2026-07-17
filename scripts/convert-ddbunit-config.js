@@ -579,6 +579,15 @@ const SPECIAL_FIELD_RULES = [
     name: 'form_items base_date format YYYY/YY → yyyy/yy (r19)',
     apply: transformBaseDateFormatNormalize,
   },
+  {
+    // r21: grid_filter_quick 块内 list 项的 label → name；item 级 onChange → eventOnChange
+    //   作用域：<configVar>.grid_filter_quick 块内
+    //   item 级 label 保留不动（按用户决策）
+    //   onChange 与冒号间可有任意空白（znfx 风格 `onChange : 'handler'`）
+    //   LHS 所在行以 // 起始时整块跳过
+    name: 'grid_filter_quick list.label → name + onChange → eventOnChange (r21)',
+    apply: transformGridFilterQuick,
+  },
   // 未来加新规则示例：
   // { name: 'xxx', apply: function xxx(content, configVar) { ... } },
 ];
@@ -1202,6 +1211,153 @@ function transformBaseDateFormatNormalize(content, configVar) {
 
   return {
     content: content.slice(0, startIdx) + replaced + content.slice(endIdx),
+    count,
+  };
+}
+
+// =================== r21: grid_filter_quick list.label / onChange ===================
+/**
+ * r21：grid_filter_quick 块内两件事
+ *   1) 任何 item 的 list: [...] 内部 label: → name:
+ *      原因：运行时 DDBunit2_CKTS Select 期望 list 项使用 `name` 作为展示字段名
+ *   2) item 级的 onChange: → eventOnChange:
+ *      原因：运行时 form_items 派发按 eventOnChange 查找 handler
+ *
+ * 作用域：
+ *   - 仅作用于 `<configVar>.grid_filter_quick = [ ... ]` 块
+ *   - item 级 label 保留不动（用户决策：label 在 item 级表示表单字段展示名，与
+ *     list 项的展示名语义不同）
+ *   - 不波及 form_items[].list（用 configVar + grid_filter_quick 锚点限定）
+ *
+ * 容错：
+ *   - LHS 变量名有多种（unitConfig / config / abgdkjConfig 等），用 configVar 参数
+ *     动态匹配；\b 词边界保护
+ *   - list 缺失时跳过；list 为空数组 [] 时也安全（depth 立即归零）
+ *   - onChange 与冒号间可有任意空白（znfx config 风格 `onChange : 'handler'`）；
+ *     替换时通过捕获组 (\s*:\s*['"][^'"]+['"]) 保留
+ *   - LHS 行以 // 起始（块被注释掉）时整块跳过，递归到下一个匹配
+ *
+ * 已知限制（用户决策接受）：
+ *   - 不处理 块注释（codebase 无此场景）
+ *   - 块内 item 自身被 // 注释时仍会被处理（codebase 无此场景）
+ *   - onChange 值若不是字符串字面量（裸标识符 / 表达式）则不匹配，保留原样
+ *
+ * @param {string} content
+ * @param {string} configVar  'unitConfig' / 'myConfig' / 其它
+ * @returns {{ content: string, count: number }}
+ */
+function transformGridFilterQuick(content, configVar) {
+  // 1) 定位 <configVar>.grid_filter_quick = [ 起点
+  const startRe = new RegExp(
+    `\\b${escapeRegExp(configVar)}\\.grid_filter_quick\\s*=\\s*\\[`,
+  );
+  const startMatch = startRe.exec(content);
+  if (!startMatch) return { content, count: 0 };
+
+  // 2) 跳过整行被 // 注释掉的块
+  const lineStart = content.lastIndexOf('\n', startMatch.index) + 1;
+  const linePrefix = content.slice(lineStart, startMatch.index);
+  if (/^\s*\/\//.test(linePrefix)) {
+    // 递归到 [ 之后的 tail 再找下一个匹配
+    const tail = content.slice(startMatch.index + startMatch[0].length);
+    const sub = transformGridFilterQuick(tail, configVar);
+    return {
+      content:
+        content.slice(0, startMatch.index + startMatch[0].length) +
+        sub.content,
+      count: sub.count,
+    };
+  }
+
+  // 3) bracket-depth 扫描找匹配的 ]
+  const startIdx = startMatch.index + startMatch[0].length;
+  let depth = 1;
+  let i = startIdx;
+  while (i < content.length && depth > 0) {
+    const ch = content[i];
+    if (ch === '[') depth++;
+    else if (ch === ']') depth--;
+    if (depth === 0) break;
+    i++;
+  }
+  if (depth !== 0) return { content, count: 0 };
+  const endIdx = i;
+  const block = content.slice(startIdx, endIdx);
+
+  let count = 0;
+  let newBlock = block;
+
+  // Pass 1: 逐 item 扫描 item 内的 list: [...], 把内部 label: → name:
+  //   - 顶层扫描 item 对象：跳过空白，期望 {，bracket-depth 到 }
+  //   - item 体内扫描 list: [，bracket-depth 到 ]，得到 listBody
+  //   - listBody 内 label: → name:（每命中一次 count++）
+  let pos = 0;
+  while (pos < newBlock.length) {
+    while (pos < newBlock.length && /\s/.test(newBlock[pos])) pos++;
+    if (pos >= newBlock.length) break;
+    if (newBlock[pos] !== '{') {
+      pos++;
+      continue;
+    }
+    const itemStart = pos;
+    let d = 1;
+    let j = pos + 1;
+    while (j < newBlock.length && d > 0) {
+      if (newBlock[j] === '{') d++;
+      else if (newBlock[j] === '}') d--;
+      if (d === 0) break;
+      j++;
+    }
+    if (d !== 0) break;
+    const itemEnd = j;
+    let itemInner = newBlock.slice(itemStart + 1, itemEnd);
+
+    const listRe = /\blist\s*:\s*\[/g;
+    let lm;
+    while ((lm = listRe.exec(itemInner)) !== null) {
+      const listOpenAt = lm.index + lm[0].length;
+      let ld = 1;
+      let k = listOpenAt;
+      while (k < itemInner.length && ld > 0) {
+        if (itemInner[k] === '[') ld++;
+        else if (itemInner[k] === ']') ld--;
+        if (ld === 0) break;
+        k++;
+      }
+      if (ld !== 0) break;
+      const listEndAt = k;
+      const listBody = itemInner.slice(listOpenAt, listEndAt);
+      const newListBody = listBody.replace(
+        /\blabel\s*:/g,
+        () => {
+          count++;
+          return 'name:';
+        },
+      );
+      itemInner =
+        itemInner.slice(0, listOpenAt) +
+        newListBody +
+        itemInner.slice(listEndAt);
+      listRe.lastIndex = listOpenAt + newListBody.length;
+    }
+
+    newBlock =
+      newBlock.slice(0, itemStart + 1) + itemInner + newBlock.slice(itemEnd);
+    pos = itemEnd + 1;
+  }
+
+  // Pass 2: item 级 onChange: → eventOnChange:（保留冒号前后空白与引号）
+  newBlock = newBlock.replace(
+    /\bonChange(\s*:\s*['"][^'"]+['"])/g,
+    (_match, tail) => {
+      count++;
+      return `eventOnChange${tail}`;
+    },
+  );
+
+  if (count === 0) return { content, count: 0 };
+  return {
+    content: content.slice(0, startIdx) + newBlock + content.slice(endIdx),
     count,
   };
 }

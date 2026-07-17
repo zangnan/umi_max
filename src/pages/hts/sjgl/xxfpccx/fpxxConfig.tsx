@@ -79,10 +79,10 @@ fpxxConfig.grid_filter_quick = [
     type: 'Select',
     defaultValue: '2',
     op: 'zdy',
-    onChange: 'handleOnChangeCxlx',
+    eventOnChange: 'handleOnChangeCxlx',
     list: [
-      { label: '发票信息', value: '2', },
-      { label: '商品信息', value: '1' },
+      { name: '发票信息', value: '2', },
+      { name: '商品信息', value: '1' },
     ],
   },
 ];

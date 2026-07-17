@@ -96,14 +96,14 @@ unitConfig.grid_filter_quick = [
     name: 'fplx',
     type: 'Select',
     defaultValue: '2',
-    onChange: 'handleOnChangeFplx',
+    eventOnChange: 'handleOnChangeFplx',
     op: 'zdy',
     searchFlag: false,
     searchModelBz: false,
     list: [
-      { label: '蓝字发票', value: '1', },
-      { label: '红字发票', value: '2' },
-      { label: '作废发票', value: '3' },
+      { name: '蓝字发票', value: '1', },
+      { name: '红字发票', value: '2' },
+      { name: '作废发票', value: '3' },
     ],
   },
 ];

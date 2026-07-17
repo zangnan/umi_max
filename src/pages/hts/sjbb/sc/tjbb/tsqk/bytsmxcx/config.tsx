@@ -72,11 +72,11 @@ unitConfig.grid_filter_quick = [
     type: 'Select',
     defaultValue: '1',
     width: '5w',
-    onChange: 'handleOnChangeBgd',
+    eventOnChange: 'handleOnChangeBgd',
     list: [
-      { label: '出口货物劳务免抵退税申报明细表', value: '1' },
-      { label: '国际运输（港澳台运输）免抵退税申报明细表', value: '2' },
-      { label: '跨境应税行为免抵退税申报明细表', value: '3' },
+      { name: '出口货物劳务免抵退税申报明细表', value: '1' },
+      { name: '国际运输（港澳台运输）免抵退税申报明细表', value: '2' },
+      { name: '跨境应税行为免抵退税申报明细表', value: '3' },
     ],
   },
 ];

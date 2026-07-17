@@ -72,10 +72,10 @@ mdthxConfig.grid_filter_quick = [
     searchFlag: false,
     type: 'Select',
     defaultValue: 'JLJG_ZXSB_SB_JLJG_MDTHX_J',
-    onChange: 'mdthxSjbsOnChange',
+    eventOnChange: 'mdthxSjbsOnChange',
     list: [
-      { label: '已申报数据', value: 'JLJG_ZXSB_SB_JLJG_MDTHX_J' },
-      { label: '已核销数据', value: 'JLJG_ZXSB_SB_JLJG_MDTHX_F' },
+      { name: '已申报数据', value: 'JLJG_ZXSB_SB_JLJG_MDTHX_J' },
+      { name: '已核销数据', value: 'JLJG_ZXSB_SB_JLJG_MDTHX_F' },
     ],
   },
   { label: '所属期', name: 'ssq', type: 'Input', width: '2w' },
