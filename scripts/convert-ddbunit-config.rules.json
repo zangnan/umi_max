@@ -522,6 +522,24 @@
           "new": "case 'ain': case 'in': searchModel[`${property}Arr`] = values; break;"
         }
       ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/ckfpkj/abgdkj/dkpbgd/f.tsx",
+      "replace": [
+        {
+          "old": "param.refUnit.current.getGridParams().searchModel",
+          "new": "param.otherParam.refUnit.current.getGridParams().searchModel"
+        }
+      ]
+    },
+    {
+      "fileName": "code_sample/src/pages/hts/ckfp/abgdkj/f.tsx",
+      "replace": [
+        {
+          "old": "param.refUnit.current.getGridParams().searchModel",
+          "new": "param.otherParam.refUnit.current.getGridParams().searchModel"
+        }
+      ]
     }
   ],
   "excludeFiles": [
