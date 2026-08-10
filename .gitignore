@@ -19,3 +19,4 @@
 .mcp.json
 __pycache__
 /.agents
+/code_sample
