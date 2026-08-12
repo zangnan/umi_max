@@ -227,12 +227,18 @@ const DDBaseGrid: React.FC<DDBaseGridProps> = ({
   }
 
   // 获取联合主键 默认___拼接
-  const getYwKey = (record: any) => {
+  const getYwKey = (record: any, connector: any = '___') => {
     const tmp: any = [];
+    if (typeof myRowKey === 'object') {
+      (myRowKey?.key || []).forEach((item: any) => {
+        tmp.push(record[item]);
+      });
+      return tmp.join(connector);
+    } 
     myRowKey.forEach((item: any) => {
       tmp.push(record[item]);
     });
-    return tmp.join("___");
+    return tmp.join(connector);
   }
 
   // 设置: 列表主键
@@ -242,6 +248,8 @@ const DDBaseGrid: React.FC<DDBaseGridProps> = ({
       key = myRowKey;
     } else if (Array.isArray(myRowKey)) { // 联合主键
       key = (record: any) => getYwKey(record);
+    } else if (typeof myRowKey === 'object' && myRowKey.type === '1') {
+      key = (record: any) => getYwKey(record, '');
     } else {
       key = (record: any) => record[myRowKey];
     }

@@ -38,14 +38,14 @@ const CONFIG_KEY = DDIT_TOOL_CONSTANTS.CONFIG_KEY;
 dayjs.extend(quarterOfYear);
 
 // ==================== 全局类型声明 ====================
-declare global {
-  interface Window {
-    getUrlCode?: (
-      url: string,
-      params: Record<string, any>,
-    ) => Promise<{ code: string; body: { rows: any[] } }>;
-  }
-}
+// declare global {
+//   interface Window {
+//     getUrlCode?: (
+//       url: string,
+//       params: Record<string, any>,
+//     ) => Promise<{ code: string; body: { rows: any[] } }>;
+//   }
+// }
 
 // ==================== 类型定义 ====================
 interface StorageOperations {
@@ -414,6 +414,91 @@ myUtil.text = {
       {},
     );
   },
+
+  /**
+   * 金额转大写人民币
+   * @param value 要处理的对象
+   * @returns 输出标准财务中文大写金额
+   */
+  formatUp(value: any) {
+    const cnNums = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"); //汉字的数字
+    const cnIntRadice = new Array("", "拾", "佰", "仟"); //基本单位
+    const cnIntUnits = new Array("", "万", "亿", "兆"); //对应整数部分扩展单位
+    const cnDecUnits = new Array("角", "分", "毫", "厘"); //对应小数部分单位
+    const cnInteger = "整"; //整数金额时后面跟的字符
+    const cnIntLast = "元"; //整型完以后的单位
+    const maxNum = 999999999999999.9999; //最大处理的数字
+    let IntegerNum; //金额整数部分
+    let DecimalNum; //金额小数部分
+    let ChineseStr = ""; //输出的中文金额字符串
+    let parts; //分离金额后用的数组，预定义
+    let Symbol = "";//正负值标记
+    if (value == "") {
+      return "";
+    }
+    let value2: any = parseFloat(value);
+    if (value2 >= maxNum) {
+      alert('超出最大处理数字');
+      return "";
+    }
+    if (value2 == 0) {
+      ChineseStr = cnNums[0] + cnIntLast + cnInteger;
+      return ChineseStr;
+    }
+    if (value2 < 0) {
+      value2 = -value2;
+      Symbol = "负 ";
+    }
+    value2 = value2.toString(); //转换为字符串
+    if (value2.indexOf(".") == -1) {
+      IntegerNum = value2;
+      DecimalNum = '';
+    } else {
+      parts = value2.split(".");
+      IntegerNum = parts[0];
+      DecimalNum = parts[1].substr(0, 4);
+    }
+    if (parseInt(IntegerNum, 10) > 0) { //获取整型部分转换
+      let zeroCount = 0;
+      const IntLen = IntegerNum.length;
+      for (let i = 0; i < IntLen; i++) {
+        const n = IntegerNum.substr(i, 1);
+        const p = IntLen - i - 1;
+        const q = p / 4;
+        const m = p % 4;
+        if (n == "0") {
+          zeroCount++;
+        } else {
+          if (zeroCount > 0) {
+            ChineseStr += cnNums[0];
+          }
+          zeroCount = 0; //归零
+          ChineseStr += cnNums[parseInt(n)] + cnIntRadice[m];
+        }
+        if (m == 0 && zeroCount < 4) {
+          ChineseStr += cnIntUnits[q];
+        }
+      }
+      ChineseStr += cnIntLast;
+      //整型部分处理完毕
+    }
+    if (DecimalNum != '') { //小数部分
+      const decLen = DecimalNum.length;
+      for (let i = 0; i < decLen; i++) {
+        const n = DecimalNum.substr(i, 1);
+        if (n != '0') {
+          ChineseStr += cnNums[Number(n)] + cnDecUnits[i];
+        }
+      }
+    }
+    if (ChineseStr == '') {
+      ChineseStr += cnNums[0] + cnIntLast + cnInteger;
+    } else if (DecimalNum == '') {
+      ChineseStr += cnInteger;
+    }
+    ChineseStr = Symbol + ChineseStr;
+    return ChineseStr;
+  },
 };
 
 // ==================== 日期处理模块 ====================
@@ -728,6 +813,133 @@ myUtil.date = {
     const hours = Math.floor(minutes / 60);
     const mins = myUtil.text.leadingZeroize(minutes % 60, 2);
     return `${hours}:${mins}`;
+  },
+
+  // 原系统移植
+  // 获取当前时间或指定时间前N年（返回年月）
+  getDateNYBeforeCurr(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const date = year + '-' + month;
+    return date;
+  },
+  // 原系统移植
+  // 获取当前时间或指定时间前N年（返回年月）格式202208
+  getDateNYBeforeCurrFormat(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const date = String(year) + month;
+    return date;
+  },
+  // 原系统移植
+  // 获取N年前到现在月份（返回开始年月与结束年月）
+  getDateYearAgoToNow(n: any) {
+    // 获取当前日期前一年的日期
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const d = new Date(year + '-' + month);
+    d.setMonth(d.getMonth() + 1);
+    // 转化为yyyy-MM格式（前一年）
+    const time = new Date(d);
+    const lastYear = time.getFullYear();
+    const lastMonth = (time.getMonth() + 1) < 10 ? '0' + (time.getMonth() + 1) : time.getMonth() + 1;
+    const lastYearMonth = lastYear + '-' + lastMonth;
+    // 转化为yyyy-MM格式（当前日期）
+    const nowYear = sj.getFullYear();
+    const nowMonth = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const nowYearMonth = nowYear + '-' + nowMonth;
+
+    return [lastYearMonth, nowYearMonth];
+  },
+  // 原系统移植
+  // 获取当前时间前N年（返回年月日）
+  getDateNYRBeforeCurr(n: any, time?: any) {
+    const sj = time ? new Date(time) : new Date();
+    const year = sj.getFullYear() - n;
+    const month = (sj.getMonth() + 1) < 10 ? '0' + (sj.getMonth() + 1) : sj.getMonth() + 1;
+    const day = sj.getDate() < 10 ? '0' + sj.getDate() : sj.getDate();
+    const date = year + '-' + month + '-' + day;
+    return date;
+  },
+  // 原系统移植
+  // 获取当前时间前N年
+  getYearBeforeCurr(n: any) {
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    return year;
+  },
+  // 原系统移植
+  getCurrentYearMonth() {
+    const now = new Date();
+    const year = now.getFullYear(); // 获取当前年份
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 获取当前月份，注意 getMonth() 返回的是 0-11，所以需要加 1，并且确保月份是两位数
+    return `${year}${month}`;
+  },
+  // 原系统移植
+  // 获取当前时间前N年（返回日期）
+  getDateBeforeCurr(n: any) {
+    const sj = new Date();
+    const year = sj.getFullYear() - n;
+    const month = sj.getMonth() + 1;
+    const date = year + '-' + month + '-01';
+    return date;
+  },
+  // 原系统移植
+  // 获取当前时间N月前的第一天和最后一天
+  getQZDateYfBeforeCurr(n: any) {
+    const sj = new Date();
+    const nowMonth = sj.getMonth() + 1;
+    let month = nowMonth;
+    const textDay = sj.getDate() < 10 ? '0' + sj.getDate() : sj.getDate();
+    const numCy = n % 12;
+    const numBs = Math.floor(Number(n / 12));
+    let year = sj.getFullYear() - numBs;
+    if (nowMonth === n) {
+      month = 12;
+      year--;
+    } else if (nowMonth < n) {
+      month = 12 - (n - nowMonth);
+      year--;
+    } else {
+      month = nowMonth - numCy;
+    }
+    const textMonth = month < 10 ? '0' + month : month;
+    const newDay = myUtil.date.getMonthLastDay(year + '-' + textMonth);
+    const date = {
+      firstDay: year + '-' + textMonth + '-01',
+      beforeDay: myUtil.date.formatDate(newDay),
+      nowDay: sj.getFullYear() + '-' + textMonth + '-' + textDay // 当天
+    };
+    return date;
+  },
+  // 原系统移植
+  /**
+   * 获取当前月的最后一天 （精确到秒23:59:59）
+   * 入参： 毫秒数
+   * 出参：毫秒数
+   * */
+  getMonthLastDay(mon: any) {
+    const time = new Date(mon);
+    const nowMonth = time.getMonth();
+    const nowYear = time.getFullYear();
+    const monthEndDate = new Date(nowYear, nowMonth + 1, 0);
+    return this.accurateDate(monthEndDate.getTime(), '2');
+  },
+  // 原系统移植
+  /**
+   * 获取当前月的第一天 （精确到秒）
+   * 入参： 毫秒数
+   * 出参：毫秒数
+   * */
+  getMonthFirstDay(mon: any) {
+    const time = new Date(mon);
+    const nowMonth = time.getMonth();
+    const nowYear = time.getFullYear();
+    const monthStartDate = new Date(nowYear, nowMonth, 1);
+    return this.accurateDate(monthStartDate.getTime(), '1');
   },
 };
 
@@ -2524,6 +2736,14 @@ myUtil.code = {
           searchModel: [{ property: 'hbzmDm', value: '', op: 'al' }],
         },
       },
+      'url_gy_hbhl:01': {
+        url: '/yw/bszx/ggfw/sbcs/ywcsxx/queryHlxx',
+        params: {
+          page: 1,
+          pageSize: 999999,
+          searchModel: [{ property: 'hbzmDm', value: '', op: 'al' }],
+        },
+      },
     };
 
     return urlConfigMap[key] || { url: '', params: {} };
@@ -2578,8 +2798,10 @@ myUtil.code = {
       // URL 类型码表
       if (key.startsWith('url')) {
         const { url, params } = this.getUrlCodeParams(key);
-        if (url && window.getUrlCode) {
-          const response = await window.getUrlCode(url, params);
+        // if (url && window.getUrlCode) {
+        if (url) {
+          // const response = await this.getUrlCode(url, params);
+          const response = await getUrlCode(url, params);
           const { code, body } = response;
           if (code === '200' && body.rows?.length > 0) {
             this.saveCodeToLocalTable(key, body.rows);
@@ -2600,7 +2822,11 @@ myUtil.code = {
       }
     }
 
-    return result || [];
+    const { code, body } = result;
+    if (code === '200') {
+      this.saveCodeToLocalTable(key, body);
+    }
+    return body || [];
   },
 
   /**
@@ -3639,7 +3865,7 @@ myUtil.indexedDB = {
 myUtil.authority = {
   // 清空用户信息
   clearUserInfo() {
-    window.localStorage.removeItem(CONSTANTS.LOGIN.ACCESS_TOKEN);
+    window.localStorage.removeItem(CONSTANTS.LOGIN.ACCESS_TOKEN_KEY);
     myUtil.sessionStore.clear('userInfo');
     myUtil.sessionStore.clear('usermenu');
     myUtil.sessionStore.clear('menuArr');
