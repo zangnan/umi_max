@@ -169,15 +169,16 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
   const [columns, setColumns] = useState<any>([]);
   const [gridViewPlan, setGridViewPlan] = useState<any>([]); // 视图设置：方案
   const [filterItems, setFilterItems] = useState(
-    formUtil.init({ items: config?.filter_items || [] }),
+    formUtil.init({ items: config?.filter_items || [], func: func }),
   );
-  const gridFilterQuick = formUtil.init({ items: config?.grid_filter_quick || []});
+  const gridFilterQuick = formUtil.init({ items: config?.grid_filter_quick || [], func: func});
   const gridViewSettingFilter = UnitUtil.filterAdvanced.init(config?.grid_setting_filter_advanced);
   const initQueryParam: any = UnitUtil.grid.initAssembleSearchModel({
     unitKey,
     filterItems,
     gridFilterQuick,
     initSearchModal,
+    moduleType,
   });
   const [queryParam, setQueryParam] = useState({ ...initQueryParam });
 
@@ -1056,6 +1057,12 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
           onReset={handleReset}
           initialValues={{}}
           name="dd_quick_filter"
+          otherParam={{
+            otherRef: getOtherRefs(),
+            unitKey,
+            refGrid,
+            refUnit,
+          }}
         />
       );
     }
@@ -1537,6 +1544,7 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
       filterItems,
       gridFilterQuick: gridFilterQuick,
       initSearchModal,
+      moduleType,
     });
     if (
       initQueryParamNew &&
@@ -1662,6 +1670,12 @@ const DDBunit2: React.FC<DDBunit2Props> = ({ refDDBunit2, config, func = {}, aut
             onSubmit={reload}
             onReset={handleReset}
             layoutType={layoutType}
+            otherParam={{
+              otherRef: getOtherRefs(),
+              unitKey,
+              refGrid,
+              refUnit,
+            }}
           />
           {adfPlan && adfPlan.length > 0 && (
             getAdvancedFilterPlanShow()
