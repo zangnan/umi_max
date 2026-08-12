@@ -56,6 +56,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 不波及 `form_items[].list`（用 `grid_filter_quick` 锚点限定）
 - `grid_filter_quick_extra` 这类带后缀的字段不被匹配（按 design）
 
+## 已提交变更（2026-08-12）
+
+### commit 1e04141 — chore(deps): 升级 antd ^6.6.0 + @umijs/max ^4.7.4 + DDItems size 'default'→'medium'
+
+**改动 3 文件 / +269 -265**：
+
+1. **[package.json:49](package.json#L49) / [package.json:53](package.json#L53)** — 依赖升级：
+   - `@umijs/max`: `^4.6.4` → `^4.7.4`
+   - `antd`: `^6` → `^6.6.0`
+   - 锁文件 [yarn.lock](yarn.lock) 同步更新 rc-component 各组件到 v6 兼容版本（cascader / select / tree / image / portal 等）
+
+2. **[src/components/DDForm/DDItems.tsx:632](src/components/DDForm/DDItems.tsx#L632)** — Switch size 适配：
+   ```diff
+   -        const inputProps: any = { ...inputCommonProps, size: 'default' };
+   +        const inputProps: any = { ...inputCommonProps, size: 'medium' };
+   ```
+   - antd v6 移除 `size: 'default'` 枚举值（v5 仍接受；v6 仅保留 `'large' | 'medium' | 'small'`）
+   - 不改会触发控制台 `Warning: [antd: Switch] value 'default' is not a valid value of size` 且样式回退到 medium 无副作用，但修复后可消除警告
+
+**端到端验证**：
+- `npm install` 后 `yarn.lock` 解析成功，无版本冲突
+- `npm run dev` 启动 dev server，控制台无 antd size 警告
+- `npx tsc --noEmit` 通过
+
+**已知限制**（用户决策接受）：
+- `size: 'default'` 全局仍可能存在其它位置 —— 本次仅修 DDItems.tsx 一处；后续若控制台仍警告可单独 follow-up
+- 不锁定 patch 版本（用 `^6.6.0`）—— 未来 antd 6.x 升级仍会自动跟进
+
 ## 已提交变更（2026-07-16）
 
 ### commit 9a0a8f3 — feat(DDBunit2/DDForm): otherParam 透传 + cktsUtil 'in'→'ain' 端点修复 + dkpbgd eventOnChange 修正
