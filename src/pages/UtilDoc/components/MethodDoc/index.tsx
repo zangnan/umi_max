@@ -122,7 +122,7 @@ const MethodDoc: React.FC<MethodDocProps> = ({ data, activeModule }) => {
           activeModuleData.dependencyTip.trim() && (
             <Alert
               type="info"
-              message="依赖提示"
+              title="依赖提示"
               description={activeModuleData.dependencyTip}
               showIcon
             />
@@ -195,7 +195,7 @@ const MethodDoc: React.FC<MethodDocProps> = ({ data, activeModule }) => {
             {utilDocConfig.showReturns && (
               <div className={styles.returnSection}>
                 <Title level={5}>返回值</Title>
-                <Space direction="vertical">
+                <Space orientation="vertical">
                   <Text code>{method.returns.type}</Text>
                   <Text>{method.returns.description}</Text>
                 </Space>
@@ -229,7 +229,7 @@ const MethodDoc: React.FC<MethodDocProps> = ({ data, activeModule }) => {
               <div className={styles.notesSection}>
                 <Alert
                   type="warning"
-                  message="注意事项"
+                  title="注意事项"
                   description={
                     <ul>
                       {method.notes.map((note, i) => (
