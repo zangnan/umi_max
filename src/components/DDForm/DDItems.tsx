@@ -629,7 +629,7 @@ const DDItems: React.FC<ItemsProps> = ({
         </Form.Item>;
         // Radio
       } else if (type === itemType.Switch) {
-        const inputProps: any = { ...inputCommonProps, size: 'default' };
+        const inputProps: any = { ...inputCommonProps, size: 'medium' };
         if (onChange) {
           inputProps.onChange = (checked: any) => {
             onChange({ checked, form: useform, myItems, setMyItems, otherParam, item: myItems[i] });
