@@ -15,7 +15,7 @@ import {
   Card,
   Col,
   Input,
-  List,
+  Listy,
   Row,
   Space,
   Spin,
@@ -36,10 +36,7 @@ type IconType =
   | 'confirm';
 
 // 图标配置
-const ICON_CONFIG: Record<
-  IconType,
-  { icon: React.ReactNode; color: string; label: string }
-> = {
+const ICON_CONFIG: any = {
   info: {
     icon: <InfoCircleOutlined />,
     color: '#1890ff',
@@ -642,7 +639,7 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
                       {loading ? (
                         <description tip="执行中..." />
                       ) : error ? (
-                        <Alert type="error" message={error} />
+                        <Alert type="error" title={error} />
                       ) : result ? (
                         <pre className={styles.resultPre}>{result}</pre>
                       ) : (
@@ -662,7 +659,7 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
                 <div>
                   <div className={styles.fullExampleHeader}>
                     <Space
-                      direction="vertical"
+                      orientation="vertical"
                       size="middle"
                       style={{ width: '100%' }}
                     >
@@ -695,9 +692,9 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
                         下载完整 Word 文档
                       </Button>
                       {result && (
-                        <Alert type="success" message={result} showIcon />
+                        <Alert type="success" title={result} showIcon />
                       )}
-                      {error && <Alert type="error" message={error} showIcon />}
+                      {error && <Alert type="error" title={error} showIcon />}
                     </Space>
                   </div>
 
@@ -730,25 +727,31 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
             <div style={{ marginBottom: 8, fontWeight: 500, color: '#666' }}>
               选择消息类型：
             </div>
-            <List
-              size="small"
-              dataSource={Object.keys(ICON_CONFIG) as IconType[]}
-              renderItem={(item) => {
+            <Listy
+              items={Object.keys(ICON_CONFIG)}
+              height={400}
+              rowKey={(item: any) => item}
+              styles={{
+                item: {
+                  padding: '0',
+                }
+              }}
+              itemRender={(item: any) => {
                 const config = ICON_CONFIG[item];
                 const isActive = selectedIcon === item;
                 return (
-                  <List.Item
+                  <div
                     className={isActive ? 'active' : ''}
                     onClick={() => handleIconSelect(item)}
                     style={
-                      isActive ? { fontWeight: 'bold' } : { color: '#333' }
+                      isActive ? { fontWeight: 'bold', cursor: 'pointer', padding: '12px' } : { color: '#333', cursor: 'pointer', padding: '12px' }
                     }
                   >
                     <Space>
                       <span style={{ color: config.color }}>{config.icon}</span>
                       <span>{config.label}</span>
                     </Space>
-                  </List.Item>
+                  </div>
                 );
               }}
             />
@@ -811,7 +814,7 @@ const Playground: React.FC<PlaygroundProps> = ({ method }) => {
               {loading ? (
                 <Spin description="执行中..." />
               ) : error ? (
-                <Alert type="error" message={error} />
+                <Alert type="error" title={error} />
               ) : result ? (
                 <pre className={styles.resultPre}>{result}</pre>
               ) : (
