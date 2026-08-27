@@ -203,8 +203,25 @@ export interface DDVTableConfig {
   filter_items?: DDVTableFormItem[];
   /** 业务单元key */
   module_key?: string;
+  /** 自定义工具栏按钮（来源：pageDef moduleInfo.customer_btn_toolbar） */
+  customer_toolbar?: DDVTableCustomerToolbarItem[];
   /** 其他VTable配置（会覆盖默认配置） */
   [key: string]: any;
+}
+
+/**
+ * 自定义工具栏按钮（来源于 pageDef moduleInfo.customer_btn_toolbar，
+ * 由 assemble_config_util.module.assembleAll 解析得到）
+ */
+export interface DDVTableCustomerToolbarItem {
+  /** 显示文本 */
+  name: string;
+  /** handler 名（在 onCustomBtn 映射表里查找） */
+  func: string;
+  /** 资源权限 key（当前未消费，保留字段） */
+  key?: string;
+  /** 禁用态 */
+  disabled?: boolean;
 }
 
 /**
@@ -443,4 +460,10 @@ export interface DDVTableProps {
   onFormSave?: (values: any, formType: 'add' | 'edit', record?: any) => Promise<void> | void;
   /** 表单加载数据完成后回调（用于编辑时回填数据） */
   onFormDataLoaded?: (form: any, record: any) => void;
+  /**
+   * 自定义工具栏按钮 handler 映射
+   * 键名匹配 config.customer_toolbar[i].func
+   * 主调用通道；未命中时回退到 window[handlerName]
+   */
+  onCustomBtn?: Record<string, (param: any) => void>;
 }

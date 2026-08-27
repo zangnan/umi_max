@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DDVTable from '../DDBaseGridVtable';
+import { DDVTableProps } from '../DDBaseGridVtable/types';
 import { automaticPageDef } from '@/services/hts/api';
 import assembleConfigUtil from './assemble_config_util';
 // import CONSTANTS from '../DDAssist/constants';
@@ -123,7 +124,7 @@ export const transformConfig = (config: any): any => {
   return newConfig;
 };
 
-const AutomaticPageVTable: React.FC<unknown> = () => {
+const AutomaticPageVTable: React.FC<{ onCustomBtn?: DDVTableProps['onCustomBtn'] }> = ({ onCustomBtn }) => {
   const [myConfig, setMyConfig] = useState<any>({});
 
   // setContent
@@ -191,7 +192,7 @@ const AutomaticPageVTable: React.FC<unknown> = () => {
 
   return (
     <>
-      <DDVTable config={myConfig} />
+      <DDVTable config={myConfig} onCustomBtn={onCustomBtn} />
       <FloatButton.Group style={{ right: 24 }}>
         <FloatButton tooltip="查看配置文件" onClick={showModal} icon={<CodeOutlined />} />
       </FloatButton.Group>

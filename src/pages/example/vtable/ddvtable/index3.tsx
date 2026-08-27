@@ -117,6 +117,19 @@ const DDVTableDemo: React.FC = () => {
         apiParams={apiParams}
         config={dynamicConfig || {}}
         autoLoad={!!dynamicConfig}
+        // 自定义工具栏按钮（来源：pageDef moduleInfo.customer_btn_toolbar = "开票&doKp&kp_001,合并&doHb&hb_001"）
+        onCustomBtn={{
+          doKp: (param: any) => {
+            message.info(
+              `开票：当前选中 ${param.selectionRowKeys.length || 0} 条，模块 ${param.moduleKey}`,
+            );
+            console.log('doKp param:', param);
+          },
+          doHb: (param: any) => {
+            message.info(`合并：当前选中 ${param.selectionRowKeys.length || 0} 条`);
+            console.log('doHb param:', param);
+          },
+        }}
         onLoadingChange={(loading) => {
           console.log('加载状态:', loading);
         }}

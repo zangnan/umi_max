@@ -464,6 +464,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
   onRefresh,
   onFormSave,
   onFormDataLoaded,
+  onCustomBtn,
 }) => {
   // 从 config.form_config 获取表单配置
   const formConfig = config?.form_config;
@@ -547,6 +548,14 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
   // 获取工具栏配置
   const toolbarConfig = config?.toolbar_default || {};
+
+  // 自定义工具栏按钮（来源：pageDef moduleInfo.customer_btn_toolbar，经 assembleAll 解析后挂在 config.customer_toolbar）
+  const [customerToolbar, setCustomerToolbar] = useState<any[]>(
+    config?.customer_toolbar || [],
+  );
+  useEffect(() => {
+    setCustomerToolbar(config?.customer_toolbar || []);
+  }, [config]);
 
   // 设置弹窗状态
   const [settingVisible, setSettingVisible] = useState(false);
@@ -814,6 +823,89 @@ const DDVTable: React.FC<DDVTableProps> = ({
     setPagination(newParams);
     loadData(newParams);
   }, [filterForm, pagination, loadData]);
+
+  /**
+   * 从 VTable 读取当前勾选状态（兼容版本：使用 getCheckboxState + records 反查，
+   * 不依赖不存在的 getSelectedRowIds / getSelectedRecords）
+   */
+  const readVTableSelection = useCallback(() => {
+    const table = tableRef.current;
+    if (!table) return { selectionRowKeys: [], selectionRows: [] };
+    const allRecords: any[] = table.records || [];
+
+    // 1) 主路径：通过 getCheckboxState('') 取得与 records 等长的 boolean[]
+    let checkedStates: boolean[] = [];
+    if (typeof table.getCheckboxState === 'function') {
+      try {
+        checkedStates = (table.getCheckboxState('') as boolean[]) || [];
+      } catch (_e) {
+        checkedStates = [];
+      }
+    }
+
+    // 2) 兜底路径：直接读 stateManager.checkedState，
+    //    兼容某些版本下 getCheckboxState('') 返回空或未初始化的情况
+    if ((!checkedStates || checkedStates.length === 0) && table.stateManager?.checkedState) {
+      const stateMap: Map<string, Record<string, any>> = table.stateManager.checkedState;
+      const fields: string[] = table.stateManager._checkboxCellTypeFields || [];
+      checkedStates = allRecords.map((_r: any, idx: number) => {
+        const entry = stateMap.get(String(idx));
+        if (!entry) return false;
+        // 任一 checkbox 字段为 true 即视为该行选中
+        return fields.some((f) => entry[f] === true);
+      });
+    }
+
+    const selectedRecords = allRecords.filter(
+      (_: any, index: number) => checkedStates[index],
+    );
+    // selectionRowKeys 取行主键值（grid_row_key），无配置时退化为记录序号
+    const rowKeyField = config?.grid_config?.grid_row_key as string | undefined;
+    const selectedKeys = rowKeyField
+      ? selectedRecords.map((r: any) => r?.[rowKeyField])
+      : selectedRecords.map((_: any, i: number) => i);
+    return { selectionRowKeys: selectedKeys, selectionRows: selectedRecords };
+  }, [config?.grid_config?.grid_row_key]);
+
+  /** 自定义工具栏按钮 handler 调度（与 DDBunit2 的 func[item.func] 形态对齐，但走 props 通道） */
+  const invokeCustomBtn = useCallback(
+    (handlerName: string, param: any) => {
+      // 主通道：onCustomBtn props 映射（与 DDBaseGridVtable 现有 props 风格一致）
+      if (onCustomBtn && onCustomBtn[handlerName]) {
+        onCustomBtn[handlerName](param);
+        return;
+      }
+      // 兜底通道：window 全局函数（兼容 DDBunit2 老用法）
+      if (typeof window !== 'undefined' && (window as any)[handlerName]) {
+        (window as any)[handlerName](param);
+        return;
+      }
+      message.info(`自定义按钮 ${handlerName} 未注册`);
+    },
+    [onCustomBtn],
+  );
+
+  /** 渲染自定义工具栏按钮 */
+  const renderCustomerToolbar = useCallback(() => {
+    if (!customerToolbar || customerToolbar.length === 0) return null;
+    return customerToolbar.map((item: any, idx: number) => (
+      <Button
+        key={`cus-toolbar-${idx}`}
+        disabled={item.disabled}
+        onClick={() => {
+          // 在点击时实时计算选中状态，而非 render 期，避免选中后 param 仍为初始空数组
+          const param: any = {
+            ...readVTableSelection(),
+            tableRef,
+            moduleKey: config?.module_key,
+          };
+          invokeCustomBtn(item.func, param);
+        }}
+      >
+        {item.name}
+      </Button>
+    ));
+  }, [customerToolbar, invokeCustomBtn, config?.module_key, readVTableSelection]);
 
   /** 封装 onFormSave 回调，保存成功后自动刷新列表（API 模式） */
   const handleApiFormSave = useCallback(
@@ -1313,8 +1405,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
   // 刷新功能
   const handleReload = useCallback(() => {
-    // 获取选中行数据
-    const selectedRecords = tableRef.current?.getSelectedRecords?.() || [];
+    // 获取选中行数据（通过 getCheckboxState + records 反查，避开不存在的 getSelectedRecords）
+    const { selectionRows: selectedRecords } = readVTableSelection();
 
     // 如果传入了 onRefresh 回调，优先调用
     if (onRefresh) {
@@ -2593,9 +2685,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
       const selectionType = settingConfig.selectionType ?? config?.grid_config?.grid_selection_type;
       if (selectionType && onSelectionChange) {
         tableInstance.on('change_selection', (args: any) => {
-          const selectedRowIds = tableInstance.getSelectedRowIds();
-          const selectedRecords = tableInstance.getSelectedRecords();
-          onSelectionChange(selectedRecords, selectedRowIds);
+          const { selectionRowKeys, selectionRows } = readVTableSelection();
+          onSelectionChange(selectionRows, selectionRowKeys);
         });
       }
 
@@ -2649,7 +2740,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
         onReady(tableInstance);
       }
     },
-    [config?.grid_config?.grid_selection_type, settingConfig.selectionType, onReady, onSelectionChange, filterRules, config],
+    [config?.grid_config?.grid_selection_type, settingConfig.selectionType, onReady, onSelectionChange, filterRules, config, readVTableSelection],
   );
 
   // 检查是否有任何按钮需要显示
@@ -2871,6 +2962,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
             共 {filteredCount !== undefined ? filteredCount : finalData?.rows?.length || 0} 条
           </div>
           <Space size={8}>
+            {renderCustomerToolbar()}
             {renderMainButtonGroup()}
             {renderSystemMenu()}
           </Space>

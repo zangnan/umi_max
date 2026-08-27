@@ -1,7 +1,7 @@
 export default [
   { name: '示例', icon: 'CodeOutlined', path: '/example', routes: [
     { name: 'AI模块生成(Java)', path: '/example/ai/module_generator', component: './easy_dev/ai/module_generator' },
-    { name: '测试临时', path: '/example/cfgp/eg_m_mts_tsjh', component: './example/test0001' },
+    { name: '测试临时', path: '/example/cfgp/eg_m_mts_tssb', component: './example/test0001' },
     { name: '高级筛选', path: '/example/advanced_filter_01', component: './example/advanced_filter_01' },
     { name: 'X6', path: '/example/X6', routes: [
       { name: 'X601', path: '/example/X6/X601', component: './example/X6/X601' },
@@ -24,6 +24,7 @@ export default [
       { name: 'vtable07', path: '/example/vtable/index07', component: './example/vtable/index07' },
       { name: 'DDVTable', path: '/example/vtable/ddvtable', component: './example/vtable/ddvtable' },
       { name: 'DDVTable2', path: '/example/vtable/ddvtable2', component: './example/vtable/ddvtable/index2' },
+      { name: 'DDVTable3', path: '/example/vtable/ddvtable3', component: './example/vtable/ddvtable/index3' },
     ]},
     { name: 'antvs2', path: '/example/antvs2', routes: [
       { name: 'antvs201', path: '/example/antvs2/antvs201', component: './example/antvs2/antvs201' },
