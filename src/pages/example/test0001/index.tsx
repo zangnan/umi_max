@@ -16,6 +16,15 @@ const Unit2: React.FC<unknown> = () => {
           message.info(`合并：当前选中 ${param.selectionRowKeys?.length || 0} 条`);
           console.log('doHb param:', param);
         },
+        // 操作列：预览 / 审批
+        doYl: (param: any) => {
+          message.info(`预览：当前行 = ${JSON.stringify(param.record)}`);
+          console.log('doYl param:', param);
+        },
+        doSp: (param: any) => {
+          message.info(`审批：当前行 = ${JSON.stringify(param.record)}`);
+          console.log('doSp param:', param);
+        },
       }}
     />
   );

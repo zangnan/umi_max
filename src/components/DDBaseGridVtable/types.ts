@@ -205,6 +205,8 @@ export interface DDVTableConfig {
   module_key?: string;
   /** 自定义工具栏按钮（来源：pageDef moduleInfo.customer_btn_toolbar） */
   customer_toolbar?: DDVTableCustomerToolbarItem[];
+  /** 自定义操作列按钮（来源：pageDef moduleInfo.customer_btn_grid_col；兼容 config.handle_columns） */
+  customer_grid_col?: DDVTableCustomerGridColItem[];
   /** 其他VTable配置（会覆盖默认配置） */
   [key: string]: any;
 }
@@ -222,6 +224,22 @@ export interface DDVTableCustomerToolbarItem {
   key?: string;
   /** 禁用态 */
   disabled?: boolean;
+}
+
+/**
+ * 自定义操作列按钮（来源于 pageDef moduleInfo.customer_btn_grid_col，
+ * 由 assemble_config_util.module.assembleAll 解析后挂在 config.handle_columns
+ * 或调用方显式配置到 config.customer_grid_col）
+ */
+export interface DDVTableCustomerGridColItem {
+  /** 显示文本 */
+  name: string;
+  /** handler 名（在 onCustomBtn 映射表里查找） */
+  func: string;
+  /** 资源权限 key（当前未消费，保留字段） */
+  key?: string;
+  /** 禁用态：boolean 直接判定；string 表示运行时由 onCustomBtn[funcName](record) 决定（当前按 false 处理，后续扩展） */
+  disabled?: boolean | string;
 }
 
 /**

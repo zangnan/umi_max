@@ -32,6 +32,8 @@ import type {
   DDVTableApiOrderItem,
   DDVTableApiQueryParams,
   DDVTableApiResponse,
+  DDVTableCustomerToolbarItem,
+  DDVTableCustomerGridColItem,
 } from './types';
 import { request } from 'umi';
 import { ListTable } from '@visactor/react-vtable';
@@ -550,11 +552,19 @@ const DDVTable: React.FC<DDVTableProps> = ({
   const toolbarConfig = config?.toolbar_default || {};
 
   // 自定义工具栏按钮（来源：pageDef moduleInfo.customer_btn_toolbar，经 assembleAll 解析后挂在 config.customer_toolbar）
-  const [customerToolbar, setCustomerToolbar] = useState<any[]>(
+  const [customerToolbar, setCustomerToolbar] = useState<DDVTableCustomerToolbarItem[]>(
     config?.customer_toolbar || [],
   );
   useEffect(() => {
     setCustomerToolbar(config?.customer_toolbar || []);
+  }, [config]);
+
+  // 自定义操作列按钮（来源：pageDef moduleInfo.customer_btn_grid_col，兼容 config.handle_columns）
+  const [customerGridCol, setCustomerGridCol] = useState<DDVTableCustomerGridColItem[]>(
+    config?.customer_grid_col || config?.handle_columns || [],
+  );
+  useEffect(() => {
+    setCustomerGridCol(config?.customer_grid_col || config?.handle_columns || []);
   }, [config]);
 
   // 设置弹窗状态
@@ -2051,13 +2061,19 @@ const DDVTable: React.FC<DDVTableProps> = ({
   // 构建操作列配置
   const getHandleColumn = useCallback(() => {
     const handleColumnsConfig = config?.grid_handle_columns_default;
-    if (!handleColumnsConfig) return null;
+    const customGridCol = customerGridCol || [];
+    // 既没有内置按钮配置也没有自定义按钮时，不显示操作列
+    if (!handleColumnsConfig && customGridCol.length === 0) return null;
 
     // 计算操作列宽度
     let colWidth = 0;
-    if (handleColumnsConfig.edit) colWidth += 45;
-    if (handleColumnsConfig.delete) colWidth += 45;
-    if (handleColumnsConfig.detail) colWidth += 45;
+    if (handleColumnsConfig?.edit) colWidth += 45;
+    if (handleColumnsConfig?.delete) colWidth += 45;
+    if (handleColumnsConfig?.detail) colWidth += 45;
+    // 自定义按钮按 name 文本长度自适应（中文字符约 14px + 间距 10px）
+    customGridCol.forEach((btn) => {
+      colWidth += (btn.name?.length || 2) * 14 + 10;
+    });
 
     // 如果没有配置任何按钮，不显示操作列
     if (colWidth === 0) return null;
@@ -2091,9 +2107,17 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
         // 收集所有要显示的按钮配置
         const buttonConfigs: { text: string; actionType: string; index: number }[] = [];
-        if (handleColumnsConfig.edit) buttonConfigs.push({ text: '编辑', actionType: 'edit', index: 0 });
-        if (handleColumnsConfig.delete) buttonConfigs.push({ text: '删除', actionType: 'delete', index: 1 });
-        if (handleColumnsConfig.detail) buttonConfigs.push({ text: '详情', actionType: 'detail', index: 2 });
+        if (handleColumnsConfig?.edit) buttonConfigs.push({ text: '编辑', actionType: 'edit', index: 0 });
+        if (handleColumnsConfig?.delete) buttonConfigs.push({ text: '删除', actionType: 'delete', index: 1 });
+        if (handleColumnsConfig?.detail) buttonConfigs.push({ text: '详情', actionType: 'detail', index: 2 });
+        // 自定义按钮：actionType 格式 'custom:<func>:<idx>'，点击时按 func 派发到 onCustomBtn
+        customGridCol.forEach((btn, idx) => {
+          buttonConfigs.push({
+            text: btn.name,
+            actionType: `custom:${btn.func}:${idx}`,
+            index: buttonConfigs.length,
+          });
+        });
 
         // 使用 VGroup 包裹每个按钮，通过 boundsPadding 实现 10px 间距
         buttonConfigs.forEach((btnConfig, btnIndex) => {
@@ -2124,7 +2148,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
         };
       },
     };
-  }, [config?.grid_handle_columns_default]);
+  }, [config?.grid_handle_columns_default, customerGridCol]);
 
   // 计算统计行总数（去重）
   const bottomFrozenRowCount = useMemo(() => {
@@ -2889,6 +2913,25 @@ const DDVTable: React.FC<DDVTableProps> = ({
         const record = tableRef.current.getCellOriginRecord(col, row);
         const rowData = record;
 
+        // 自定义操作列按钮：actionType 格式 'custom:<func>:<idx>'
+        if (typeof actionType === 'string' && actionType.startsWith('custom:')) {
+          const parts = actionType.split(':');
+          const handlerName = parts[1];
+          if (handlerName) {
+            const { selectionRowKeys, selectionRows } = readVTableSelection();
+            const param: any = {
+              record: rowData,
+              tableRef,
+              moduleKey: config?.module_key,
+              selectionRowKeys,
+              selectionRows,
+            };
+            // 复用 invokeCustomBtn：props → window 兜底 → 未注册提示
+            invokeCustomBtn(handlerName, param);
+          }
+          return;
+        }
+
         switch (actionType) {
           case 'edit':
             // 如果配置了表单字段，自动弹出编辑表单
@@ -2924,7 +2967,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
         onCellClick(args);
       }
     },
-    [onCellClick, onRowEdit, onRowDelete, onRowDetail, handlePopupEdit, handleRowDelete, formConfig],
+    [onCellClick, onRowEdit, onRowDelete, onRowDetail, handlePopupEdit, handleRowDelete, formConfig, invokeCustomBtn, readVTableSelection, config?.module_key],
   );
 
   return (

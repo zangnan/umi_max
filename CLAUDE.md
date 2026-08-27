@@ -195,3 +195,23 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 
 - 提交推送代码前先告知用户，由用户决定是否提交
 - 记录变更信息到 CLAUDE.md 而非自动提交
+
+## 变更记录
+
+### 2026-08-27 — commit `dc27944` `feat(vtable): 增强 DDBaseGridVtable 支持自定义工具栏按钮 并接通 test0001 页面`
+
+- **新增功能**
+  - [src/components/DDBaseGridVtable/types.ts](src/components/DDBaseGridVtable/types.ts)：新增 `DDVTableCustomerToolbarItem` 接口；在 `DDVTableConfig` 上加 `customer_toolbar?: DDVTableCustomerToolbarItem[]`；在 `DDVTableProps` 上加 `onCustomBtn?: Record<string, (param) => void>`
+  - [src/components/DDBaseGridVtable/index.tsx](src/components/DDBaseGridVtable/index.tsx)：新增 `customerToolbar` state + `invokeCustomBtn`（props → window 兜底 → 未注册提示）+ `renderCustomerToolbar`，渲染到主按钮组左侧；新增 `readVTableSelection` 帮助函数（封装 `getCheckboxState('')` + `stateManager.checkedState` 双路径反查选中行/键）
+- **接通页面**
+  - [src/components/DDBunit/automatic_page_vtable.tsx](src/components/DDBunit/automatic_page_vtable.tsx)：扩展签名 `React.FC<{ onCustomBtn?: DDVTableProps['onCustomBtn'] }>`，透传到 `<DDVTable>`；为 [src/pages/common/automatic_page_enh.tsx](src/pages/common/automatic_page_enh.tsx) 与 test0001 两个调用方提供可选 prop（向后兼容）
+  - [src/pages/example/test0001/index.tsx](src/pages/example/test0001/index.tsx)：注册 `onCustomBtn = { doKp, doHb }`，与 [src/pages/example/vtable/ddvtable/index3.tsx](src/pages/example/vtable/ddvtable/index3.tsx) 演示页行为对齐（`message.info` + `console.log`）
+- **修复**
+  - `DDBaseGridVtable` 中三处调用不存在的 VTable API `getSelectedRowIds` / `getSelectedRecords`：`renderCustomerToolbar`、`handleReload`、`change_selection` 监听，全部改为 `readVTableSelection()`
+  - `param` 计算时机由 render 期改为 click 期（之前选中后 param 仍为初始空数组）
+- **附属**
+  - [src/pages/common/automatic_page_enh.tsx](src/pages/common/automatic_page_enh.tsx)：新增文件（10 行包装 `<AutomaticPageVTable />`，未挂路由）
+
+### 验证
+
+- URL `http://localhost:3001/example/cfgp/eg_m_mts_tsjh` → 工具栏出现 `开票` / `合并`，勾选 N 条后点击弹 "当前选中 N 条" 并打印完整 `param`
