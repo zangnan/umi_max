@@ -803,6 +803,30 @@ myUtil.date = {
   },
 
   /**
+   * 将任意值转换为合法 dayjs；非法值返回 undefined（绝不返回非 dayjs）
+   * 用于给 antd DatePicker / RangePicker 回填前的统一净化
+   *
+   * 规则：
+   *   - dayjs 实例 且 isValid  -> 原样返回
+   *   - 数组                   -> 逐个递归；任一非法丢弃，全部失败返回 undefined
+   *   - string / number / Date -> dayjs(...); 无效返回 undefined
+   *   - null / undefined / "" / 其他 -> undefined
+   */
+  toDayjsOrUndefined(value: any): dayjs.Dayjs | dayjs.Dayjs[] | undefined {
+    if (value === null || value === undefined || value === '') return undefined;
+    if (dayjs.isDayjs(value)) {
+      return (value as dayjs.Dayjs).isValid() ? (value as dayjs.Dayjs) : undefined;
+    }
+    if (Array.isArray(value)) {
+      const arr = value.map((v) => this.toDayjsOrUndefined(v));
+      const cleaned = arr.filter((v): v is dayjs.Dayjs => !!v);
+      return cleaned.length > 0 ? cleaned : undefined;
+    }
+    const d = dayjs(value);
+    return d.isValid() ? d : undefined;
+  },
+
+  /**
    * 分钟转小时分钟格式
    * @param minutes 分钟数
    * @returns 小时分钟格式数据（如：1:30）
@@ -3566,9 +3590,18 @@ myUtil.module = {
   formatFormValue({ formItems, formValues }: any) {
     // 表单特殊类型处理
     formItems.forEach((item: any) => {
-      if (item.type === itemType.DatePicker && formValues[item.name]) {  // 日期类型
-        let dataFormatStr = item.format || 'YYYY-MM-DD';
-        formValues[item.name] = new Date(dayjs(formValues[item.name]).format(dataFormatStr)).getTime();
+      if (item.type === itemType.DatePicker || item.type === itemType.TimePicker) {  // 日期 / 时间类型
+        const v = formValues[item.name];
+        if (!v) return;
+        const dataFormatStr = item.format || 'YYYY-MM-DD';
+        if (Array.isArray(v)) {
+          // RangePicker / TimePicker.RangePicker：数组每个 dayjs 元素分别转毫秒
+          formValues[item.name] = v.map((x: any) =>
+            dayjs.isDayjs(x) ? new Date(dayjs(x).format(dataFormatStr)).getTime() : x,
+          );
+        } else if (dayjs.isDayjs(v)) {
+          formValues[item.name] = new Date(dayjs(v).format(dataFormatStr)).getTime();
+        }
       }
       if (item.type === itemType.Select && item.mode === 'multiple') {
         if (formValues[item.name]) {

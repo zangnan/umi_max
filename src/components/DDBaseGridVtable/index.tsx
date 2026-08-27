@@ -551,6 +551,11 @@ const DDVTable: React.FC<DDVTableProps> = ({
   // 设置弹窗状态
   const [settingVisible, setSettingVisible] = useState(false);
 
+  let winHeight = 500;
+  if (typeof window !== 'undefined') {
+    winHeight = window.innerHeight - 40 -54 - 54 - 50;
+  }
+
   // 初始化设置配置 - 仅组件首次加载时从 grid_config 读取
   const [settingConfig, setSettingConfig] = useState<DDVTableSettingConfig>(() => {
     const gridConfig = config?.grid_config || {};
@@ -564,7 +569,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
       selectionType: gridConfig.grid_selection_type || false,
       columnVisibility: {},
       columnOrder: [],
-      gridHeight: typeof gridConfig.grid_height === 'number' ? gridConfig.grid_height : 500,
+      gridHeight: typeof gridConfig.grid_height === 'number' ? gridConfig.grid_height : winHeight,
     };
   });
 
@@ -573,9 +578,9 @@ const DDVTable: React.FC<DDVTableProps> = ({
     setSettingVisible(true);
   }, []);
 
-  // 计算表格高度：优先使用 settingConfig.gridHeight（本地预览），否则使用配置的 grid_height，默认 500
+  // 计算表格高度：优先使用 settingConfig.gridHeight（本地预览），否则使用配置的 grid_height，默认 winHeight
   const tableHeight = useMemo(
-    () => (settingConfig?.gridHeight ?? config?.grid_config?.grid_height ?? 500) as number,
+    () => (settingConfig?.gridHeight ?? config?.grid_config?.grid_height ?? winHeight) as number,
     [settingConfig?.gridHeight, config?.grid_config?.grid_height],
   );
 
@@ -776,12 +781,12 @@ const DDVTable: React.FC<DDVTableProps> = ({
   const handleFilterSubmit = useCallback(async () => {
     try {
       const values = await filterForm.validateFields();
-      console.log('[DDVTable] filter form values:', values);
+      // console.log('[DDVTable] filter form values:', values);
 
       // 使用 assembleVtableSearchModel 构建 searchModel
       const searchModel = assembleVtableSearchModel(values, filterItems);
 
-      console.log('[DDVTable] handleFilterSubmit searchModel:', searchModel);
+      // console.log('[DDVTable] handleFilterSubmit searchModel:', searchModel);
 
       // 更新分页并重新加载数据
       const newParams: DDVTableApiQueryParams = {
@@ -789,11 +794,11 @@ const DDVTable: React.FC<DDVTableProps> = ({
         page: 1, // 筛选时重置到第一页
         searchModel: searchModel,
       };
-      console.log('[DDVTable] handleFilterSubmit newParams:', newParams);
+      // console.log('[DDVTable] handleFilterSubmit newParams:', newParams);
       setPagination(newParams);
       loadData(newParams);
     } catch (error) {
-      console.log('[DDVTable] handleFilterSubmit validate error:', error);
+      // console.log('[DDVTable] handleFilterSubmit validate error:', error);
     }
   }, [pagination, loadData, filterForm, filterItems]);
 
@@ -855,7 +860,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
     if (!config?.form_items) return [];
     const dateFields: string[] = [];
     config.form_items?.forEach((item: any) => {
-      if (item.type === 'DatePicker' || item.type === 'RangePicker') {
+      if (item.type === itemType.DatePicker || item.type === itemType.TimePicker) {
         dateFields.push(item.name);
       }
     });
@@ -872,24 +877,33 @@ const DDVTable: React.FC<DDVTableProps> = ({
     config.form_items?.forEach((item: any) => {
       if (!item?.name) return;
       const value = formatted[item.name];
-      if (!value) return;
+      if (value === undefined || value === null) return;
 
-      if (item.type === 'DatePicker' && value && typeof value === 'string') {  // 日期类型
-        // yyyymmdd 格式正则
-        const reg1 = /^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|(02(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))0229))$/;
-        // yyyy-mm-dd 或 yyyy-mm-dd HH:mm:ss 格式正则
-        const reg2 = /^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))(\s\d{2}:\d{2}:\d{2})?$/;
+      if (item.type === itemType.DatePicker || item.type === itemType.TimePicker) {
+        // DatePicker（含 range 子类型 RangePicker）/ TimePicker（含 range 子类型 TimePicker.RangePicker）
+        // 全部走 dayjs 净化，否则 picker 内部 getUDayjs(value).isValid() 会因 value 不是 dayjs 抛错
+        if (typeof value === 'string') {
+          // yyyymmdd 格式正则
+          const reg1 = /^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})(((0[13578]|1[02])(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)(0[1-9]|[12][0-9]|30))|(02(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))0229))$/;
+          // yyyy-mm-dd 或 yyyy-mm-dd HH:mm:ss 格式正则
+          const reg2 = /^((([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29))(\s\d{2}:\d{2}:\d{2})?$/;
 
-        if (reg1.test(value) || reg2.test(value)) {
-          // 后端返回 yyyymmdd 或 yyyy-mm-dd 或 yyyy-mm-dd HH:mm:ss 格式
-          formatted[item.name] = dayjs(new Date(value));
-        } else {
-          // 后端返回时间戳格式
-          const numValue = Number(value);
-          if (!isNaN(numValue)) {
-            formatted[item.name] = dayjs(new Date(numValue));
+          if (reg1.test(value) || reg2.test(value)) {
+            // 后端返回 yyyymmdd 或 yyyy-mm-dd 或 yyyy-mm-dd HH:mm:ss 格式
+            formatted[item.name] = dayjs(new Date(value));
+          } else {
+            // 后端返回时间戳格式
+            const numValue = Number(value);
+            if (!isNaN(numValue)) {
+              formatted[item.name] = dayjs(new Date(numValue));
+            } else {
+              // 无法识别的字符串：走白名单兜底
+              formatted[item.name] = myUtil.date.toDayjsOrUndefined(value);
+            }
           }
-          // 否则保留原值，让 AntD DatePicker 自行处理
+        } else {
+          // number / Date / dayjs / 数组 等统一过白名单
+          formatted[item.name] = myUtil.date.toDayjsOrUndefined(value);
         }
       }
     });
@@ -959,9 +973,9 @@ const DDVTable: React.FC<DDVTableProps> = ({
             if (response?.code === '200' || response?.code == 200 || response?.success) {
               // 优先从 body 获取数据，其次是 data，最后是整个响应
               // 调试日志
-              console.log('[DDVTable] 查询响应:', response);
+              // console.log('[DDVTable] 查询响应:', response);
               const formData = response?.body?.data || response?.body || response?.data || response;
-              console.log('[DDVTable] 表单数据:', formData);
+              // console.log('[DDVTable] 表单数据:', formData);
               // 通过 onFormDataLoaded 回调赋值表单
               if (onFormDataLoaded) {
                 onFormDataLoaded(form, formData);
@@ -1071,6 +1085,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
     try {
       const values = await form.validateFields();
+      // 表单特殊类型处理：日期/时间转为毫秒数等（与 DDBunit 的 Func.handleSave 保持一致）
+      myUtil.module.formatFormValue({ formItems, formValues: values });
       setFormMasker2(true);
 
       // 获取表单保存 API 地址
@@ -1138,7 +1154,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
   // 查询到表单数据后赋值
   useEffect(() => {
     if (queryFormData && form) {
-      console.log('[DDVTable] 赋值表单数据:', queryFormData);
+      // console.log('[DDVTable] 赋值表单数据:', queryFormData);
       // 处理日期格式
       const formattedData = formatFormData(queryFormData);
       form.setFieldsValue(formattedData);
@@ -1157,9 +1173,17 @@ const DDVTable: React.FC<DDVTableProps> = ({
       const dateFields = getDateFields();
       const dateValues: Record<string, any> = {};
       dateFields.forEach((field) => {
-        if (formattedData[field] !== undefined) {
-          dateValues[field] = formattedData[field];
+        const v = formattedData[field];
+        if (v === undefined) return;
+        if (Array.isArray(v)) {
+          // RangePicker：仅保留数组中的合法 dayjs 元素
+          const arr = v.filter((x: any) => dayjs.isDayjs(x) && x.isValid());
+          if (arr.length > 0) dateValues[field] = arr;
+        } else if (dayjs.isDayjs(v) && v.isValid()) {
+          // DatePicker：必须是合法 dayjs
+          dateValues[field] = v;
         }
+        // 其他形态（string/number/Date/对象/null）一律丢弃，绝不 setFieldsValue
       });
       if (Object.keys(dateValues).length > 0) {
         form.setFieldsValue(dateValues);
@@ -1423,7 +1447,7 @@ const DDVTable: React.FC<DDVTableProps> = ({
               // 过滤出选中的数据
               const selectedData = allRecords.filter((_: any, index: number) => checkedStates[index]);
               // 控制台输出选中的数据
-              console.log('选中的列表数据:', selectedData);
+              // console.log('选中的列表数据:', selectedData);
               // 执行批量删除
               handleBatchDelete(selectedData);
             }
@@ -1663,9 +1687,8 @@ const DDVTable: React.FC<DDVTableProps> = ({
     if (!config?.form_items || config.form_items.length === 0) return null;
 
     // 获取表单配置
-    const formWidth = formConfig.form_width || 720;
+    const formWidth = formConfig.form_width || 960;
     const formLayoutType = formConfig.form_layout_type || 'vertical';
-    const formLabelLayout = formConfig.form_label_input_layout || 'horizontal';
 
     return (
       <Modal
@@ -1688,8 +1711,6 @@ const DDVTable: React.FC<DDVTableProps> = ({
             items={formItems}
             config={{
               form_layout_type: formLayoutType,
-              form_label_input_layout: formLabelLayout,
-              form_style: formConfig.form_style,
             }}
             initialValues={{}}
             otherParam={{
@@ -2646,15 +2667,15 @@ const DDVTable: React.FC<DDVTableProps> = ({
 
       // 构建完整 API 地址
       const fullApiUrl = buildFullApiUrl(deleteApiUrl);
-      console.log('[删除] 完整URL:', fullApiUrl, ', 参数:', { uuids: uuidValues });
+      // console.log('[删除] 完整URL:', fullApiUrl, ', 参数:', { uuids: uuidValues });
 
       try {
         const response = await request(fullApiUrl, {
           method: 'POST',
           data: { uuids: uuidValues },
         });
-        console.log('[删除] 响应:', response);
-        console.log('[删除] code:', response?.code, ', msg:', response?.msg);
+        // console.log('[删除] 响应:', response);
+        // console.log('[删除] code:', response?.code, ', msg:', response?.msg);
 
         // 处理返回结果
         if (response?.code === '200' || response?.code === 200) {
@@ -2680,9 +2701,9 @@ const DDVTable: React.FC<DDVTableProps> = ({
       const gridRowKey = config?.grid_config?.grid_row_key || 'id';
       const uuidValue = rowData[gridRowKey];
 
-      console.log('[删除] gridRowKey:', gridRowKey, ', uuidValue:', uuidValue);
-      console.log('[删除] formConfig:', formConfig);
-      console.log('[删除] getDeleteApiUrl():', getDeleteApiUrl());
+      // console.log('[删除] gridRowKey:', gridRowKey, ', uuidValue:', uuidValue);
+      // console.log('[删除] formConfig:', formConfig);
+      // console.log('[删除] getDeleteApiUrl():', getDeleteApiUrl());
 
       if (!uuidValue) {
         message.error('无法获取删除所需的主键值');
@@ -2722,10 +2743,10 @@ const DDVTable: React.FC<DDVTableProps> = ({
         return;
       }
 
-      console.log('[批量删除] gridRowKey:', gridRowKey);
-      console.log('[批量删除] 选中数据:', selectedData);
-      console.log('[批量删除] uuidValues:', uuidValues);
-      console.log('[批量删除] getDeleteApiUrl():', getDeleteApiUrl());
+      // console.log('[批量删除] gridRowKey:', gridRowKey);
+      // console.log('[批量删除] 选中数据:', selectedData);
+      // console.log('[批量删除] uuidValues:', uuidValues);
+      // console.log('[批量删除] getDeleteApiUrl():', getDeleteApiUrl());
 
       // 弹窗确认
       Modal.confirm({
