@@ -215,3 +215,21 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 ### 验证
 
 - URL `http://localhost:3001/example/cfgp/eg_m_mts_tsjh` → 工具栏出现 `开票` / `合并`，勾选 N 条后点击弹 "当前选中 N 条" 并打印完整 `param`
+
+### 2026-08-27 — commit `bbd10bd` `feat(vtable): DDBaseGridVtable 支持自定义操作列按钮 并接通 test0001 页面预览/审批`
+
+- **新增功能**
+  - [src/components/DDBaseGridVtable/types.ts](src/components/DDBaseGridVtable/types.ts)：新增 `DDVTableCustomerGridColItem` 接口（`name`/`func`/`key?`/`disabled?: boolean | string`）；`DDVTableConfig` 加 `customer_grid_col?: DDVTableCustomerGridColItem[]`
+  - [src/components/DDBaseGridVtable/index.tsx](src/components/DDBaseGridVtable/index.tsx)：
+    - 新增 `customerGridCol` state（兼容读取 `config.customer_grid_col || config.handle_columns`，DDBunit2 旧字段不丢）
+    - 改造 `getHandleColumn`：列宽度计算追加自定义按钮宽度（字符数 × 14px + 10px 间距）；`buttonConfigs` 追加 `actionType = "custom:<func>:<idx>"`；当仅自定义按钮时也显示操作列
+    - 扩展 `handleCellClick`：命中 `custom:` 前缀的 actionType 时提取 `func`，拼装 `{record, tableRef, moduleKey, selectionRowKeys, selectionRows}` 后调用 `invokeCustomBtn`（复用 props → window 兜底 → 未注册提示通道）
+- **接通页面**
+  - [src/pages/example/test0001/index.tsx](src/pages/example/test0001/index.tsx)：在 `onCustomBtn` 内追加 `doYl` / `doSp` 处理器（弹 `message.info` + 控制台 `console.log`）
+- **兼容性**
+  - `assemble_config_util.tsx` 未改动，继续产出 `handle_columns`，由 DDVTable 通过 `config.customer_grid_col || config.handle_columns` 兼容读取
+  - `DDBunit2.tsx`、内置 `edit/delete/detail` 行为完全不变
+
+### 验证
+
+- URL `http://localhost:3001/example/cfgp/eg_m_mts_tsjh` → 操作列出现 `编辑` / `删除` / `详情` + `预览` / `审批`；点击 `预览` 弹 "预览：当前行 = {...}" 并打印完整 `param`；工具栏 `开票` / `合并` 不受影响
