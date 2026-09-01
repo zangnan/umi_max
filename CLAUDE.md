@@ -233,3 +233,14 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 ### 验证
 
 - URL `http://localhost:3001/example/cfgp/eg_m_mts_tsjh` → 操作列出现 `编辑` / `删除` / `详情` + `预览` / `审批`；点击 `预览` 弹 "预览：当前行 = {...}" 并打印完整 `param`；工具栏 `开票` / `合并` 不受影响
+
+### 2026-08-27 — commit `8671998` `fix(vtable): 修复 /dynamicbs1/enh/cfgp/* 路由切换时数据残留问题`
+
+- **问题**：四个 `/dynamicbs1/enh/cfgp/...` 路由（`eg_m_mts_tsjh` / `eg_m_mts_tssb` / `m_sys_api_log` / `m_sys_app_log`）均绑定到 [src/pages/common/automatic_page_enh.tsx](src/pages/common/automatic_page_enh.tsx)。访问 A 后访问 B，B 表格展示的是 A 的数据；切回 A 又正确。
+- **根因**：[src/components/DDBunit/automatic_page_vtable.tsx:195](src/components/DDBunit/automatic_page_vtable.tsx#L195) 的 `<DDVTable>` 未绑定 `key`。父 `init()` 在 URL 变化时会跑、`setMyConfig(newConfig)` 会触发重渲染，但 `<DDVTable>` 是同一实例。DDVTable 内部 [src/components/DDBaseGridVtable/index.tsx:488](src/components/DDBaseGridVtable/index.tsx#L488) `hasInitialLoad = useRef(false)` 仅在**首次挂载**时调用 `loadData()`，切模块时不会重跑。
+- **修复**：参考 [src/components/DDBunit/automatic_page.tsx:76](src/components/DDBunit/automatic_page.tsx#L76)（工作版本）与 [src/pages/example/vtable/ddvtable/index3.tsx:116](src/pages/example/vtable/ddvtable/index3.tsx#L116)（演示页）既有做法，加 `key={myConfig?.module_key}`。`module_key` 变化时 React 卸载/重建组件，触发首次加载分支重新拉取数据。
+- **附带**：[src/pages/User/Login/index.less](src/pages/User/Login/index.less) 微调（`margin: -8px`）。
+
+### 验证
+
+- 依次访问 `eg_m_mts_tsjh` → `eg_m_mts_tssb` → `m_sys_api_log` → `m_sys_app_log` → `eg_m_mts_tsjh`：每页表格数据正确切换，Network 每次都触发对应模块的 `grid_query`
