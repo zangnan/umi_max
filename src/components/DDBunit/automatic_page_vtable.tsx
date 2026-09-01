@@ -192,7 +192,7 @@ const AutomaticPageVTable: React.FC<{ onCustomBtn?: DDVTableProps['onCustomBtn']
 
   return (
     <>
-      <DDVTable config={myConfig} onCustomBtn={onCustomBtn} />
+      <DDVTable key={myConfig?.module_key} config={myConfig} onCustomBtn={onCustomBtn} />
       <FloatButton.Group style={{ right: 24 }}>
         <FloatButton tooltip="查看配置文件" onClick={showModal} icon={<CodeOutlined />} />
       </FloatButton.Group>
