@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Tag, Button, Typography, Badge, Avatar, version, Table, message } from 'antd';
+import { Row, Col, Card, Tag, Button, Typography, Badge, Avatar, version, Table, message, BorderBeam } from 'antd';
 import { history, useModel } from 'umi';
 import { queryListNs } from '@/services/api';
 import {
@@ -94,13 +94,37 @@ const getInterfaceData = (interfaceData: any[]) => {
 // ==================== 快捷入口配置 ====================
 
 const quickEntries = [
-  { icon: <BuildOutlined />, label: '系统构建', path: '/easy_dev_dc/agility/app_build', colorKey: 'colorPrimary' },
+  { icon: <BuildOutlined />, label: '系统构建', path: '/easy_dev_dc/agility/app_build', colorKey: 'colorPrimary', borderBeamColor: [
+    { color: '#1677ff', percent: 0 },
+    { color: '#36cfc9', percent: 52 },
+    { color: '#95de64', percent: 100 },
+  ] },
   // { icon: <UserOutlined />, label: '用户管理', path: '/easy_dev_dc/sys/cfgp/m_sys_user', colorKey: 'colorInfo' },
-  { icon: <FileTextOutlined />, label: '文档生成', path: '/easy_dev_dc/agility/doc_build', colorKey: 'colorSuccess' },
-  { icon: <RobotOutlined />, label: 'AI主题', path: '/easy_dev_dc/sys/skin_setting_ai', colorKey: 'colorWarning' },
-  { icon: <ApiOutlined />, label: '接口日志', path: '/easy_dev_dc/sys/cfgp/m_sys_api_log', colorKey: 'colorError' },
-  { icon: <DatabaseOutlined />, label: '系统日志', path: '/easy_dev_dc/sys/cfgp/m_sys_app_log', colorKey: 'colorPrimary' },
-  { icon: <BookOutlined />, label: '工具文档', path: '/UtilDoc', colorKey: 'colorInfo', isExternal: true },
+  { icon: <FileTextOutlined />, label: '文档生成', path: '/easy_dev_dc/agility/doc_build', colorKey: 'colorSuccess', borderBeamColor: [
+    { color: '#ff7a45', percent: 0 },
+    { color: '#ff4d4f', percent: 49 },
+    { color: '#ff85c0', percent: 100 },
+  ] },
+  { icon: <RobotOutlined />, label: 'AI主题', path: '/easy_dev_dc/sys/skin_setting_ai', colorKey: 'colorWarning', borderBeamColor: [
+    { color: '#7c3aed', percent: 0 },
+    { color: '#06b6d4', percent: 57 },
+    { color: '#67e8f9', percent: 100 },
+  ] },
+  { icon: <ApiOutlined />, label: '接口日志', path: '/easy_dev_dc/sys/cfgp/m_sys_api_log', colorKey: 'colorError', borderBeamColor: [
+    { color: '#22c55e', percent: 0 },
+    { color: '#a3e635', percent: 54 },
+    { color: '#facc15', percent: 100 },
+  ] },
+  { icon: <DatabaseOutlined />, label: '系统日志', path: '/easy_dev_dc/sys/cfgp/m_sys_app_log', colorKey: 'colorPrimary', borderBeamColor: [
+    { color: '#fa541c', percent: 0 },
+    { color: '#ff7875', percent: 46 },
+    { color: '#ffd666', percent: 100 },
+  ] },
+  { icon: <BookOutlined />, label: '工具文档', path: '/UtilDoc', colorKey: 'colorInfo', isExternal: true, borderBeamColor: [
+    { color: '#2f54eb', percent: 0 },
+    { color: '#722ed1', percent: 44 },
+    { color: '#ff85c0', percent: 100 },
+  ] },
 ];
 
 // ==================== 组件定义 ====================
@@ -341,6 +365,7 @@ const HomePage: React.FC = () => {
         <Row gutter={[20, 20]}>
           {quickEntries.map((entry, index) => (
             <Col xs={12} sm={8} md={4} key={index}>
+              <BorderBeam color={entry.borderBeamColor}>
               <Card
                 hoverable
                 className="quick-entry-card glass-card-inner"
@@ -381,6 +406,7 @@ const HomePage: React.FC = () => {
                   </Text>
                 </div>
               </Card>
+              </BorderBeam>
             </Col>
           ))}
         </Row>
