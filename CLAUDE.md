@@ -244,3 +244,15 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 ### 验证
 
 - 依次访问 `eg_m_mts_tsjh` → `eg_m_mts_tssb` → `m_sys_api_log` → `m_sys_app_log` → `eg_m_mts_tsjh`：每页表格数据正确切换，Network 每次都触发对应模块的 `grid_query`
+
+### 2026-08-27 — commit `80ec0b8` `feat(home): 首页快捷入口增加 BorderBeam 边框流光效果`
+
+- **改动**
+  - [src/pages/Home/index.tsx](src/pages/Home/index.tsx)：
+    - 从 antd 导入 `BorderBeam`
+    - 每个 `quickEntries` 项增加 `borderBeamColor` 三段渐变色配置（按入口风格区分）
+    - 渲染处用 `<BorderBeam color={entry.borderBeamColor}>` 包裹快捷入口 `<Card>`，实现边框流光效果
+
+### 验证
+
+- 访问首页 → 6 个快捷入口卡片（系统构建 / 文档生成 / AI主题 / 接口日志 / 系统日志 / 工具文档）均显示动态彩色边框流光，颜色组合与配置一致
