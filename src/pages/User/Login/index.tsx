@@ -12,6 +12,8 @@ import myUtil from '@/components/DDAssist/util';
 import CONSTANTS from '@/components/DDAssist/constants';
 import './index.less';
 import nbglxtUtil from '@/pages/nbglxt/common/nbglxtUtil';
+import GhostFibers from '@/components/DDReactBits/GhostFibers/GhostFibers';
+import GradientText from '@/components/DDReactBits/GradientText/GradientText';
 
 const LoginMessage: React.FC<{
   content: string;
@@ -91,36 +93,78 @@ export default () => {
       <Helmet>
         <title> 登录页 - {myUtil?.sys?.getConfig()?.title} </title>
       </Helmet>
-      <div style={{ backgroundColor: 'white' }} className='login_container'>
-        <LoginForm
-          // logo={"/img/logo_rpa.png"}
-          // logo={logo}
-          logo={myUtil.sys.getConfig().logo_login}
-          title={myUtil?.sys?.getConfig()?.title}
-          // subTitle="辅助开发工具"
-          onFinish={async (values) => {
-            await handleSubmit(values);
-          }}
-        >
-          {!userLoginState && (
-            <LoginMessage content='账户或密码错误' />
-          )}
-          <ProFormText
-            name="username"
-            // fieldProps={{ onChange: handleChangeUser, size: 'large', prefix: <UserOutlined className={'prefixIcon'} />, }}
-            fieldProps={{ size: 'large', prefix: <UserOutlined className={'prefixIcon'} />, }}
-            placeholder={'用户名'}
-            rules={[ { required: true, message: '请输入用户名!', }, ]}
-          />
-          <ProFormText.Password
-            name="password"
-            fieldProps={{ size: 'large', prefix: <LockOutlined className={'prefixIcon'} />, }}
-            placeholder={'密码'}
-            rules={[ { required: true, message: '请输入密码！', }, ]}
-          />
-        </LoginForm>
+        
+      {/* 背景层：fixed，跟着视口，内容滚动它不动 */}
+      <div className="bg-fixed">
+        <GhostFibers
+          lineColor="#140E35"
+          glowColor="#3437A0"
+          speed={0.2}
+          scale={2}
+          rotation={0}
+          rotationSpeed={0.25}
+          layers={4}
+          waveAmplitude={0.015}
+          waveFrequency={3}
+          waveSpeed={0.15}
+          layerSpeed={0.08}
+          twist={0.1}
+          twistFrequency={5}
+          twistSpeed={1.2}
+          lineFrequency={5}
+          lineSpacing={2}
+          lineSharpness={16}
+          glowFalloff={10}
+          glowIntensity={1.6}
+          brightness={2}
+          blueBoost={1.25}
+          vignette={0.8}
+          grain={0.05}
+          dpr={1}
+          lightMode={false}
+          fps={60}
+          paused={false}
+        />
+      </div>
+      
+      {/* 遮罩层 */}
+      <div className="bg-scrim"></div>
+      
+      {/* 内容层 */}
+      <div style={{position: "relative", zIndex: 999, color: "#ffffff", margin: "0 auto", textAlign: "center" }}>
+        <div className='login_container'>
+          <LoginForm
+            // logo={"/img/logo_rpa.png"}
+            // logo={logo}
+            logo={myUtil.sys.getConfig().logo_login}
+            title={myUtil?.sys?.getConfig()?.title}
+            // subTitle="辅助开发工具"
+            onFinish={async (values) => {
+              await handleSubmit(values);
+            }}
+          >
+            {!userLoginState && (
+              <LoginMessage content='账户或密码错误' />
+            )}
+            <ProFormText
+              name="username"
+              // fieldProps={{ onChange: handleChangeUser, size: 'large', prefix: <UserOutlined className={'prefixIcon'} />, }}
+              fieldProps={{ size: 'large', prefix: <UserOutlined className={'prefixIcon'} />, }}
+              placeholder={'用户名'}
+              rules={[ { required: true, message: '请输入用户名!', }, ]}
+            />
+            <ProFormText.Password
+              name="password"
+              fieldProps={{ size: 'large', prefix: <LockOutlined className={'prefixIcon'} />, }}
+              placeholder={'密码'}
+              rules={[ { required: true, message: '请输入密码！', }, ]}
+            />
+          </LoginForm>
+        </div>
         <div className="login-footer">
-          {myUtil?.sys?.getConfig()?.copyRight} v_{VERSION_DATE || '0'}
+          <GradientText colors={["#5227FF","#987add","#B497CF"]} animationSpeed={8} showBorder={false} className="custom-class">
+            {myUtil?.sys?.getConfig()?.copyRight} v_{VERSION_DATE || '0'}
+          </GradientText>
         </div>
       </div>
     </ProConfigProvider>
