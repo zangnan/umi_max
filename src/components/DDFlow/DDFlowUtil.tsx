@@ -1,11 +1,12 @@
-import { Shape } from '@antv/x6';
-import { Stencil } from '@antv/x6-plugin-stencil';
-import { Transform } from '@antv/x6-plugin-transform';
-import { Selection } from '@antv/x6-plugin-selection';
-import { Snapline } from '@antv/x6-plugin-snapline';
-import { Keyboard } from '@antv/x6-plugin-keyboard';
-import { Clipboard } from '@antv/x6-plugin-clipboard';
-import { History } from '@antv/x6-plugin-history';
+import {
+  Shape,
+  Stencil,
+  Selection,
+  Snapline,
+  Keyboard,
+  Clipboard,
+  History,
+} from '@antv/x6';
 import { register } from '@antv/x6-react-shape';
 import { SettingOutlined, CaretRightOutlined, PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import './index.less';
@@ -315,6 +316,7 @@ X6Util.registerNode = (graphObj: any) => {
 X6Util.INIT_CONFIG = {
   autoResize: true,
   grid: true,
+  panning: false,
   mousewheel: {
     enabled: true,
     zoomAtMousePosition: true,
@@ -341,7 +343,7 @@ X6Util.INIT_CONFIG = {
             targetMarker: { name: 'block', width: 12, height: 8 }
           }
         },
-        tools: ['edge-editor'],
+        tools: [{ name: 'edge-editor' }],
         // tools: [X6Util.nodeTools.editor],
         zIndex: 0,
       })
@@ -377,7 +379,9 @@ X6Util.initStencil = (graph: any, stencilRef: any) => {
       ],
       layoutOptions: { columns: 2, columnWidth: 130, rowHeight: 42, },
   });
-  stencilRef.current.appendChild(stencil.container);
+  // v3 运行时仍有 stencil.container（见 plugin/stencil initContainer），
+  // 但该属性未出现在 v3 的类型声明中，故显式断言避免编辑器误报
+  stencilRef.current.appendChild((stencil as any).container);
   const r1: any = graph.createNode({
     shape: 'custom-rect',
     label: '开始',

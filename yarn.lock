@@ -1066,80 +1066,19 @@
     d3-time "^3.1.0"
     d3-timer "^3.0.1"
 
-"@antv/x6-common@^2.0.16":
-  version "2.0.17"
-  resolved "https://registry.npmmirror.com/@antv/x6-common/-/x6-common-2.0.17.tgz#a40a0920859faadf567452dea81132783a19aaa4"
-  integrity sha512-37g7vmRkNdYzZPdwjaMSZEGv/MMH0S4r70/Jwoab1mioycmuIBN73iyziX8m56BvJSDucZ3J/6DU07otWqzS6A==
+"@antv/x6-react-shape@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.npmmirror.com/@antv/x6-react-shape/-/x6-react-shape-3.0.1.tgz#f9fd618da85ff75035152ce43f3f6884ce7f30bd"
+  integrity sha512-zLIJ0NMO6R3sXZGKQJKMUEZmaVwNDBxx3jYUMSXE9cZhKsvWV+P8WuiUCtJYNSVTezBLbxYLzrukA/QdQa/sKg==
+
+"@antv/x6@^3.1.8":
+  version "3.1.8"
+  resolved "https://registry.npmmirror.com/@antv/x6/-/x6-3.1.8.tgz#2b3f0329c5e92a5488bce2fdc04421f903d6bd95"
+  integrity sha512-JVGxBRmjnqDr7W7Ql5XWc6FUtFcy+QlFaV31cv0pHIeVIJmyYnB5rHmdzz93CY5lCS/XcNBtOnNIIq6JVgfZ5w==
   dependencies:
+    dom-align "^1.12.4"
     lodash-es "^4.17.15"
-    utility-types "^3.10.0"
-
-"@antv/x6-geometry@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.npmmirror.com/@antv/x6-geometry/-/x6-geometry-2.0.5.tgz#c158317d74135bedd78c2fdeb76f9c7cfa0ef0aa"
-  integrity sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==
-
-"@antv/x6-plugin-clipboard@^2.1.6":
-  version "2.1.6"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-clipboard/-/x6-plugin-clipboard-2.1.6.tgz#98886d5b16a175b67f142ef66c75907de7c1b069"
-  integrity sha512-roZPLnZx6PK8MBvee0QMo90fz/TXeF0WNe4EGin2NBq5M1I5XTWrYvA6N2XVIiWAAI67gjQeEE8TpkL7f8QdqA==
-
-"@antv/x6-plugin-dnd@^2.x":
-  version "2.1.1"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-dnd/-/x6-plugin-dnd-2.1.1.tgz#4d9afed8e8105e01e31cdf526068fa686fb6b4aa"
-  integrity sha512-v0szzik1RkadPDn4Qi5mOSaB2AeI78D40/YuCYbPVzplG+HydGsHwO3MLTgJPQ+R5n0eM0W5F850p1VfTOHR7g==
-
-"@antv/x6-plugin-export@^2.1.6":
-  version "2.1.6"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-export/-/x6-plugin-export-2.1.6.tgz#f8cedab3707c43728baaf0f0bfb1e75ec4a61a30"
-  integrity sha512-m0ukMmZhrFE5n7uCR43DVQBdiUfpjGN+vm1mc+6RTZdHK8pa6Mxr0RZztaxPy34YA4tli+bGY3ePslsNPfh6PQ==
-
-"@antv/x6-plugin-history@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-history/-/x6-plugin-history-2.2.4.tgz#c4a543b8a2b6ae8b6934ec69067688459cae6c48"
-  integrity sha512-9gHHvEW4Fla+1hxUV49zNgJyIMoV9CjVM52MrFgAJcvyRn1Kvxz4MfxiKlG+DEZUs+/zvfjl9pS6gJOd8laRkg==
-
-"@antv/x6-plugin-keyboard@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-keyboard/-/x6-plugin-keyboard-2.2.3.tgz#4f774ad27527596400ba85ce8597cf8ad7e65ff8"
-  integrity sha512-pnCIC+mDyKKfkcDyLePfGxKVIqXBcldTgannITkHC1kc0IafRS1GMvzpvuDGrM5haRYd6Nwz8kjkJyHkJE4GPA==
-  dependencies:
     mousetrap "^1.6.5"
-
-"@antv/x6-plugin-selection@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-selection/-/x6-plugin-selection-2.2.2.tgz#681c843124c2150af51594e8e1fc947b5e95e858"
-  integrity sha512-s2gtR9Onlhr7HOHqyqg0d+4sG76JCcQEbvrZZ64XmSChlvieIPlC3YtH4dg1KMNhYIuBmBmpSum6S0eVTEiPQw==
-
-"@antv/x6-plugin-snapline@^2.1.7":
-  version "2.1.7"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-snapline/-/x6-plugin-snapline-2.1.7.tgz#1b4e3be0a281ba324117b7ac7b9b8c39e484cce2"
-  integrity sha512-AsysoCb9vES0U2USNhEpYuO/W8I0aYfkhlbee5Kt4NYiMfQfZKQyqW/YjDVaS2pm38C1NKu1LdPVk/BBr4CasA==
-
-"@antv/x6-plugin-stencil@^2.1.5":
-  version "2.1.5"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-stencil/-/x6-plugin-stencil-2.1.5.tgz#27d96ead99027cfa6ce2537e76301c0d46035f01"
-  integrity sha512-q7wx7XRMFkUKPv3WsHkvZda6O1GW+6q6H/+c1lcrwlQoEKOFv1Djc4Hu2J4SGhV2z98P2JLfVJiT5m7YoOoCHw==
-  dependencies:
-    "@antv/x6-plugin-dnd" "^2.x"
-
-"@antv/x6-plugin-transform@^2.1.8":
-  version "2.1.8"
-  resolved "https://registry.npmmirror.com/@antv/x6-plugin-transform/-/x6-plugin-transform-2.1.8.tgz#0a40cf63f1a0a882b08c800e37319973ba12e4c1"
-  integrity sha512-GvJuiJ4BKp0H7+qx3R1I+Vzbw5gXp9+oByXo/WyVxE3urOC7LC5sqnaDfIjyYMN6ROLPYPZraLSeSyYBgMgcDw==
-
-"@antv/x6-react-shape@^2.2.3":
-  version "2.2.3"
-  resolved "https://registry.npmmirror.com/@antv/x6-react-shape/-/x6-react-shape-2.2.3.tgz#3b2d07f216f501e1b394b612ee2e0e3d49e18143"
-  integrity sha512-42PGxk3XLnx9bsHQiRPauai5UQCrsh0MbWI3MyHRpjQaC30FK1rqyjH/EJ8qH0p6/cAndszZzCaiPqBbs3FqLQ==
-
-"@antv/x6@^2.18.1":
-  version "2.19.2"
-  resolved "https://registry.npmmirror.com/@antv/x6/-/x6-2.19.2.tgz#219729fc6486c89d8d46f5c65cd16c6412f82808"
-  integrity sha512-lr9sUAlrR7eSVANru8kUNZUqCRl7eOCgb36M61FMDonUYREwkHpRN+0zq+1egSSOdz3HHSDBjs7UMtGH1ZEg2w==
-  dependencies:
-    "@antv/x6-common" "^2.0.16"
-    "@antv/x6-geometry" "^2.0.5"
     utility-types "^3.10.0"
 
 "@babel/code-frame@7.22.5":
@@ -8737,7 +8676,7 @@ docx@^9.5.0:
     xml "^1.0.1"
     xml-js "^1.6.8"
 
-dom-align@^1.7.0:
+dom-align@^1.12.4, dom-align@^1.7.0:
   version "1.12.4"
   resolved "https://registry.npmmirror.com/dom-align/-/dom-align-1.12.4.tgz#3503992eb2a7cfcb2ed3b2a6d21e0b9c00d54511"
   integrity sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==
@@ -10082,12 +10021,12 @@ fraction.js@^5.3.4:
   integrity sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==
 
 framer-motion@^13.4.1:
-  version "13.4.0"
-  resolved "https://registry.npmmirror.com/framer-motion/-/framer-motion-13.4.0.tgz#2a7171731ce00028ea6c12527e8ee97427e26c86"
-  integrity sha512-HCpqKM9BTu6UYKtj0u6J1QNxojnnirNcghcSDZ+SkpiL3myxvtsgXPS3ZGEELC2eSma7YiA937rAEXtRyydSXQ==
+  version "13.5.1"
+  resolved "https://registry.npmmirror.com/framer-motion/-/framer-motion-13.5.1.tgz#afa53c127eb72e9ae32aefc2e8f7bc06531efd6b"
+  integrity sha512-HeWOaeHD3kyTSIEMT6+nw7fBn4saIfxxabZyAITbycAl4xr1kzGJKIvGt/OWghSlvIA9qTnZ1zTGelHAe6S8DA==
   dependencies:
-    motion-dom "^13.3.0"
-    motion-utils "^13.3.0"
+    motion-dom "13.5.1"
+    motion-utils "13.5.0"
     tslib "^2.4.0"
 
 fresh@0.5.2, fresh@~0.5.2:
@@ -13325,17 +13264,17 @@ moment@^2.24.0, moment@^2.29.2, moment@^2.29.4:
   resolved "https://registry.npmmirror.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
   integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
-motion-dom@^13.3.0:
-  version "13.4.1"
-  resolved "https://registry.npmmirror.com/motion-dom/-/motion-dom-13.4.1.tgz#a6967a4f2b9087c5d78130ce204cd1d08cba134f"
-  integrity sha512-qw6ILBFHrIPQd3k9Dd1fNlCLHTNzvMXW2zpeTlxn4wZXX02m0Dnsf8ycyvcjtAZtBiBnL4SfbyDIXWg+b1x/Ig==
+motion-dom@13.5.1:
+  version "13.5.1"
+  resolved "https://registry.npmmirror.com/motion-dom/-/motion-dom-13.5.1.tgz#4d3cddcbda97a7f34235cc6c8477897bce8aa3c8"
+  integrity sha512-/7CVCD20Mz1KobktorpdgvowV0V41J7UxqE+qWS3GkSJqrRr5ft+2RloOYtEKv+wvBp3JaSFBclhxt4ja8ovHg==
   dependencies:
-    motion-utils "^13.3.0"
+    motion-utils "13.5.0"
 
-motion-utils@^13.3.0:
-  version "13.3.0"
-  resolved "https://registry.npmmirror.com/motion-utils/-/motion-utils-13.3.0.tgz#f48cb83bc43c29ca06a807cb84ecd3d04563c635"
-  integrity sha512-sgSschQp7EseHInIlR7hBbMuvet3RA0bs28KPZAXJcGKGdxHGvh1ogpYDilY3bOMtl73EqPNmp75sAKHYPU5sg==
+motion-utils@13.5.0:
+  version "13.5.0"
+  resolved "https://registry.npmmirror.com/motion-utils/-/motion-utils-13.5.0.tgz#13b41a3f5d67c9d6b5fafe23c7439611bf97fb9f"
+  integrity sha512-Hqe/sqjIKliPZg8sVjWAkdySDPJNIeKH+euVkDOG8ri3DUUU7ZjndmHsGqEPz2iHpiyVaV5I22iguCMHU2he+Q==
 
 motion@^13.4.1:
   version "13.4.1"

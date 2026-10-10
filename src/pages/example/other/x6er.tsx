@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Graph, Cell, Shape } from '@antv/x6';
+import { Graph, Cell, Shape, Export } from '@antv/x6';
 import { Dropdown, Button, Space } from 'antd';
-import { Export } from '@antv/x6-plugin-export';
 
 const testData: any = [
   {

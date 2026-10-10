@@ -1,9 +1,13 @@
 import React, { useRef, useEffect } from 'react';
-import { Graph, Node, Color } from '@antv/x6';
+import {
+  Graph,
+  Node,
+  Color,
+  Snapline,
+  History,
+  Selection,
+} from '@antv/x6';
 import { register } from '@antv/x6-react-shape';
-import { Snapline } from '@antv/x6-plugin-snapline';
-import { History } from '@antv/x6-plugin-history';
-import { Selection } from '@antv/x6-plugin-selection';
 import { Dropdown, Button, Space } from 'antd';
 
 Graph.registerNode(
@@ -167,7 +171,7 @@ const Report01: React.FC<unknown> = () => {
         break
       case 'attr':
         nodes.forEach((node: any) => {
-          const color = Color.random().toHex()
+          const color = Color.randomHex()
           node.attr('body/fill', color)
         })
         break
