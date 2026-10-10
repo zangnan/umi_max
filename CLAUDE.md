@@ -256,3 +256,45 @@ const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
 ### 验证
 
 - 访问首页 → 6 个快捷入口卡片（系统构建 / 文档生成 / AI主题 / 接口日志 / 系统日志 / 工具文档）均显示动态彩色边框流光，颜色组合与配置一致
+
+### 2026-10-10 — commit `59ad5de` `chore(deps): 升级 @antv/x6 v2 → v3.1.8 并适配 v3 API`
+
+- **依赖**
+  - [package.json](package.json)：`@antv/x6` `^2.19.2` → `^3.1.8`
+  - [yarn.lock](yarn.lock)：依赖树同步
+  - 删除 [pnpm-lock.yaml](pnpm-lock.yaml)（项目以 yarn 为准，pnpm 锁文件作废）
+- **v3 API 适配**
+  - [src/components/DDFlow/DDFlowUtil.tsx](src/components/DDFlow/DDFlowUtil.tsx)：插件合并到主包后调整 import 形态
+  - [src/pages/example/X6/X601.tsx](src/pages/example/X6/X601.tsx) / [src/pages/example/X6/X601 copy.tsx](src/pages/example/X6/X601%20copy.tsx) / [src/pages/example/other/x6er.tsx](src/pages/example/other/x6er.tsx)：演示页 `Color.random().toHex()` → `Color.randomHex()`（v3 中 `Color` 为 namespace，`randomHex` 挂在其上）
+
+### 验证
+
+- `yarn build` / `yarn dev` 通过；3 个 X6 演示页拖拽/连线/撤销重做正常
+
+### 2026-10-10 — commit `7d102da` `feat(flow): flow_edit 保存按 ENV_TYPE 分支 + 兼容 Node(eggjs) 蛇形字段`
+
+- **背景**：原 DDFlowDesigner 保存只调 `editFlow`（`POST /dict/procdef/save`，Java 后端专用）；Node(eggjs) 后端不可用。整条流程编辑链路（打开 / 编辑 / 保存 / readonly）的字段读取也全部硬编码驼峰，Node 后端返回蛇形导致空标题、空选项、流程图不显示等连锁问题。
+- **保存分支**
+  - [src/components/DDFlow/DDFlowDesigner.tsx:115-147](src/components/DDFlow/DDFlowDesigner.tsx#L115-L147) `saveFlow`：新增 `ENV_TYPE === 'node'` 分支走 `saveOrUpdate`（`POST /dict/automatic/exp/bs/saveOrUpdate/nbgl_process_def`），与母页"新建/编辑流程信息"同一接口；非 Node 保留原 `editFlow` 行为不变
+  - 顺手补 `graph.dispose()` 卸载清理（v2/v3 通用，避免事件监听与节点组件累积）
+- **读取命名兼容（响应体）**
+  - [src/components/DDAssist/util/customerBuss.tsx:119](src/components/DDAssist/util/customerBuss.tsx#L119) `openModalFlow`：读 `record.xtgl_process_data || record.xtglProcessData` —— 修复"编辑流程后再次进入看不到图"（Node 下原代码读到 undefined → `data: []` → 画布全空）
+  - [src/components/DDAssist/util/customerBuss.tsx:132](src/components/DDAssist/util/customerBuss.tsx#L132) `openModalFlowReadonly`：读 `record.xtgl_process_run_id || record.xtglProcessRunId`
+  - [src/components/DDAssist/util/customerBuss.tsx:136-137](src/components/DDAssist/util/customerBuss.tsx#L136-L137) `openModalFlowReadonly`：读 `processDef.xtgl_process_data || processDef.xtglProcessData`，避免 Node 下 `JSON.parse({})` 抛错
+  - [src/components/DDAssist/util/customerBuss.tsx:131-145](src/components/DDAssist/util/customerBuss.tsx#L131-L145) `openModalFlowReadonly` 请求体：按 `ENV_TYPE` ternary 选 `xtgl_process_run_id` 或 `xtglProcessRunId`（请求体只发一个 key，避免后端重复字段处理）
+  - [src/components/DDFlow/DDFlowDesigner.tsx:79-89](src/components/DDFlow/DDFlowDesigner.tsx#L79-L89) readonly 任务高亮：读 `xtgl_process_task_flag || xtglProcessTaskFlag`、`xtgl_process_task_id || xtglProcessTaskId`
+  - [src/components/DDFlow/DDFlowDesigner.tsx:229-230](src/components/DDFlow/DDFlowDesigner.tsx#L229-L230) 角色下拉：读 `role_name || roleName`、`role_id || roleId`
+- **组织架构树（预加载在 App 启动时）**
+  - [src/pages/nbglxt/common/nbglxtUtil.tsx:10-32](src/pages/nbglxt/common/nbglxtUtil.tsx#L10-L32) `app.init`：原代码已用 `ENV_TYPE === 'node'` 区分 `idName`，但 `title` / `value` / `name` / `pid` 仍读驼峰。补齐 ternary 到 `idField` / `nameField`（`org_id` / `org_name`），`pid` 用 `??` 兜底兼容 `parent_id`（不确定 Node 实际字段名，宁可保留原值不强行覆盖）
+- **约定**：Node(eggjs) 后端 dict/流程相关表统一返回蛇形字段名；Java 后端返回驼峰。前端读取处一律 `||` 兜底，请求体构造处用 `ENV_TYPE === 'node'` ternary
+
+### 验证
+
+- **Java/默认环境**：行为完全不变，`editFlow` 仍调 `/dict/procdef/save`，所有 `||` 兜底走左值（驼峰存在）
+- **Node(eggjs) 环境**：
+  - 从母页"编辑流程"进入 flow_edit → 画布显示已有图（`openModalFlow` 正确读到 `xtgl_process_data`）
+  - 编辑后保存 → Network 走 `/dict/automatic/exp/bs/saveOrUpdate/nbgl_process_def`，toast "保存成功！"
+  - 再次"编辑流程" → 画布显示刚保存的图
+  - 右侧"角色"下拉列出全部角色（`role_name` / `role_id` 正确读取）
+  - 右侧"组织架构"下拉列出组织树（`nbglxtUtil` 启动预加载的新数据；DevTools → Session Storage 删旧 `treeTable` 后重新登录）
+  - readonly 流程：API 请求体带 `xtgl_process_run_id`，当前运行节点高亮正确（`xtgl_process_task_flag` / `xtgl_process_task_id` 正确读取）
