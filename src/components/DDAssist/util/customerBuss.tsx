@@ -115,7 +115,8 @@ customerBuss.exportResumePDF = async (funParam: any) => {
 // 打开流程
 customerBuss.openModalFlow = (funParam: any) => {
   let record: any = funParam?.record || {};
-  let xtglProcessDataStr = record.xtglProcessData;
+  // 兼容 Node(eggjs) 后端的蛇形字段 xtgl_process_data 与 Java 后端的驼峰 xtglProcessData
+  let xtglProcessDataStr = record.xtgl_process_data || record.xtglProcessData;
   let xtglProcessDataS = xtglProcessDataStr ? JSON.parse(xtglProcessDataStr) : '';
   const state: any = {
     data: xtglProcessDataS || [],
@@ -127,10 +128,16 @@ customerBuss.openModalFlow = (funParam: any) => {
 // 打开流程 readonly
 customerBuss.openModalFlowReadonly = (funParam: any) => {
   let record: any = funParam?.record || {};
-  let xtglProcessRunId: any = record.xtglProcessRunId;
-  let apiParams: any = { xtglProcessRunId };
+  // 兼容 Node(eggjs) 后端的蛇形字段 xtgl_process_run_id 与 Java 后端的驼峰 xtglProcessRunId
+  let xtglProcessRunId: any = record.xtgl_process_run_id || record.xtglProcessRunId;
+  // 请求体也按 ENV_TYPE 区分：Node 后端的 queryProcBsAndTasks 需要蛇形字段
+  let apiParams: any = ENV_TYPE === 'node'
+    ? { xtgl_process_run_id: xtglProcessRunId }
+    : { xtglProcessRunId };
   queryProcBsAndTasks(apiParams).then((res: any) => {
-    let xtglProcessDataStr = res?.body?.processDef?.xtglProcessData || {};
+    // 兼容 Node(eggjs) 后端的蛇形字段 xtgl_process_data 与 Java 后端的驼峰 xtglProcessData
+    let processDef: any = res?.body?.processDef || {};
+    let xtglProcessDataStr: any = processDef.xtgl_process_data || processDef.xtglProcessData || {};
     let xtglProcessDataS = JSON.parse(xtglProcessDataStr);
     const state: any = {
       data: xtglProcessDataS || [],

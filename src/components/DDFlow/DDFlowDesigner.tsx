@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Graph } from '@antv/x6';
 import { Button, message, Space, Form, Splitter } from 'antd';
 import { useLocation } from 'umi';
-import { editFlow, queryList } from '@/services/hts/api';
+import { editFlow, queryList, saveOrUpdate } from '@/services/hts/api';
 import X6Util from './DDFlowUtil';
 import './index.less';
 import ApprovalFlow from './approvalFlow';
@@ -76,9 +76,13 @@ const DDFlowDesigner: React.FC<any> = ({}) => {
       let processTaskRun = location?.state?.processTaskRun || [];
       let xtglProcessTaskIdArr: any = [];
       for (let mm = 0; mm < processTaskRun.length; mm++) {
-        if (processTaskRun[mm].xtglProcessTaskFlag === '1' || processTaskRun[mm].xtglProcessTaskFlag === '0') {
-          let xtglProcessTaskId = processTaskRun[mm].xtglProcessTaskId;
-          xtglProcessTaskIdArr.push(xtglProcessTaskId);
+        // 兼容 Node(eggjs) 后端的蛇形字段 xtgl_process_task_flag / xtgl_process_task_id
+        // 与 Java 后端的驼峰 xtglProcessTaskFlag / xtglProcessTaskId
+        let taskItem: any = processTaskRun[mm];
+        let taskFlag: any = taskItem.xtgl_process_task_flag || taskItem.xtglProcessTaskFlag;
+        let taskId: any = taskItem.xtgl_process_task_id || taskItem.xtglProcessTaskId;
+        if (taskFlag === '1' || taskFlag === '0') {
+          xtglProcessTaskIdArr.push(taskId);
         }
       }
       // debugger;
@@ -104,27 +108,45 @@ const DDFlowDesigner: React.FC<any> = ({}) => {
 
     // 初始化角色信息
     initRoleData();
+
+    // 卸载时销毁 Graph，避免事件监听与节点组件累积
+    return () => {
+      graph.dispose();
+      graphRef.current = null;
+    };
   }, []);
 
   // 保存
   const saveFlow = () => {
-    if (location.state) {
-      let tmpData: any = location.state;
-      let record: any = tmpData?.record;
-      let xtglProcessId: any = record?.xtglProcessId;
-      let aa: any =  graphRef.current?.toJSON();
-      let params: any = {
-        xtglProcessId,
-        xtglProcessData: JSON.stringify(aa),
+    if (!location.state) return;
+
+    const record: any = location.state.record || {};
+    const xtglProcessId: any = record?.xtglProcessId;
+    const xtglProcessData: string = JSON.stringify(graphRef.current?.toJSON());
+
+    const handleRes = (res: any) => {
+      const { code } = res || {};
+      if (code === '200') {
+        message.success("保存成功！");
+      } else {
+        message.error("保存失败！");
       }
-      editFlow(params).then((res: any) => {
-        const { code } = res;
-        if (code === '200') {
-          message.success("保存成功！");
-        } else {
-          message.error("保存失败！");
-        }
-      })
+    };
+
+    if (ENV_TYPE === 'node') {
+      // Node（eggjs）后端：走通用 def saveOrUpdate，把流程图数据带在 body，
+      // 由后端在 nbgl_process_def 行上同时更新 def 字段与 xtglProcessData。
+      // ...record 提供主键 xtglProcessId 等 def 字段（值不变 = 安全 no-op），
+      // xtglProcessData 用最新值覆盖 record 中旧的同名字段。
+      saveOrUpdate({
+        key: 'nbgl_process_def',
+        formType: 'edit',
+        ...record,
+        xtgl_process_data: xtglProcessData,
+      }).then(handleRes);
+    } else {
+      // 其它后端：保留原 editFlow 调用（POST /dict/procdef/save），行为不变
+      editFlow({ xtglProcessId, xtglProcessData }).then(handleRes);
     }
   }
 
@@ -205,8 +227,9 @@ const DDFlowDesigner: React.FC<any> = ({}) => {
   let viewRight2: any = () => {
     let role = [...roleList];
     role.forEach((roleItem: any) => {
-      roleItem.name = roleItem.roleName;
-      roleItem.value = roleItem.roleId;
+      // 兼容 Node(eggjs) 后端的蛇形字段 role_name / role_id 与 Java 后端的驼峰 roleName / roleId
+      roleItem.name = roleItem.role_name || roleItem.roleName;
+      roleItem.value = roleItem.role_id || roleItem.roleId;
     })
     let formConfig: any = {
       form_layout_type: 'vertical',
